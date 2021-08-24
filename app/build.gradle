@@ -69,4 +69,7 @@ dependencies {
         exclude(group: 'org.xerial')
     }
     implementation 'org.xerial:sqlite-jdbc:3.34.0'
+
+    def paging_version = "3.0.1"
+    implementation("androidx.paging:paging-runtime:$paging_version")
 }
