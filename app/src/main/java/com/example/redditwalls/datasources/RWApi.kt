@@ -2,6 +2,7 @@
 
 package com.example.redditwalls.datasources
 
+import com.example.redditwalls.forEach
 import com.example.redditwalls.models.Image
 import com.example.redditwalls.models.PostInfo
 import com.example.redditwalls.models.Subreddit
@@ -162,12 +163,5 @@ object RWApi {
                 response.toString()
             }
         }
-    }
-}
-
-inline fun JSONArray.forEach(action: (JSONObject) -> Unit) {
-    val length = length()
-    for (i in 0 until length) {
-        action(getJSONObject(i))
     }
 }
