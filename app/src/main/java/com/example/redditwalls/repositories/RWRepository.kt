@@ -1,4 +1,4 @@
-package com.example.redditwalls
+package com.example.redditwalls.repositories
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
