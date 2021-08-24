@@ -2,6 +2,7 @@
 
 package com.example.redditwalls.datasources
 
+import com.example.redditwalls.Utils
 import com.example.redditwalls.forEach
 import com.example.redditwalls.models.Image
 import com.example.redditwalls.models.PostInfo
@@ -123,7 +124,7 @@ object RWApi {
             val utcTime = json.getLong("created_utc")
             val author = json.getString("author")
             val numComments = json.getString("num_comments")
-            val uploadDate = " "//AppUtils.convertUTC(utcTime * 1000)
+            val uploadDate = Utils.convertUTC(utcTime * 1000)
 
             PostInfo(
                 imageSize = imageSize,
