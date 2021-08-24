@@ -1,3 +1,5 @@
+@file:Suppress("BlockingMethodInNonBlockingContext")
+
 package com.example.redditwalls.datasources
 
 import com.example.redditwalls.models.Image
@@ -75,33 +77,34 @@ object RWApi {
         } to nextAfter
     }
 
-    suspend fun searchSubs(query: String) = withContext(Dispatchers.Default) {
+    suspend fun searchSubs(query: String): List<Subreddit> =
+        withContext(Dispatchers.Default) {
 
-        val endpoint = "https://www.reddit.com/api/search_reddit_names/.json?query=$query"
-        val json = JSONObject(fetch(endpoint))
-        val names = json.getJSONArray("names")
+            val endpoint = "https://www.reddit.com/api/search_reddit_names/.json?query=$query"
+            val json = JSONObject(fetch(endpoint))
+            val names = json.getJSONArray("names")
 
-        val results: MutableList<Subreddit> = mutableListOf()
-        for (i in 0..names.length()) {
-            val name = names.getString(i)
-            val subInfo = getSubInfo(name)
-            val data = subInfo.getJSONObject("data")
-            val iconUrl = data.getString("icon_img")
-            val title = data.getString("display_name_prefixed")
-            val desc = data.getString("public_description")
-            val subs = data.getInt("subscribers")
+            val results: MutableList<Subreddit> = mutableListOf()
+            for (i in 0..names.length()) {
+                val name = names.getString(i)
+                val subInfo = getSubInfo(name)
+                val data = subInfo.getJSONObject("data")
+                val iconUrl = data.getString("icon_img")
+                val title = data.getString("display_name_prefixed")
+                val desc = data.getString("public_description")
+                val subs = data.getInt("subscribers")
 
-            val sub = Subreddit(
-                name = title,
-                description = desc,
-                numSubscribers = subs,
-                icon = iconUrl
-            )
-            results.add(sub)
+                val sub = Subreddit(
+                    name = title,
+                    description = desc,
+                    numSubscribers = subs,
+                    icon = iconUrl
+                )
+                results.add(sub)
+            }
+
+            results
         }
-
-        results
-    }
 
     suspend fun getPostInfo(postLink: String, imageSize: Int) =
         withContext(Dispatchers.Default) {
