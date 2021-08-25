@@ -2,7 +2,7 @@
 
 package com.example.redditwalls.datasources
 
-import com.example.redditwalls.Utils
+import com.example.redditwalls.misc.Utils
 import com.example.redditwalls.forEach
 import com.example.redditwalls.models.Image
 import com.example.redditwalls.models.PostInfo
@@ -20,27 +20,43 @@ object RWApi {
 
     const val PAGE_SIZE = 25
 
-    enum class Sort(val queryParam: String) {
-        HOT("/hot.json?sort=hot"),
-        NEW("/new.json?sort=new"),
-        TOP_WEEK("/top.json?sort=top&t=week"),
-        TOP_MONTH("/top.json?sort=top&t=month"),
-        TOP_YEAR("/top.json?sort=top&t=year"),
-        TOP_ALL("/top.json?sort=top&t=all")
+    enum class Sort(val trailing: String, val queryParam: String) {
+        HOT("/hot.json", "sort=hot"),
+        NEW("/new.json", "sort=new"),
+        TOP_WEEK("/top.json", "sort=top&t=week"),
+        TOP_MONTH("/top.json", "sort=top&t=month"),
+        TOP_YEAR("/top.json", "sort=top&t=year"),
+        TOP_ALL("/top.json", "sort=top&t=all")
+    }
+
+    // http://reddit.com/r/anime/search/.json?q=kanojo&restrict_sr=true&sort=top&t=year&limit=25
+    private fun buildImageListEndpoint(
+        subreddit: String,
+        query: String = "",
+        sort: Sort,
+        after: String
+    ): String {
+        val trailing = if (query.isNotBlank()) {
+            "/search/.json?q=$query&restrict_sr=true&${sort.queryParam}"
+        } else {
+            "${sort.trailing}?${sort.queryParam}"
+        }
+
+        val base = "https://www.reddit.com/r/$subreddit"
+        return StringBuilder(base).apply {
+            append(trailing)
+            append("&limit=25")
+            append("&after=$after")
+        }.toString()
     }
 
     suspend fun getImages(
         subreddit: String,
+        query: String = "",
         sort: Sort,
         after: String = ""
     ): Pair<List<Image>, String> = withContext(Dispatchers.Default) {
-        val endpoint = StringBuilder("https://www.reddit.com/r/").apply {
-            append(subreddit)
-            append(sort.queryParam)
-            if (after.isNotEmpty()) {
-                append("&after=$after")
-            }
-        }.toString()
+        val endpoint = buildImageListEndpoint(subreddit, query, sort, after)
 
         val json = JSONObject(fetch(endpoint)).getJSONObject("data")
         val nextAfter = json.getString("after")

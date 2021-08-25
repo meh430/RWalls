@@ -1,0 +1,19 @@
+package com.example.redditwalls.misc
+
+import android.content.Context
+import com.bumptech.glide.Glide
+import com.example.redditwalls.repositories.Resolution
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
+
+class ImageLoader @Inject constructor() {
+    suspend fun loadImage(context: Context, image: String, resolution: Resolution) =
+        withContext(Dispatchers.IO) {
+            Glide.with(context)
+                .asBitmap()
+                .load(image)
+                .override(resolution.width, resolution.height)
+                .submit().get()
+        }
+}
