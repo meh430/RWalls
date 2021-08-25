@@ -1,6 +1,7 @@
 package com.example.redditwalls.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import com.example.redditwalls.RWDatabase
 import dagger.Module
 import dagger.Provides
@@ -21,4 +22,11 @@ object AppModule {
 
     @Provides
     fun provideFavoriteSubredditsDAO(db: RWDatabase) = db.getSubredditDAO()
+
+    @Provides
+    fun providesPreferences(@ApplicationContext context: Context) =
+        context.getSharedPreferences(
+            "settings",
+            Context.MODE_PRIVATE
+        )
 }
