@@ -101,7 +101,7 @@ object RWApi {
             images.add(image)
         }
 
-        if (after.isBlank()) {
+        if (after.isBlank() && images.size > 25) {
             images.slice(0 until PAGE_SIZE)
         } else {
             images
