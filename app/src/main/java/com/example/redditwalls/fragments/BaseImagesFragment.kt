@@ -6,10 +6,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.redditwalls.R
 import com.example.redditwalls.adapters.ImagesAdapter
 import com.example.redditwalls.datasources.RWApi.Sort
@@ -41,7 +39,7 @@ abstract class BaseImagesFragment : Fragment() {
     protected fun initRecyclerView(recyclerView: RecyclerView) {
         recyclerView.apply {
             adapter = imagesAdapter
-            layoutManager = LinearLayoutManager(requireContext())
+            layoutManager = GridLayoutManager(requireContext(), 2)
         }
     }
 
