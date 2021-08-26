@@ -1,6 +1,5 @@
 package com.example.redditwalls.datasources
 
-import android.app.DownloadManager
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.redditwalls.models.Image
@@ -19,7 +18,7 @@ class ImagesPagingDataSource(
             LoadResult.Page(
                 data = result.first,
                 prevKey = null,
-                nextKey = result.second
+                nextKey = result.second.takeIf { it.isNotBlank() }
             )
         } catch (e: Exception) {
             LoadResult.Error(e)

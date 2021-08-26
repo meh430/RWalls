@@ -37,6 +37,12 @@ class HomeFragment : BaseImagesFragment() {
             imagesAdapter.refresh()
             binding.swipeRefresh.isRefreshing = false
         }
+        addLoadStateListener(
+            binding.imageScroll,
+            binding.loading,
+            binding.error,
+            binding.empty
+        )
     }
 
     override fun onDestroyView() {

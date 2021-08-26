@@ -14,5 +14,7 @@
     <string name="sort_top_day">Top Day</string>
     
     <string name="image_description">Image preview</string>
+    <string name="retry">RETRY</string>
+    <string name="empty_label">There\'s nothing here :(</string>
 
 </resources>
