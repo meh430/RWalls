@@ -1,31 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+<!--suppress ALL -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <item
-        android:id="@+id/sort_hot"
+        android:id="@+id/sorting"
+        android:icon="@drawable/ic_sort"
         android:orderInCategory="1"
-        android:title="@string/sort_hot" />
-    <item
-        android:id="@+id/sort_new"
-        android:orderInCategory="2"
-        android:title="@string/sort_new" />
-    <item
-        android:id="@+id/sort_top_all"
-        android:orderInCategory="3"
-        android:title="@string/sort_top_all" />
-    <item
-        android:id="@+id/sort_top_year"
-        android:orderInCategory="4"
-        android:title="@string/sort_top_year" />
-    <item
-        android:id="@+id/sort_top_month"
-        android:orderInCategory="5"
-        android:title="@string/sort_top_month" />
-    <item
-        android:id="@+id/sort_top_week"
-        android:orderInCategory="6"
-        android:title="@string/sort_top_week" />
-    <item
-        android:id="@+id/sort_top_day"
-        android:orderInCategory="7"
-        android:title="@string/sort_top_day" />
+        android:title="SORT"
+        app:showAsAction="always">
+
+        <menu xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools">
+            <item
+                android:id="@+id/sort_hot"
+                android:orderInCategory="2"
+                android:title="@string/sort_hot" />
+            <item
+                android:id="@+id/sort_new"
+                android:orderInCategory="3"
+                android:title="@string/sort_new" />
+            <item
+                android:id="@+id/sort_top_all"
+                android:orderInCategory="7"
+                android:title="@string/sort_top_all" />
+            <item
+                android:id="@+id/sort_top_year"
+                android:orderInCategory="6"
+                android:title="@string/sort_top_year" />
+            <item
+                android:id="@+id/sort_top_month"
+                android:orderInCategory="5"
+                android:title="@string/sort_top_month" />
+            <item
+                android:id="@+id/sort_top_week"
+                android:orderInCategory="4"
+                android:title="@string/sort_top_week" />>
+        </menu>
+    </item>
 </menu>

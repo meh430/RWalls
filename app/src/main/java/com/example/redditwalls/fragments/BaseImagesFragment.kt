@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.redditwalls.MainActivity
 import com.example.redditwalls.R
 import com.example.redditwalls.adapters.ImagesAdapter
 import com.example.redditwalls.adapters.LoadingStateAdapter
@@ -58,8 +59,17 @@ abstract class BaseImagesFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        setSort(Sort.fromId(item.itemId))
-        return true
+        return when (item.itemId) {
+            R.id.sort_hot, R.id.sort_new, R.id.sort_top_week,
+            R.id.sort_top_month, R.id.sort_top_year, R.id.sort_top_all -> {
+                val sort = Sort.fromId(item.itemId)
+                if (imagesViewModel.currentSort != sort) {
+                    setSort(sort)
+                }
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     fun setQuery(query: String) {

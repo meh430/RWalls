@@ -12,7 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SubImagesViewModel @Inject constructor(private val rwRepository: RWRepository) : ViewModel() {
     private lateinit var subreddit: String
-    private var sort: Sort = Sort.HOT
+    var currentSort = Sort.HOT
     private var query = ""
 
     private val params: MutableLiveData<ImagesParams> = MutableLiveData()
@@ -24,6 +24,7 @@ class SubImagesViewModel @Inject constructor(private val rwRepository: RWReposit
         rwRepository.getImages(subreddit, query, sort).cachedIn(viewModelScope)
 
     fun setSort(sort: Sort) {
+        currentSort = sort
         params.value = ImagesParams(
             subreddit = subreddit,
             query = query,
@@ -32,10 +33,11 @@ class SubImagesViewModel @Inject constructor(private val rwRepository: RWReposit
     }
 
     fun setQuery(query: String) {
+        this.query = query
         params.value = ImagesParams(
             subreddit = subreddit,
             query = query.takeIf { it.isNotBlank() } ?: "",
-            sort = sort
+            sort = currentSort
         )
     }
 
@@ -43,13 +45,13 @@ class SubImagesViewModel @Inject constructor(private val rwRepository: RWReposit
         params.value = ImagesParams(
             subreddit = subreddit,
             query = query,
-            sort = sort
+            sort = currentSort
         )
     }
 
     fun initialize(subreddit: String, sort: Sort = Sort.HOT, query: String = "") {
         this.subreddit = subreddit
-        this.sort = sort
+        this.currentSort = sort
         this.query = query
         params.value = ImagesParams(
             subreddit = subreddit,
