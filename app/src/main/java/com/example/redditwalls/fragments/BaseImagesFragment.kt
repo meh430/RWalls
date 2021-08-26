@@ -19,7 +19,7 @@ abstract class BaseImagesFragment : Fragment() {
     abstract val toolBarTitle: String
     abstract val subreddit: String
 
-    private val imagesAdapter: ImagesAdapter by lazy {
+    protected val imagesAdapter: ImagesAdapter by lazy {
         val loadLowRes = settingsViewModel.loadLowResPreviews()
         ImagesAdapter(loadLowRes)
     }

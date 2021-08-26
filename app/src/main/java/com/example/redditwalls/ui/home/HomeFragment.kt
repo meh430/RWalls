@@ -4,17 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.example.redditwalls.R
 import com.example.redditwalls.databinding.FragmentHomeBinding
 import com.example.redditwalls.fragments.BaseImagesFragment
-import com.example.redditwalls.viewmodels.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class HomeFragment : BaseImagesFragment() {
@@ -33,14 +26,17 @@ class HomeFragment : BaseImagesFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView(binding.imageScroll)
         observeImages()
+        binding.swipeRefresh.setOnRefreshListener {
+            imagesAdapter.refresh()
+            binding.swipeRefresh.isRefreshing = false
+        }
     }
 
     override fun onDestroyView() {
