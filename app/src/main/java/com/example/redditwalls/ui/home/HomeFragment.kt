@@ -6,36 +6,41 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.redditwalls.R
 import com.example.redditwalls.databinding.FragmentHomeBinding
+import com.example.redditwalls.fragments.BaseImagesFragment
+import com.example.redditwalls.viewmodels.SettingsViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
-class HomeFragment : Fragment() {
+@AndroidEntryPoint
+class HomeFragment : BaseImagesFragment() {
 
-    private lateinit var homeViewModel: HomeViewModel
     private var _binding: FragmentHomeBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
+
+    override val toolBarTitle: String
+        get() = getString(R.string.title_home)
+    override val subreddit: String
+        get() = settingsViewModel.getDefaultSub()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
-
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initRecyclerView(binding.imageScroll)
+        observeImages()
     }
 
     override fun onDestroyView() {

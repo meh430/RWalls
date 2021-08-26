@@ -1,6 +1,18 @@
 <resources>
     <string name="app_name">RedditWalls</string>
+
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+
+    <string name="sort_hot">Hot</string>
+    <string name="sort_new">New</string>
+    <string name="sort_top_all">Top All</string>
+    <string name="sort_top_year">Top Year</string>
+    <string name="sort_top_month">Top Month</string>
+    <string name="sort_top_week">Top Week</string>
+    <string name="sort_top_day">Top Day</string>
+    
+    <string name="image_description">Image preview</string>
+
 </resources>

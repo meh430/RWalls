@@ -11,7 +11,11 @@ import javax.inject.Inject
 class RWRepository @Inject constructor() {
     fun getImages(subreddit: String, query: String = "", sort: RWApi.Sort) =
         Pager(
-            config = PagingConfig(pageSize = PAGE_SIZE, prefetchDistance = 2),
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                prefetchDistance = 2,
+                initialLoadSize = PAGE_SIZE
+            ),
             pagingSourceFactory = { ImagesPagingDataSource(subreddit, query, sort) }
         ).liveData
 

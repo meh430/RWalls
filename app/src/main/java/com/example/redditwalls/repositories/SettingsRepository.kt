@@ -18,7 +18,8 @@ class SettingsRepository @Inject constructor(private val prefs: SharedPreference
         prefs.edit().putString(DEFAULT_SUB, subreddit).apply()
     }
 
-    fun getDefaultSub() = prefs.getString(DEFAULT_SUB, "") ?: ""
+    fun getDefaultSub() =
+        prefs.getString(DEFAULT_SUB, "").takeIf { !it.isNullOrBlank() } ?: "mobilewallpaper"
 
     fun setResolution(height: Int, width: Int) {
         prefs.edit().apply {

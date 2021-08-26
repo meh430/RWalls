@@ -2,6 +2,7 @@
 
 package com.example.redditwalls.datasources
 
+import com.example.redditwalls.R
 import com.example.redditwalls.misc.Utils
 import com.example.redditwalls.forEach
 import com.example.redditwalls.models.Image
@@ -26,7 +27,19 @@ object RWApi {
         TOP_WEEK("/top.json", "sort=top&t=week"),
         TOP_MONTH("/top.json", "sort=top&t=month"),
         TOP_YEAR("/top.json", "sort=top&t=year"),
-        TOP_ALL("/top.json", "sort=top&t=all")
+        TOP_ALL("/top.json", "sort=top&t=all");
+
+        companion object {
+            fun fromId(id: Int) = when (id) {
+                R.id.sort_hot -> HOT
+                R.id.sort_new -> NEW
+                R.id.sort_top_all -> TOP_ALL
+                R.id.sort_top_year -> TOP_YEAR
+                R.id.sort_top_month -> TOP_MONTH
+                R.id.sort_top_week -> TOP_WEEK
+                else -> HOT
+            }
+        }
     }
 
     // http://reddit.com/r/anime/search/.json?q=kanojo&restrict_sr=true&sort=top&t=year&limit=25

@@ -9,7 +9,12 @@
         android:id="@+id/navigation_home"
         android:name="com.example.redditwalls.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <argument
+            android:name="subreddit"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_dashboard"
