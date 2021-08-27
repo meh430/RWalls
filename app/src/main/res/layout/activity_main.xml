@@ -48,11 +48,12 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavView"
             style="@style/Widget.MaterialComponents.BottomNavigationView"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:elevation="4dp"
+            android:elevation="8dp"
             app:itemIconSize="24dp"
             app:layout_scrollFlags="scroll|enterAlways|snap"
             app:menu="@menu/bottom_nav_menu" />

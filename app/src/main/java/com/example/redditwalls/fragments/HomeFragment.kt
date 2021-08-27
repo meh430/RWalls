@@ -1,4 +1,4 @@
-package com.example.redditwalls.ui.home
+package com.example.redditwalls.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater

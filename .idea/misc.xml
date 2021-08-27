@@ -5,8 +5,14 @@
       <map>
         <entry key="app/src/main/res/drawable/empty.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/drawable/error.xml" value="0.15208333333333332" />
+        <entry key="app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.28229166666666666" />
+        <entry key="app/src/main/res/drawable/ic_favorite_filled.xml" value="0.28229166666666666" />
+        <entry key="app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.28229166666666666" />
+        <entry key="app/src/main/res/drawable/ic_search.xml" value="0.28229166666666666" />
+        <entry key="app/src/main/res/drawable/ic_settings.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/drawable/ic_sort.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_wall.xml" value="0.25815217391304346" />
         <entry key="app/src/main/res/layout/empty.xml" value="0.2608695652173913" />
         <entry key="app/src/main/res/layout/error.xml" value="0.25026619086940977" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.2608695652173913" />
@@ -14,6 +20,7 @@
         <entry key="app/src/main/res/layout/old_activity.xml" value="0.25" />
         <entry key="app/src/main/res/layout/scroll_footer.xml" value="0.1" />
         <entry key="app/src/main/res/layout/toolbar.xml" value="0.25" />
+        <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.26614583333333336" />
         <entry key="app/src/main/res/menu/sort_enu.xml" value="0.26614583333333336" />
       </map>
     </option>

@@ -8,6 +8,8 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ImageLoader @Inject constructor() {
+
+    // Use to save a bitmap
     suspend fun loadImage(context: Context, image: String, resolution: Resolution) =
         withContext(Dispatchers.IO) {
             Glide.with(context)

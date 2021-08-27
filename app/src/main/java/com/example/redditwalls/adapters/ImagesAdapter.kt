@@ -11,8 +11,13 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.redditwalls.databinding.ImageItemBinding
 import com.example.redditwalls.models.Image
 
-class ImagesAdapter(private val loadLowRes: Boolean) :
+class ImagesAdapter(private val loadLowRes: Boolean, private val imageListener: ImageListener) :
     PagingDataAdapter<Image, ImagesAdapter.ImageViewHolder>(ImageComparator) {
+
+    interface ImageListener {
+        fun onClick(image: Image)
+        fun onLongClick(image: Image)
+    }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         getItem(position)?.let { holder.bind(image = it) }
@@ -26,6 +31,16 @@ class ImagesAdapter(private val loadLowRes: Boolean) :
     inner class ImageViewHolder(private val binding: ImageItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(image: Image) {
+
+            binding.imagePreview.setOnClickListener {
+                imageListener.onClick(image)
+            }
+
+            binding.imagePreview.setOnLongClickListener {
+                imageListener.onLongClick(image)
+                true
+            }
+
             val requestOptions = RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .centerCrop()

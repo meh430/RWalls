@@ -7,28 +7,29 @@ import android.view.MenuItem
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.redditwalls.MainActivity
 import com.example.redditwalls.R
 import com.example.redditwalls.adapters.ImagesAdapter
 import com.example.redditwalls.adapters.LoadingStateAdapter
 import com.example.redditwalls.databinding.EmptyBinding
 import com.example.redditwalls.databinding.ErrorBinding
 import com.example.redditwalls.datasources.RWApi.Sort
+import com.example.redditwalls.models.Image
 import com.example.redditwalls.viewmodels.SettingsViewModel
 import com.example.redditwalls.viewmodels.SubImagesViewModel
 import com.google.android.material.progressindicator.LinearProgressIndicator
 
-abstract class BaseImagesFragment : Fragment() {
+abstract class BaseImagesFragment : Fragment(), ImagesAdapter.ImageListener {
 
     abstract val toolBarTitle: String
     abstract val subreddit: String
 
     protected val imagesAdapter: ImagesAdapter by lazy {
         val loadLowRes = settingsViewModel.loadLowResPreviews()
-        ImagesAdapter(loadLowRes).apply {
+        ImagesAdapter(loadLowRes, this).apply {
             withLoadStateHeader(
                 header = LoadingStateAdapter(this)
             )
@@ -113,5 +114,14 @@ abstract class BaseImagesFragment : Fragment() {
             emptyView.empty.isVisible = isEmpty
             recyclerView.isVisible = !isEmpty && !hasError
         }
+    }
+
+    override fun onClick(image: Image) {
+        val toWall = HomeFragmentDirections.actionNavigationHomeToNavigationWallpaper(image)
+        findNavController().navigate(toWall)
+    }
+
+    override fun onLongClick(image: Image) {
+        TODO("Not yet implemented")
     }
 }

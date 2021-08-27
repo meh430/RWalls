@@ -7,24 +7,23 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.redditwalls.ui.home.HomeFragment"
+        android:name="com.example.redditwalls.fragments.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" >
         <argument
             android:name="subreddit"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_wallpaper"
+            app:destination="@id/navigation_wallpaper" />
     </fragment>
 
-    <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.redditwalls.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
-
-    <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.redditwalls.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+    <activity
+        android:id="@+id/navigation_wallpaper"
+        android:name="com.example.redditwalls.WallActivity" >
+        <argument
+            android:name="image"
+            app:argType="com.example.redditwalls.models.Image" />
+    </activity>
 </navigation>

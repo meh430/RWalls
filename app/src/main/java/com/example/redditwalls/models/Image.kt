@@ -1,9 +1,11 @@
 package com.example.redditwalls.models
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
-
+@Parcelize
 @Entity(tableName = "Favorites")
 data class Image(
     @PrimaryKey(autoGenerate = true)
@@ -12,4 +14,4 @@ data class Image(
     val postLink: String = "",
     val subreddit: String = "",
     val previewLink: String = ""
-)
+) : Parcelable
