@@ -19,5 +19,6 @@
     <string name="image_description">Image preview</string>
     <string name="retry">RETRY</string>
     <string name="empty_label">There\'s nothing here :(</string>
+    <string name="grapple">Grapple</string>
 
 </resources>

@@ -1,5 +1,6 @@
 package com.example.redditwalls.misc
 
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
@@ -7,12 +8,27 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import android.view.View
+import android.view.Window
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.*
+import androidx.annotation.ColorInt
+
+import android.R
+
+import android.content.res.Resources.Theme
+
+import android.util.TypedValue
+
+
+
 
 object Utils {
 
@@ -65,6 +81,24 @@ object Utils {
             "a.m"
         }
         return "$month ${getOrdinal(Integer.parseInt(date[1]))}, ${date[2]} | ${hours}:${time[1]} $pmam"
+    }
+
+    fun setNavigationBarColor(activity: Activity) {
+        val typedValue = TypedValue()
+        val theme: Theme = activity.theme
+        theme.resolveAttribute(R.attr.colorBackground, typedValue, true)
+        @ColorInt val color = typedValue.data
+        activity.window.navigationBarColor = color
+    }
+
+    fun setFullScreen(window: Window, rootView: View) {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowInsetsControllerCompat(window, rootView).let { controller ->
+            controller.hide(WindowInsetsCompat.Type.statusBars())
+            controller.hide(WindowInsetsCompat.Type.captionBar())
+            controller.systemBarsBehavior =
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
     }
 
     fun getDate(): String {

@@ -2,15 +2,12 @@ package com.example.redditwalls
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.WindowManager
 import androidx.navigation.navArgs
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.example.redditwalls.databinding.ActivityWallBinding
-import android.view.View
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
-
+import com.example.redditwalls.misc.Utils
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class WallActivity : AppCompatActivity() {
     val wallArgs: WallActivityArgs by navArgs()
@@ -22,12 +19,30 @@ class WallActivity : AppCompatActivity() {
         binding = ActivityWallBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        WindowInsetsControllerCompat(window, binding.root).let { controller ->
-            controller.hide(WindowInsetsCompat.Type.systemBars())
-            controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        }
+        Utils.setFullScreen(window, binding.root)
 
-        Glide.with(this).load(wallArgs.image.imageLink).centerCrop().into(binding.wallpaper)
+        loadWallpaper()
+    }
+
+    private fun showBottomSheet() {
+        BottomSheetDialog(this).apply {
+            setContentView(R.layout.wall_sheet)
+            show()
+        }
+    }
+
+    private fun loadWallpaper() {
+        val circularProgressDrawable = CircularProgressDrawable(this)
+        circularProgressDrawable.strokeWidth = 5f
+        circularProgressDrawable.centerRadius = 30f
+        circularProgressDrawable.start()
+        Glide.with(this)
+            .load(wallArgs.image.imageLink)
+            .placeholder(circularProgressDrawable)
+            .centerCrop().into(binding.wallpaper)
+
+        binding.wallpaper.setOnClickListener {
+            showBottomSheet()
+        }
     }
 }
