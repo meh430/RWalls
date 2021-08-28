@@ -16,10 +16,13 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
+import javax.inject.Inject
 
-object RWApi {
+class RWApi @Inject constructor() {
 
-    const val PAGE_SIZE = 25
+    companion object {
+        const val PAGE_SIZE = 25
+    }
 
     enum class Sort(val trailing: String, val queryParam: String) {
         HOT("/hot.json", "sort=hot"),

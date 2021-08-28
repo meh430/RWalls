@@ -1,7 +1,5 @@
 package com.example.redditwalls.models
 
-import com.example.redditwalls.repositories.Resolution
-
 data class PostInfo(
     val subreddit: String,
     val upvotes: String,

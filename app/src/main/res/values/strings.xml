@@ -20,5 +20,9 @@
     <string name="retry">RETRY</string>
     <string name="empty_label">There\'s nothing here :(</string>
     <string name="grapple">Grapple</string>
-
+    <string-array name="location_options">
+        <item>Home Screen</item>
+        <item>Lock Screen</item>
+        <item>Both</item>
+    </string-array>
 </resources>

@@ -27,13 +27,13 @@ import android.content.res.Resources.Theme
 import android.util.DisplayMetrics
 
 import android.util.TypedValue
-import com.example.redditwalls.repositories.Resolution
 import android.graphics.Point
 
 import android.view.Display
 
 import android.view.WindowManager
 import com.example.redditwalls.currentWindowMetricsPointCompat
+import com.example.redditwalls.models.Resolution
 import java.text.NumberFormat
 
 

@@ -2,7 +2,7 @@ package com.example.redditwalls.misc
 
 import android.content.Context
 import com.bumptech.glide.Glide
-import com.example.redditwalls.repositories.Resolution
+import com.example.redditwalls.models.Resolution
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

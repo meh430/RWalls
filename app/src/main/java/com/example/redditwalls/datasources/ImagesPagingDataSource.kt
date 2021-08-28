@@ -5,6 +5,7 @@ import androidx.paging.PagingState
 import com.example.redditwalls.models.Image
 
 class ImagesPagingDataSource(
+    private val api: RWApi,
     private val subreddit: String = "",
     private val query: String = "",
     private val sort: RWApi.Sort
@@ -14,7 +15,7 @@ class ImagesPagingDataSource(
         val after = params.key ?: ""
 
         return try {
-            val result = RWApi.getImages(subreddit, query, sort, after)
+            val result = api.getImages(subreddit, query, sort, after)
             LoadResult.Page(
                 data = result.first,
                 prevKey = null,

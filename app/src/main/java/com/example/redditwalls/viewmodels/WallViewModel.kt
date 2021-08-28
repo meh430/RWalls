@@ -7,10 +7,10 @@ import com.example.redditwalls.misc.ImageLoader
 import com.example.redditwalls.misc.Utils
 import com.example.redditwalls.models.Image
 import com.example.redditwalls.models.PostInfo
+import com.example.redditwalls.models.Resolution
 import com.example.redditwalls.models.Resource
 import com.example.redditwalls.repositories.FavoriteImagesRepository
 import com.example.redditwalls.repositories.RWRepository
-import com.example.redditwalls.repositories.Resolution
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

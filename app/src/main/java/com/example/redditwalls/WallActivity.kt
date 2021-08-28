@@ -18,9 +18,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import android.view.MotionEvent
 import android.annotation.SuppressLint
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.view.GestureDetector
+import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
+import javax.inject.Inject
 import kotlin.math.abs
 
 
@@ -29,6 +32,9 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
     private val wallArgs: WallActivityArgs by navArgs()
     private lateinit var binding: ActivityWallBinding
     private val wallViewModel: WallViewModel by viewModels()
+
+    @Inject
+    lateinit var wallpaperHelper: WallpaperHelper
 
     private lateinit var detector: GestureDetector
 
@@ -65,21 +71,37 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
         loadPostInfo(sheetBinding)
 
         detector = GestureDetector(this, this)
+
+        setUpFavorite()
+        addListeners()
+    }
+
+    private fun addListeners() {
+        binding.backButton.setOnClickListener {
+            onBackPressed()
+        }
+
         binding.info.setOnClickListener {
             wallSheet.show()
         }
 
-        setUpFavorite()
         binding.favorite.setOnClickListener {
             wallViewModel.toggleFavorite()
+        }
+
+        sheetBinding.setWallpaper.setOnClickListener {
+            wallpaperHelper.showLocationPickerDialog(this) { location ->
+                if (binding.wallpaper.drawable == null) {
+                    Toast.makeText(this, "Loading image...", Toast.LENGTH_SHORT).show()
+                } else {
+                    val bitmap = (binding.wallpaper.drawable as BitmapDrawable).bitmap
+                    wallpaperHelper.setBitmapAsWallpaper(this, bitmap, location)
+                }
+            }
         }
     }
 
     private fun setUpFavorite() {
-        binding.favorite.setOnClickListener {
-            wallViewModel.toggleFavorite()
-        }
-
         wallViewModel.isFavorite.observe(this) {
             val icon = if (it) filledHeartIcon else heartIcon
             binding.favorite.icon = icon

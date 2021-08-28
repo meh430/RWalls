@@ -1,6 +1,8 @@
 package com.example.redditwalls.repositories
 
 import android.content.SharedPreferences
+import com.example.redditwalls.WallpaperLocation
+import com.example.redditwalls.models.Resolution
 import javax.inject.Inject
 
 class SettingsRepository @Inject constructor(private val prefs: SharedPreferences) {
@@ -54,19 +56,3 @@ class SettingsRepository @Inject constructor(private val prefs: SharedPreference
         prefs.edit().putInt(RANDOM_REFRESH_LOCATION, location.id).apply()
 
 }
-
-// TODO: Move later
-enum class WallpaperLocation(val id: Int) {
-    HOME(0),
-    LOCK(1),
-    BOTH(2);
-
-    companion object {
-        fun fromId(id: Int) = WallpaperLocation.values().find { it.id == id } ?: BOTH
-    }
-}
-
-data class Resolution(
-    val height: Int,
-    val width: Int
-)
