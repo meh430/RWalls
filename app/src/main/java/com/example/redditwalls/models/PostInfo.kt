@@ -8,4 +8,16 @@ data class PostInfo(
     val numComments: String,
     val uploadDate: String,
     val imageSize: Int
-)
+) {
+    companion object {
+        fun loading() = PostInfo(
+            "Loading...",
+            0,
+            "Loading...",
+            "Loading...",
+            "Loading...",
+            "Loading...",
+            0
+        )
+    }
+}
