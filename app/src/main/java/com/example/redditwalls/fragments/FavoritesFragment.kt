@@ -96,8 +96,8 @@ class FavoritesFragment : Fragment(), ImageClickListener {
             .setTitle("Actions")
             .setAdapter(actionsAdapter) { _, i ->
                 when (i) {
-                    0 -> TODO()
-                    1 -> TODO()
+                    0 -> favoritesViewModel.getRandomFavoriteImage(this::onClick)
+                    1 -> favoritesViewModel.deleteAllFavorites()
                     2 -> TODO()
                 }
             }.show()
