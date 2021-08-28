@@ -19,8 +19,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import android.util.TypedValue
 
-import android.os.Build
-
 import android.widget.TextView
 
 import android.view.View
@@ -28,6 +26,13 @@ import android.view.View
 
 @AndroidEntryPoint
 class FavoritesFragment : Fragment(), ImageClickListener {
+
+    companion object {
+        const val FEELING_LUCKY = 0
+        const val DOWNLOAD_ALL = 1
+        const val DELETE_ALL = 3
+    }
+
     private var _binding: FragmentFavoritesBinding? = null
     private val binding get() = _binding!!
 
@@ -59,6 +64,7 @@ class FavoritesFragment : Fragment(), ImageClickListener {
     }
 
     private fun showActionsDialog(): Boolean {
+
         val actions = listOf(
             "Feeling lucky" to R.drawable.ic_lucky,
             "Download all" to R.drawable.ic_download,
@@ -96,9 +102,9 @@ class FavoritesFragment : Fragment(), ImageClickListener {
             .setTitle("Actions")
             .setAdapter(actionsAdapter) { _, i ->
                 when (i) {
-                    0 -> favoritesViewModel.getRandomFavoriteImage(this::onClick)
-                    1 -> favoritesViewModel.deleteAllFavorites()
-                    2 -> TODO()
+                    FEELING_LUCKY -> favoritesViewModel.getRandomFavoriteImage(this::onClick)
+                    DELETE_ALL -> favoritesViewModel.deleteAllFavorites()
+                    DOWNLOAD_ALL -> TODO()
                 }
             }.show()
         return true
