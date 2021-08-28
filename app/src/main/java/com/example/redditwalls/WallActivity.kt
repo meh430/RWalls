@@ -1,5 +1,6 @@
 package com.example.redditwalls
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -52,6 +53,7 @@ class WallActivity : AppCompatActivity() {
         val circularProgressDrawable = CircularProgressDrawable(this)
         circularProgressDrawable.strokeWidth = 5f
         circularProgressDrawable.centerRadius = 30f
+        circularProgressDrawable.setColorSchemeColors(Color.RED)
         circularProgressDrawable.start()
         Glide.with(this)
             .load(wallArgs.image.imageLink)
