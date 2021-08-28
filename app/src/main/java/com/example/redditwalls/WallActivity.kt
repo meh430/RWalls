@@ -16,12 +16,19 @@ import com.example.redditwalls.models.Resource
 import com.example.redditwalls.viewmodels.WallViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
+import android.view.MotionEvent
+import android.annotation.SuppressLint
+import android.view.GestureDetector
+import kotlin.math.abs
+
 
 @AndroidEntryPoint
-class WallActivity : AppCompatActivity() {
+class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
     private val wallArgs: WallActivityArgs by navArgs()
     private lateinit var binding: ActivityWallBinding
     private val wallViewModel: WallViewModel by viewModels()
+
+    private lateinit var detector: GestureDetector
 
     private val sheetBinding: WallSheetBinding by lazy {
         WallSheetBinding.inflate(
@@ -34,6 +41,7 @@ class WallActivity : AppCompatActivity() {
         wallSheet
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -43,10 +51,12 @@ class WallActivity : AppCompatActivity() {
         Utils.setFullScreen(window, binding.root)
         loadWallpaper()
         loadPostInfo(sheetBinding)
-    }
 
-    private fun showBottomSheet() {
-        wallSheet.show()
+        detector = GestureDetector(this, this)
+
+        binding.info.setOnClickListener {
+            wallSheet.show()
+        }
     }
 
     private fun loadWallpaper() {
@@ -59,10 +69,6 @@ class WallActivity : AppCompatActivity() {
             .load(wallArgs.image.imageLink)
             .placeholder(circularProgressDrawable)
             .centerCrop().into(binding.wallpaper)
-
-        binding.wallpaper.setOnClickListener {
-            showBottomSheet()
-        }
     }
 
     private fun loadPostInfo(sheetBinding: WallSheetBinding) {
@@ -78,5 +84,44 @@ class WallActivity : AppCompatActivity() {
                 Resource.Status.LOADING -> sheetBinding.postInfo = PostInfo.loading()
             }
         }
+    }
+
+
+    // Gestures
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        return detector.onTouchEvent(event) || super.onTouchEvent(event)
+    }
+
+    override fun onDown(event: MotionEvent) = false
+
+    override fun onShowPress(event: MotionEvent) {
+        // NO-OP
+    }
+
+    override fun onSingleTapUp(event: MotionEvent) = false
+
+    override fun onScroll(evt1: MotionEvent, evt2: MotionEvent, p1: Float, p2: Float) = false
+
+    override fun onLongPress(event: MotionEvent) {
+        // NO-OP
+    }
+
+    override fun onFling(e1: MotionEvent, e2: MotionEvent, vX: Float, vY: Float): Boolean {
+        val SWIPE_DISTANCE_THRESHOLD = 50
+        val SWIPE_VELOCITY_THRESHOLD = 50
+        val distanceX: Float = e2.x - e1.x
+        val distanceY: Float = e2.y - e1.y
+        if (abs(distanceX) > abs(distanceY) && abs(distanceX) > SWIPE_DISTANCE_THRESHOLD && abs(vX) > SWIPE_VELOCITY_THRESHOLD) {
+            return true
+        } else if (abs(distanceY) > SWIPE_DISTANCE_THRESHOLD && abs(vY) > SWIPE_VELOCITY_THRESHOLD) {
+            if (distanceY > 0) {
+                wallSheet.hide()
+            } else {
+                wallSheet.show()
+            }
+            return true
+        }
+        return false
     }
 }

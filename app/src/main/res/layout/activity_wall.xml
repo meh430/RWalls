@@ -22,25 +22,32 @@
             android:contentDescription="@string/image_description" />
 
         <LinearLayout
-            android:gravity="center"
-            android:foregroundGravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:layout_margin="20dp"
+            android:foregroundGravity="center"
+            android:gravity="center"
             android:orientation="horizontal">
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/image_description"
-                android:src="@drawable/ic_info" />
+                android:layout_margin="10dp"
+                android:text="Info"
+                app:icon="@drawable/ic_info"
+                app:iconSize="18dp" />
 
-            <ImageView
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/favorite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_favorite_filled"
-                app:tint="@color/red" />
+                android:layout_margin="10dp"
+                android:text="Favorite"
+                app:icon="@drawable/ic_favorite_filled"
+                app:iconSize="18dp" />
         </LinearLayout>
     </RelativeLayout>
 </layout>
