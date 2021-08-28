@@ -9,6 +9,8 @@ import com.example.redditwalls.misc.Utils
 import com.example.redditwalls.repositories.FavoriteImagesRepository
 import com.example.redditwalls.repositories.SettingsRepository
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class WallpaperHelper @Inject constructor(
@@ -19,7 +21,14 @@ class WallpaperHelper @Inject constructor(
 
     suspend fun setRandomFavoriteWallpaper(context: Context) {
         val image = favoriteImagesRepository.getRandomFavoriteImage()
-        setImageLinkAsWallpaper(context, image.imageLink, settingsRepository.getRandomRefreshLocation())
+        setImageLinkAsWallpaper(
+            context,
+            image.imageLink,
+            settingsRepository.getRandomRefreshLocation()
+        )
+        withContext(Dispatchers.Main) {
+            Toast.makeText(context, "Successfully set wallpaper", Toast.LENGTH_SHORT).show()
+        }
     }
 
     suspend fun setImageLinkAsWallpaper(
