@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -49,7 +50,14 @@ class FavoritesFragment : Fragment(), ImageClickListener {
         }
 
         favoritesViewModel.getFavorites().observe(viewLifecycleOwner) {
-            favoritesAdapter.submitList(it)
+            val hasFavs = it?.isNullOrEmpty() == false
+
+            binding.imageScroll.isVisible = hasFavs
+            binding.empty.empty.isVisible = !hasFavs
+
+            if (hasFavs) {
+                favoritesAdapter.submitList(it)
+            }
         }
     }
 
