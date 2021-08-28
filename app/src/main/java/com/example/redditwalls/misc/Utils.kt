@@ -24,10 +24,17 @@ import androidx.annotation.ColorInt
 import android.R
 
 import android.content.res.Resources.Theme
+import android.util.DisplayMetrics
 
 import android.util.TypedValue
+import com.example.redditwalls.repositories.Resolution
+import android.graphics.Point
 
+import android.view.Display
 
+import android.view.WindowManager
+import com.example.redditwalls.currentWindowMetricsPointCompat
+import java.text.NumberFormat
 
 
 object Utils {
@@ -81,6 +88,23 @@ object Utils {
             "a.m"
         }
         return "$month ${getOrdinal(Integer.parseInt(date[1]))}, ${date[2]} | ${hours}:${time[1]} $pmam"
+    }
+
+    fun getResolution(context: Context): Resolution {
+        val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        return wm.currentWindowMetricsPointCompat().run {
+            Resolution(
+                width = x,
+                height = y
+            )
+        }
+    }
+
+    fun formatNumber(number: Double, round: Boolean = false) = NumberFormat.getInstance().run {
+        val decimalPlaces = if (round) 2 else 0
+        minimumFractionDigits = decimalPlaces
+        maximumFractionDigits = decimalPlaces
+        format(number)
     }
 
     fun setNavigationBarColor(activity: Activity) {

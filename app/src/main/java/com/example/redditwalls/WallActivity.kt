@@ -64,7 +64,12 @@ class WallActivity : AppCompatActivity() {
     }
 
     private fun loadPostInfo(sheetBinding: WallSheetBinding) {
-        wallViewModel.getPostInfo(postLink = wallArgs.image.postLink, imageSize = 12)
+        wallViewModel.getPostInfo(
+            postLink = wallArgs.image.postLink,
+            imageLink = wallArgs.image.imageLink,
+            context = this,
+            resolution = Utils.getResolution(context = this)
+        )
         wallViewModel.postInfo.observe(this) {
             when (it.status) {
                 Resource.Status.SUCCESS, Resource.Status.ERROR -> sheetBinding.postInfo = it.data

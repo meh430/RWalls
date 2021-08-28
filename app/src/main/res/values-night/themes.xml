@@ -17,6 +17,8 @@
         <item name="fontFamily">@font/poppins</item>
         <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">shortEdges
         </item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">?attr/isLightTheme
+        </item>
     </style>
 
     <style name="AppBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">

@@ -18,4 +18,10 @@ class ImageLoader @Inject constructor() {
                 .override(resolution.width, resolution.height)
                 .submit().get()
         }
+
+    suspend fun getImageSize(context: Context, image: String, resolution: Resolution) =
+        withContext(Dispatchers.IO) {
+            val image = loadImage(context, image, resolution)
+            image.allocationByteCount / (1024.0 * 1024.0)
+        }
 }

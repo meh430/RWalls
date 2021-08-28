@@ -1,23 +1,42 @@
 package com.example.redditwalls.models
 
+import com.example.redditwalls.repositories.Resolution
+
 data class PostInfo(
     val subreddit: String,
-    val upvotes: Int,
+    val upvotes: String,
     val postTitle: String,
     val author: String,
     val numComments: String,
     val uploadDate: String,
-    val imageSize: Int
+    val imageSize: String,
+    val resolution: Resolution = Resolution(0, 0)
 ) {
+
+    constructor(
+        info: PostInfo,
+        resolution: Resolution
+    ) : this(
+        info.subreddit,
+        info.upvotes,
+        info.postTitle,
+        info.author,
+        info.numComments,
+        info.uploadDate,
+        info.imageSize,
+        resolution
+    )
+
     companion object {
         fun loading() = PostInfo(
             "Loading...",
-            0,
             "Loading...",
             "Loading...",
             "Loading...",
             "Loading...",
-            0
+            "Loading...",
+            "Loading",
+            Resolution(0, 0)
         )
     }
 }

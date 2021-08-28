@@ -138,7 +138,7 @@ object RWApi {
             results
         }
 
-    suspend fun getPostInfo(postLink: String, imageSize: Int) =
+    suspend fun getPostInfo(postLink: String, imageSize: Double) =
         withContext(Dispatchers.Default) {
             val endpoint = "$postLink.json"
             val jsonArr = JSONArray(fetch(endpoint))
@@ -157,12 +157,12 @@ object RWApi {
             val uploadDate = Utils.convertUTC(utcTime * 1000)
 
             PostInfo(
-                imageSize = imageSize,
+                imageSize = "${Utils.formatNumber(imageSize, true)} MB",
                 subreddit = "r/$sub",
                 postTitle = title,
-                upvotes = ups,
+                upvotes = Utils.formatNumber(ups.toDouble()),
                 uploadDate = uploadDate,
-                numComments = numComments,
+                numComments = Utils.formatNumber(numComments.toDouble()),
                 author = author
             )
         }

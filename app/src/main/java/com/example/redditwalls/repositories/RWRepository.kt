@@ -21,6 +21,6 @@ class RWRepository @Inject constructor() {
 
     suspend fun searchSubs(query: String) = RWApi.searchSubs(query)
 
-    suspend fun getPostInfo(postLink: String, imageSize: Int) =
+    suspend fun getPostInfo(postLink: String, imageSize: Double) =
         RWApi.getPostInfo(postLink, imageSize)
 }
