@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.29583333333333334" />
         <entry key="app/src/main/res/drawable/empty.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/drawable/error.xml" value="0.15208333333333332" />
         <entry key="app/src/main/res/drawable/grapple.xml" value="0.296875" />
@@ -10,6 +11,7 @@
         <entry key="app/src/main/res/drawable/ic_download.xml" value="0.15260416666666668" />
         <entry key="app/src/main/res/drawable/ic_favorite_filled.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.28229166666666666" />
+        <entry key="app/src/main/res/drawable/ic_info.xml" value="0.296875" />
         <entry key="app/src/main/res/drawable/ic_post.xml" value="0.15260416666666668" />
         <entry key="app/src/main/res/drawable/ic_refresh.xml" value="0.296875" />
         <entry key="app/src/main/res/drawable/ic_search.xml" value="0.28229166666666666" />
@@ -31,6 +33,7 @@
         <entry key="app/src/main/res/layout/wall_sheet.xml" value="0.25815217391304346" />
         <entry key="app/src/main/res/layout/wall_sheet_2.xml" value="0.25815217391304346" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.26614583333333336" />
+        <entry key="app/src/main/res/menu/favorites_menu.xml" value="0.28072916666666664" />
         <entry key="app/src/main/res/menu/sort_enu.xml" value="0.26614583333333336" />
       </map>
     </option>
