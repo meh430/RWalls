@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
+import com.example.redditwalls.RefreshWallpaper.Companion.REFRESH_WALLPAPER
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import javax.inject.Inject
@@ -15,6 +16,11 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class RefreshWallpaper : AppWidgetProvider() {
+
+    companion object {
+        const val REFRESH_WALLPAPER = "REFRESH_WALLPAPER"
+    }
+
     @Inject
     lateinit var wallpaperHelper: WallpaperHelper
 
@@ -39,6 +45,10 @@ class RefreshWallpaper : AppWidgetProvider() {
     override fun onReceive(context: Context, intent: Intent?) {
         super.onReceive(context, intent)
 
+        if (intent?.action != REFRESH_WALLPAPER) {
+            return
+        }
+
         coroutineScope.launch {
             wallpaperHelper.setRandomFavoriteWallpaper(context)
         }
@@ -54,7 +64,7 @@ internal fun updateAppWidget(
     val views = RemoteViews(context.packageName, R.layout.refresh_wallpaper)
 
     val intent = Intent(context, RefreshWallpaper::class.java)
-    intent.action = "CHANGE_TIME"
+    intent.action = REFRESH_WALLPAPER
     val flags = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
         PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
     } else {

@@ -31,16 +31,17 @@ class WallpaperHelper @Inject constructor(
         }
     }
 
-    suspend fun setImageLinkAsWallpaper(
+    private suspend fun setImageLinkAsWallpaper(
         context: Context,
         imageLink: String,
         location: WallpaperLocation
     ) {
         try {
+            val resolution = Utils.getResolution(context)
             val wallpaper = imageLoader.loadImage(
                 context,
                 imageLink,
-                Utils.getResolution(context)
+                resolution
             )
             setBitmapAsWallpaper(context, wallpaper, location)
         } catch (e: Exception) {

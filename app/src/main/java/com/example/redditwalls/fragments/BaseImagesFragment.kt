@@ -12,6 +12,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.redditwalls.R
+import com.example.redditwalls.adapters.ImageClickListener
 import com.example.redditwalls.adapters.ImagesAdapter
 import com.example.redditwalls.adapters.LoadingStateAdapter
 import com.example.redditwalls.databinding.EmptyBinding
@@ -22,7 +23,7 @@ import com.example.redditwalls.viewmodels.SettingsViewModel
 import com.example.redditwalls.viewmodels.SubImagesViewModel
 import com.google.android.material.progressindicator.LinearProgressIndicator
 
-abstract class BaseImagesFragment : Fragment(), ImagesAdapter.ImageListener {
+abstract class BaseImagesFragment : Fragment(), ImageClickListener {
 
     abstract val toolBarTitle: String
     abstract val subreddit: String
@@ -30,8 +31,8 @@ abstract class BaseImagesFragment : Fragment(), ImagesAdapter.ImageListener {
     protected val imagesAdapter: ImagesAdapter by lazy {
         val loadLowRes = settingsViewModel.loadLowResPreviews()
         ImagesAdapter(loadLowRes, this).apply {
-            withLoadStateHeader(
-                header = LoadingStateAdapter(this)
+            withLoadStateFooter(
+                footer = LoadingStateAdapter(this)
             )
         }
     }
