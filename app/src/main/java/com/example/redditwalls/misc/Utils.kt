@@ -1,5 +1,6 @@
 package com.example.redditwalls.misc
 
+import android.Manifest.permission
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
@@ -24,17 +25,25 @@ import androidx.annotation.ColorInt
 import android.R
 
 import android.content.res.Resources.Theme
-import android.util.DisplayMetrics
 
 import android.util.TypedValue
-import android.graphics.Point
-
-import android.view.Display
 
 import android.view.WindowManager
 import com.example.redditwalls.currentWindowMetricsPointCompat
 import com.example.redditwalls.models.Resolution
 import java.text.NumberFormat
+import android.app.DownloadManager
+import android.content.pm.PackageManager
+
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+
+import androidx.core.content.ContextCompat
+
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.os.Build.VERSION
+
+import android.os.Build.VERSION.SDK_INT
+import android.widget.Toast
 
 
 object Utils {
@@ -90,6 +99,31 @@ object Utils {
         return "$month ${getOrdinal(Integer.parseInt(date[1]))}, ${date[2]} | ${hours}:${time[1]} $pmam"
     }
 
+    fun checkPermission(context: Context): Boolean {
+        return if (SDK_INT >= Build.VERSION_CODES.R) {
+            Environment.isExternalStorageManager()
+        } else {
+            val result = ContextCompat.checkSelfPermission(context, WRITE_EXTERNAL_STORAGE)
+            result == PackageManager.PERMISSION_GRANTED
+        }
+    }
+
+    fun downloadFile(context: Context, imageLink: String) {
+        val mgr = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val downloadUri = Uri.parse(imageLink)
+        val request = DownloadManager.Request(
+            downloadUri
+        )
+        request.setAllowedNetworkTypes(
+            DownloadManager.Request.NETWORK_WIFI
+                    or DownloadManager.Request.NETWORK_MOBILE
+        ).setAllowedOverMetered(true)
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
+            .setAllowedOverRoaming(true).setTitle("Downloading $imageLink")
+            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOCUMENTS, imageLink)
+        mgr.enqueue(request)
+    }
+
     fun getResolution(context: Context): Resolution {
         val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         return wm.currentWindowMetricsPointCompat().run {
@@ -130,8 +164,8 @@ object Utils {
         return SimpleDateFormat("MM-dd-yyyy 'at' HH:mm:ss", Locale.CANADA).format(Date());
     }
 
-    fun saveBitmap(bitmap: Bitmap, context: Context): String {
-        val fName = (0..999999999).random().toString().replace(" ", "") + ".jpg"
+    fun saveBitmap(bitmap: Bitmap, name: String?, context: Context): String {
+        val fName = name ?: UUID.randomUUID().toString()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val relativeLocation: String =
                 Environment.DIRECTORY_PICTURES + File.separator + "RedditWalls"
@@ -160,11 +194,13 @@ object Utils {
                     throw IOException("Failed to save bitmap.")
                 }
 
+                Toast.makeText(context, "Downloaded image", Toast.LENGTH_SHORT).show()
+
             } catch (e: IOException) {
                 if (uri != null) {
                     resolver.delete(uri, null, null)
                 }
-                throw e
+                Toast.makeText(context, "Failed to download image", Toast.LENGTH_SHORT).show()
             } finally {
                 stream?.close()
             }
@@ -186,8 +222,11 @@ object Utils {
                     file.name,
                     file.name
                 )
+
+                Toast.makeText(context, "Downloaded image", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
                 e.printStackTrace()
+                Toast.makeText(context, "Failed to download image", Toast.LENGTH_SHORT).show()
             }
         }
 

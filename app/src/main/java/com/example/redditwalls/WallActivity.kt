@@ -23,6 +23,7 @@ import android.graphics.drawable.Drawable
 import android.view.GestureDetector
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
+import java.util.*
 import javax.inject.Inject
 import kotlin.math.abs
 
@@ -91,14 +92,24 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
 
         sheetBinding.setWallpaper.setOnClickListener {
             wallpaperHelper.showLocationPickerDialog(this) { location ->
-                if (binding.wallpaper.drawable == null) {
-                    Toast.makeText(this, "Loading image...", Toast.LENGTH_SHORT).show()
-                } else {
-                    val bitmap = (binding.wallpaper.drawable as BitmapDrawable).bitmap
-                    wallpaperHelper.setBitmapAsWallpaper(this, bitmap, location)
+                getBitmap()?.let {
+                    wallpaperHelper.setBitmapAsWallpaper(this, it, location)
                 }
             }
         }
+
+        sheetBinding.saveWallpaper.setOnClickListener {
+            getBitmap()?.let {
+                Utils.saveBitmap(it, sheetBinding.postTitle.text?.toString(), this)
+            }
+        }
+    }
+
+    private fun getBitmap() = if (binding.wallpaper.drawable == null) {
+        Toast.makeText(this, "Loading image...", Toast.LENGTH_SHORT).show()
+        null
+    } else {
+        (binding.wallpaper.drawable as BitmapDrawable).bitmap
     }
 
     private fun setUpFavorite() {
