@@ -28,4 +28,8 @@ class FavoriteImagesRepository @Inject constructor(private val favoritesDAO: Fav
     suspend fun favoriteExists(imageLink: String) = withContext(Dispatchers.IO) {
         favoritesDAO.favoriteExists(imageLink)
     }
+
+    suspend fun getRandomFavoriteImage() = withContext(Dispatchers.IO) {
+        favoritesDAO.getRandomFavoriteImage()
+    }
 }

@@ -6,10 +6,22 @@ import android.graphics.Bitmap
 import android.widget.Toast
 import com.example.redditwalls.misc.ImageLoader
 import com.example.redditwalls.misc.Utils
+import com.example.redditwalls.repositories.FavoriteImagesRepository
+import com.example.redditwalls.repositories.SettingsRepository
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import javax.inject.Inject
 
-class WallpaperHelper @Inject constructor(private val imageLoader: ImageLoader) {
+class WallpaperHelper @Inject constructor(
+    private val imageLoader: ImageLoader,
+    private val favoriteImagesRepository: FavoriteImagesRepository,
+    private val settingsRepository: SettingsRepository
+) {
+
+    suspend fun setRandomFavoriteWallpaper(context: Context) {
+        val image = favoriteImagesRepository.getRandomFavoriteImage()
+        setImageLinkAsWallpaper(context, image.imageLink, settingsRepository.getRandomRefreshLocation())
+    }
+
     suspend fun setImageLinkAsWallpaper(
         context: Context,
         imageLink: String,

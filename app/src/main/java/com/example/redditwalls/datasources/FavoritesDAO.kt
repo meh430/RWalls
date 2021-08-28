@@ -23,4 +23,7 @@ interface FavoritesDAO {
 
     @Query("SELECT EXISTS(SELECT * FROM Favorites WHERE imageLink = :imageLink)")
     suspend fun favoriteExists(imageLink: String): Boolean
+
+    @Query("SELECT * FROM Favorites ORDER BY RANDOM() LIMIT 1")
+    suspend fun getRandomFavoriteImage(): Image
 }

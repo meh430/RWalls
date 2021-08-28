@@ -43,4 +43,12 @@
     <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/rounded_top</item>
     </style>
+
+    <style name="Theme.RedditWalls.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault">
+        <item name="appWidgetRadius">8dp</item>
+        <item name="appWidgetPadding">4dp</item>
+        <item name="appWidgetInnerRadius">4dp</item>
+    </style>
+
+    <style name="Theme.RedditWalls.AppWidgetContainer" parent="Theme.RedditWalls.AppWidgetContainerParent" />
 </resources>
