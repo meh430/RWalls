@@ -22,6 +22,17 @@ class WallActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWallBinding
     private val wallViewModel: WallViewModel by viewModels()
 
+    private val sheetBinding: WallSheetBinding by lazy {
+        WallSheetBinding.inflate(
+            LayoutInflater.from(this)
+        )
+    }
+    private val wallSheet: BottomSheetDialog by lazy {
+        val wallSheet = BottomSheetDialog(this)
+        wallSheet.setContentView(sheetBinding.root)
+        wallSheet
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -30,16 +41,11 @@ class WallActivity : AppCompatActivity() {
 
         Utils.setFullScreen(window, binding.root)
         loadWallpaper()
+        loadPostInfo(sheetBinding)
     }
 
     private fun showBottomSheet() {
-        val wallSheet = BottomSheetDialog(this)
-        val sheetBinding = WallSheetBinding.inflate(
-            LayoutInflater.from(this)
-        )
-        wallSheet.setContentView(sheetBinding.root)
         wallSheet.show()
-        loadPostInfo(sheetBinding)
     }
 
     private fun loadWallpaper() {

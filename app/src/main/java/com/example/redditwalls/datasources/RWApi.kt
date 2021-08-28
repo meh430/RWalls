@@ -158,7 +158,7 @@ object RWApi {
 
             PostInfo(
                 imageSize = imageSize,
-                subreddit = sub,
+                subreddit = "r/$sub",
                 postTitle = title,
                 upvotes = ups,
                 uploadDate = uploadDate,
