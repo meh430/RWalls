@@ -30,7 +30,7 @@ class FavoritesFragment : Fragment(), ImageClickListener {
     companion object {
         const val FEELING_LUCKY = 0
         const val DOWNLOAD_ALL = 1
-        const val DELETE_ALL = 3
+        const val DELETE_ALL = 2
     }
 
     private var _binding: FragmentFavoritesBinding? = null
