@@ -37,8 +37,10 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:text="Info"
+                android:textColor="@color/white"
                 app:icon="@drawable/ic_info"
-                app:iconSize="18dp" />
+                app:iconSize="18dp"
+                app:iconTint="@color/white" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/favorite"
@@ -46,8 +48,10 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:text="Favorite"
+                android:textColor="@color/white"
                 app:icon="@drawable/ic_favorite_filled"
-                app:iconSize="18dp" />
+                app:iconSize="18dp"
+                app:iconTint="@color/white" />
         </LinearLayout>
     </RelativeLayout>
 </layout>

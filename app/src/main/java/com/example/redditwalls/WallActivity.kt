@@ -18,7 +18,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import android.view.MotionEvent
 import android.annotation.SuppressLint
+import android.graphics.drawable.Drawable
 import android.view.GestureDetector
+import androidx.appcompat.content.res.AppCompatResources
 import kotlin.math.abs
 
 
@@ -41,6 +43,14 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
         wallSheet
     }
 
+    private val filledHeartIcon: Drawable? by lazy {
+        AppCompatResources.getDrawable(this, R.drawable.ic_favorite_filled)
+    }
+
+    private val heartIcon: Drawable? by lazy {
+        AppCompatResources.getDrawable(this, R.drawable.ic_favorite)
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,14 +58,31 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
         binding = ActivityWallBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        wallViewModel.initialize(wallArgs.image)
+
         Utils.setFullScreen(window, binding.root)
         loadWallpaper()
         loadPostInfo(sheetBinding)
 
         detector = GestureDetector(this, this)
-
         binding.info.setOnClickListener {
             wallSheet.show()
+        }
+
+        setUpFavorite()
+        binding.favorite.setOnClickListener {
+            wallViewModel.toggleFavorite()
+        }
+    }
+
+    private fun setUpFavorite() {
+        binding.favorite.setOnClickListener {
+            wallViewModel.toggleFavorite()
+        }
+
+        wallViewModel.isFavorite.observe(this) {
+            val icon = if (it) filledHeartIcon else heartIcon
+            binding.favorite.icon = icon
         }
     }
 
