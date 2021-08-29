@@ -23,7 +23,7 @@ class WallViewModel @Inject constructor(
 ) : BaseViewModel() {
     val postInfo = MutableLiveData<Resource<PostInfo>>()
     val isFavorite = MutableLiveData<Boolean>()
-    lateinit var currentImage: Image
+    private lateinit var currentImage: Image
 
     init {
         postInfo.value = Resource.loading()
@@ -41,7 +41,7 @@ class WallViewModel @Inject constructor(
             viewModelScope.launch {
                 favoriteImagesRepository.favoriteExists(currentImage.imageLink).let { exists ->
                     if (exists) {
-                        favoriteImagesRepository.deleteFavoriteImage(currentImage)
+                        favoriteImagesRepository.deleteFavoriteImage(currentImage.imageLink)
                     } else {
                         favoriteImagesRepository.insertFavorite(currentImage)
                     }

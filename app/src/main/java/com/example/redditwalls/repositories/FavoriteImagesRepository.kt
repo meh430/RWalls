@@ -15,8 +15,8 @@ class FavoriteImagesRepository @Inject constructor(private val favoritesDAO: Fav
         favoritesDAO.deleteAllFavorites()
     }
 
-    suspend fun deleteFavoriteImage(favorite: Image) = withContext(Dispatchers.IO) {
-        favoritesDAO.deleteFavoriteImage(favorite)
+    suspend fun deleteFavoriteImage(imageLink: String) = withContext(Dispatchers.IO) {
+        favoritesDAO.deleteFavoriteImage(imageLink)
     }
 
     fun getFavoritesFlow() = favoritesDAO.getFavoritesFlow()

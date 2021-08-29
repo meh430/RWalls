@@ -24,7 +24,7 @@ object AppModule {
     fun provideFavoriteSubredditsDAO(db: RWDatabase) = db.getSubredditDAO()
 
     @Provides
-    fun providesPreferences(@ApplicationContext context: Context) =
+    fun providesPreferences(@ApplicationContext context: Context): SharedPreferences =
         context.getSharedPreferences(
             "settings",
             Context.MODE_PRIVATE

@@ -1,6 +1,9 @@
 package com.example.redditwalls.datasources
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import com.example.redditwalls.models.Image
 import kotlinx.coroutines.flow.Flow
 
@@ -12,8 +15,8 @@ interface FavoritesDAO {
     @Query("DELETE FROM FAVORITES")
     suspend fun deleteAllFavorites()
 
-    @Delete
-    suspend fun deleteFavoriteImage(favorite: Image)
+    @Query("DELETE FROM FAVORITES WHERE imageLink = :imageLink")
+    suspend fun deleteFavoriteImage(imageLink: String)
 
     @Query("SELECT * FROM Favorites")
     fun getFavoritesFlow(): Flow<List<Image>>

@@ -3,8 +3,8 @@
 package com.example.redditwalls.datasources
 
 import com.example.redditwalls.R
-import com.example.redditwalls.forEach
 import com.example.redditwalls.misc.Utils
+import com.example.redditwalls.misc.forEach
 import com.example.redditwalls.models.Image
 import com.example.redditwalls.models.PostInfo
 import com.example.redditwalls.models.Subreddit
@@ -27,7 +27,6 @@ class RWApi @Inject constructor() {
     enum class Sort(val trailing: String, val queryParam: String) {
         HOT("/hot.json", "sort=hot"),
         NEW("/new.json", "sort=new"),
-        TOP_DAY("/top.json", "sort=top&t=day"),
         TOP_WEEK("/top.json", "sort=top&t=week"),
         TOP_MONTH("/top.json", "sort=top&t=month"),
         TOP_YEAR("/top.json", "sort=top&t=year"),

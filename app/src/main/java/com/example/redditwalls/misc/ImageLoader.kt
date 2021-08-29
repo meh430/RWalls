@@ -1,16 +1,19 @@
 package com.example.redditwalls.misc
 
 import android.content.Context
+import android.graphics.Bitmap
 import com.bumptech.glide.Glide
 import com.example.redditwalls.models.Resolution
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+// get() is called in an IO coroutine
+@Suppress("BlockingMethodInNonBlockingContext")
 class ImageLoader @Inject constructor() {
 
     // Use to save a bitmap
-    suspend fun loadImage(context: Context, image: String, resolution: Resolution) =
+    suspend fun loadImage(context: Context, image: String, resolution: Resolution): Bitmap =
         withContext(Dispatchers.IO) {
             Glide.with(context)
                 .asBitmap()
@@ -21,7 +24,6 @@ class ImageLoader @Inject constructor() {
 
     suspend fun getImageSize(context: Context, image: String, resolution: Resolution) =
         withContext(Dispatchers.IO) {
-            val image = loadImage(context, image, resolution)
-            image.allocationByteCount / (1024.0 * 1024.0)
+            loadImage(context, image, resolution).allocationByteCount / (1024.0 * 1024.0)
         }
 }

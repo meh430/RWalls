@@ -76,7 +76,7 @@ abstract class BaseApiImagesFragment : BaseImagesFragment() {
         imagesViewModel.setQuery(query)
     }
 
-    fun setSort(sort: Sort = Sort.HOT) {
+    private fun setSort(sort: Sort = Sort.HOT) {
         imagesViewModel.setSort(sort)
     }
 

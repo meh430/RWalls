@@ -1,4 +1,4 @@
-package com.example.redditwalls
+package com.example.redditwalls.misc
 
 import android.app.Activity
 import android.content.Intent

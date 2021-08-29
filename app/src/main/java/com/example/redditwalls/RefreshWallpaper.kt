@@ -8,7 +8,10 @@ import android.content.Intent
 import android.widget.RemoteViews
 import com.example.redditwalls.RefreshWallpaper.Companion.REFRESH_WALLPAPER
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -25,7 +28,7 @@ class RefreshWallpaper : AppWidgetProvider() {
     lateinit var wallpaperHelper: WallpaperHelper
 
     private val job = SupervisorJob()
-    val coroutineScope = CoroutineScope(Dispatchers.IO + job)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO + job)
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,

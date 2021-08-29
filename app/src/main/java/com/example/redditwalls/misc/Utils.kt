@@ -1,30 +1,23 @@
 package com.example.redditwalls.misc
 
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-import android.R
-import android.app.Activity
-import android.app.DownloadManager
 import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
-import android.content.res.Resources.Theme
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.TypedValue
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import com.example.redditwalls.currentWindowMetricsPointCompat
 import com.example.redditwalls.models.Resolution
 import java.io.File
 import java.io.FileOutputStream
@@ -97,22 +90,6 @@ object Utils {
         }
     }
 
-    fun downloadFile(context: Context, imageLink: String) {
-        val mgr = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-        val downloadUri = Uri.parse(imageLink)
-        val request = DownloadManager.Request(
-            downloadUri
-        )
-        request.setAllowedNetworkTypes(
-            DownloadManager.Request.NETWORK_WIFI
-                    or DownloadManager.Request.NETWORK_MOBILE
-        ).setAllowedOverMetered(true)
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
-            .setAllowedOverRoaming(true).setTitle("Downloading $imageLink")
-            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOCUMENTS, imageLink)
-        mgr.enqueue(request)
-    }
-
     fun getResolution(context: Context): Resolution {
         val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         return wm.currentWindowMetricsPointCompat().run {
@@ -123,20 +100,13 @@ object Utils {
         }
     }
 
-    fun formatNumber(number: Double, round: Boolean = false) = NumberFormat.getInstance().run {
-        val decimalPlaces = if (round) 2 else 0
-        minimumFractionDigits = decimalPlaces
-        maximumFractionDigits = decimalPlaces
-        format(number)
-    }
-
-    fun setNavigationBarColor(activity: Activity) {
-        val typedValue = TypedValue()
-        val theme: Theme = activity.theme
-        theme.resolveAttribute(R.attr.colorBackground, typedValue, true)
-        @ColorInt val color = typedValue.data
-        activity.window.navigationBarColor = color
-    }
+    fun formatNumber(number: Double, round: Boolean = false): String =
+        NumberFormat.getInstance().run {
+            val decimalPlaces = if (round) 2 else 0
+            minimumFractionDigits = decimalPlaces
+            maximumFractionDigits = decimalPlaces
+            format(number)
+        }
 
     fun setFullScreen(window: Window, rootView: View) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -153,9 +123,10 @@ object Utils {
         return SimpleDateFormat("MM-dd-yyyy 'at' HH:mm:ss", Locale.CANADA).format(Date())
     }
 
+    @Suppress("Deprecation")
     fun saveBitmap(bitmap: Bitmap, name: String?, context: Context): String {
         val fName = name ?: UUID.randomUUID().toString()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (SDK_INT >= Build.VERSION_CODES.Q) {
             val relativeLocation: String =
                 Environment.DIRECTORY_PICTURES + File.separator + "RedditWalls"
 

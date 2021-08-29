@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide
 import com.example.redditwalls.databinding.ActivityWallBinding
 import com.example.redditwalls.databinding.WallSheetBinding
 import com.example.redditwalls.misc.Utils
+import com.example.redditwalls.misc.launchBrowser
 import com.example.redditwalls.models.PostInfo
 import com.example.redditwalls.models.Resource
 import com.example.redditwalls.viewmodels.WallViewModel
@@ -30,6 +31,12 @@ import kotlin.math.abs
 @AndroidEntryPoint
 class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
     GestureDetector.OnDoubleTapListener {
+
+    companion object {
+        const val SWIPE_DISTANCE_THRESHOLD = 50
+        const val SWIPE_VELOCITY_THRESHOLD = 50
+    }
+
     private val wallArgs: WallActivityArgs by navArgs()
     private lateinit var binding: ActivityWallBinding
     private val wallViewModel: WallViewModel by viewModels()
@@ -165,8 +172,6 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
     }
 
     override fun onFling(e1: MotionEvent, e2: MotionEvent, vX: Float, vY: Float): Boolean {
-        val SWIPE_DISTANCE_THRESHOLD = 50
-        val SWIPE_VELOCITY_THRESHOLD = 50
         val distanceX: Float = e2.x - e1.x
         val distanceY: Float = e2.y - e1.y
         if (abs(distanceX) > abs(distanceY) && abs(distanceX) > SWIPE_DISTANCE_THRESHOLD && abs(vX) > SWIPE_VELOCITY_THRESHOLD) {

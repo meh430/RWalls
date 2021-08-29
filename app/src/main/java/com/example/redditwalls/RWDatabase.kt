@@ -1,6 +1,5 @@
 package com.example.redditwalls
 
-import android.app.Application
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
@@ -9,7 +8,6 @@ import com.example.redditwalls.datasources.FavoritesDAO
 import com.example.redditwalls.datasources.SubredditsDAO
 import com.example.redditwalls.models.Image
 import com.example.redditwalls.models.Subreddit
-import dagger.hilt.android.qualifiers.ApplicationContext
 
 @Database(entities = [Image::class, Subreddit::class], version = 1, exportSchema = false)
 abstract class RWDatabase : RoomDatabase(){
