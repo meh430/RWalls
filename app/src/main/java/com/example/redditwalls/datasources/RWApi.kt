@@ -3,8 +3,8 @@
 package com.example.redditwalls.datasources
 
 import com.example.redditwalls.R
-import com.example.redditwalls.misc.Utils
 import com.example.redditwalls.forEach
+import com.example.redditwalls.misc.Utils
 import com.example.redditwalls.models.Image
 import com.example.redditwalls.models.PostInfo
 import com.example.redditwalls.models.Subreddit
@@ -166,7 +166,7 @@ class RWApi @Inject constructor() {
                 upvotes = Utils.formatNumber(ups.toDouble()),
                 uploadDate = uploadDate,
                 numComments = Utils.formatNumber(numComments.toDouble()),
-                author = author
+                author = "u/$author"
             )
         }
 

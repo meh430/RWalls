@@ -103,6 +103,17 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
                 Utils.saveBitmap(it, sheetBinding.postTitle.text?.toString(), this)
             }
         }
+
+        sheetBinding.toPost.setOnClickListener {
+            wallArgs.image.postLink.launchBrowser(this)
+        }
+
+        sheetBinding.author.setOnClickListener {
+            wallViewModel.postInfo.value?.data?.author.let { author ->
+                val url = "https://www.reddit.com/${author}"
+                url.launchBrowser(this)
+            }
+        }
     }
 
     private fun getBitmap() = if (binding.wallpaper.drawable == null) {

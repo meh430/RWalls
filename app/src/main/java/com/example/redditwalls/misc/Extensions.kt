@@ -1,12 +1,16 @@
 package com.example.redditwalls
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Insets
 import android.graphics.Point
+import android.net.Uri
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.lifecycle.MutableLiveData
 import org.json.JSONArray
 import org.json.JSONObject
+
 
 inline fun JSONArray.forEach(action: (JSONObject) -> Unit) {
     val length = length()
@@ -41,4 +45,10 @@ fun WindowManager.currentWindowMetricsPointCompat(): Point {
             defaultDisplay.getRealSize(this)
         }
     }
+}
+
+fun String.launchBrowser(activity: Activity) {
+    Intent(Intent.ACTION_VIEW).apply {
+        data = Uri.parse(this@launchBrowser)
+    }.also { activity.startActivity(it) }
 }
