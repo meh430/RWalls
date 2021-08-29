@@ -1,8 +1,11 @@
 package com.example.redditwalls.datasources
 
-import androidx.room.*
+import androidx.lifecycle.LiveData
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import com.example.redditwalls.models.Subreddit
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SubredditsDAO {
@@ -10,7 +13,7 @@ interface SubredditsDAO {
     suspend fun insertFavoriteSubreddit(favorite: Subreddit)
 
     @Query("SELECT * FROM FavoriteSubreddits")
-    fun getFavoriteSubredditsFlow(): Flow<List<Subreddit>>
+    fun getFavoriteSubredditsLiveData(): LiveData<List<Subreddit>>
 
     @Query("SELECT * FROM FavoriteSubreddits")
     suspend fun getFavoriteSubreddits(): List<Subreddit>
@@ -18,6 +21,6 @@ interface SubredditsDAO {
     @Query("DELETE FROM FavoriteSubreddits")
     suspend fun deleteAllFavorites()
 
-    @Delete
-    suspend fun deleteFavoriteSubreddit(subreddit: Subreddit)
+    @Query("DELETE FROM FavoriteSubreddits WHERE id = :id")
+    suspend fun deleteFavoriteSubreddit(id: Long)
 }

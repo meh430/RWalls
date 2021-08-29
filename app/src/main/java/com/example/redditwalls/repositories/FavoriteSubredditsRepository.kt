@@ -12,7 +12,7 @@ class FavoriteSubredditsRepository @Inject constructor(private val subredditsDAO
         subredditsDAO.insertFavoriteSubreddit(subreddit)
     }
 
-    fun getFavoriteSubredditsFlow() = subredditsDAO.getFavoriteSubredditsFlow()
+    fun getFavoriteSubredditsLiveData() = subredditsDAO.getFavoriteSubredditsLiveData()
 
     suspend fun getFavoriteSubreddits() = withContext(Dispatchers.IO) {
         subredditsDAO.getFavoriteSubreddits()
@@ -22,7 +22,7 @@ class FavoriteSubredditsRepository @Inject constructor(private val subredditsDAO
         subredditsDAO.deleteAllFavorites()
     }
 
-    suspend fun deleteFavoriteSubreddit(subreddit: Subreddit) = withContext(Dispatchers.IO) {
-        subredditsDAO.deleteFavoriteSubreddit(subreddit)
+    suspend fun deleteFavoriteSubreddit(id: Long) = withContext(Dispatchers.IO) {
+        subredditsDAO.deleteFavoriteSubreddit(id)
     }
 }

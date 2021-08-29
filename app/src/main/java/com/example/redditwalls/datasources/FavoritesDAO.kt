@@ -15,8 +15,8 @@ interface FavoritesDAO {
     @Query("DELETE FROM FAVORITES")
     suspend fun deleteAllFavorites()
 
-    @Query("DELETE FROM FAVORITES WHERE imageLink = :imageLink")
-    suspend fun deleteFavoriteImage(imageLink: String)
+    @Query("DELETE FROM FAVORITES WHERE id = :id")
+    suspend fun deleteFavoriteImage(id: Long)
 
     @Query("SELECT * FROM Favorites")
     fun getFavoritesFlow(): Flow<List<Image>>
