@@ -6,11 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.redditwalls.R
 import com.example.redditwalls.databinding.FragmentHomeBinding
-import com.example.redditwalls.fragments.BaseImagesFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : BaseImagesFragment() {
+class HomeFragment : BaseApiImagesFragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
