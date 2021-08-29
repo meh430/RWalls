@@ -20,14 +20,23 @@ class WallpaperHelper @Inject constructor(
 ) {
 
     suspend fun setRandomFavoriteWallpaper(context: Context) {
-        val image = favoriteImagesRepository.getRandomFavoriteImage()
-        setImageLinkAsWallpaper(
-            context,
-            image.imageLink,
-            settingsRepository.getRandomRefreshLocation()
-        )
+        val images = favoriteImagesRepository.getFavorites()
+
+        if (images.isNotEmpty()) {
+            setImageLinkAsWallpaper(
+                context,
+                images.random().imageLink,
+                settingsRepository.getRandomRefreshLocation()
+            )
+        }
+
         withContext(Dispatchers.Main) {
-            Toast.makeText(context, "Successfully set wallpaper", Toast.LENGTH_SHORT).show()
+            val msg = if (images.isNotEmpty()) {
+                "Successfully set wallpaper"
+            } else {
+                "No favorites to choose from :("
+            }
+            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
         }
     }
 
