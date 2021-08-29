@@ -39,12 +39,15 @@ class WallViewModel @Inject constructor(
     fun toggleFavorite() {
         isFavorite.value?.let {
             viewModelScope.launch {
-                if (it) {
-                    favoriteImagesRepository.deleteFavoriteImage(currentImage)
-                } else {
-                    favoriteImagesRepository.insertFavorite(currentImage)
+                favoriteImagesRepository.favoriteExists(currentImage.imageLink).let { exists ->
+                    if (exists) {
+                        favoriteImagesRepository.deleteFavoriteImage(currentImage)
+                    } else {
+                        favoriteImagesRepository.insertFavorite(currentImage)
+                    }
+
+                    isFavorite.postValue(!exists)
                 }
-                isFavorite.postValue(!it)
             }
         }
     }
