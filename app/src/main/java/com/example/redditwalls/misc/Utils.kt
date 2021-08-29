@@ -1,49 +1,38 @@
 package com.example.redditwalls.misc
 
-import android.Manifest.permission
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.R
 import android.app.Activity
+import android.app.DownloadManager
 import android.content.ContentValues
 import android.content.Context
+import android.content.pm.PackageManager
+import android.content.res.Resources.Theme
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.TypedValue
 import android.view.View
 import android.view.Window
+import android.view.WindowManager
+import android.widget.Toast
+import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.example.redditwalls.currentWindowMetricsPointCompat
+import com.example.redditwalls.models.Resolution
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
-import androidx.annotation.ColorInt
-
-import android.R
-
-import android.content.res.Resources.Theme
-
-import android.util.TypedValue
-
-import android.view.WindowManager
-import com.example.redditwalls.currentWindowMetricsPointCompat
-import com.example.redditwalls.models.Resolution
-import java.text.NumberFormat
-import android.app.DownloadManager
-import android.content.pm.PackageManager
-
-import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-
-import androidx.core.content.ContextCompat
-
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
-import android.os.Build.VERSION
-
-import android.os.Build.VERSION.SDK_INT
-import android.widget.Toast
 
 
 object Utils {
@@ -161,7 +150,7 @@ object Utils {
     }
 
     fun getDate(): String {
-        return SimpleDateFormat("MM-dd-yyyy 'at' HH:mm:ss", Locale.CANADA).format(Date());
+        return SimpleDateFormat("MM-dd-yyyy 'at' HH:mm:ss", Locale.CANADA).format(Date())
     }
 
     fun saveBitmap(bitmap: Bitmap, name: String?, context: Context): String {

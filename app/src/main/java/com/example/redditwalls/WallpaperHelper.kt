@@ -31,7 +31,7 @@ class WallpaperHelper @Inject constructor(
         }
     }
 
-    private suspend fun setImageLinkAsWallpaper(
+    suspend fun setImageLinkAsWallpaper(
         context: Context,
         imageLink: String,
         location: WallpaperLocation

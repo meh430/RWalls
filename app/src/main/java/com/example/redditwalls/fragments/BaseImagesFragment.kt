@@ -4,14 +4,17 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.redditwalls.R
+import com.example.redditwalls.WallpaperHelper
 import com.example.redditwalls.adapters.ImageClickListener
 import com.example.redditwalls.adapters.ImagesAdapter
 import com.example.redditwalls.adapters.LoadingStateAdapter
@@ -19,14 +22,20 @@ import com.example.redditwalls.databinding.EmptyBinding
 import com.example.redditwalls.databinding.ErrorBinding
 import com.example.redditwalls.datasources.RWApi.Sort
 import com.example.redditwalls.models.Image
+import com.example.redditwalls.viewmodels.FavoritesViewModel
 import com.example.redditwalls.viewmodels.SettingsViewModel
 import com.example.redditwalls.viewmodels.SubImagesViewModel
 import com.google.android.material.progressindicator.LinearProgressIndicator
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 abstract class BaseImagesFragment : Fragment(), ImageClickListener {
 
     abstract val toolBarTitle: String
     abstract val subreddit: String
+
+    @Inject
+    lateinit var wallpaperHelper: WallpaperHelper
 
     protected val imagesAdapter: ImagesAdapter by lazy {
         val loadLowRes = settingsViewModel.loadLowResPreviews()
@@ -37,6 +46,7 @@ abstract class BaseImagesFragment : Fragment(), ImageClickListener {
         }
     }
     protected val settingsViewModel: SettingsViewModel by viewModels()
+    private val favoritesViewModel: FavoritesViewModel by viewModels()
     protected val imagesViewModel: SubImagesViewModel by lazy {
         val vm: SubImagesViewModel by viewModels()
         vm.also {
@@ -123,6 +133,18 @@ abstract class BaseImagesFragment : Fragment(), ImageClickListener {
     }
 
     override fun onLongClick(image: Image) {
-        TODO("Not yet implemented")
+        wallpaperHelper.showLocationPickerDialog(requireContext()) {
+            lifecycleScope.launch {
+                wallpaperHelper.setImageLinkAsWallpaper(requireContext(), image.imageLink, it)
+            }
+        }
+    }
+
+    override fun onDoubleClick(image: Image) {
+        lifecycleScope.launch {
+            val added = favoritesViewModel.addFavorite(image)
+            val msg = if (added) "Added to favorites" else "Removed from favorites"
+            Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+        }
     }
 }

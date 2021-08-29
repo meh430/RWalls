@@ -1,14 +1,19 @@
 package com.example.redditwalls.fragments
 
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.*
 import android.widget.ArrayAdapter
-import androidx.fragment.app.Fragment
+import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.redditwalls.R
+import com.example.redditwalls.WallpaperHelper
 import com.example.redditwalls.adapters.FavoritesAdapter
 import com.example.redditwalls.adapters.ImageClickListener
 import com.example.redditwalls.databinding.FragmentFavoritesBinding
@@ -17,11 +22,8 @@ import com.example.redditwalls.viewmodels.FavoritesViewModel
 import com.example.redditwalls.viewmodels.SettingsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import android.util.TypedValue
-
-import android.widget.TextView
-
-import android.view.View
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -38,6 +40,9 @@ class FavoritesFragment : Fragment(), ImageClickListener {
 
     private val favoritesViewModel: FavoritesViewModel by viewModels()
     private val settingsViewModel: SettingsViewModel by viewModels()
+
+    @Inject
+    lateinit var wallpaperHelper: WallpaperHelper
 
     private val favoritesAdapter: FavoritesAdapter by lazy {
         FavoritesAdapter(
@@ -151,7 +156,19 @@ class FavoritesFragment : Fragment(), ImageClickListener {
     }
 
     override fun onLongClick(image: Image) {
-        TODO("Not yet implemented")
+        wallpaperHelper.showLocationPickerDialog(requireContext()) {
+            lifecycleScope.launch {
+                wallpaperHelper.setImageLinkAsWallpaper(requireContext(), image.imageLink, it)
+            }
+        }
+    }
+
+    override fun onDoubleClick(image: Image) {
+        lifecycleScope.launch {
+            val added = favoritesViewModel.addFavorite(image)
+            val msg = if (added) "Added to favorites" else "Removed from favorites"
+            Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+        }
     }
 
 }

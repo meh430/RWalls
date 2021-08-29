@@ -1,10 +1,17 @@
 package com.example.redditwalls
 
+import android.annotation.SuppressLint
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.view.GestureDetector
 import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.navigation.navArgs
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
@@ -16,20 +23,13 @@ import com.example.redditwalls.models.Resource
 import com.example.redditwalls.viewmodels.WallViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
-import android.view.MotionEvent
-import android.annotation.SuppressLint
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
-import android.view.GestureDetector
-import android.widget.Toast
-import androidx.appcompat.content.res.AppCompatResources
-import java.util.*
 import javax.inject.Inject
 import kotlin.math.abs
 
 
 @AndroidEntryPoint
-class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
+class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
+    GestureDetector.OnDoubleTapListener {
     private val wallArgs: WallActivityArgs by navArgs()
     private lateinit var binding: ActivityWallBinding
     private val wallViewModel: WallViewModel by viewModels()
@@ -153,20 +153,6 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
         return detector.onTouchEvent(event) || super.onTouchEvent(event)
     }
 
-    override fun onDown(event: MotionEvent) = false
-
-    override fun onShowPress(event: MotionEvent) {
-        // NO-OP
-    }
-
-    override fun onSingleTapUp(event: MotionEvent) = false
-
-    override fun onScroll(evt1: MotionEvent, evt2: MotionEvent, p1: Float, p2: Float) = false
-
-    override fun onLongPress(event: MotionEvent) {
-        // NO-OP
-    }
-
     override fun onFling(e1: MotionEvent, e2: MotionEvent, vX: Float, vY: Float): Boolean {
         val SWIPE_DISTANCE_THRESHOLD = 50
         val SWIPE_VELOCITY_THRESHOLD = 50
@@ -183,5 +169,28 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
             return true
         }
         return false
+    }
+
+    override fun onDoubleTap(event: MotionEvent?): Boolean {
+        wallViewModel.toggleFavorite()
+        return true
+    }
+
+    override fun onSingleTapConfirmed(event: MotionEvent?): Boolean = true
+
+    override fun onDoubleTapEvent(event: MotionEvent?): Boolean = true
+
+    override fun onDown(event: MotionEvent) = false
+
+    override fun onShowPress(event: MotionEvent) {
+        // NO-OP
+    }
+
+    override fun onSingleTapUp(event: MotionEvent) = false
+
+    override fun onScroll(evt1: MotionEvent, evt2: MotionEvent, p1: Float, p2: Float) = false
+
+    override fun onLongPress(event: MotionEvent) {
+        // NO-OP
     }
 }
