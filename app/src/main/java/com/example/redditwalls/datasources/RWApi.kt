@@ -129,9 +129,11 @@ class RWApi @Inject constructor() {
                 val subs = data.getInt("subscribers")
 
                 val sub = Subreddit(
+                    id = -1,
+                    networkId = data.getString("id") + data.getString("name"),
                     name = title,
                     description = desc,
-                    numSubscribers = subs,
+                    numSubscribers = Utils.formatNumber(subs + 0.0, false),
                     icon = iconUrl
                 )
                 results.add(sub)

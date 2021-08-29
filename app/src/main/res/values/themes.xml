@@ -50,5 +50,9 @@
         <item name="appWidgetInnerRadius">4dp</item>
     </style>
 
+    <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
+
     <style name="Theme.RedditWalls.AppWidgetContainer" parent="Theme.RedditWalls.AppWidgetContainerParent" />
 </resources>

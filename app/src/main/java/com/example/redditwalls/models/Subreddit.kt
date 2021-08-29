@@ -7,9 +7,9 @@ import androidx.room.PrimaryKey
 data class Subreddit(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
+    val networkId: String = "",
     val name: String,
     val description: String = "",
-    val numSubscribers: Int,
-    val icon: String = "",
-    val numVisits: Int = 0
+    val numSubscribers: String = "",
+    val icon: String = ""
 )

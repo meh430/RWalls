@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="subreddit"
+            type="com.example.redditwalls.models.Subreddit" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="6dp"
+        app:cardElevation="4dp">
+
+        <LinearLayout
+            android:id="@+id/subInfoLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/subIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginEnd="14dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_info"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+
+                <TextView
+                    android:id="@+id/subName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginEnd="14dp"
+                    android:layout_weight="4"
+                    android:gravity="top"
+                    android:text="@{subreddit.name}"
+                    android:textAppearance="?attr/textAppearanceHeadline5"
+                    android:textColor="?attr/colorOnSurface" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/subscriberCount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical"
+                android:text="@{`Subscribers: ` + subreddit.numSubscribers}"
+                android:textAppearance="?attr/textAppearanceBody1"
+                android:textColor="?colorOnSurface" />
+
+            <TextView
+                android:id="@+id/subDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginBottom="12dp"
+                android:gravity="center_vertical"
+                android:text="This is a description of the subreddit"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="?attr/colorOnSurface" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

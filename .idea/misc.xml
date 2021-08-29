@@ -17,6 +17,7 @@
         <entry key="app/src/main/res/drawable/ic_search.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/drawable/ic_settings.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/drawable/ic_sort.xml" value="0.28229166666666666" />
+        <entry key="app/src/main/res/drawable/rounded_icon.xml" value="0.296875" />
         <entry key="app/src/main/res/drawable/rounded_top.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/drawable/up.xml" value="0.1625" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
@@ -29,6 +30,8 @@
         <entry key="app/src/main/res/layout/old_activity.xml" value="0.25" />
         <entry key="app/src/main/res/layout/refresh_wallpaper.xml" value="0.2554347826086957" />
         <entry key="app/src/main/res/layout/scroll_footer.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/sub_sheet.xml" value="0.4883203559510567" />
+        <entry key="app/src/main/res/layout/subreddit_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/toolbar.xml" value="0.25" />
         <entry key="app/src/main/res/layout/wall_sheet.xml" value="0.25815217391304346" />
         <entry key="app/src/main/res/layout/wall_sheet_2.xml" value="0.25815217391304346" />
