@@ -7,15 +7,20 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.redditwalls.R
 import com.example.redditwalls.adapters.FavoritesAdapter
 import com.example.redditwalls.databinding.FragmentFavoritesBinding
+import com.example.redditwalls.misc.ImageLoader
+import com.example.redditwalls.misc.Utils
 import com.example.redditwalls.models.Image
 import com.example.redditwalls.viewmodels.SettingsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -29,6 +34,9 @@ class FavoritesFragment : BaseImagesFragment() {
 
     private var _binding: FragmentFavoritesBinding? = null
     private val binding get() = _binding!!
+
+    @Inject
+    lateinit var imageLoader: ImageLoader
 
     private val settingsViewModel: SettingsViewModel by viewModels()
 
@@ -97,7 +105,13 @@ class FavoritesFragment : BaseImagesFragment() {
                 when (i) {
                     FEELING_LUCKY -> favoritesViewModel.getRandomFavoriteImage(this::onClick)
                     DELETE_ALL -> favoritesViewModel.deleteAllFavorites()
-                    DOWNLOAD_ALL -> TODO()
+                    DOWNLOAD_ALL -> lifecycleScope.launch {
+                        Utils.downloadAllImages(
+                            requireContext(),
+                            imageLoader,
+                            favoritesViewModel.getFavoritesAsList()
+                        )
+                    }
                 }
             }.show()
         return true

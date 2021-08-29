@@ -18,7 +18,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.example.redditwalls.models.Image
 import com.example.redditwalls.models.Resolution
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -124,7 +127,12 @@ object Utils {
     }
 
     @Suppress("Deprecation")
-    fun saveBitmap(bitmap: Bitmap, name: String?, context: Context): String {
+    fun saveBitmap(
+        bitmap: Bitmap,
+        name: String? = null,
+        context: Context,
+        showToasts: Boolean = true
+    ): String {
         val fName = name ?: UUID.randomUUID().toString()
         if (SDK_INT >= Build.VERSION_CODES.Q) {
             val relativeLocation: String =
@@ -154,13 +162,16 @@ object Utils {
                     throw IOException("Failed to save bitmap.")
                 }
 
-                Toast.makeText(context, "Downloaded image", Toast.LENGTH_SHORT).show()
-
+                if (showToasts) {
+                    Toast.makeText(context, "Downloaded image", Toast.LENGTH_SHORT).show()
+                }
             } catch (e: IOException) {
                 if (uri != null) {
                     resolver.delete(uri, null, null)
                 }
-                Toast.makeText(context, "Failed to download image", Toast.LENGTH_SHORT).show()
+                if (showToasts) {
+                    Toast.makeText(context, "Failed to download image", Toast.LENGTH_SHORT).show()
+                }
             } finally {
                 stream?.close()
             }
@@ -183,13 +194,41 @@ object Utils {
                     file.name
                 )
 
-                Toast.makeText(context, "Downloaded image", Toast.LENGTH_SHORT).show()
+                if (showToasts) {
+                    Toast.makeText(context, "Downloaded image", Toast.LENGTH_SHORT).show()
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
-                Toast.makeText(context, "Failed to download image", Toast.LENGTH_SHORT).show()
+                if (showToasts) {
+                    Toast.makeText(context, "Failed to download image", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
         return fName
+    }
+
+    suspend fun downloadAllImages(
+        context: Context,
+        imageLoader: ImageLoader,
+        images: List<Image>
+    ) {
+        val notify = ProgressNotification(context, images.size)
+        notify.sendNotification()
+
+        val resolution = getResolution(context)
+
+        withContext(Dispatchers.Default) {
+            images.forEachIndexed { index, image ->
+                val bitmap = imageLoader.loadImage(context, image.imageLink, resolution)
+                saveBitmap(bitmap = bitmap, context = context, showToasts = false)
+
+                withContext(Dispatchers.Main) {
+                    notify.updateProgress(index + 1)
+                }
+            }
+        }
+
+        notify.finish()
     }
 }

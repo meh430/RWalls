@@ -17,6 +17,8 @@ class FavoritesViewModel @Inject constructor(
     fun getFavorites() =
         favoriteImagesRepository.getFavoritesFlow().asLiveData(viewModelScope.coroutineContext)
 
+    suspend fun getFavoritesAsList() = favoriteImagesRepository.getFavorites()
+
     fun deleteAllFavorites() = viewModelScope.launch {
         favoriteImagesRepository.deleteAllFavorites()
     }
