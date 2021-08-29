@@ -22,7 +22,7 @@ class FavoriteSubredditsRepository @Inject constructor(private val subredditsDAO
         subredditsDAO.deleteAllFavorites()
     }
 
-    suspend fun deleteFavoriteSubreddit(id: Long) = withContext(Dispatchers.IO) {
-        subredditsDAO.deleteFavoriteSubreddit(id)
+    suspend fun deleteFavoriteSubreddit(name: String) = withContext(Dispatchers.IO) {
+        subredditsDAO.deleteFavoriteSubreddit(name)
     }
 }

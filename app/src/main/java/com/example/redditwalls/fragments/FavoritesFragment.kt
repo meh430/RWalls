@@ -106,11 +106,14 @@ class FavoritesFragment : BaseImagesFragment() {
                     FEELING_LUCKY -> favoritesViewModel.getRandomFavoriteImage(this::onClick)
                     DELETE_ALL -> favoritesViewModel.deleteAllFavorites()
                     DOWNLOAD_ALL -> lifecycleScope.launch {
-                        Utils.downloadAllImages(
-                            requireContext(),
-                            imageLoader,
-                            favoritesViewModel.getFavoritesAsList()
-                        )
+                        val favs = favoritesViewModel.getFavoritesAsList()
+                        if (favs.isNotEmpty()) {
+                            Utils.downloadAllImages(
+                                requireContext(),
+                                imageLoader,
+                                favs
+                            )
+                        }
                     }
                 }
             }.show()

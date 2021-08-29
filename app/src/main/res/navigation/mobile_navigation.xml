@@ -34,4 +34,10 @@
             android:name="image"
             app:argType="com.example.redditwalls.models.Image" />
     </activity>
+
+    <fragment
+        android:id="@+id/navigation_subs"
+        android:name="com.example.redditwalls.fragments.SubFragment"
+        android:label="Subreddits"
+        tools:layout="@layout/fragment_sub" />
 </navigation>

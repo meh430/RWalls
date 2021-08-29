@@ -21,6 +21,6 @@ interface SubredditsDAO {
     @Query("DELETE FROM FavoriteSubreddits")
     suspend fun deleteAllFavorites()
 
-    @Query("DELETE FROM FavoriteSubreddits WHERE id = :id")
-    suspend fun deleteFavoriteSubreddit(id: Long)
+    @Query("DELETE FROM FavoriteSubreddits WHERE name = :name")
+    suspend fun deleteFavoriteSubreddit(name: String)
 }

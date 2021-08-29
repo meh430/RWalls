@@ -3,4 +3,5 @@
     <color name="search">@color/white</color>
     <color name="secondarySurface">#121212</color>
     <color name="grey">#272626</color>
+    <color name="searchColor">@color/white</color>
 </resources>

@@ -42,7 +42,7 @@ class SearchSubViewModel @Inject constructor(
 
     fun deleteFavoriteSub(subreddit: Subreddit) {
         viewModelScope.launch {
-            favoriteSubredditsRepository.deleteFavoriteSubreddit(subreddit.id)
+            favoriteSubredditsRepository.deleteFavoriteSubreddit(subreddit.name)
         }
     }
 }

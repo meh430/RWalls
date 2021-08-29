@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".fragments.SubFragment">
+
+        <EditText
+            android:id="@+id/searchBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/search_focus"
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="10dp"
+            android:hint="Search"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:textCursorDrawable="@color/black" />
+
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/searchBar"
+            android:layout_centerHorizontal="true"
+            app:tabIndicatorFullWidth="true">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Search" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Saved" />
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <RelativeLayout
+            android:id="@+id/subsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tabs">
+
+            <include
+                android:id="@+id/error"
+                layout="@layout/error"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
+
+            <include
+                android:id="@+id/empty"
+                layout="@layout/empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+</layout>
