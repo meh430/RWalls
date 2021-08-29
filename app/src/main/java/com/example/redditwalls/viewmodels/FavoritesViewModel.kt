@@ -34,7 +34,7 @@ class FavoritesViewModel @Inject constructor(
     suspend fun addFavorite(image: Image): Boolean {
         val exists = favoriteImagesRepository.favoriteExists(image.imageLink)
         if (exists) {
-            favoriteImagesRepository.deleteFavoriteImage(image.id)
+            favoriteImagesRepository.deleteFavoriteImage(image.imageLink)
         } else {
             favoriteImagesRepository.insertFavorite(image)
         }

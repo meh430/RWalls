@@ -41,7 +41,7 @@ class WallViewModel @Inject constructor(
             viewModelScope.launch {
                 favoriteImagesRepository.favoriteExists(currentImage.imageLink).let { exists ->
                     if (exists) {
-                        favoriteImagesRepository.deleteFavoriteImage(currentImage.id)
+                        favoriteImagesRepository.deleteFavoriteImage(currentImage.imageLink)
                     } else {
                         favoriteImagesRepository.insertFavorite(currentImage)
                     }
