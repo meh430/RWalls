@@ -175,17 +175,6 @@
                     android:textColor="?attr/colorOnSurface" />
 
                 <TextView
-                    android:id="@+id/resolution"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="4dp"
-                    android:text="@{`Resolution: ` + postInfo.resolution.height + ` x ` + postInfo.resolution.width}"
-                    android:textAppearance="?attr/textAppearanceBody1"
-                    android:textColor="?attr/colorOnSurface" />
-
-                <TextView
                     android:id="@+id/author"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
