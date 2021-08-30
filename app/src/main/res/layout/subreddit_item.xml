@@ -12,8 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="6dp"
         app:cardCornerRadius="6dp"
         app:cardElevation="4dp">
 
@@ -56,12 +57,12 @@
 
                 <TextView
                     android:id="@+id/options"
-                    android:text="&#8942;"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
                     android:layout_marginEnd="14dp"
-                    android:textAppearance="?attr/textAppearanceHeadline5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:text="&#8942;"
+                    android:textAppearance="?attr/textAppearanceHeadline5" />
             </LinearLayout>
 
             <TextView
