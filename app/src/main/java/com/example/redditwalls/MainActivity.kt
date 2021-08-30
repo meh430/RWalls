@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             setOf(
                 R.id.navigation_home,
                 R.id.navigation_favorites,
-                R.id.navigation_subs
+                R.id.navigation_search
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

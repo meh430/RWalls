@@ -9,7 +9,7 @@ import com.example.redditwalls.datasources.SubredditsDAO
 import com.example.redditwalls.models.Image
 import com.example.redditwalls.models.Subreddit
 
-@Database(entities = [Image::class, Subreddit::class], version = 2, exportSchema = false)
+@Database(entities = [Image::class, Subreddit::class], version = 3, exportSchema = false)
 abstract class RWDatabase : RoomDatabase(){
 
     abstract fun getFavoritesDAO(): FavoritesDAO

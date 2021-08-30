@@ -36,8 +36,7 @@
     </activity>
 
     <fragment
-        android:id="@+id/navigation_subs"
-        android:name="com.example.redditwalls.fragments.SubFragment"
-        android:label="Subreddits"
-        tools:layout="@layout/fragment_sub" />
+        android:id="@+id/navigation_search"
+        android:label="Search"
+        android:name="com.example.redditwalls.fragments.SearchSubsFragment" />
 </navigation>

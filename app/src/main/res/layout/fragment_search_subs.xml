@@ -2,16 +2,16 @@
 <layout>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragments.SubFragment">
+        tools:context=".fragments.SearchSubsFragment">
 
         <EditText
             android:id="@+id/searchBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/loading"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="18dp"
@@ -30,50 +30,40 @@
             android:textCursorDrawable="@color/black" />
 
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/loading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/searchBar"
-            android:layout_centerHorizontal="true"
-            app:tabIndicatorFullWidth="true">
+            android:layout_centerInParent="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:indeterminate="true"
+            android:visibility="gone" />
 
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Search" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Saved" />
-
-        </com.google.android.material.tabs.TabLayout>
-
-        <RelativeLayout
-            android:id="@+id/subsLayout"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/subScroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/tabs">
+            android:layout_below="@+id/searchBar"
+            android:layout_centerHorizontal="true"
+            android:padding="4dp" />
 
-            <include
-                android:id="@+id/error"
-                layout="@layout/error"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                android:visibility="gone" />
+        <include
+            android:id="@+id/error"
+            layout="@layout/error"
+            android:layout_below="@+id/searchBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
 
-            <include
-                android:id="@+id/empty"
-                layout="@layout/empty"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                android:visibility="gone" />
-
-
-        </RelativeLayout>
-
+        <include
+            android:id="@+id/empty"
+            layout="@layout/empty"
+            android:layout_below="@+id/searchBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
     </RelativeLayout>
 </layout>

@@ -23,4 +23,7 @@ interface SubredditsDAO {
 
     @Query("DELETE FROM FavoriteSubreddits WHERE name = :name")
     suspend fun deleteFavoriteSubreddit(name: String)
+
+    @Query("SELECT EXISTS(SELECT * FROM FavoriteSubreddits WHERE name = :name)")
+    suspend fun isSaved(name: String): Boolean
 }

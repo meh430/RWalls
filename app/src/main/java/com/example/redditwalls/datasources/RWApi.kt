@@ -119,7 +119,7 @@ class RWApi @Inject constructor() {
             val names = json.getJSONArray("names")
 
             val results: MutableList<Subreddit> = mutableListOf()
-            for (i in 0..names.length()) {
+            for (i in 0 until names.length()) {
                 val name = names.getString(i)
                 val subInfo = getSubInfo(name)
                 val data = subInfo.getJSONObject("data")
@@ -130,11 +130,11 @@ class RWApi @Inject constructor() {
 
                 val sub = Subreddit(
                     id = -1,
-                    networkId = data.getString("id") + data.getString("name"),
                     name = title,
                     description = desc,
                     numSubscribers = Utils.formatNumber(subs + 0.0, false),
-                    icon = iconUrl
+                    icon = iconUrl,
+                    isSaved = false
                 )
                 results.add(sub)
             }

@@ -30,6 +30,7 @@
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.2554347826086957" />
         <entry key="app/src/main/res/layout/fragment_favorites.xml" value="0.2554347826086957" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.2608695652173913" />
+        <entry key="app/src/main/res/layout/fragment_search_subs.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_sub.xml" value="0.1" />
         <entry key="app/src/main/res/layout/image_item.xml" value="0.2608695652173913" />
         <entry key="app/src/main/res/layout/old_activity.xml" value="0.25" />
