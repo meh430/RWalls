@@ -8,7 +8,9 @@ import com.example.redditwalls.misc.forEach
 import com.example.redditwalls.models.Image
 import com.example.redditwalls.models.PostInfo
 import com.example.redditwalls.models.Subreddit
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
@@ -118,28 +120,31 @@ class RWApi @Inject constructor() {
             val json = JSONObject(fetch(endpoint))
             val names = json.getJSONArray("names")
 
-            val results: MutableList<Subreddit> = mutableListOf()
+            val subJobs = mutableListOf<Deferred<Subreddit>>()
             for (i in 0 until names.length()) {
-                val name = names.getString(i)
-                val subInfo = getSubInfo(name)
-                val data = subInfo.getJSONObject("data")
-                val iconUrl = data.getString("icon_img")
-                val title = data.getString("display_name_prefixed")
-                val desc = data.getString("public_description")
-                val subs = data.getInt("subscribers")
+                val subOperation = async {
+                    val name = names.getString(i)
+                    val subInfo = getSubInfo(name)
+                    val data = subInfo.getJSONObject("data")
+                    val iconUrl = data.getString("icon_img")
+                    val title = data.getString("display_name_prefixed")
+                    val desc = data.getString("public_description")
+                    val subs = data.getInt("subscribers")
 
-                val sub = Subreddit(
-                    id = -1,
-                    name = title,
-                    description = desc,
-                    numSubscribers = Utils.formatNumber(subs + 0.0, false),
-                    icon = iconUrl,
-                    isSaved = false
-                )
-                results.add(sub)
+                    Subreddit(
+                        id = -1,
+                        name = title,
+                        description = desc,
+                        numSubscribers = Utils.formatNumber(subs + 0.0, false),
+                        icon = iconUrl,
+                        isSaved = false
+                    )
+                }
+                subJobs.add(subOperation)
             }
 
-            results
+
+            subJobs.map { it.await() }
         }
 
     suspend fun getPostInfo(postLink: String, imageSize: Double) =
