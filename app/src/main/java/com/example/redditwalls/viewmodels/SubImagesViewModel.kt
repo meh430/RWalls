@@ -32,6 +32,15 @@ class SubImagesViewModel @Inject constructor(private val rwRepository: RWReposit
         )
     }
 
+    fun setSubreddit(subreddit: String) {
+        this.subreddit = subreddit
+        params.value = ImagesParams(
+            subreddit = subreddit,
+            query = query,
+            sort = currentSort
+        )
+    }
+
     fun setQuery(query: String) {
         this.query = query
         params.value = ImagesParams(

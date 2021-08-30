@@ -9,7 +9,15 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(private val settingsRepository: SettingsRepository) :
     ViewModel() {
     fun getDefaultSub() = settingsRepository.getDefaultSub()
-    fun setDefaultSub(subreddit: String) = settingsRepository.setDefaultSub(subreddit)
+    fun setDefaultSub(subreddit: String) {
+        val default = if (subreddit.startsWith("r/") && subreddit.length > 2) {
+            subreddit.substring(2)
+        } else {
+            subreddit
+        }
+
+        settingsRepository.setDefaultSub(default)
+    }
 
     fun loadLowResPreviews() = settingsRepository.loadLowResPreviews()
     fun setLoadLowResPreviews(loadLowRes: Boolean) =

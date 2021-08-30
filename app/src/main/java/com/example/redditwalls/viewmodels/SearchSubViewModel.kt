@@ -29,8 +29,10 @@ class SearchSubViewModel @Inject constructor(
     }
 
     fun refresh() {
+        val data = searchResults.value?.data
+
         getResource(searchResults) {
-            searchResults.value?.data?.let {
+            data?.let {
                 checkIfSubsAreSaved(it)
             } ?: emptyList()
         }

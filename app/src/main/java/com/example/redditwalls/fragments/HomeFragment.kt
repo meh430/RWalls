@@ -33,7 +33,7 @@ class HomeFragment : BaseApiImagesFragment() {
         initRecyclerView(binding.imageScroll)
         observeImages()
         binding.swipeRefresh.setOnRefreshListener {
-            imagesAdapter.refresh()
+            imagesViewModel.setSubreddit(subreddit)
             binding.swipeRefresh.isRefreshing = false
         }
         addLoadStateListener(

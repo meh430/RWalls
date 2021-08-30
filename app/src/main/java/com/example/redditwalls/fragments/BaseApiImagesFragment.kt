@@ -35,7 +35,7 @@ abstract class BaseApiImagesFragment : BaseImagesFragment() {
         }
     }
     protected val settingsViewModel: SettingsViewModel by viewModels()
-    private val imagesViewModel: SubImagesViewModel by lazy {
+    protected val imagesViewModel: SubImagesViewModel by lazy {
         val vm: SubImagesViewModel by viewModels()
         vm.also {
             it.initialize(subreddit)
