@@ -58,6 +58,7 @@ class SearchSubsFragment : BaseSubsFragment() {
             binding.loading.isVisible = false
             binding.subScroll.isVisible = false
             binding.error.error.isVisible = false
+            binding.empty.empty.isVisible = false
 
             when (it.status) {
                 Status.SUCCESS -> {
@@ -83,9 +84,7 @@ class SearchSubsFragment : BaseSubsFragment() {
         _binding = null
     }
 
-    override fun onClick(subreddit: Subreddit) {
-        TODO("Not yet implemented")
-    }
+    override fun onClick(subreddit: Subreddit) {}
 
     override fun onMenuItemClick(
         subreddit: Subreddit,

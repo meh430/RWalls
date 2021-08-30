@@ -5,6 +5,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingBottom="?attr/actionBarSize"
         tools:context=".fragments.SearchSubsFragment">
 
         <EditText
@@ -14,10 +15,10 @@
             android:layout_below="@id/loading"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginStart="18dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="18dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/search_focus"
             android:drawableStart="@drawable/ic_search"
             android:drawablePadding="10dp"
@@ -45,24 +46,23 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/searchBar"
-            android:layout_centerHorizontal="true"
-            android:padding="4dp" />
+            android:layout_centerHorizontal="true" />
 
         <include
             android:id="@+id/error"
             layout="@layout/error"
-            android:layout_below="@+id/searchBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@+id/searchBar"
             android:layout_centerInParent="true"
             android:visibility="gone" />
 
         <include
             android:id="@+id/empty"
             layout="@layout/empty"
-            android:layout_below="@+id/searchBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@+id/searchBar"
             android:layout_centerInParent="true"
             android:visibility="gone" />
     </RelativeLayout>

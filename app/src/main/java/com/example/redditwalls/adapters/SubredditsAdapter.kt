@@ -65,7 +65,7 @@ class SubredditsAdapter(private val listener: SubredditClickListener) :
                 SubredditMenuOptions.fromText(items[i])?.let {
                     listener.onMenuItemClick(subreddit, it)
                 }
-            }
+            }.show()
         }
 
         fun bind(subreddit: Subreddit) = binding.apply {
@@ -77,6 +77,10 @@ class SubredditsAdapter(private val listener: SubredditClickListener) :
             root.setOnLongClickListener {
                 showOptionsDialog(it.context, subreddit)
                 true
+            }
+
+            options.setOnClickListener {
+                showOptionsDialog(it.context, subreddit)
             }
 
             if (subreddit.icon.isEmpty() || subreddit.icon.isBlank()) {
