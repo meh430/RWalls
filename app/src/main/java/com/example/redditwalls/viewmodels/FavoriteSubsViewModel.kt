@@ -12,13 +12,15 @@ import javax.inject.Inject
 class FavoriteSubsViewModel @Inject constructor(
     private val subsRepository: FavoriteSubredditsRepository
 ) : ViewModel() {
+
     fun getFavoriteSubs() = subsRepository.getFavoriteSubredditsLiveData()
 
     fun insertFavoriteSub(subreddit: Subreddit) {
         viewModelScope.launch {
             subsRepository.insertFavoriteSubreddit(
                 subreddit.copy(
-                    numSubscribers = ""
+                    numSubscribers = "",
+                    isSaved = true
                 )
             )
         }

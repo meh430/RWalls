@@ -39,4 +39,9 @@
         android:id="@+id/navigation_search"
         android:label="Search"
         android:name="com.example.redditwalls.fragments.SearchSubsFragment" />
+
+    <fragment
+        android:id="@+id/navigation_saved"
+        android:label="Saved"
+        android:name="com.example.redditwalls.fragments.FavoriteSubsFragment" />
 </navigation>

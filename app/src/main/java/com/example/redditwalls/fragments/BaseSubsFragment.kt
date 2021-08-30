@@ -18,7 +18,7 @@ abstract class BaseSubsFragment : Fragment(), SubredditClickListener {
     }
 
     private val settingsViewModel: SettingsViewModel by viewModels()
-    private val favoriteSubsViewModel: FavoriteSubsViewModel by viewModels()
+    protected val favoriteSubsViewModel: FavoriteSubsViewModel by viewModels()
 
     override fun onMenuItemClick(
         subreddit: Subreddit,

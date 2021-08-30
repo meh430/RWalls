@@ -17,9 +17,13 @@
         android:title="@string/title_search" />
 
     <item
+        android:id="@+id/navigation_saved"
+        android:icon="@drawable/ic_saved"
+        android:title="Saved" />
+
+    <item
         android:id="@+id/navigation_settings"
         android:icon="@drawable/ic_settings"
         android:title="@string/title_settings" />
-
 
 </menu>

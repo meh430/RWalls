@@ -5,6 +5,7 @@
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.29583333333333334" />
         <entry key="app/src/main/res/drawable-v21/app_widget_background.xml" value="0.296875" />
+        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.296875" />
         <entry key="app/src/main/res/drawable/empty.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/drawable/error.xml" value="0.15208333333333332" />
         <entry key="app/src/main/res/drawable/grapple.xml" value="0.296875" />
@@ -28,6 +29,7 @@
         <entry key="app/src/main/res/layout/error.xml" value="0.25026619086940977" />
         <entry key="app/src/main/res/layout/fragment_blank.xml" value="0.2554347826086957" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.2554347826086957" />
+        <entry key="app/src/main/res/layout/fragment_favorite_subs.xml" value="0.25271739130434784" />
         <entry key="app/src/main/res/layout/fragment_favorites.xml" value="0.2554347826086957" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.2608695652173913" />
         <entry key="app/src/main/res/layout/fragment_search_subs.xml" value="0.1" />
