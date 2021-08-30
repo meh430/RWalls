@@ -18,7 +18,7 @@ class SearchSubViewModel @Inject constructor(
     private var currentQuery = ""
 
     init {
-        searchResults.value = Resource.loading()
+        searchResults.value = Resource.success(emptyList())
     }
 
     fun searchSubs(query: String) {
