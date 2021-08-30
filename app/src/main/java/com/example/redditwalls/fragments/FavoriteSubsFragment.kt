@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
 import com.example.redditwalls.databinding.FragmentFavoriteSubsBinding
 import com.example.redditwalls.models.Subreddit
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,6 +27,7 @@ class FavoriteSubsFragment : BaseSubsFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initRecyclerView(binding.subScroll)
         observeFavorites()
     }
@@ -49,5 +51,9 @@ class FavoriteSubsFragment : BaseSubsFragment() {
         _binding = null
     }
 
-    override fun onClick(subreddit: Subreddit) {}
+    override fun onClick(subreddit: Subreddit) {
+        val toImages =
+            FavoriteSubsFragmentDirections.actionNavigationSavedToSearchImagesFragment(subreddit)
+        findNavController().navigate(toImages)
+    }
 }

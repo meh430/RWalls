@@ -23,7 +23,6 @@ import com.google.android.material.progressindicator.LinearProgressIndicator
 
 abstract class BaseApiImagesFragment : BaseImagesFragment() {
 
-    abstract val toolBarTitle: String
     abstract val subreddit: String
 
     protected val imagesAdapter: ImagesAdapter by lazy {

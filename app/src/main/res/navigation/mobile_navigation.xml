@@ -38,10 +38,29 @@
     <fragment
         android:id="@+id/navigation_search"
         android:label="Search"
-        android:name="com.example.redditwalls.fragments.SearchSubsFragment" />
+        android:name="com.example.redditwalls.fragments.SearchSubsFragment">
+        <action
+            android:id="@+id/action_navigation_search_to_searchImagesFragment"
+            app:destination="@id/searchImagesFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_saved"
         android:label="Saved"
-        android:name="com.example.redditwalls.fragments.FavoriteSubsFragment" />
+        android:name="com.example.redditwalls.fragments.FavoriteSubsFragment">
+        <action
+            android:id="@+id/action_navigation_saved_to_searchImagesFragment"
+            app:destination="@id/searchImagesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchImagesFragment"
+        android:name="com.example.redditwalls.fragments.SearchImagesFragment"
+        android:label="SearchImagesFragment">
+        <action
+            android:id="@+id/action_searchImagesFragment_to_navigation_wallpaper"
+            app:destination="@id/navigation_wallpaper" />
+        <argument
+            android:name="subreddit"
+            app:argType="com.example.redditwalls.models.Subreddit" />
+    </fragment>
 </navigation>

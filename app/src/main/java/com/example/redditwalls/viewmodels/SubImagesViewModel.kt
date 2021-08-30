@@ -58,6 +58,8 @@ class SubImagesViewModel @Inject constructor(private val rwRepository: RWReposit
         )
     }
 
+    fun subredditHasChanged(subreddit: String) = this.subreddit != subreddit
+
     fun initialize(subreddit: String, sort: Sort = Sort.HOT, query: String = "") {
         this.subreddit = subreddit
         this.currentSort = sort

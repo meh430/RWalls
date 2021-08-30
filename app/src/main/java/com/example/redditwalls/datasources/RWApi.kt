@@ -60,7 +60,13 @@ class RWApi @Inject constructor() {
             "${sort.trailing}?${sort.queryParam}"
         }
 
-        val base = "https://www.reddit.com/r/$subreddit"
+        val suffix = if (subreddit.startsWith("r/")) {
+            subreddit
+        } else {
+            "r/$subreddit"
+        }
+
+        val base = "https://www.reddit.com/$suffix"
         return StringBuilder(base).apply {
             append(trailing)
             append("&limit=25")
@@ -106,11 +112,13 @@ class RWApi @Inject constructor() {
             images.add(image)
         }
 
-        if (after.isBlank() && images.size > 25) {
+        val res = if (after.isBlank() && images.size > 25) {
             images.slice(0 until PAGE_SIZE)
         } else {
             images
-        } to nextAfter
+        }
+
+        res to if (nextAfter == "null" || res.isEmpty()) "" else nextAfter
     }
 
     suspend fun searchSubs(query: String): List<Subreddit> =
@@ -132,7 +140,6 @@ class RWApi @Inject constructor() {
                     val subs = data.getInt("subscribers")
 
                     Subreddit(
-                        id = -1,
                         name = title,
                         description = desc,
                         numSubscribers = Utils.formatNumber(subs + 0.0, false),

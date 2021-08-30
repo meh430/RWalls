@@ -101,11 +101,7 @@ class SubredditsAdapter(private val listener: SubredditClickListener) :
 
     object SubredditComparator : DiffUtil.ItemCallback<Subreddit>() {
         override fun areItemsTheSame(oldItem: Subreddit, newItem: Subreddit): Boolean {
-            if (oldItem.id < 0 || newItem.id < 0) {
-                return oldItem.name == newItem.name
-            }
-
-            return oldItem.id == newItem.id
+            return oldItem.name == newItem.name
         }
 
         override fun areContentsTheSame(oldItem: Subreddit, newItem: Subreddit): Boolean {

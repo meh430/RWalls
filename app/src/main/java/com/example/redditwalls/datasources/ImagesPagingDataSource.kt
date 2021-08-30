@@ -16,10 +16,11 @@ class ImagesPagingDataSource(
 
         return try {
             val result = api.getImages(subreddit, query, sort, after)
+            val nextKey = result.second.takeIf { it.isNotBlank() }
             LoadResult.Page(
                 data = result.first,
                 prevKey = null,
-                nextKey = result.second.takeIf { it.isNotBlank() }
+                nextKey = nextKey
             )
         } catch (e: Exception) {
             LoadResult.Error(e)

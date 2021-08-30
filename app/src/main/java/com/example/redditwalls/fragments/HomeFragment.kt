@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.redditwalls.R
 import com.example.redditwalls.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -14,8 +13,6 @@ class HomeFragment : BaseApiImagesFragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    override val toolBarTitle: String
-        get() = getString(R.string.title_home)
     override val subreddit: String
         get() = settingsViewModel.getDefaultSub()
 
@@ -33,7 +30,7 @@ class HomeFragment : BaseApiImagesFragment() {
         initRecyclerView(binding.imageScroll)
         observeImages()
         binding.swipeRefresh.setOnRefreshListener {
-            imagesViewModel.setSubreddit(subreddit)
+            imagesAdapter.refresh()
             binding.swipeRefresh.isRefreshing = false
         }
         addLoadStateListener(
@@ -42,6 +39,13 @@ class HomeFragment : BaseApiImagesFragment() {
             binding.error,
             binding.empty
         )
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (imagesViewModel.subredditHasChanged(subreddit)) {
+            imagesViewModel.setSubreddit(subreddit)
+        }
     }
 
     override fun onDestroyView() {
