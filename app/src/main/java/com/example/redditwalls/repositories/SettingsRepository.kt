@@ -14,6 +14,7 @@ class SettingsRepository @Inject constructor(private val prefs: SharedPreference
         const val LOW_RES_PREVIEWS = "low_res_previews"
         const val RANDOM_REFRESH = "random_refresh"
         const val RANDOM_REFRESH_LOCATION = "random_refresh_location"
+        const val REFRESH_PERIOD = "refresh_period"
     }
 
     fun setDefaultSub(subreddit: String) {
@@ -55,4 +56,8 @@ class SettingsRepository @Inject constructor(private val prefs: SharedPreference
     fun setRandomRefreshLocation(location: WallpaperLocation) =
         prefs.edit().putInt(RANDOM_REFRESH_LOCATION, location.id).apply()
 
+    fun getRandomRefreshPeriod() = prefs.getInt(REFRESH_PERIOD, 1)
+
+    fun setRandomRefreshPeriod(period: Int) =
+        prefs.edit().putInt(REFRESH_PERIOD, period).apply()
 }

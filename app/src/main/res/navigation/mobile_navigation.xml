@@ -37,25 +37,25 @@
 
     <fragment
         android:id="@+id/navigation_search"
-        android:label="Search"
-        android:name="com.example.redditwalls.fragments.SearchSubsFragment">
+        android:name="com.example.redditwalls.fragments.SearchSubsFragment"
+        android:label="Search">
         <action
             android:id="@+id/action_navigation_search_to_searchImagesFragment"
-            app:destination="@id/searchImagesFragment" />
+            app:destination="@id/navigation_search_images" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_saved"
-        android:label="Saved"
-        android:name="com.example.redditwalls.fragments.FavoriteSubsFragment">
+        android:name="com.example.redditwalls.fragments.FavoriteSubsFragment"
+        android:label="Saved">
         <action
             android:id="@+id/action_navigation_saved_to_searchImagesFragment"
-            app:destination="@id/searchImagesFragment" />
+            app:destination="@id/navigation_search_images" />
     </fragment>
     <fragment
-        android:id="@+id/searchImagesFragment"
+        android:id="@+id/navigation_search_images"
         android:name="com.example.redditwalls.fragments.SearchImagesFragment"
-        android:label="SearchImagesFragment">
+        android:label="Search Images">
         <action
             android:id="@+id/action_searchImagesFragment_to_navigation_wallpaper"
             app:destination="@id/navigation_wallpaper" />
@@ -63,4 +63,9 @@
             android:name="subreddit"
             app:argType="com.example.redditwalls.models.Subreddit" />
     </fragment>
+
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.example.redditwalls.fragments.SettingsFragment"
+        android:label="Settings" />
 </navigation>

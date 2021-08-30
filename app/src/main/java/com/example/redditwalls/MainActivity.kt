@@ -35,13 +35,14 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_home,
                 R.id.navigation_favorites,
                 R.id.navigation_search,
-                R.id.navigation_saved
+                R.id.navigation_saved,
+                R.id.navigation_settings
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            binding.bottomNavView.isVisible = destination.id != R.id.searchImagesFragment
+            binding.bottomNavView.isVisible = destination.id != R.id.navigation_search_images
         }
     }
 
