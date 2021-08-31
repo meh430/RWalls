@@ -2,6 +2,7 @@
 
 package com.example.redditwalls.datasources
 
+import android.net.Uri
 import com.example.redditwalls.R
 import com.example.redditwalls.misc.Utils
 import com.example.redditwalls.misc.forEach
@@ -24,6 +25,7 @@ class RWApi @Inject constructor() {
 
     companion object {
         const val PAGE_SIZE = 25
+        const val BASE = "https://www.reddit.com"
     }
 
     enum class Sort(val trailing: String, val queryParam: String) {
@@ -66,7 +68,7 @@ class RWApi @Inject constructor() {
             "r/$subreddit"
         }
 
-        val base = "https://www.reddit.com/$suffix"
+        val base = "$BASE/$suffix"
         return StringBuilder(base).apply {
             append(trailing)
             append("&limit=25")
@@ -96,19 +98,12 @@ class RWApi @Inject constructor() {
             }
 
             val postLink = data.getString("permalink")
-            val preview = data.getJSONObject("preview")
-            val imageJSON = preview.getJSONArray("images").getJSONObject(0)
-            val source = imageJSON.getJSONObject("source")
-            val url = source.getString("url").replace("amp;".toRegex(), "")
-            val resolutions = imageJSON.getJSONArray("resolutions")
-            val previewUrl =
-                resolutions.getJSONObject(0).getString("url").replace("amp;".toRegex(), "")
-
+            val (previewLink, imageLink) = getImageInfoFromData(data)
             val image = Image(
-                imageLink = url,
-                postLink = "https://www.reddit.com$postLink",
+                imageLink = imageLink,
+                postLink = "$BASE$postLink",
                 subreddit = subreddit,
-                previewLink = previewUrl
+                previewLink = previewLink
             )
             images.add(image)
         }
@@ -122,10 +117,11 @@ class RWApi @Inject constructor() {
         res to if (nextAfter == "null" || res.isEmpty()) "" else nextAfter
     }
 
+
     suspend fun searchSubs(query: String): List<Subreddit> =
         withContext(Dispatchers.Default) {
 
-            val endpoint = "https://www.reddit.com/api/search_reddit_names/.json?query=$query"
+            val endpoint = "$BASE/api/search_reddit_names/.json?query=$query"
             val json = JSONObject(fetch(endpoint))
             val names = json.getJSONArray("names")
 
@@ -185,8 +181,64 @@ class RWApi @Inject constructor() {
         }
 
     private suspend fun getSubInfo(subreddit: String = ""): JSONObject {
-        val endpoint = "https://www.reddit.com/r/$subreddit/about/.json"
+        val endpoint = "$BASE/r/$subreddit/about/.json"
         return JSONObject(fetch(endpoint))
+    }
+
+    // preview to image link
+    private fun getImageInfoFromData(data: JSONObject): Pair<String, String> {
+        val preview = data.getJSONObject("preview")
+        val imageJSON = preview.getJSONArray("images").getJSONObject(0)
+        val source = imageJSON.getJSONObject("source")
+        val url = source.getString("url").replace("amp;".toRegex(), "")
+        val resolutions = imageJSON.getJSONArray("resolutions")
+        val previewUrl =
+            resolutions.getJSONObject(0)
+                .getString("url")
+                .replace("amp;".toRegex(), "")
+        return previewUrl to url
+    }
+
+    // subreddit to id
+    fun extractPostLinkInfo(link: String): Pair<String, String> {
+        val uri = Uri.parse(link)
+
+        val scheme = uri.scheme
+        val host = uri.host
+        val pathSegments = uri.pathSegments
+
+        if (scheme != "https" || host != "www.reddit.com") {
+            return "" to ""
+        }
+
+        return try {
+            pathSegments[1] to pathSegments[3]
+        } catch (e: IndexOutOfBoundsException) {
+            "" to ""
+        }
+    }
+
+    fun buildPostLink(subreddit: String, id: String): String {
+        var sub = subreddit
+        if (subreddit.startsWith("r/")) {
+            sub = subreddit.substring(2)
+        }
+
+        return "$BASE/r/$sub/comments/$id/.json"
+    }
+
+    suspend fun getImageFromPost(postLink: String): Image {
+        val data = JSONObject(fetch(postLink)).getJSONObject("data")
+        val postInfo = data.getJSONArray("children").getJSONObject(0).getJSONObject("data")
+        val (preview, imageLink) = getImageInfoFromData(postInfo)
+
+        return Image(
+            id = -1,
+            imageLink = imageLink,
+            postLink = BASE + postInfo.getString("permalink"),
+            subreddit = postInfo.getString("subreddit"),
+            previewLink = preview
+        )
     }
 
 
