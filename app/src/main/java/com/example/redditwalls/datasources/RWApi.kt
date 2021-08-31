@@ -71,6 +71,7 @@ class RWApi @Inject constructor() {
             append(trailing)
             append("&limit=25")
             append("&after=$after")
+            append("&include_over_18=true")
         }.toString()
     }
 
