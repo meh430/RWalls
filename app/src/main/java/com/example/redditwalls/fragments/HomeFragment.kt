@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.example.redditwalls.databinding.FragmentHomeBinding
+import com.example.redditwalls.models.Image
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -39,6 +41,11 @@ class HomeFragment : BaseApiImagesFragment() {
             binding.error,
             binding.empty
         )
+    }
+
+    override fun onClick(image: Image) {
+        val toWall = HomeFragmentDirections.actionNavigationHomeToNavigationWallpaper(image)
+        findNavController().navigate(toWall)
     }
 
     override fun onResume() {

@@ -6,7 +6,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +15,6 @@ import com.example.redditwalls.adapters.LoadingStateAdapter
 import com.example.redditwalls.databinding.EmptyBinding
 import com.example.redditwalls.databinding.ErrorBinding
 import com.example.redditwalls.datasources.RWApi.Sort
-import com.example.redditwalls.models.Image
 import com.example.redditwalls.viewmodels.SettingsViewModel
 import com.example.redditwalls.viewmodels.SubImagesViewModel
 import com.google.android.material.progressindicator.LinearProgressIndicator
@@ -112,10 +110,5 @@ abstract class BaseApiImagesFragment : BaseImagesFragment() {
             emptyView.empty.isVisible = isEmpty
             recyclerView.isVisible = !isEmpty && !hasError
         }
-    }
-
-    override fun onClick(image: Image) {
-        val toWall = HomeFragmentDirections.actionNavigationHomeToNavigationWallpaper(image)
-        findNavController().navigate(toWall)
     }
 }
