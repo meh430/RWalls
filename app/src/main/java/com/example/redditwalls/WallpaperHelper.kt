@@ -77,19 +77,20 @@ class WallpaperHelper @Inject constructor(
     }
 
     fun showLocationPickerDialog(context: Context, onChoose: (WallpaperLocation) -> Unit) {
+        val items = WallpaperLocation.values().map { it.displayText }.toTypedArray()
         MaterialAlertDialogBuilder(context)
             .setTitle("Set where?")
-            .setItems(R.array.location_options) { _, i ->
+            .setItems(items) { _, i ->
                 onChoose(WallpaperLocation.fromId(i))
                 Toast.makeText(context, "Successfully set wallpaper", Toast.LENGTH_SHORT).show()
             }.show()
     }
 }
 
-enum class WallpaperLocation(val id: Int) {
-    HOME(0),
-    LOCK(1),
-    BOTH(2);
+enum class WallpaperLocation(val id: Int, val displayText: String) {
+    HOME(0, "Home"),
+    LOCK(1, "Lock Screen"),
+    BOTH(2, "Home and Lock Screen");
 
     companion object {
         fun fromId(id: Int) = values().find { it.id == id } ?: BOTH

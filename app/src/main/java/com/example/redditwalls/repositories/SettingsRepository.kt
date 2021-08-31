@@ -8,13 +8,14 @@ import javax.inject.Inject
 class SettingsRepository @Inject constructor(private val prefs: SharedPreferences) {
 
     companion object {
-        const val DEFAULT_SUB = "default_sub"
-        const val WIDTH = "width"
-        const val HEIGHT = "height"
-        const val LOW_RES_PREVIEWS = "low_res_previews"
-        const val RANDOM_REFRESH = "random_refresh"
-        const val RANDOM_REFRESH_LOCATION = "random_refresh_location"
-        const val REFRESH_PERIOD = "refresh_period"
+        const val FALLBACK_SUBREDDIT = "mobilewallpaper"
+        private const val DEFAULT_SUB = "default_sub"
+        private const val WIDTH = "width"
+        private const val HEIGHT = "height"
+        private const val LOW_RES_PREVIEWS = "low_res_previews"
+        private const val RANDOM_REFRESH = "random_refresh"
+        private const val RANDOM_REFRESH_LOCATION = "random_refresh_location"
+        private const val REFRESH_PERIOD = "refresh_period"
     }
 
     fun setDefaultSub(subreddit: String) {
@@ -22,7 +23,7 @@ class SettingsRepository @Inject constructor(private val prefs: SharedPreference
     }
 
     fun getDefaultSub() =
-        prefs.getString(DEFAULT_SUB, "").takeIf { !it.isNullOrBlank() } ?: "mobilewallpaper"
+        prefs.getString(DEFAULT_SUB, "").takeIf { !it.isNullOrBlank() } ?: FALLBACK_SUBREDDIT
 
     fun setResolution(height: Int, width: Int) {
         prefs.edit().apply {
