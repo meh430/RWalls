@@ -5,6 +5,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
@@ -18,6 +19,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.example.redditwalls.models.Image
 import com.example.redditwalls.models.Resolution
 import kotlinx.coroutines.Dispatchers
@@ -120,6 +122,13 @@ object Utils {
             controller.systemBarsBehavior =
                 WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
+    }
+
+    fun getImageLoadingDrawable(context: Context) = CircularProgressDrawable(context).apply {
+        strokeWidth = 5f
+        centerRadius = 30f
+        setColorSchemeColors(Color.RED)
+        start()
     }
 
     fun getDate(): String {

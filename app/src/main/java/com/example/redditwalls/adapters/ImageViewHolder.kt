@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.example.redditwalls.databinding.ImageItemBinding
+import com.example.redditwalls.misc.Utils
 import com.example.redditwalls.models.Image
 
 
@@ -53,6 +54,7 @@ class ImageViewHolder(
         Glide.with(binding.imagePreview.context)
             .applyDefaultRequestOptions(requestOptions)
             .load(if (loadLowRes) image.previewLink else image.imageLink)
+            .placeholder(Utils.getImageLoadingDrawable(binding.imagePreview.context))
             .into(binding.imagePreview)
     }
 }

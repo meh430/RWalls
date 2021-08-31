@@ -1,7 +1,6 @@
 package com.example.redditwalls
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -13,7 +12,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.navigation.navArgs
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.example.redditwalls.databinding.ActivityWallBinding
 import com.example.redditwalls.databinding.WallSheetBinding
@@ -138,14 +136,9 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
     }
 
     private fun loadWallpaper() {
-        val circularProgressDrawable = CircularProgressDrawable(this)
-        circularProgressDrawable.strokeWidth = 5f
-        circularProgressDrawable.centerRadius = 30f
-        circularProgressDrawable.setColorSchemeColors(Color.RED)
-        circularProgressDrawable.start()
         Glide.with(this)
             .load(wallArgs.image.imageLink)
-            .placeholder(circularProgressDrawable)
+            .placeholder(Utils.getImageLoadingDrawable(this))
             .centerCrop().into(binding.wallpaper)
     }
 
