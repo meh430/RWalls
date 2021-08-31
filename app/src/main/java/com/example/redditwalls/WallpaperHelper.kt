@@ -9,8 +9,6 @@ import com.example.redditwalls.misc.Utils
 import com.example.redditwalls.repositories.FavoriteImagesRepository
 import com.example.redditwalls.repositories.SettingsRepository
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class WallpaperHelper @Inject constructor(
@@ -30,13 +28,8 @@ class WallpaperHelper @Inject constructor(
             )
         }
 
-        withContext(Dispatchers.Main) {
-            val msg = if (image != null) {
-                "Successfully set wallpaper"
-            } else {
-                "No favorites to choose from :("
-            }
-            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+        if (image == null) {
+            Toast.makeText(context, "No favorites to choose from :(", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -71,6 +64,8 @@ class WallpaperHelper @Inject constructor(
             } else {
                 wm.setBitmap(bitmap)
             }
+
+            Toast.makeText(context, "Successfully set wallpaper", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
             Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
         }
@@ -82,7 +77,6 @@ class WallpaperHelper @Inject constructor(
             .setTitle("Set where?")
             .setItems(items) { _, i ->
                 onChoose(WallpaperLocation.fromId(i))
-                Toast.makeText(context, "Successfully set wallpaper", Toast.LENGTH_SHORT).show()
             }.show()
     }
 }
