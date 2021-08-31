@@ -27,7 +27,7 @@ class SettingsViewModel @Inject constructor(
 
     fun randomRefreshEnabled() = settingsRepository.randomRefreshEnabled()
 
-    fun randomRefreshEnabled(enabled: Boolean) = settingsRepository.setRandomRefresh(enabled)
+    fun setRandomRefresh(enabled: Boolean) = settingsRepository.setRandomRefresh(enabled)
 
 
     fun getRandomRefreshPeriod() = settingsRepository.getRandomRefreshPeriod()
