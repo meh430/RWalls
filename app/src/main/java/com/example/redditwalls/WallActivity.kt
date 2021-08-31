@@ -12,6 +12,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.navigation.navArgs
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.example.redditwalls.databinding.ActivityWallBinding
 import com.example.redditwalls.databinding.WallSheetBinding
@@ -121,12 +122,13 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
         }
     }
 
-    private fun getBitmap() = if (binding.wallpaper.drawable == null) {
-        Toast.makeText(this, "Loading image...", Toast.LENGTH_SHORT).show()
-        null
-    } else {
-        (binding.wallpaper.drawable as BitmapDrawable).bitmap
-    }
+    private fun getBitmap() =
+        if (binding.wallpaper.drawable == null || binding.wallpaper.drawable is CircularProgressDrawable) {
+            Toast.makeText(this, "Loading image...", Toast.LENGTH_SHORT).show()
+            null
+        } else {
+            (binding.wallpaper.drawable as BitmapDrawable).bitmap
+        }
 
     private fun setUpFavorite() {
         wallViewModel.isFavorite.observe(this) {

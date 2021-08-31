@@ -8,6 +8,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.redditwalls.databinding.ActivityMainBinding
+import com.example.redditwalls.repositories.SettingsRepository
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -41,8 +42,15 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-        navController.addOnDestinationChangedListener { _, destination, _ ->
+        navController.addOnDestinationChangedListener { _, destination, arguments ->
             binding.bottomNavView.isVisible = destination.id != R.id.navigation_search_images
+
+            if (destination.id == R.id.navigation_search_images) {
+                val subreddit =
+                    arguments?.getString("subreddit") ?: SettingsRepository.FALLBACK_SUBREDDIT
+
+                setToolbarTitle(subreddit)
+            }
         }
     }
 
@@ -51,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
-    fun setToolbarTitle(title: String) {
+    private fun setToolbarTitle(title: String) {
         binding.toolbar.toolbar.title = title
     }
 }

@@ -87,7 +87,7 @@ class SearchSubsFragment : BaseSubsFragment() {
 
     override fun onClick(subreddit: Subreddit) {
         val toImages =
-            SearchSubsFragmentDirections.actionNavigationSearchToSearchImagesFragment(subreddit)
+            SearchSubsFragmentDirections.actionNavigationSearchToSearchImagesFragment(subreddit.name)
         findNavController().navigate(toImages)
     }
 

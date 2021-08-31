@@ -9,6 +9,8 @@ import com.example.redditwalls.misc.Utils
 import com.example.redditwalls.repositories.FavoriteImagesRepository
 import com.example.redditwalls.repositories.SettingsRepository
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class WallpaperHelper @Inject constructor(
@@ -27,9 +29,10 @@ class WallpaperHelper @Inject constructor(
                 settingsRepository.getRandomRefreshLocation()
             )
         }
-
         if (image == null) {
-            Toast.makeText(context, "No favorites to choose from :(", Toast.LENGTH_SHORT).show()
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context, "No favorites to choose from :(", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -45,9 +48,14 @@ class WallpaperHelper @Inject constructor(
                 imageLink,
                 resolution
             )
-            setBitmapAsWallpaper(context, wallpaper, location)
+
+            withContext(Dispatchers.Main) {
+                setBitmapAsWallpaper(context, wallpaper, location)
+            }
         } catch (e: Exception) {
-            Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

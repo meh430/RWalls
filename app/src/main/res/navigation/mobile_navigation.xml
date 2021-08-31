@@ -61,7 +61,7 @@
             app:destination="@id/navigation_wallpaper" />
         <argument
             android:name="subreddit"
-            app:argType="com.example.redditwalls.models.Subreddit" />
+            app:argType="string" />
     </fragment>
 
     <fragment

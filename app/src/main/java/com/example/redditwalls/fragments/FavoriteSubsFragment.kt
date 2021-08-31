@@ -53,7 +53,8 @@ class FavoriteSubsFragment : BaseSubsFragment() {
 
     override fun onClick(subreddit: Subreddit) {
         val toImages =
-            FavoriteSubsFragmentDirections.actionNavigationSavedToSearchImagesFragment(subreddit)
+            FavoriteSubsFragmentDirections.actionNavigationSavedToSearchImagesFragment(subreddit.name)
+
         findNavController().navigate(toImages)
     }
 }

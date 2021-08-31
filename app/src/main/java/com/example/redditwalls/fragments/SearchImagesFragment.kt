@@ -9,7 +9,6 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.redditwalls.MainActivity
 import com.example.redditwalls.databinding.FragmentSearchImagesBinding
 import com.example.redditwalls.models.Image
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,7 +22,7 @@ class SearchImagesFragment : BaseApiImagesFragment() {
     private val binding get() = _binding!!
 
     override val subreddit: String
-        get() = navArgs.subreddit.name
+        get() = navArgs.subreddit
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,8 +35,6 @@ class SearchImagesFragment : BaseApiImagesFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        (activity as? MainActivity)?.setToolbarTitle(subreddit)
 
         initRecyclerView(binding.imageScroll)
         observeImages()
