@@ -57,6 +57,8 @@ class SettingsFragment : Fragment() {
     }
 
     private fun populateSettings() {
+        setLoading(true)
+
         val defaultSubreddit = settingsViewModel.getDefaultSub().takeIf {
             it.isNotEmpty()
         } ?: FALLBACK_SUBREDDIT
@@ -80,6 +82,8 @@ class SettingsFragment : Fragment() {
             val setLocation = settingsViewModel.getRandomRefreshLocation()
             binding.locationButton.text = setLocation.displayText
         }
+
+        setLoading(false)
     }
 
     private fun addListeners() {
@@ -160,6 +164,19 @@ class SettingsFragment : Fragment() {
     private fun cancelRandomRefreshWork() {
         val workManager = WorkManager.getInstance(requireContext().applicationContext)
         workManager.cancelUniqueWork(RANDOM_REFRESH_WORK)
+    }
+
+    private fun setLoading(isLoading: Boolean) {
+        val hasLoaded = !isLoading
+
+        binding.apply {
+            defaultSubreddit.isVisible = hasLoaded
+            lowResPreviewsSwitch.isVisible = hasLoaded
+            randomRefreshSwitch.isVisible = hasLoaded
+            randomRefreshSettings.isVisible = hasLoaded
+
+            loading.isVisible = isLoading
+        }
     }
 
     override fun onDestroyView() {
