@@ -1,9 +1,6 @@
 package com.example.redditwalls.adapters
 
 import android.annotation.SuppressLint
-import android.view.GestureDetector
-import android.view.GestureDetector.SimpleOnGestureListener
-import android.view.MotionEvent
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -22,7 +19,8 @@ class ImageViewHolder(
     @SuppressLint("ClickableViewAccessibility")
     fun bind(image: Image) {
 
-        val gDetector = GestureDetector(binding.root.context, object : SimpleOnGestureListener() {
+        // causes noticeable delay due to double tap
+        /*val gDetector = GestureDetector(binding.root.context, object : SimpleOnGestureListener() {
             override fun onDown(e: MotionEvent): Boolean {
                 return true
             }
@@ -41,9 +39,17 @@ class ImageViewHolder(
                 super.onLongPress(e)
                 imageListener.onLongClick(image)
             }
-        })
+        })*/
+        //binding.imagePreview.setOnTouchListener { _, event -> gDetector.onTouchEvent(event) }
 
-        binding.imagePreview.setOnTouchListener { _, event -> gDetector.onTouchEvent(event) }
+        binding.imagePreview.setOnClickListener {
+            imageListener.onClick(image)
+        }
+
+        binding.imagePreview.setOnLongClickListener {
+            imageListener.onLongClick(image)
+            true
+        }
 
         val requestOptions = RequestOptions()
             .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
