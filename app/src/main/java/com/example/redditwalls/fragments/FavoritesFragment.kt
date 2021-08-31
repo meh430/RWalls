@@ -5,6 +5,7 @@ import android.util.TypedValue
 import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -19,6 +20,7 @@ import com.example.redditwalls.models.Image
 import com.example.redditwalls.viewmodels.SettingsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -103,7 +105,18 @@ class FavoritesFragment : BaseImagesFragment() {
             .setTitle("Actions")
             .setAdapter(actionsAdapter) { _, i ->
                 when (i) {
-                    FEELING_LUCKY -> favoritesViewModel.getRandomFavoriteImage(this::onClick)
+                    FEELING_LUCKY -> lifecycleScope.launch(Dispatchers.Main) {
+                        val randomImage = favoritesViewModel.getRandomFavoriteImage()
+                        if (randomImage != null) {
+                            onClick(randomImage)
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                "No favorites found :(",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
                     DELETE_ALL -> favoritesViewModel.deleteAllFavorites()
                     DOWNLOAD_ALL -> lifecycleScope.launch {
                         val favs = favoritesViewModel.getFavoritesAsList()

@@ -28,5 +28,5 @@ interface FavoritesDAO {
     suspend fun favoriteExists(imageLink: String): Boolean
 
     @Query("SELECT * FROM Favorites ORDER BY RANDOM() LIMIT 1")
-    suspend fun getRandomFavoriteImage(): Image
+    suspend fun getRandomFavoriteImage(): Image?
 }

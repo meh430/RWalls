@@ -38,4 +38,9 @@ class SettingsViewModel @Inject constructor(
 
     fun setRandomRefreshLocation(location: WallpaperLocation) =
         settingsRepository.setRandomRefreshLocation(location)
+
+    fun randomRefreshSettingsChanged(
+        period: Int,
+        location: WallpaperLocation
+    ) = period != getRandomRefreshPeriod() || location != getRandomRefreshLocation()
 }

@@ -20,18 +20,18 @@ class WallpaperHelper @Inject constructor(
 ) {
 
     suspend fun setRandomFavoriteWallpaper(context: Context) {
-        val images = favoriteImagesRepository.getFavorites()
+        val image = favoriteImagesRepository.getRandomFavoriteImage()
 
-        if (images.isNotEmpty()) {
+        image?.let {
             setImageLinkAsWallpaper(
                 context,
-                images.random().imageLink,
+                it.imageLink,
                 settingsRepository.getRandomRefreshLocation()
             )
         }
 
         withContext(Dispatchers.Main) {
-            val msg = if (images.isNotEmpty()) {
+            val msg = if (image != null) {
                 "Successfully set wallpaper"
             } else {
                 "No favorites to choose from :("

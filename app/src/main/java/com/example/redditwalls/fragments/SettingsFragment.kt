@@ -1,23 +1,33 @@
 package com.example.redditwalls.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.work.*
 import com.example.redditwalls.R
 import com.example.redditwalls.WallpaperHelper
+import com.example.redditwalls.WallpaperLocation
 import com.example.redditwalls.databinding.FragmentSettingsBinding
+import com.example.redditwalls.misc.RandomRefreshWorker
 import com.example.redditwalls.repositories.SettingsRepository.Companion.FALLBACK_SUBREDDIT
 import com.example.redditwalls.viewmodels.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
+
+    companion object {
+        const val RANDOM_REFRESH_WORK = "random_refresh_work"
+    }
 
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
@@ -75,40 +85,81 @@ class SettingsFragment : Fragment() {
     private fun addListeners() {
         binding.defaultSubreddit.editText?.setOnEditorActionListener { _, i, _ ->
             if (i == EditorInfo.IME_ACTION_DONE) {
-                settingsViewModel.setDefaultSub(binding.defaultSubreddit.editText?.text.toString())
+                binding.defaultSubreddit.clearFocus()
+                (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+                    .hideSoftInputFromWindow(binding.defaultSubreddit.windowToken, 0)
                 true
             } else {
                 false
             }
         }
 
-        binding.lowResPreviewsSwitch.setOnCheckedChangeListener { _, isChecked ->
-            settingsViewModel.setLoadLowResPreviews(isChecked)
-        }
-
         binding.randomRefreshSwitch.setOnCheckedChangeListener { _, isChecked ->
             binding.randomRefreshSettings.isVisible = isChecked
-            settingsViewModel.setRandomRefresh(isChecked)
         }
 
-        binding.intervalGroup.setOnCheckedChangeListener { _, i ->
-            val interval = when (i) {
+        binding.locationButton.setOnClickListener {
+            wallpaperHelper.showLocationPickerDialog(requireContext()) {
+                binding.locationButton.text = it.displayText
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        saveSettings()
+    }
+
+    private fun saveSettings() {
+        settingsViewModel.setDefaultSub(binding.defaultSubreddit.editText?.text.toString())
+        settingsViewModel.setLoadLowResPreviews(binding.lowResPreviewsSwitch.isChecked)
+
+        val randomRefreshEnabled = binding.randomRefreshSwitch.isChecked
+        settingsViewModel.setRandomRefresh(randomRefreshEnabled)
+        if (binding.randomRefreshSwitch.isChecked) {
+            val interval = when (binding.intervalGroup.checkedRadioButtonId) {
                 R.id.one -> 1
                 R.id.six -> 6
                 R.id.twelve -> 12
                 R.id.twentyFour -> 24
                 else -> 1
             }
+            val location = WallpaperLocation.values().find {
+                it.displayText == binding.locationButton.text.toString()
+            } ?: WallpaperLocation.BOTH
 
-            settingsViewModel.setRandomRefreshPeriod(interval)
-        }
-
-        binding.locationButton.setOnClickListener {
-            wallpaperHelper.showLocationPickerDialog(requireContext()) {
-                settingsViewModel.setRandomRefreshLocation(it)
-                binding.locationButton.text = it.displayText
+            // Only add new worker if settings changed
+            if (settingsViewModel.randomRefreshSettingsChanged(interval, location)) {
+                settingsViewModel.setRandomRefreshPeriod(interval)
+                settingsViewModel.setRandomRefreshLocation(location)
+                startRandomRefreshWork(interval)
             }
+
+        } else {
+            cancelRandomRefreshWork()
         }
+    }
+
+    private fun startRandomRefreshWork(interval: Int) {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val work = PeriodicWorkRequestBuilder<RandomRefreshWorker>(
+            interval.toLong(),
+            TimeUnit.HOURS
+        ).setConstraints(constraints).build()
+        val workManager = WorkManager.getInstance(requireContext().applicationContext)
+        workManager.enqueueUniquePeriodicWork(
+            RANDOM_REFRESH_WORK,
+            ExistingPeriodicWorkPolicy.REPLACE,
+            work
+        )
+    }
+
+    private fun cancelRandomRefreshWork() {
+        val workManager = WorkManager.getInstance(requireContext().applicationContext)
+        workManager.cancelUniqueWork(RANDOM_REFRESH_WORK)
     }
 
     override fun onDestroyView() {

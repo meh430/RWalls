@@ -23,12 +23,8 @@ class FavoritesViewModel @Inject constructor(
         favoriteImagesRepository.deleteAllFavorites()
     }
 
-    fun getRandomFavoriteImage(onClick: (Image) -> Unit) {
-        viewModelScope.launch {
-            val randomImage = favoriteImagesRepository.getRandomFavoriteImage()
-            onClick(randomImage)
-        }
-    }
+    suspend fun getRandomFavoriteImage() = favoriteImagesRepository.getRandomFavoriteImage()
+
 
     // True if added, false if not
     suspend fun addFavorite(image: Image): Boolean {
