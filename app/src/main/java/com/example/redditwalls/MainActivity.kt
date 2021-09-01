@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, destination, arguments ->
+            setToolbarSubtitle("")
             binding.bottomNavView.isVisible = destination.id != R.id.navigation_search_images
 
             if (destination.id == R.id.navigation_search_images) {
@@ -61,5 +62,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun setToolbarTitle(title: String) {
         binding.toolbar.toolbar.title = title
+    }
+
+    fun setToolbarSubtitle(subtitle: String) {
+        binding.toolbar.toolbar.subtitle = subtitle
     }
 }

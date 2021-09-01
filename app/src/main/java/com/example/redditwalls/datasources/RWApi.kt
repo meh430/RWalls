@@ -29,13 +29,13 @@ class RWApi @Inject constructor() {
         const val RAW_JSON_QUERY = "raw_json=true"
     }
 
-    enum class Sort(val trailing: String, val queryParam: String) {
-        HOT("/hot.json", "sort=hot"),
-        NEW("/new.json", "sort=new"),
-        TOP_WEEK("/top.json", "sort=top&t=week"),
-        TOP_MONTH("/top.json", "sort=top&t=month"),
-        TOP_YEAR("/top.json", "sort=top&t=year"),
-        TOP_ALL("/top.json", "sort=top&t=all");
+    enum class Sort(val trailing: String, val queryParam: String, val displayText: String) {
+        HOT("/hot.json", "sort=hot", "hot"),
+        NEW("/new.json", "sort=new", "new"),
+        TOP_WEEK("/top.json", "sort=top&t=week", "top week"),
+        TOP_MONTH("/top.json", "sort=top&t=month", "top month"),
+        TOP_YEAR("/top.json", "sort=top&t=year", "top week"),
+        TOP_ALL("/top.json", "sort=top&t=all", "top all");
 
         companion object {
             fun fromId(id: Int) = when (id) {

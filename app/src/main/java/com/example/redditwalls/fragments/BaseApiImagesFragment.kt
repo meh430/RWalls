@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.redditwalls.MainActivity
 import com.example.redditwalls.R
 import com.example.redditwalls.adapters.ImagesAdapter
 import com.example.redditwalls.adapters.LoadingStateAdapter
@@ -78,6 +79,7 @@ abstract class BaseApiImagesFragment : BaseImagesFragment() {
 
     private fun setSort(sort: Sort = Sort.HOT) {
         scrollToTop()
+        (activity as? MainActivity)?.setToolbarSubtitle(sort.displayText)
         imagesViewModel.setSort(sort)
     }
 
