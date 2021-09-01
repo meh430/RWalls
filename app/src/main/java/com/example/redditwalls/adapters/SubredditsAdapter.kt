@@ -71,6 +71,7 @@ class SubredditsAdapter(private val listener: SubredditClickListener) :
         fun bind(subreddit: Subreddit) = binding.apply {
             setSubreddit(subreddit)
             subscriberCount.isVisible = subreddit.numSubscribers.isNotEmpty()
+            subDescription.isVisible = subreddit.description.isNotBlank()
             root.setOnClickListener {
                 listener.onClick(subreddit)
             }

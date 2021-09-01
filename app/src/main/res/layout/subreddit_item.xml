@@ -50,7 +50,10 @@
                     android:layout_marginTop="14dp"
                     android:layout_marginEnd="14dp"
                     android:layout_weight="4"
+                    android:ellipsize="end"
                     android:gravity="top"
+                    android:maxLines="1"
+                    android:scrollHorizontally="true"
                     android:text="@{subreddit.name}"
                     android:textAppearance="?attr/textAppearanceHeadline5"
                     android:textColor="?attr/colorOnSurface" />
@@ -89,6 +92,7 @@
                 android:layout_marginBottom="12dp"
                 android:gravity="center_vertical"
                 android:text="@{subreddit.description}"
+
                 android:textAppearance="?attr/textAppearanceBody2"
                 android:textColor="?attr/colorOnSurface" />
         </LinearLayout>
