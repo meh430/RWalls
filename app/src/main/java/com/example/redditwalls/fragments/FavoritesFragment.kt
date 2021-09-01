@@ -117,7 +117,7 @@ class FavoritesFragment : BaseImagesFragment() {
                             ).show()
                         }
                     }
-                    DELETE_ALL -> favoritesViewModel.deleteAllFavorites()
+                    DELETE_ALL -> deleteFavorites()
                     DOWNLOAD_ALL -> lifecycleScope.launch {
                         val favs = favoritesViewModel.getFavoritesAsList()
                         if (favs.isNotEmpty()) {
@@ -159,6 +159,19 @@ class FavoritesFragment : BaseImagesFragment() {
             if (hasFavs) {
                 favoritesAdapter.submitList(it)
             }
+        }
+    }
+
+    fun deleteFavorites() {
+        lifecycleScope.launch {
+            val numFavs = favoritesViewModel.getFavoritesAsList().size
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Are you sure?")
+                .setMessage("Do you want to delete $numFavs saved favorites?")
+                .setPositiveButton("Yes") { _, _ ->
+                    favoritesViewModel.deleteAllFavorites()
+                }
+                .setNegativeButton("No") { _, _ -> }.show()
         }
     }
 
