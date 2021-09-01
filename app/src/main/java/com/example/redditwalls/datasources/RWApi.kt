@@ -200,6 +200,7 @@ class RWApi @Inject constructor() {
     }
 
     // subreddit to id
+    // To use with search
     fun extractPostLinkInfo(link: String): Pair<String, String> {
         val uri = Uri.parse(link)
 
@@ -218,6 +219,7 @@ class RWApi @Inject constructor() {
         }
     }
 
+    // To use with deeplink query
     fun buildPostLink(subreddit: String, id: String): String {
         var sub = subreddit
         if (subreddit.startsWith("r/")) {

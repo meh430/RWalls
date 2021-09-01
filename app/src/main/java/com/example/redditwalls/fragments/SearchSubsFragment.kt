@@ -63,11 +63,10 @@ class SearchSubsFragment : BaseSubsFragment() {
 
             when (it.status) {
                 Status.SUCCESS -> {
-                    binding.subScroll.isVisible = true
-
                     if (it.data.isNullOrEmpty()) {
                         binding.empty.empty.isVisible = true
                     } else {
+                        binding.subScroll.isVisible = true
                         subsAdapter.submitList(it.data)
                     }
                 }
