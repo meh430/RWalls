@@ -133,7 +133,7 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
     private fun setUpFavorite() {
         wallViewModel.isFavorite.observe(this) {
             val icon = if (it) filledHeartIcon else heartIcon
-            binding.favorite.icon = icon
+            binding.favorite.setImageDrawable(icon)
         }
     }
 

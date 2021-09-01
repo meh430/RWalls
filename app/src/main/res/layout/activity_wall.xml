@@ -36,27 +36,29 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <com.google.android.material.button.MaterialButton
+            <ImageButton
                 android:id="@+id/info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="Info"
-                android:textColor="@color/white"
-                app:icon="@drawable/ic_info"
-                app:iconSize="18dp"
-                app:iconTint="@color/white" />
+                android:background="@drawable/up"
+                android:padding="8dp"
+                android:src="@drawable/ic_info"
+                android:textColor="?attr/colorOnSurface"
+                android:translationZ="2dp"
+                app:tint="?attr/colorOnSurface" />
 
-            <com.google.android.material.button.MaterialButton
+            <ImageButton
                 android:id="@+id/favorite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="Favorite"
-                android:textColor="@color/white"
-                app:icon="@drawable/ic_favorite_filled"
-                app:iconSize="18dp"
-                app:iconTint="@color/white" />
+                android:background="@drawable/up"
+                android:padding="8dp"
+                android:src="@drawable/ic_favorite_filled"
+                android:textColor="?attr/colorOnSurface"
+                android:translationZ="2dp"
+                app:tint="@color/red" />
         </LinearLayout>
     </RelativeLayout>
 </layout>
