@@ -18,9 +18,9 @@ class SubredditsAdapter(private val listener: SubredditClickListener) :
     ListAdapter<Subreddit, SubredditsAdapter.SubredditViewHolder>(SubredditComparator) {
 
     enum class SubredditMenuOptions(val displayText: String) {
-        DEFAULT("Set as default"),
         FAVORITE("Add to favorites"),
         UNFAVORITE("Remove from favorites"),
+        DEFAULT("Set as default"),
         BROWSE("Browse images");
 
         companion object {
