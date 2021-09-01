@@ -20,6 +20,7 @@ class WallpaperHelper @Inject constructor(
 ) {
 
     suspend fun setRandomFavoriteWallpaper(context: Context) {
+        toast("Setting wallpaper...", context)
         val image = favoriteImagesRepository.getRandomFavoriteImage()
 
         image?.let {
@@ -30,9 +31,7 @@ class WallpaperHelper @Inject constructor(
             )
         }
         if (image == null) {
-            withContext(Dispatchers.Main) {
-                Toast.makeText(context, "No favorites to choose from :(", Toast.LENGTH_SHORT).show()
-            }
+            toast("No favorites to choose from :(", context)
         }
     }
 
@@ -42,6 +41,7 @@ class WallpaperHelper @Inject constructor(
         location: WallpaperLocation
     ) {
         try {
+            toast("Setting wallpaper...", context)
             val resolution = Utils.getResolution(context)
             val wallpaper = imageLoader.loadImage(
                 context,
@@ -86,6 +86,12 @@ class WallpaperHelper @Inject constructor(
             .setItems(items) { _, i ->
                 onChoose(WallpaperLocation.fromId(i))
             }.show()
+    }
+
+    private suspend fun toast(msg: String, context: Context) {
+        withContext(Dispatchers.Main) {
+            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+        }
     }
 }
 
