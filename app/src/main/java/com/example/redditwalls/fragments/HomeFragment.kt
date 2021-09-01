@@ -18,6 +18,10 @@ class HomeFragment : BaseApiImagesFragment() {
     override val subreddit: String
         get() = settingsViewModel.getDefaultSub()
 
+    override fun scrollToTop() {
+        binding.imageScroll.scrollToPosition(0)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

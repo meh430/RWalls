@@ -69,11 +69,15 @@ abstract class BaseApiImagesFragment : BaseImagesFragment() {
         }
     }
 
+    abstract fun scrollToTop()
+
     fun setQuery(query: String) {
+        scrollToTop()
         imagesViewModel.setQuery(query)
     }
 
     private fun setSort(sort: Sort = Sort.HOT) {
+        scrollToTop()
         imagesViewModel.setSort(sort)
     }
 

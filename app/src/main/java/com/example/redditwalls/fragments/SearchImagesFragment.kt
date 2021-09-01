@@ -24,6 +24,10 @@ class SearchImagesFragment : BaseApiImagesFragment() {
     override val subreddit: String
         get() = navArgs.subreddit
 
+    override fun scrollToTop() {
+        binding.imageScroll.scrollToPosition(0)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -59,9 +63,9 @@ class SearchImagesFragment : BaseApiImagesFragment() {
 
                 if (query.isEmpty()) {
                     // Search with new query
-                    imagesViewModel.setQuery("")
+                    setQuery("")
                 } else {
-                    imagesViewModel.setQuery(query)
+                    setQuery(query)
                 }
                 true
             } else {
