@@ -26,6 +26,7 @@ class RWApi @Inject constructor() {
     companion object {
         const val PAGE_SIZE = 25
         const val BASE = "https://www.reddit.com"
+        const val RAW_JSON_QUERY = "raw_json=true"
     }
 
     enum class Sort(val trailing: String, val queryParam: String) {
@@ -74,6 +75,7 @@ class RWApi @Inject constructor() {
             append("&limit=25")
             append("&after=$after")
             append("&include_over_18=true")
+            append("&$RAW_JSON_QUERY")
         }.toString()
     }
 
@@ -153,7 +155,7 @@ class RWApi @Inject constructor() {
 
     suspend fun getPostInfo(postLink: String, imageSize: Double) =
         withContext(Dispatchers.Default) {
-            val endpoint = "$postLink.json"
+            val endpoint = "$postLink.json?$RAW_JSON_QUERY"
             val jsonArr = JSONArray(fetch(endpoint))
 
             val json = jsonArr.getJSONObject(0)
@@ -181,7 +183,7 @@ class RWApi @Inject constructor() {
         }
 
     private suspend fun getSubInfo(subreddit: String = ""): JSONObject {
-        val endpoint = "$BASE/r/$subreddit/about/.json"
+        val endpoint = "$BASE/r/$subreddit/about/.json?$RAW_JSON_QUERY"
         return JSONObject(fetch(endpoint))
     }
 
@@ -226,7 +228,7 @@ class RWApi @Inject constructor() {
             sub = subreddit.substring(2)
         }
 
-        return "$BASE/r/$sub/comments/$id/.json"
+        return "$BASE/r/$sub/comments/$id/.json?$RAW_JSON_QUERY"
     }
 
     suspend fun getImageFromPost(postLink: String): Image {
