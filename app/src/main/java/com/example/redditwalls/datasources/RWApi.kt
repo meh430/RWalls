@@ -29,6 +29,26 @@ class RWApi @Inject constructor() {
         const val PAGE_SIZE = 25
         const val BASE = "https://www.reddit.com"
         const val RAW_JSON_QUERY = "raw_json=true"
+
+        // subreddit to id
+        // To use with search
+        fun extractPostLinkInfo(link: String): Pair<String, String> {
+            val uri = Uri.parse(link)
+
+            val scheme = uri.scheme
+            val host = uri.host
+            val pathSegments = uri.pathSegments
+
+            if (scheme != "https" || host != "www.reddit.com") {
+                return "" to ""
+            }
+
+            return try {
+                pathSegments[1] to pathSegments[3]
+            } catch (e: IndexOutOfBoundsException) {
+                "" to ""
+            }
+        }
     }
 
     enum class Sort(
@@ -211,28 +231,8 @@ class RWApi @Inject constructor() {
         return previewUrl to url
     }
 
-    // subreddit to id
-    // To use with search
-    fun extractPostLinkInfo(link: String): Pair<String, String> {
-        val uri = Uri.parse(link)
-
-        val scheme = uri.scheme
-        val host = uri.host
-        val pathSegments = uri.pathSegments
-
-        if (scheme != "https" || host != "www.reddit.com") {
-            return "" to ""
-        }
-
-        return try {
-            pathSegments[1] to pathSegments[3]
-        } catch (e: IndexOutOfBoundsException) {
-            "" to ""
-        }
-    }
-
     // To use with deeplink query
-    fun buildPostLink(subreddit: String, id: String): String {
+    private fun buildPostLink(subreddit: String, id: String): String {
         var sub = subreddit
         if (subreddit.startsWith("r/")) {
             sub = subreddit.substring(2)
@@ -241,19 +241,28 @@ class RWApi @Inject constructor() {
         return "$BASE/r/$sub/comments/$id/.json?$RAW_JSON_QUERY"
     }
 
-    suspend fun getImageFromPost(postLink: String): Image {
-        val data = JSONObject(fetch(postLink)).getJSONObject("data")
-        val postInfo = data.getJSONArray("children").getJSONObject(0).getJSONObject("data")
-        val (preview, imageLink) = getImageInfoFromData(postInfo)
+    suspend fun getImageFromPost(postLink: String = "", subreddit: String = "", id: String = "") =
+        withContext(Dispatchers.Default) {
 
-        return Image(
-            id = -1,
-            imageLink = imageLink,
-            postLink = BASE + postInfo.getString("permalink"),
-            subreddit = postInfo.getString("subreddit"),
-            previewLink = preview
-        )
-    }
+            val endpoint = if (postLink.isEmpty()) {
+                buildPostLink(subreddit, id)
+            } else {
+                postLink
+            }
+
+            val json = JSONArray(fetch(endpoint)).getJSONObject(0)
+            val data = json.getJSONObject("data")
+            val postInfo = data.getJSONArray("children").getJSONObject(0).getJSONObject("data")
+            val (preview, imageLink) = getImageInfoFromData(postInfo)
+
+            Image(
+                id = -1,
+                imageLink = imageLink,
+                postLink = BASE + postInfo.getString("permalink"),
+                subreddit = postInfo.getString("subreddit"),
+                previewLink = preview
+            )
+        }
 
 
     private suspend fun fetch(endpoint: String) = withContext(Dispatchers.IO) {

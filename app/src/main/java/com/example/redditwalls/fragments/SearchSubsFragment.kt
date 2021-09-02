@@ -2,6 +2,8 @@ package com.example.redditwalls.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,10 +14,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.redditwalls.adapters.SubredditsAdapter
 import com.example.redditwalls.databinding.FragmentSearchSubsBinding
+import com.example.redditwalls.datasources.RWApi
 import com.example.redditwalls.models.Resource.Status
 import com.example.redditwalls.models.Subreddit
 import com.example.redditwalls.viewmodels.SearchSubViewModel
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class SearchSubsFragment : BaseSubsFragment() {
@@ -52,6 +56,31 @@ class SearchSubsFragment : BaseSubsFragment() {
                 false
             }
         }
+
+        binding.searchBar.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                val (subreddit, id) = RWApi.extractPostLinkInfo(s.toString())
+                binding.linkBanner.linkBanner.isVisible = subreddit.isNotEmpty() && id.isNotEmpty()
+            }
+        })
+
+        binding.linkBanner.yes.setOnClickListener {
+            val (subreddit, id) = RWApi.extractPostLinkInfo(binding.searchBar.text.toString())
+            val toWall =
+                SearchSubsFragmentDirections.actionNavigationSearchToNavigationWallpaper(
+                    null,
+                    id,
+                    subreddit
+                )
+            findNavController().navigate(toWall)
+        }
+
+        binding.linkBanner.no.setOnClickListener {
+            binding.linkBanner.linkBanner.isVisible = false
+        }
     }
 
     private fun observeSearchResults() {
@@ -60,6 +89,7 @@ class SearchSubsFragment : BaseSubsFragment() {
             binding.subScroll.isVisible = false
             binding.error.error.isVisible = false
             binding.empty.empty.isVisible = false
+            binding.linkBanner.linkBanner.isVisible = false
 
             when (it.status) {
                 Status.SUCCESS -> {

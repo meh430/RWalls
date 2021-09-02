@@ -23,31 +23,39 @@ class WallViewModel @Inject constructor(
 ) : BaseViewModel() {
     val postInfo = MutableLiveData<Resource<PostInfo>>()
     val isFavorite = MutableLiveData<Boolean>()
-    private lateinit var currentImage: Image
+    val currentImage = MutableLiveData<Resource<Image>>()
 
     init {
         postInfo.value = Resource.loading()
     }
 
-    fun initialize(image: Image) {
-        currentImage = image
+    fun initialize(image: Image?, postId: String?, subreddit: String?) {
         viewModelScope.launch {
-            isFavorite.postValue(favoriteImagesRepository.favoriteExists(currentImage.imageLink))
+            if (image != null) {
+                currentImage.postValue(Resource.success(image))
+            } else {
+                getResource(currentImage) {
+                    rwRepository.getImageFromPost(id = postId ?: "", subreddit = subreddit ?: "")
+                }
+            }
         }
     }
 
     fun toggleFavorite() {
         isFavorite.value?.let {
             viewModelScope.launch {
-                favoriteImagesRepository.favoriteExists(currentImage.imageLink).let { exists ->
-                    if (exists) {
-                        favoriteImagesRepository.deleteFavoriteImage(currentImage.imageLink)
-                    } else {
-                        favoriteImagesRepository.insertFavorite(currentImage)
-                    }
+                currentImage.value?.data?.let { image ->
+                    favoriteImagesRepository.favoriteExists(image.imageLink).let { exists ->
+                        if (exists) {
+                            favoriteImagesRepository.deleteFavoriteImage(image.imageLink)
+                        } else {
+                            favoriteImagesRepository.insertFavorite(image)
+                        }
 
-                    isFavorite.postValue(!exists)
+                        isFavorite.postValue(!exists)
+                    }
                 }
+
             }
         }
     }
@@ -61,6 +69,12 @@ class WallViewModel @Inject constructor(
         getResource(postInfo) {
             val imageSize = imageLoader.getImageSize(context, imageLink, resolution)
             PostInfo(rwRepository.getPostInfo(postLink, imageSize), Utils.getResolution(context))
+        }
+    }
+
+    fun setUpFavorite(image: Image) {
+        viewModelScope.launch {
+            isFavorite.postValue(favoriteImagesRepository.favoriteExists(image.imageLink))
         }
     }
 }

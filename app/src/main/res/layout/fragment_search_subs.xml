@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="?attr/actionBarSize"
@@ -12,7 +12,6 @@
             android:id="@+id/searchBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/loading"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="10dp"
@@ -30,6 +29,19 @@
             android:textColorHint="@color/black"
             android:textCursorDrawable="@color/black" />
 
+        <include
+            android:id="@+id/linkBanner"
+            layout="@layout/link_banner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/searchBar"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="12dp"
+            android:visibility="gone" />
+
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/loading"
@@ -45,7 +57,7 @@
             android:id="@+id/subScroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/searchBar"
+            android:layout_below="@+id/linkBanner"
             android:layout_centerHorizontal="true" />
 
         <include

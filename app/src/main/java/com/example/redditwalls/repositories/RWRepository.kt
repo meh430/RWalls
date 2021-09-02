@@ -23,4 +23,9 @@ class RWRepository @Inject constructor(private val api: RWApi) {
 
     suspend fun getPostInfo(postLink: String, imageSize: Double) =
         api.getPostInfo(postLink, imageSize)
+
+
+    suspend fun getImageFromPost(postLink: String = "", subreddit: String = "", id: String = "") =
+        api.getImageFromPost(postLink = postLink, subreddit = subreddit, id = id)
+
 }

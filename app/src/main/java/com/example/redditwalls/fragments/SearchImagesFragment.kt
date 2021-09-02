@@ -76,7 +76,11 @@ class SearchImagesFragment : BaseApiImagesFragment() {
 
     override fun onClick(image: Image) {
         val toWall =
-            SearchImagesFragmentDirections.actionSearchImagesFragmentToNavigationWallpaper(image)
+            SearchImagesFragmentDirections.actionSearchImagesFragmentToNavigationWallpaper(
+                image,
+                null,
+                null
+            )
         findNavController().navigate(toWall)
     }
 

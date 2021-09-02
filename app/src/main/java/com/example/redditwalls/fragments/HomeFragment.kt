@@ -48,7 +48,8 @@ class HomeFragment : BaseApiImagesFragment() {
     }
 
     override fun onClick(image: Image) {
-        val toWall = HomeFragmentDirections.actionNavigationHomeToNavigationWallpaper(image)
+        val toWall =
+            HomeFragmentDirections.actionNavigationHomeToNavigationWallpaper(image, null, null)
         findNavController().navigate(toWall)
     }
 

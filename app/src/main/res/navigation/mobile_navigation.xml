@@ -32,7 +32,16 @@
         android:name="com.example.redditwalls.WallActivity">
         <argument
             android:name="image"
-            app:argType="com.example.redditwalls.models.Image" />
+            app:argType="com.example.redditwalls.models.Image"
+            app:nullable="true" />
+        <argument
+            android:name="postId"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="subreddit"
+            app:argType="string"
+            app:nullable="true" />
     </activity>
 
     <fragment
@@ -42,6 +51,9 @@
         <action
             android:id="@+id/action_navigation_search_to_searchImagesFragment"
             app:destination="@id/navigation_search_images" />
+        <action
+            android:id="@+id/action_navigation_search_to_navigation_wallpaper"
+            app:destination="@id/navigation_wallpaper" />
     </fragment>
 
     <fragment

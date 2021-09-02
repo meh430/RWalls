@@ -182,7 +182,11 @@ class FavoritesFragment : BaseImagesFragment() {
 
     override fun onClick(image: Image) {
         val toWall =
-            FavoritesFragmentDirections.actionNavigationFavoritesToNavigationWallpaper(image)
+            FavoritesFragmentDirections.actionNavigationFavoritesToNavigationWallpaper(
+                image,
+                null,
+                null
+            )
         findNavController().navigate(toWall)
     }
 }

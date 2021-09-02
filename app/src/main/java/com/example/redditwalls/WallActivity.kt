@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.view.isVisible
 import androidx.navigation.navArgs
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
@@ -18,6 +19,7 @@ import com.example.redditwalls.databinding.ActivityWallBinding
 import com.example.redditwalls.databinding.WallSheetBinding
 import com.example.redditwalls.misc.Utils
 import com.example.redditwalls.misc.launchBrowser
+import com.example.redditwalls.models.Image
 import com.example.redditwalls.models.PostInfo
 import com.example.redditwalls.models.Resource
 import com.example.redditwalls.viewmodels.WallViewModel
@@ -71,16 +73,43 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
         binding = ActivityWallBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        wallViewModel.initialize(wallArgs.image)
+        wallViewModel.initialize(wallArgs.image, wallArgs.postId, wallArgs.subreddit)
 
         Utils.setFullScreen(window, binding.root)
-        loadWallpaper()
-        loadPostInfo(sheetBinding)
+        observeImage()
 
         detector = GestureDetector(this, this)
 
         setUpFavorite()
         addListeners()
+    }
+
+    private fun observeImage() {
+        wallViewModel.currentImage.observe(this) {
+            binding.bottomButtons.isVisible = false
+            binding.error.error.isVisible = false
+            binding.loading.isVisible = false
+            binding.wallpaper.isVisible = false
+
+            when (it.status) {
+                Resource.Status.SUCCESS -> {
+                    binding.bottomButtons.isVisible = true
+                    binding.wallpaper.isVisible = true
+                    it.data?.let { image ->
+                        wallViewModel.setUpFavorite(image)
+                        loadWallpaper(image)
+                        loadPostInfo(sheetBinding, image)
+                    }
+                }
+                Resource.Status.LOADING -> {
+                    binding.loading.isVisible = true
+                }
+                Resource.Status.ERROR -> {
+                    binding.error.error.isVisible = true
+                    binding.error.errorLabel.text = it.errorMessage
+                }
+            }
+        }
     }
 
     private fun addListeners() {
@@ -111,7 +140,12 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
         }
 
         sheetBinding.toPost.setOnClickListener {
-            wallArgs.image.postLink.launchBrowser(this)
+            val image = wallViewModel.currentImage.value?.data
+            if (image != null) {
+                image.postLink.launchBrowser(this)
+            } else {
+                Toast.makeText(this, "Please wait", Toast.LENGTH_SHORT).show()
+            }
         }
 
         sheetBinding.author.setOnClickListener {
@@ -137,17 +171,17 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
         }
     }
 
-    private fun loadWallpaper() {
+    private fun loadWallpaper(image: Image) {
         Glide.with(this)
-            .load(wallArgs.image.imageLink)
+            .load(image.imageLink)
             .placeholder(Utils.getImageLoadingDrawable(this))
             .centerCrop().into(binding.wallpaper)
     }
 
-    private fun loadPostInfo(sheetBinding: WallSheetBinding) {
+    private fun loadPostInfo(sheetBinding: WallSheetBinding, image: Image) {
         wallViewModel.getPostInfo(
-            postLink = wallArgs.image.postLink,
-            imageLink = wallArgs.image.imageLink,
+            postLink = image.postLink,
+            imageLink = image.imageLink,
             context = this,
             resolution = Utils.getResolution(context = this)
         )
