@@ -32,11 +32,6 @@ class SettingsViewModel @Inject constructor(
 
     fun setRandomRefresh(enabled: Boolean) = settingsRepository.setRandomRefresh(enabled)
 
-
-    fun getRandomRefreshPeriod() = settingsRepository.getRandomRefreshPeriod()
-
-    fun setRandomRefreshPeriod(period: Int) = settingsRepository.setRandomRefreshPeriod(period)
-
     fun getRandomRefreshInterval() = settingsRepository.getRandomRefreshInterval()
 
     fun setRandomRefreshInterval(refreshInterval: RefreshInterval) =
@@ -50,7 +45,15 @@ class SettingsViewModel @Inject constructor(
     fun randomRefreshSettingsChanged(
         interval: RefreshInterval,
         location: WallpaperLocation
-    ) = interval != getRandomRefreshInterval() || location != getRandomRefreshLocation()
+    ): Boolean {
+        val savedInterval = getRandomRefreshInterval()
+        val refreshChanged = interval != savedInterval
+
+        val savedLocation = getRandomRefreshLocation()
+        val locationChanged = location != savedLocation
+
+        return refreshChanged || locationChanged
+    }
 
     fun setTheme(theme: Theme) {
         settingsRepository.setTheme(theme)
@@ -63,4 +66,6 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun getDefaultSort() = settingsRepository.getDefaultSort()
+
+    fun clearRandomRefreshSettings() = settingsRepository.clearRandomRefreshSettings()
 }

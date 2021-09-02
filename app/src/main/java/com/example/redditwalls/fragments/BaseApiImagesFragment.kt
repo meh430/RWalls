@@ -36,7 +36,7 @@ abstract class BaseApiImagesFragment : BaseImagesFragment() {
     protected val imagesViewModel: SubImagesViewModel by lazy {
         val vm: SubImagesViewModel by viewModels()
         vm.also {
-            it.initialize(subreddit)
+            it.initialize(subreddit, settingsViewModel.getDefaultSort())
         }
     }
 
@@ -116,5 +116,10 @@ abstract class BaseApiImagesFragment : BaseImagesFragment() {
             emptyView.empty.isVisible = isEmpty
             recyclerView.isVisible = !isEmpty && !hasError
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as? MainActivity)?.setToolbarSubtitle(imagesViewModel.currentSort.displayText)
     }
 }

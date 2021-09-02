@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -105,7 +106,7 @@ class SettingsFragment : Fragment() {
                 requireContext(),
                 "Set Default Sort",
                 sorts,
-                sorts.fromDisplayText(binding.themeButton.text.toString(), RWApi.Sort.HOT).id
+                sorts.fromDisplayText(binding.sortButton.text.toString(), RWApi.Sort.HOT).id
             ).show {
                 binding.sortButton.text = RWApi.Sort.fromId(it).displayText
             }
@@ -167,9 +168,10 @@ class SettingsFragment : Fragment() {
         val randomRefreshEnabled = binding.randomRefreshSwitch.isChecked
         settingsViewModel.setRandomRefresh(randomRefreshEnabled)
         if (binding.randomRefreshSwitch.isChecked) {
+            val refreshDisplayText = binding.refreshPeriodButton.text.toString()
             val interval =
                 RefreshInterval.values().fromDisplayText(
-                    binding.refreshPeriodButton.text.toString(),
+                    refreshDisplayText,
                     RefreshInterval.ONE_H
                 )
             val location = WallpaperLocation.values()
@@ -184,6 +186,7 @@ class SettingsFragment : Fragment() {
 
         } else {
             cancelRandomRefreshWork()
+            settingsViewModel.clearRandomRefreshSettings()
         }
     }
 
@@ -202,11 +205,13 @@ class SettingsFragment : Fragment() {
             ExistingPeriodicWorkPolicy.REPLACE,
             work
         )
+        Toast.makeText(requireContext(), "Start refresh", Toast.LENGTH_SHORT).show()
     }
 
     private fun cancelRandomRefreshWork() {
         val workManager = WorkManager.getInstance(requireContext().applicationContext)
         workManager.cancelUniqueWork(RANDOM_REFRESH_WORK)
+        Toast.makeText(requireContext(), "Stops refresh", Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {

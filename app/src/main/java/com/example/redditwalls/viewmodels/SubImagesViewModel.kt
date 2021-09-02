@@ -6,13 +6,17 @@ import androidx.paging.cachedIn
 import com.example.redditwalls.datasources.RWApi.Sort
 import com.example.redditwalls.models.Image
 import com.example.redditwalls.repositories.RWRepository
+import com.example.redditwalls.repositories.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class SubImagesViewModel @Inject constructor(private val rwRepository: RWRepository) : ViewModel() {
+class SubImagesViewModel @Inject constructor(
+    private val rwRepository: RWRepository,
+    settingsRepository: SettingsRepository
+) : ViewModel() {
     private lateinit var subreddit: String
-    var currentSort = Sort.HOT
+    var currentSort = settingsRepository.getDefaultSort()
     private var query = ""
 
     private val params: MutableLiveData<ImagesParams> = MutableLiveData()

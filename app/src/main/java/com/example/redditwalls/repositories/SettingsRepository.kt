@@ -46,12 +46,6 @@ class SettingsRepository @Inject constructor(private val prefs: SharedPreference
     fun setRandomRefreshLocation(location: WallpaperLocation) =
         prefs.edit().putInt(RANDOM_REFRESH_LOCATION, location.id).apply()
 
-    fun getRandomRefreshPeriod() = prefs.getInt(REFRESH_PERIOD, 1)
-
-    fun setRandomRefreshPeriod(period: Int) =
-        prefs.edit().putInt(REFRESH_PERIOD, period).apply()
-
-
     fun setRandomRefreshInterval(interval: RefreshInterval) {
         prefs.edit().putInt(REFRESH_INTERVAL, interval.id).apply()
     }
@@ -71,6 +65,10 @@ class SettingsRepository @Inject constructor(private val prefs: SharedPreference
     }
 
     fun getDefaultSort() = RWApi.Sort.fromId(prefs.getInt(DEFAULT_SORT, RWApi.Sort.HOT.id))
+
+    fun clearRandomRefreshSettings() {
+        prefs.edit().remove(REFRESH_INTERVAL).remove(RANDOM_REFRESH_LOCATION).apply()
+    }
 }
 
 enum class Theme(override val id: Int, override val displayText: String) : SettingsItem {
