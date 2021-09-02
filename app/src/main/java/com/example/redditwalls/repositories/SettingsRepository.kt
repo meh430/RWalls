@@ -1,6 +1,7 @@
 package com.example.redditwalls.repositories
 
 import android.content.SharedPreferences
+import androidx.appcompat.app.AppCompatDelegate
 import com.example.redditwalls.WallpaperLocation
 import com.example.redditwalls.datasources.RWApi
 import com.example.redditwalls.misc.fromId
@@ -71,10 +72,11 @@ class SettingsRepository @Inject constructor(private val prefs: SharedPreference
     }
 }
 
-enum class Theme(override val id: Int, override val displayText: String) : SettingsItem {
-    LIGHT(0, "Light mode"),
-    DARK(1, "Dark mode"),
-    SYSTEM(2, "Follow system");
+enum class Theme(override val id: Int, override val displayText: String, val mode: Int) :
+    SettingsItem {
+    LIGHT(0, "Light mode", AppCompatDelegate.MODE_NIGHT_NO),
+    DARK(1, "Dark mode", AppCompatDelegate.MODE_NIGHT_YES),
+    SYSTEM(2, "Follow system", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
 
     companion object {
         fun fromId(id: Int) = values().fromId(id, SYSTEM)

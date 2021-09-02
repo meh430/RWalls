@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -96,7 +97,9 @@ class SettingsFragment : Fragment() {
                 themes,
                 themes.fromDisplayText(binding.themeButton.text.toString(), Theme.SYSTEM).id
             ).show {
-                binding.themeButton.text = Theme.fromId(it).displayText
+                val selectedTheme = Theme.fromId(it)
+                binding.themeButton.text = selectedTheme.displayText
+                AppCompatDelegate.setDefaultNightMode(selectedTheme.mode)
             }
         }
 
