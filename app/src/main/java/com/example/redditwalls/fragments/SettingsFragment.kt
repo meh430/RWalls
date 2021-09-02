@@ -11,15 +11,18 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.work.*
-import com.example.redditwalls.R
 import com.example.redditwalls.WallpaperHelper
 import com.example.redditwalls.WallpaperLocation
 import com.example.redditwalls.databinding.FragmentSettingsBinding
+import com.example.redditwalls.datasources.RWApi
+import com.example.redditwalls.misc.RadioDialog
 import com.example.redditwalls.misc.RandomRefreshWorker
+import com.example.redditwalls.misc.fromDisplayText
+import com.example.redditwalls.repositories.RefreshInterval
 import com.example.redditwalls.repositories.SettingsRepository.Companion.FALLBACK_SUBREDDIT
+import com.example.redditwalls.repositories.Theme
 import com.example.redditwalls.viewmodels.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -57,6 +60,12 @@ class SettingsFragment : Fragment() {
     }
 
     private fun populateSettings() {
+        val theme = settingsViewModel.getTheme()
+        binding.themeButton.text = theme.displayText
+
+        val sort = settingsViewModel.getDefaultSort()
+        binding.sortButton.text = sort.displayText
+
         val defaultSubreddit = settingsViewModel.getDefaultSub().takeIf {
             it.isNotEmpty()
         } ?: FALLBACK_SUBREDDIT
@@ -67,15 +76,10 @@ class SettingsFragment : Fragment() {
         val refreshOn = settingsViewModel.randomRefreshEnabled()
         binding.randomRefreshSwitch.isChecked = refreshOn
         binding.randomRefreshSettings.isVisible = refreshOn
+
         if (refreshOn) {
-            val checkedInterval = when (settingsViewModel.getRandomRefreshPeriod()) {
-                1 -> R.id.one
-                6 -> R.id.six
-                12 -> R.id.twelve
-                24 -> R.id.twentyFour
-                else -> R.id.one
-            }
-            binding.intervalGroup.check(checkedInterval)
+            val refreshInterval = settingsViewModel.getRandomRefreshInterval()
+            binding.refreshPeriodButton.text = refreshInterval.displayText
 
             val setLocation = settingsViewModel.getRandomRefreshLocation()
             binding.locationButton.text = setLocation.displayText
@@ -83,6 +87,30 @@ class SettingsFragment : Fragment() {
     }
 
     private fun addListeners() {
+        binding.themeButton.setOnClickListener {
+            val themes = Theme.values()
+            RadioDialog(
+                requireContext(),
+                "Set Theme",
+                themes,
+                themes.fromDisplayText(binding.themeButton.text.toString(), Theme.SYSTEM).id
+            ).show {
+                binding.themeButton.text = Theme.fromId(it).displayText
+            }
+        }
+
+        binding.sortButton.setOnClickListener {
+            val sorts = RWApi.Sort.values()
+            RadioDialog(
+                requireContext(),
+                "Set Default Sort",
+                sorts,
+                sorts.fromDisplayText(binding.themeButton.text.toString(), RWApi.Sort.HOT).id
+            ).show {
+                binding.sortButton.text = RWApi.Sort.fromId(it).displayText
+            }
+        }
+
         binding.defaultSubreddit.editText?.setOnEditorActionListener { _, i, _ ->
             if (i == EditorInfo.IME_ACTION_DONE) {
                 binding.defaultSubreddit.clearFocus()
@@ -103,6 +131,21 @@ class SettingsFragment : Fragment() {
                 binding.locationButton.text = it.displayText
             }
         }
+
+        binding.refreshPeriodButton.setOnClickListener {
+            val intervals = RefreshInterval.values()
+            RadioDialog(
+                requireContext(),
+                "Set Refresh Interval",
+                intervals,
+                intervals.fromDisplayText(
+                    binding.refreshPeriodButton.text.toString(),
+                    RefreshInterval.ONE_H
+                ).id
+            ).show {
+                binding.refreshPeriodButton.text = RefreshInterval.fromId(it).displayText
+            }
+        }
     }
 
     override fun onPause() {
@@ -111,26 +154,30 @@ class SettingsFragment : Fragment() {
     }
 
     private fun saveSettings() {
+        settingsViewModel.setTheme(
+            Theme.values().fromDisplayText(binding.themeButton.text.toString(), Theme.SYSTEM)
+        )
+        settingsViewModel.setDefaultSort(
+            RWApi.Sort.values().fromDisplayText(binding.sortButton.text.toString(), RWApi.Sort.HOT)
+        )
+
         settingsViewModel.setDefaultSub(binding.defaultSubreddit.editText?.text.toString())
         settingsViewModel.setLoadLowResPreviews(binding.lowResPreviewsSwitch.isChecked)
 
         val randomRefreshEnabled = binding.randomRefreshSwitch.isChecked
         settingsViewModel.setRandomRefresh(randomRefreshEnabled)
         if (binding.randomRefreshSwitch.isChecked) {
-            val interval = when (binding.intervalGroup.checkedRadioButtonId) {
-                R.id.one -> 1
-                R.id.six -> 6
-                R.id.twelve -> 12
-                R.id.twentyFour -> 24
-                else -> 1
-            }
-            val location = WallpaperLocation.values().find {
-                it.displayText == binding.locationButton.text.toString()
-            } ?: WallpaperLocation.BOTH
+            val interval =
+                RefreshInterval.values().fromDisplayText(
+                    binding.refreshPeriodButton.text.toString(),
+                    RefreshInterval.ONE_H
+                )
+            val location = WallpaperLocation.values()
+                .fromDisplayText(binding.locationButton.text.toString(), WallpaperLocation.BOTH)
 
             // Only add new worker if settings changed
             if (settingsViewModel.randomRefreshSettingsChanged(interval, location)) {
-                settingsViewModel.setRandomRefreshPeriod(interval)
+                settingsViewModel.setRandomRefreshInterval(interval)
                 settingsViewModel.setRandomRefreshLocation(location)
                 startRandomRefreshWork(interval)
             }
@@ -140,14 +187,14 @@ class SettingsFragment : Fragment() {
         }
     }
 
-    private fun startRandomRefreshWork(interval: Int) {
+    private fun startRandomRefreshWork(interval: RefreshInterval) {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
         val work = PeriodicWorkRequestBuilder<RandomRefreshWorker>(
-            interval.toLong(),
-            TimeUnit.HOURS
+            interval.amount,
+            interval.timeUnit
         ).setConstraints(constraints).build()
         val workManager = WorkManager.getInstance(requireContext().applicationContext)
         workManager.enqueueUniquePeriodicWork(

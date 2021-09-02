@@ -4,6 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.29583333333333334" />
+        <entry key="../../Library/Android/sdk/platforms/android-31/data/res/layout/select_dialog_item.xml" value="0.37447916666666664" />
+        <entry key="../../Library/Android/sdk/platforms/android-31/data/res/layout/select_dialog_multichoice.xml" value="0.37447916666666664" />
+        <entry key="../../Library/Android/sdk/platforms/android-31/data/res/layout/select_dialog_singlechoice.xml" value="0.37447916666666664" />
         <entry key="app/src/main/res/drawable-v21/app_widget_background.xml" value="0.296875" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.296875" />
         <entry key="app/src/main/res/drawable/empty.xml" value="0.28229166666666666" />
@@ -25,6 +28,7 @@
         <entry key="app/src/main/res/drawable/up.xml" value="0.1625" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_wall.xml" value="0.25815217391304346" />
+        <entry key="app/src/main/res/layout/dialog_radiobutton.xml" value="0.37447916666666664" />
         <entry key="app/src/main/res/layout/empty.xml" value="0.2608695652173913" />
         <entry key="app/src/main/res/layout/error.xml" value="0.25026619086940977" />
         <entry key="app/src/main/res/layout/fragment_blank.xml" value="0.2554347826086957" />
@@ -34,7 +38,7 @@
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.2608695652173913" />
         <entry key="app/src/main/res/layout/fragment_search_images.xml" value="0.25271739130434784" />
         <entry key="app/src/main/res/layout/fragment_search_subs.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_sub.xml" value="0.1" />
         <entry key="app/src/main/res/layout/image_item.xml" value="0.2608695652173913" />
         <entry key="app/src/main/res/layout/old_activity.xml" value="0.25" />

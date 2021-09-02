@@ -8,6 +8,7 @@ import android.net.Uri
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.lifecycle.MutableLiveData
+import com.example.redditwalls.repositories.SettingsItem
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -51,4 +52,12 @@ fun String.launchBrowser(activity: Activity) {
     Intent(Intent.ACTION_VIEW).apply {
         data = Uri.parse(this@launchBrowser)
     }.also { activity.startActivity(it) }
+}
+
+fun <T : SettingsItem> Array<T>.fromId(id: Int, default: T): T {
+    return find { it.id == id } ?: default
+}
+
+fun <T : SettingsItem> Array<T>.fromDisplayText(text: String, default: T): T {
+    return find { it.displayText == text } ?: default
 }

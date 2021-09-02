@@ -6,9 +6,11 @@ import android.net.Uri
 import com.example.redditwalls.R
 import com.example.redditwalls.misc.Utils
 import com.example.redditwalls.misc.forEach
+import com.example.redditwalls.misc.fromId
 import com.example.redditwalls.models.Image
 import com.example.redditwalls.models.PostInfo
 import com.example.redditwalls.models.Subreddit
+import com.example.redditwalls.repositories.SettingsItem
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -29,16 +31,22 @@ class RWApi @Inject constructor() {
         const val RAW_JSON_QUERY = "raw_json=true"
     }
 
-    enum class Sort(val trailing: String, val queryParam: String, val displayText: String) {
-        HOT("/hot.json", "sort=hot", "hot"),
-        NEW("/new.json", "sort=new", "new"),
-        TOP_WEEK("/top.json", "sort=top&t=week", "top week"),
-        TOP_MONTH("/top.json", "sort=top&t=month", "top month"),
-        TOP_YEAR("/top.json", "sort=top&t=year", "top week"),
-        TOP_ALL("/top.json", "sort=top&t=all", "top all");
+    enum class Sort(
+        val trailing: String,
+        val queryParam: String,
+        override val displayText: String,
+        override val id: Int
+    ) :
+        SettingsItem {
+        HOT("/hot.json", "sort=hot", "hot", 0),
+        NEW("/new.json", "sort=new", "new", 1),
+        TOP_WEEK("/top.json", "sort=top&t=week", "top week", 2),
+        TOP_MONTH("/top.json", "sort=top&t=month", "top month", 3),
+        TOP_YEAR("/top.json", "sort=top&t=year", "top week", 4),
+        TOP_ALL("/top.json", "sort=top&t=all", "top all", 5);
 
         companion object {
-            fun fromId(id: Int) = when (id) {
+            fun fromMenuId(id: Int) = when (id) {
                 R.id.sort_hot -> HOT
                 R.id.sort_new -> NEW
                 R.id.sort_top_all -> TOP_ALL
@@ -47,6 +55,8 @@ class RWApi @Inject constructor() {
                 R.id.sort_top_week -> TOP_WEEK
                 else -> HOT
             }
+
+            fun fromId(id: Int) = values().fromId(id, HOT)
         }
     }
 

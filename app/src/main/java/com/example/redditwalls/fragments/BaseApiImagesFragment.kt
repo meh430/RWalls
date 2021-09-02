@@ -60,7 +60,7 @@ abstract class BaseApiImagesFragment : BaseImagesFragment() {
         return when (item.itemId) {
             R.id.sort_hot, R.id.sort_new, R.id.sort_top_week,
             R.id.sort_top_month, R.id.sort_top_year, R.id.sort_top_all -> {
-                val sort = Sort.fromId(item.itemId)
+                val sort = Sort.fromMenuId(item.itemId)
                 if (imagesViewModel.currentSort != sort) {
                     setSort(sort)
                 }
