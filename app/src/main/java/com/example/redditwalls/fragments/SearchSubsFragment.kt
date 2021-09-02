@@ -49,8 +49,13 @@ class SearchSubsFragment : BaseSubsFragment() {
                 binding.searchBar.clearFocus()
                 (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
                     .hideSoftInputFromWindow(binding.searchBar.windowToken, 0)
-                // Search with new query
-                searchSubsViewModel.searchSubs(binding.searchBar.text.toString())
+
+                val query = binding.searchBar.text.toString()
+
+                if (!showBanner(query)) {
+                    // Search with new query
+                    searchSubsViewModel.searchSubs(query)
+                }
                 true
             } else {
                 false
@@ -62,8 +67,7 @@ class SearchSubsFragment : BaseSubsFragment() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                val (subreddit, id) = RWApi.extractPostLinkInfo(s.toString())
-                binding.linkBanner.linkBanner.isVisible = subreddit.isNotEmpty() && id.isNotEmpty()
+                showBanner(s.toString())
             }
         })
 
@@ -80,6 +84,13 @@ class SearchSubsFragment : BaseSubsFragment() {
 
         binding.linkBanner.no.setOnClickListener {
             binding.linkBanner.linkBanner.isVisible = false
+        }
+    }
+
+    fun showBanner(query: String): Boolean {
+        val (subreddit, id) = RWApi.extractPostLinkInfo(query)
+        return (subreddit.isNotEmpty() && id.isNotEmpty()).also {
+            binding.linkBanner.linkBanner.isVisible = it
         }
     }
 
