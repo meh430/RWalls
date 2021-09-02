@@ -33,7 +33,9 @@
             android:exported="true"
             android:label="Wall Preview"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.RedditWalls.NoActionBar" />
+            android:theme="@style/Theme.RedditWalls.NoActionBar">
+            <nav-graph android:value="@navigation/mobile_navigation" />
+        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -49,7 +51,7 @@
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
-            tools:node="remove"></provider>
+            tools:node="remove" />
     </application>
 
 </manifest>

@@ -42,6 +42,9 @@
             android:name="subreddit"
             app:argType="string"
             app:nullable="true" />
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="https://www.reddit.com/r/{subreddit}/comments/{postId}" />
     </activity>
 
     <fragment

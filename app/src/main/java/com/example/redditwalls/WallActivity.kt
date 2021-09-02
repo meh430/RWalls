@@ -17,6 +17,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.example.redditwalls.databinding.ActivityWallBinding
 import com.example.redditwalls.databinding.WallSheetBinding
+import com.example.redditwalls.datasources.RWApi
 import com.example.redditwalls.misc.Utils
 import com.example.redditwalls.misc.launchBrowser
 import com.example.redditwalls.models.Image
@@ -73,8 +74,14 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
         binding = ActivityWallBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        wallViewModel.initialize(wallArgs.image, wallArgs.postId, wallArgs.subreddit)
-
+        try {
+            wallViewModel.initialize(wallArgs.image, wallArgs.postId, wallArgs.subreddit)
+        } catch (e: Exception) {
+            intent.data?.toString()?.let {
+                val (subreddit, id) = RWApi.extractPostLinkInfo(it)
+                wallViewModel.initialize(null, id, subreddit)
+            }
+        }
         Utils.setFullScreen(window, binding.root)
         observeImage()
 
