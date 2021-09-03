@@ -60,10 +60,11 @@ class RWApi @Inject constructor() {
         SettingsItem {
         HOT("/hot.json", "sort=hot", "hot", 0),
         NEW("/new.json", "sort=new", "new", 1),
-        TOP_WEEK("/top.json", "sort=top&t=week", "top week", 2),
-        TOP_MONTH("/top.json", "sort=top&t=month", "top month", 3),
-        TOP_YEAR("/top.json", "sort=top&t=year", "top week", 4),
-        TOP_ALL("/top.json", "sort=top&t=all", "top all", 5);
+        TOP_DAY("/top.json", "sort=top&t=day", "top day", 2),
+        TOP_WEEK("/top.json", "sort=top&t=week", "top week", 3),
+        TOP_MONTH("/top.json", "sort=top&t=month", "top month", 4),
+        TOP_YEAR("/top.json", "sort=top&t=year", "top year", 5),
+        TOP_ALL("/top.json", "sort=top&t=all", "top all", 6);
 
         companion object {
             fun fromMenuId(id: Int) = when (id) {
@@ -73,6 +74,7 @@ class RWApi @Inject constructor() {
                 R.id.sort_top_year -> TOP_YEAR
                 R.id.sort_top_month -> TOP_MONTH
                 R.id.sort_top_week -> TOP_WEEK
+                R.id.sort_top_day -> TOP_DAY
                 else -> HOT
             }
 

@@ -58,7 +58,7 @@ abstract class BaseApiImagesFragment : BaseImagesFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.sort_hot, R.id.sort_new, R.id.sort_top_week,
+            R.id.sort_hot, R.id.sort_new, R.id.sort_top_day, R.id.sort_top_week,
             R.id.sort_top_month, R.id.sort_top_year, R.id.sort_top_all -> {
                 val sort = Sort.fromMenuId(item.itemId)
                 if (imagesViewModel.currentSort != sort) {
