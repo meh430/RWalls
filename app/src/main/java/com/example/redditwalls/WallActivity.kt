@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.GestureDetector
 import android.view.LayoutInflater
 import android.view.MotionEvent
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +21,7 @@ import com.example.redditwalls.databinding.WallSheetBinding
 import com.example.redditwalls.datasources.RWApi
 import com.example.redditwalls.misc.Utils
 import com.example.redditwalls.misc.launchBrowser
+import com.example.redditwalls.misc.toPx
 import com.example.redditwalls.models.Image
 import com.example.redditwalls.models.PostInfo
 import com.example.redditwalls.models.Resource
@@ -28,6 +30,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.math.abs
+import kotlin.math.roundToInt
 
 
 @AndroidEntryPoint
@@ -83,12 +86,23 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
             }
         }
         Utils.setFullScreen(window, binding.root)
+        setBackButtonMargins()
+
         observeImage()
 
         detector = GestureDetector(this, this)
 
         setUpFavorite()
         addListeners()
+    }
+
+    private fun setBackButtonMargins() {
+        20.toPx.roundToInt().let {
+            val statusHeight = Utils.getStatusBarHeight(this)
+
+            val params = (binding.backButton.layoutParams as ViewGroup.MarginLayoutParams)
+            params.setMargins(it, statusHeight + 10, it, it)
+        }
     }
 
     private fun observeImage() {

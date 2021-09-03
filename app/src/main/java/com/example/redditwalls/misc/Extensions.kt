@@ -2,9 +2,11 @@ package com.example.redditwalls.misc
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.Resources
 import android.graphics.Insets
 import android.graphics.Point
 import android.net.Uri
+import android.util.TypedValue
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.lifecycle.MutableLiveData
@@ -61,3 +63,10 @@ fun <T : SettingsItem> Array<T>.fromId(id: Int, default: T): T {
 fun <T : SettingsItem> Array<T>.fromDisplayText(text: String, default: T): T {
     return find { it.displayText == text } ?: default
 }
+
+val Number.toPx
+    get() = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        this.toFloat(),
+        Resources.getSystem().displayMetrics
+    )

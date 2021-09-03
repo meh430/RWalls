@@ -240,4 +240,10 @@ object Utils {
 
         notify.finish()
     }
+
+    fun getStatusBarHeight(context: Context): Int =
+        context.run {
+            val statusBarHeightId = resources.getIdentifier("status_bar_height", "dimen", "android")
+            resources.getDimensionPixelSize(statusBarHeightId)
+        }
 }
