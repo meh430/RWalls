@@ -29,7 +29,7 @@ class RWApi @Inject constructor() {
     companion object {
         const val PAGE_SIZE = 25
         const val BASE = "https://www.reddit.com"
-        const val RAW_JSON_QUERY = "raw_json=true"
+        const val RAW_JSON_QUERY = "raw_json=1"
 
         private val hosts = setOf(
             "www.reddit.com",

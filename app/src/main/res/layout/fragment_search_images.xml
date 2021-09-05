@@ -51,6 +51,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/imageScroll"
                 android:paddingEnd="4dp"
+                android:paddingTop="4dp"
                 android:paddingStart="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
