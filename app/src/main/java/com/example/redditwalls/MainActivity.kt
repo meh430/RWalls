@@ -42,9 +42,13 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-        navController.addOnDestinationChangedListener { _, destination, arguments ->
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            val lastDestination = controller.previousBackStackEntry?.destination
+            if (lastDestination != null && lastDestination.id != destination.id) {
+                setToolbarSubtitle("")
+            }
+
             binding.appbar.setExpanded(true, true)
-            setToolbarSubtitle("")
             binding.bottomNavView.isVisible = destination.id != R.id.navigation_search_images
 
             if (destination.id == R.id.navigation_search_images) {
