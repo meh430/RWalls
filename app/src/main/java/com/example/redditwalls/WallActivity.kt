@@ -147,11 +147,7 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
         }
 
         sheetBinding.setWallpaper.setOnClickListener {
-            wallpaperHelper.showLocationPickerDialog(this) { location ->
-                getBitmap()?.let {
-                    wallpaperHelper.setBitmapAsWallpaper(this, it, location)
-                }
-            }
+            setWallpaper()
         }
 
         sheetBinding.saveWallpaper.setOnClickListener {
@@ -173,6 +169,14 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
             wallViewModel.postInfo.value?.data?.author.let { author ->
                 val url = "https://www.reddit.com/${author}"
                 url.launchBrowser(this)
+            }
+        }
+    }
+
+    private fun setWallpaper() {
+        wallpaperHelper.showLocationPickerDialog(this) { location ->
+            getBitmap()?.let {
+                wallpaperHelper.setBitmapAsWallpaper(this, it, location)
             }
         }
     }
@@ -257,6 +261,6 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
     override fun onScroll(evt1: MotionEvent, evt2: MotionEvent, p1: Float, p2: Float) = false
 
     override fun onLongPress(event: MotionEvent) {
-        // NO-OP
+        setWallpaper()
     }
 }
