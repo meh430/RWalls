@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, destination, arguments ->
+            binding.appbar.setExpanded(true, true)
             setToolbarSubtitle("")
             binding.bottomNavView.isVisible = destination.id != R.id.navigation_search_images
 
