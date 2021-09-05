@@ -8,6 +8,9 @@ import com.example.redditwalls.adapters.SubredditsAdapter
 import com.example.redditwalls.adapters.SubredditsAdapter.SubredditClickListener
 import com.example.redditwalls.adapters.SubredditsAdapter.SubredditMenuOptions
 import com.example.redditwalls.adapters.SubredditsAdapter.SubredditMenuOptions.*
+import com.example.redditwalls.datasources.RWApi.Companion.BASE
+import com.example.redditwalls.misc.launchBrowser
+import com.example.redditwalls.misc.removeSubPrefix
 import com.example.redditwalls.models.Subreddit
 import com.example.redditwalls.viewmodels.FavoriteSubsViewModel
 import com.example.redditwalls.viewmodels.SettingsViewModel
@@ -28,6 +31,9 @@ abstract class BaseSubsFragment : Fragment(), SubredditClickListener {
             DEFAULT -> settingsViewModel.setDefaultSub(subreddit.name)
             FAVORITE -> favoriteSubsViewModel.insertFavoriteSub(subreddit)
             UNFAVORITE -> favoriteSubsViewModel.deleteFavoriteSub(subreddit)
+            LAUNCH_WEB -> "$BASE/r/${subreddit.name.removeSubPrefix()}".launchBrowser(
+                requireActivity()
+            )
             BROWSE -> onClick(subreddit)
         }
     }

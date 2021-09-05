@@ -21,6 +21,7 @@ class SubredditsAdapter(private val listener: SubredditClickListener) :
         FAVORITE("Add to favorites"),
         UNFAVORITE("Remove from favorites"),
         DEFAULT("Set as default"),
+        LAUNCH_WEB("Open in browser"),
         BROWSE("Browse images");
 
         companion object {

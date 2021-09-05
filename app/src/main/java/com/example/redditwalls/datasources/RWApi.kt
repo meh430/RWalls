@@ -7,6 +7,7 @@ import com.example.redditwalls.R
 import com.example.redditwalls.misc.Utils
 import com.example.redditwalls.misc.forEach
 import com.example.redditwalls.misc.fromId
+import com.example.redditwalls.misc.removeSubPrefix
 import com.example.redditwalls.models.Image
 import com.example.redditwalls.models.PostInfo
 import com.example.redditwalls.models.Subreddit
@@ -252,12 +253,7 @@ class RWApi @Inject constructor() {
 
     // To use with deeplink query
     private fun buildPostLink(subreddit: String, id: String): String {
-        var sub = subreddit
-        if (subreddit.startsWith("r/")) {
-            sub = subreddit.substring(2)
-        }
-
-        return "$BASE/r/$sub/comments/$id/.json?$RAW_JSON_QUERY"
+        return "$BASE/r/${subreddit.removeSubPrefix()}/comments/$id/.json?$RAW_JSON_QUERY"
     }
 
     suspend fun getImageFromPost(postLink: String = "", subreddit: String = "", id: String = "") =

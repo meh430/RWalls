@@ -3,6 +3,7 @@ package com.example.redditwalls.viewmodels
 import androidx.lifecycle.ViewModel
 import com.example.redditwalls.WallpaperLocation
 import com.example.redditwalls.datasources.RWApi
+import com.example.redditwalls.misc.removeSubPrefix
 import com.example.redditwalls.repositories.RefreshInterval
 import com.example.redditwalls.repositories.SettingsRepository
 import com.example.redditwalls.repositories.Theme
@@ -15,11 +16,7 @@ class SettingsViewModel @Inject constructor(
 ) : ViewModel() {
     fun getDefaultSub() = settingsRepository.getDefaultSub()
     fun setDefaultSub(subreddit: String) {
-        val default = if (subreddit.startsWith("r/") && subreddit.length > 2) {
-            subreddit.substring(2)
-        } else {
-            subreddit
-        }
+        val default = subreddit.removeSubPrefix()
 
         settingsRepository.setDefaultSub(default)
     }

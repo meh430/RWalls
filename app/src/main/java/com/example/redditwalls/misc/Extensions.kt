@@ -56,6 +56,13 @@ fun String.launchBrowser(activity: Activity) {
     }.also { activity.startActivity(it) }
 }
 
+fun String.removeSubPrefix(): String =
+    if (startsWith("r/") && length > 2) {
+        substring(2)
+    } else {
+        this
+    }
+
 fun <T : SettingsItem> Array<T>.fromId(id: Int, default: T): T {
     return find { it.id == id } ?: default
 }
