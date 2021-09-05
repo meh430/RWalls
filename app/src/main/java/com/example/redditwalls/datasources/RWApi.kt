@@ -30,22 +30,39 @@ class RWApi @Inject constructor() {
         const val BASE = "https://www.reddit.com"
         const val RAW_JSON_QUERY = "raw_json=true"
 
+        private val hosts = setOf(
+            "www.reddit.com",
+            "amp.reddit.com",
+            "old.reddit.com",
+            "www.google.com"
+        )
+
         // subreddit to id
         // To use with search
         fun extractPostLinkInfo(link: String): Pair<String, String> {
             val uri = Uri.parse(link)
 
-            val scheme = uri.scheme
             val host = uri.host
             val pathSegments = uri.pathSegments
 
-            if (scheme != "https" || host != "www.reddit.com") {
+            if (!hosts.contains(host)) {
                 return "" to ""
             }
 
+
             return try {
-                pathSegments[1] to pathSegments[3]
-            } catch (e: IndexOutOfBoundsException) {
+                val subredditIndex = pathSegments.indexOfFirst { it == "r" }.takeIf {
+                    it != -1
+                }
+                val idIndex = pathSegments.indexOfFirst { it == "comments" }.takeIf { it != -1 }
+
+                if (subredditIndex == null || idIndex == null) {
+                    "" to ""
+                } else {
+
+                    pathSegments[subredditIndex + 1] to pathSegments[idIndex + 1]
+                }
+            } catch (e: Exception) {
                 "" to ""
             }
         }
