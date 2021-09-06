@@ -1,6 +1,5 @@
 package com.example.redditwalls.adapters
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -12,7 +11,6 @@ import com.bumptech.glide.Glide
 import com.example.redditwalls.R
 import com.example.redditwalls.databinding.SubredditItemBinding
 import com.example.redditwalls.models.Subreddit
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class SubredditsAdapter(private val listener: SubredditClickListener) :
     ListAdapter<Subreddit, SubredditsAdapter.SubredditViewHolder>(SubredditComparator) {
@@ -31,7 +29,7 @@ class SubredditsAdapter(private val listener: SubredditClickListener) :
 
     interface SubredditClickListener {
         fun onClick(subreddit: Subreddit)
-        fun onMenuItemClick(subreddit: Subreddit, option: SubredditMenuOptions)
+        fun onMenuOpen(subreddit: Subreddit)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubredditViewHolder {
@@ -52,23 +50,6 @@ class SubredditsAdapter(private val listener: SubredditClickListener) :
         private val binding: SubredditItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        private fun showOptionsDialog(context: Context, subreddit: Subreddit) {
-            val items = SubredditMenuOptions.values().filter {
-                val target = if (subreddit.isSaved) {
-                    SubredditMenuOptions.FAVORITE
-                } else {
-                    SubredditMenuOptions.UNFAVORITE
-                }
-
-                it != target
-            }.map { it.displayText }.toTypedArray()
-            MaterialAlertDialogBuilder(context).setTitle("Options").setItems(items) { _, i ->
-                SubredditMenuOptions.fromText(items[i])?.let {
-                    listener.onMenuItemClick(subreddit, it)
-                }
-            }.show()
-        }
-
         fun bind(subreddit: Subreddit) = binding.apply {
             setSubreddit(subreddit)
             subscriberCount.isVisible = subreddit.numSubscribers.isNotEmpty()
@@ -77,12 +58,12 @@ class SubredditsAdapter(private val listener: SubredditClickListener) :
                 listener.onClick(subreddit)
             }
             root.setOnLongClickListener {
-                showOptionsDialog(it.context, subreddit)
+                listener.onMenuOpen(subreddit)
                 true
             }
 
             options.setOnClickListener {
-                showOptionsDialog(it.context, subreddit)
+                listener.onMenuOpen(subreddit)
             }
 
             if (subreddit.icon.isEmpty() || subreddit.icon.isBlank()) {

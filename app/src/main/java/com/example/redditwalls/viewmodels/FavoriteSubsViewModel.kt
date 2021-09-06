@@ -15,6 +15,8 @@ class FavoriteSubsViewModel @Inject constructor(
 
     fun getFavoriteSubs() = subsRepository.getFavoriteSubredditsLiveData()
 
+    suspend fun subExists(name: String) = subsRepository.isSaved(name)
+
     fun insertFavoriteSub(subreddit: Subreddit) {
         viewModelScope.launch {
             subsRepository.insertFavoriteSubreddit(
