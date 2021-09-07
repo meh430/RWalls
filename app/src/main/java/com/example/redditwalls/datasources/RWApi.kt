@@ -2,6 +2,7 @@
 
 package com.example.redditwalls.datasources
 
+import android.content.res.Resources
 import android.net.Uri
 import com.example.redditwalls.R
 import com.example.redditwalls.misc.Utils
@@ -286,8 +287,9 @@ class RWApi @Inject constructor() {
             // optional default is GET
             requestMethod = "GET"
 
-            println("URL : $url")
-            println("Response Code : $responseCode")
+            if (responseCode == 404) {
+                throw Resources.NotFoundException("404 resource not found")
+            }
 
             BufferedReader(InputStreamReader(inputStream)).use {
                 val response = StringBuilder()
