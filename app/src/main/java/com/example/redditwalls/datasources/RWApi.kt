@@ -146,12 +146,18 @@ class RWApi @Inject constructor() {
 
         childrenArr.forEach {
             val data = it.getJSONObject("data")
-            if (!data.has("preview")) {
+
+            val postLink = data.getString("permalink")
+            val (previewLink, imageLink) = try {
+                getImageInfoFromData(data)
+            } catch (e: Exception) {
+                null to null
+            }
+
+            if (previewLink.isNullOrEmpty() || imageLink.isNullOrEmpty()) {
                 return@forEach
             }
 
-            val postLink = data.getString("permalink")
-            val (previewLink, imageLink) = getImageInfoFromData(data)
             val image = Image(
                 imageLink = imageLink,
                 postLink = "$BASE$postLink",
