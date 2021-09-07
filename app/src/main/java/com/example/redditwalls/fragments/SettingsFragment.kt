@@ -13,6 +13,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.work.*
+import com.example.redditwalls.R
 import com.example.redditwalls.WallpaperHelper
 import com.example.redditwalls.WallpaperLocation
 import com.example.redditwalls.databinding.FragmentSettingsBinding
@@ -54,6 +55,7 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         addListeners()
+        addTips()
     }
 
     override fun onResume() {
@@ -215,6 +217,11 @@ class SettingsFragment : Fragment() {
         val workManager = WorkManager.getInstance(requireContext().applicationContext)
         workManager.cancelUniqueWork(RANDOM_REFRESH_WORK)
         Toast.makeText(requireContext(), "Stops refresh", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun addTips() {
+        val tips = resources.getStringArray(R.array.tips).joinToString(separator = "\n")
+        binding.tips.text = tips
     }
 
     override fun onDestroyView() {

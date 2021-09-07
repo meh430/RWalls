@@ -25,6 +25,13 @@
         <item>Lock Screen</item>
         <item>Both</item>
     </string-array>
+    <string-array name="tips">
+        <item>\u2022 Long press an image to quickly set the image as your wallpaper</item>
+        <item>\u2022 Double tap the image preview to add it to your favorites list</item>
+        <item>\u2022 Long press a subreddit card to show extra options</item>
+        <item>\u2022 Paste a post link into the search bar to try and load the image in that post</item>
+        <item>\u2022 Add the refresh widget to your home screen to quickly change to another favorite wallpaper</item>
+    </string-array>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="app_widget_description">This is an app widget description</string>
