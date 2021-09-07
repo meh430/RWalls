@@ -269,6 +269,11 @@ class RWApi @Inject constructor() {
             val json = JSONArray(fetch(endpoint)).getJSONObject(0)
             val data = json.getJSONObject("data")
             val postInfo = data.getJSONArray("children").getJSONObject(0).getJSONObject("data")
+
+            if (!postInfo.has("preview")) {
+                throw Resources.NotFoundException("No image found in this post")
+            }
+
             val (preview, imageLink) = getImageInfoFromData(postInfo)
 
             Image(
