@@ -6,6 +6,8 @@ import com.bumptech.glide.Glide
 import com.example.redditwalls.models.Resolution
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
 import javax.inject.Inject
 
 // get() is called in an IO coroutine
@@ -24,6 +26,20 @@ class ImageLoader @Inject constructor() {
 
     suspend fun getImageSize(context: Context, image: String, resolution: Resolution) =
         withContext(Dispatchers.IO) {
-            loadImage(context, image, resolution).allocationByteCount / (1024.0 * 1024.0)
+            try {
+                val bitmap = loadImage(context, image, resolution)
+                val tempFile = File(context.cacheDir, "temp")
+                val out = FileOutputStream(tempFile)
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+                val sizeInMB = tempFile.length() / (1024.0 * 1024.0)
+
+                out.flush()
+                out.close()
+                tempFile.delete()
+
+                sizeInMB
+            } catch (e: Exception) {
+                0.0
+            }
         }
 }
