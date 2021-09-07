@@ -14,9 +14,9 @@
             android:layout_below="@id/loading"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
             android:layout_marginBottom="2dp"
             android:background="@drawable/search_focus"
             android:drawableStart="@drawable/ic_search"
@@ -50,9 +50,9 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/imageScroll"
-                android:paddingEnd="4dp"
-                android:paddingTop="4dp"
-                android:paddingStart="4dp"
+                android:paddingEnd="2dp"
+                android:paddingTop="2dp"
+                android:paddingStart="2dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
