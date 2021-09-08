@@ -21,6 +21,7 @@ import com.example.redditwalls.datasources.RWApi
 import com.example.redditwalls.misc.RadioDialog
 import com.example.redditwalls.misc.RandomRefreshWorker
 import com.example.redditwalls.misc.fromDisplayText
+import com.example.redditwalls.repositories.ColumnCount
 import com.example.redditwalls.repositories.RefreshInterval
 import com.example.redditwalls.repositories.SettingsRepository.Companion.FALLBACK_SUBREDDIT
 import com.example.redditwalls.repositories.Theme
@@ -74,6 +75,8 @@ class SettingsFragment : Fragment() {
             it.isNotEmpty()
         } ?: FALLBACK_SUBREDDIT
         binding.defaultSubreddit.editText?.setText(defaultSubreddit)
+
+        binding.columnCountSlider.value = settingsViewModel.getColumnCount().count.toFloat()
 
         binding.lowResPreviewsSwitch.isChecked = settingsViewModel.loadLowResPreviews()
 
@@ -168,6 +171,10 @@ class SettingsFragment : Fragment() {
         )
 
         settingsViewModel.setDefaultSub(binding.defaultSubreddit.editText?.text.toString())
+        val count = binding.columnCountSlider.value.toInt()
+        settingsViewModel.setColumnCount(
+            ColumnCount.values().find { it.count == count } ?: ColumnCount.TWO
+        )
         settingsViewModel.setLoadLowResPreviews(binding.lowResPreviewsSwitch.isChecked)
 
         val randomRefreshEnabled = binding.randomRefreshSwitch.isChecked
