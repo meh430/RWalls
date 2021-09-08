@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.example.redditwalls.WallpaperLocation
 import com.example.redditwalls.datasources.RWApi
 import com.example.redditwalls.misc.removeSubPrefix
+import com.example.redditwalls.repositories.ColumnCount
 import com.example.redditwalls.repositories.RefreshInterval
 import com.example.redditwalls.repositories.SettingsRepository
 import com.example.redditwalls.repositories.Theme
@@ -65,4 +66,8 @@ class SettingsViewModel @Inject constructor(
     fun getDefaultSort() = settingsRepository.getDefaultSort()
 
     fun clearRandomRefreshSettings() = settingsRepository.clearRandomRefreshSettings()
+
+    fun setColumnCount(count: ColumnCount) = settingsRepository.setColumnCount(count)
+
+    fun getColumnCount() = settingsRepository.getColumnCount()
 }

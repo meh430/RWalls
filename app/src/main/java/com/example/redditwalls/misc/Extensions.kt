@@ -2,6 +2,7 @@ package com.example.redditwalls.misc
 
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.res.Resources
 import android.graphics.Insets
 import android.graphics.Point
@@ -77,3 +78,21 @@ val Number.toPx
         this.toFloat(),
         Resources.getSystem().displayMetrics
     )
+
+fun <T> SharedPreferences.putValue(key: String, value: T) {
+    edit().apply {
+        when (value) {
+            is Boolean -> {
+                putBoolean(key, value)
+            }
+            is String -> {
+                putString(key, value)
+            }
+            is Int -> {
+                putInt(key, value)
+            }
+        }
+
+        apply()
+    }
+}

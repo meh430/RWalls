@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.example.redditwalls.WallpaperLocation
 import com.example.redditwalls.datasources.RWApi
 import com.example.redditwalls.misc.fromId
+import com.example.redditwalls.misc.putValue
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -20,23 +21,24 @@ class SettingsRepository @Inject constructor(private val prefs: SharedPreference
         private const val REFRESH_PERIOD = "refresh_period"
         private const val REFRESH_INTERVAL = "refresh_interval"
         private const val THEME = "theme"
+        private const val COLUMN_COUNT = "column_count"
     }
 
     fun setDefaultSub(subreddit: String) {
-        prefs.edit().putString(DEFAULT_SUB, subreddit).apply()
+        prefs.putValue(DEFAULT_SUB, subreddit)
     }
 
     fun getDefaultSub() =
         prefs.getString(DEFAULT_SUB, "").takeIf { !it.isNullOrBlank() } ?: FALLBACK_SUBREDDIT
 
     fun setLoadLowResPreviews(loadLowRes: Boolean) {
-        prefs.edit().putBoolean(LOW_RES_PREVIEWS, loadLowRes).apply()
+        prefs.putValue(LOW_RES_PREVIEWS, loadLowRes)
     }
 
     fun loadLowResPreviews() = prefs.getBoolean(LOW_RES_PREVIEWS, true)
 
     fun setRandomRefresh(randomRefresh: Boolean) {
-        prefs.edit().putBoolean(RANDOM_REFRESH, randomRefresh).apply()
+        prefs.putValue(RANDOM_REFRESH, randomRefresh)
     }
 
     fun randomRefreshEnabled() = prefs.getBoolean(RANDOM_REFRESH, false)
@@ -45,10 +47,10 @@ class SettingsRepository @Inject constructor(private val prefs: SharedPreference
         WallpaperLocation.fromId(prefs.getInt(RANDOM_REFRESH_LOCATION, 0))
 
     fun setRandomRefreshLocation(location: WallpaperLocation) =
-        prefs.edit().putInt(RANDOM_REFRESH_LOCATION, location.id).apply()
+        prefs.putValue(RANDOM_REFRESH_LOCATION, location.id)
 
     fun setRandomRefreshInterval(interval: RefreshInterval) {
-        prefs.edit().putInt(REFRESH_INTERVAL, interval.id).apply()
+        prefs.putValue(REFRESH_INTERVAL, interval.id)
     }
 
     fun getRandomRefreshInterval() =
@@ -56,13 +58,13 @@ class SettingsRepository @Inject constructor(private val prefs: SharedPreference
 
 
     fun setTheme(theme: Theme) {
-        prefs.edit().putInt(THEME, theme.id).apply()
+        prefs.putValue(THEME, theme.id)
     }
 
     fun getTheme() = Theme.fromId(prefs.getInt(THEME, Theme.SYSTEM.id))
 
     fun setDefaultSort(sort: RWApi.Sort) {
-        prefs.edit().putInt(DEFAULT_SORT, sort.id).apply()
+        prefs.putValue(DEFAULT_SORT, sort.id)
     }
 
     fun getDefaultSort() = RWApi.Sort.fromId(prefs.getInt(DEFAULT_SORT, RWApi.Sort.HOT.id))
@@ -70,6 +72,12 @@ class SettingsRepository @Inject constructor(private val prefs: SharedPreference
     fun clearRandomRefreshSettings() {
         prefs.edit().remove(REFRESH_INTERVAL).remove(RANDOM_REFRESH_LOCATION).apply()
     }
+
+    fun setColumnCount(count: ColumnCount) {
+        prefs.putValue(COLUMN_COUNT, count.id)
+    }
+
+    fun getColumnCount() = ColumnCount.fromId(prefs.getInt(COLUMN_COUNT, 1))
 }
 
 enum class Theme(override val id: Int, override val displayText: String, val mode: Int) :
@@ -98,6 +106,22 @@ enum class RefreshInterval(
 
     companion object {
         fun fromId(id: Int) = values().fromId(id, ONE_H)
+    }
+}
+
+enum class ColumnCount(
+    override val id: Int,
+    override val displayText: String,
+    val count: Int,
+    val imageHeightDp: Int = -1
+) : SettingsItem {
+    ONE(0, "One", 1, -1),
+    TWO(1, "Two", 2, 340),
+    THREE(2, "Three", 3, 220),
+    FOUR(3, "Four", 4, 180);
+
+    companion object {
+        fun fromId(id: Int) = values().fromId(id, TWO)
     }
 }
 
