@@ -223,7 +223,7 @@ class SettingsFragment : Fragment() {
     private fun cancelRandomRefreshWork() {
         val workManager = WorkManager.getInstance(requireContext().applicationContext)
         workManager.cancelUniqueWork(RANDOM_REFRESH_WORK)
-        Toast.makeText(requireContext(), "Stops refresh", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "Cancels refresh", Toast.LENGTH_SHORT).show()
     }
 
     private fun addTips() {
