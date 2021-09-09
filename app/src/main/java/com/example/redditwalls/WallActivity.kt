@@ -213,8 +213,8 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
         wallViewModel.postInfo.observe(this) {
             when (it.status) {
                 Resource.Status.SUCCESS -> sheetBinding.postInfo = it.data
-                Resource.Status.LOADING, Resource.Status.ERROR -> sheetBinding.postInfo =
-                    PostInfo.loading()
+                Resource.Status.LOADING -> sheetBinding.postInfo = PostInfo.loading()
+                Resource.Status.ERROR -> sheetBinding.postInfo = PostInfo.error(it.errorMessage)
             }
         }
     }

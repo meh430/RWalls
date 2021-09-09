@@ -26,14 +26,18 @@ data class PostInfo(
     )
 
     companion object {
-        fun loading() = PostInfo(
-            "Loading...",
-            "Loading...",
-            "Loading...",
-            "Loading...",
-            "Loading...",
-            "Loading...",
-            "Loading",
+        fun loading() = message("Loading...")
+
+        fun error(errorMessage: String) = message("Error").copy(postTitle = errorMessage)
+
+        private fun message(msg: String) = PostInfo(
+            msg,
+            msg,
+            msg,
+            msg,
+            msg,
+            msg,
+            msg,
             Resolution(0, 0)
         )
     }
