@@ -160,7 +160,7 @@ class RWApi @Inject constructor() {
 
             val image = Image(
                 imageLink = imageLink,
-                postLink = "$BASE$postLink",
+                postLink = "https://m.reddit.com$postLink",
                 subreddit = subreddit,
                 previewLink = previewLink
             )
@@ -285,7 +285,8 @@ class RWApi @Inject constructor() {
             Image(
                 id = -1,
                 imageLink = imageLink,
-                postLink = BASE + postInfo.getString("permalink"),
+                // work around to stop infinite loop with intent filters
+                postLink = "https://m.reddit.com" + postInfo.getString("permalink"),
                 subreddit = postInfo.getString("subreddit"),
                 previewLink = preview
             )
