@@ -222,11 +222,15 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
 
     // Gestures
 
-    override fun onTouchEvent(event: MotionEvent): Boolean {
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
         return detector.onTouchEvent(event) || super.onTouchEvent(event)
     }
 
-    override fun onFling(e1: MotionEvent, e2: MotionEvent, vX: Float, vY: Float): Boolean {
+    override fun onFling(e1: MotionEvent?, e2: MotionEvent?, vX: Float, vY: Float): Boolean {
+        if (e1 == null || e2 == null) {
+            return false
+        }
+
         val distanceX: Float = e2.x - e1.x
         val distanceY: Float = e2.y - e1.y
         if (abs(distanceX) > abs(distanceY) && abs(distanceX) > SWIPE_DISTANCE_THRESHOLD && abs(vX) > SWIPE_VELOCITY_THRESHOLD) {
@@ -251,17 +255,19 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
 
     override fun onDoubleTapEvent(event: MotionEvent?): Boolean = true
 
-    override fun onDown(event: MotionEvent) = false
+    override fun onDown(event: MotionEvent?) = false
 
-    override fun onShowPress(event: MotionEvent) {
+    override fun onShowPress(event: MotionEvent?) {
         // NO-OP
     }
 
-    override fun onSingleTapUp(event: MotionEvent) = false
+    override fun onSingleTapUp(event: MotionEvent?) = false
 
-    override fun onScroll(evt1: MotionEvent, evt2: MotionEvent, p1: Float, p2: Float) = false
+    override fun onScroll(evt1: MotionEvent?, evt2: MotionEvent?, p1: Float, p2: Float): Boolean {
+        return false
+    }
 
-    override fun onLongPress(event: MotionEvent) {
+    override fun onLongPress(event: MotionEvent?) {
         setWallpaper()
     }
 }
