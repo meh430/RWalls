@@ -4,8 +4,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginStart="2dp"
-    android:layout_marginEnd="2dp"
     android:layout_marginTop="2dp"
+    android:layout_marginEnd="2dp"
     android:layout_marginBottom="2dp"
     android:orientation="vertical"
     app:cardCornerRadius="2dp"
@@ -22,6 +22,7 @@
             android:layout_centerInParent="true"
             android:layout_gravity="center"
             android:contentDescription="@string/image_description"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:transitionName="redditImage" />
     </RelativeLayout>
 </com.google.android.material.card.MaterialCardView>

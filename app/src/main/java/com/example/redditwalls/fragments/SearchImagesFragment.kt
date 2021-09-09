@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.redditwalls.databinding.FragmentSearchImagesBinding
 import com.example.redditwalls.models.Image
@@ -74,14 +73,14 @@ class SearchImagesFragment : BaseApiImagesFragment() {
         }
     }
 
-    override fun onClick(image: Image) {
+    override fun onClick(view: View?, image: Image) {
         val toWall =
             SearchImagesFragmentDirections.actionSearchImagesFragmentToNavigationWallpaper(
                 image,
                 null,
                 null
             )
-        findNavController().navigate(toWall)
+        navigateToWall(view, toWall)
     }
 
     override fun onDestroyView() {

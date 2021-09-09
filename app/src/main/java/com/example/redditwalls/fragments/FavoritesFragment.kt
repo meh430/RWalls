@@ -8,7 +8,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.example.redditwalls.R
 import com.example.redditwalls.adapters.FavoritesAdapter
 import com.example.redditwalls.databinding.FragmentFavoritesBinding
@@ -104,7 +103,7 @@ class FavoritesFragment : BaseImagesFragment() {
                     FEELING_LUCKY -> lifecycleScope.launch(Dispatchers.Main) {
                         val randomImage = favoritesViewModel.getRandomFavoriteImage()
                         if (randomImage != null) {
-                            onClick(randomImage)
+                            onClick(null, randomImage)
                         } else {
                             Toast.makeText(
                                 requireContext(),
@@ -176,13 +175,13 @@ class FavoritesFragment : BaseImagesFragment() {
         _binding = null
     }
 
-    override fun onClick(image: Image) {
+    override fun onClick(view: View?, image: Image) {
         val toWall =
             FavoritesFragmentDirections.actionNavigationFavoritesToNavigationWallpaper(
                 image,
                 null,
                 null
             )
-        findNavController().navigate(toWall)
+        navigateToWall(view, toWall)
     }
 }

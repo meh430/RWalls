@@ -19,6 +19,7 @@
             app:tint="?attr/colorOnSurface" />
 
         <ImageView
+            android:transitionName="redditImage"
             android:id="@+id/wallpaper"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

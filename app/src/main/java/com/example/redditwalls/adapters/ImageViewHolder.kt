@@ -47,7 +47,7 @@ class ImageViewHolder(
         //binding.imagePreview.setOnTouchListener { _, event -> gDetector.onTouchEvent(event) }
 
         binding.imagePreview.setOnClickListener {
-            imageListener.onClick(image)
+            imageListener.onClick(it, image)
         }
 
         binding.imagePreview.setOnLongClickListener {
