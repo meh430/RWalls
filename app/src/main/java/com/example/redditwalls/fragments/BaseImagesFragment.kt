@@ -52,8 +52,17 @@ abstract class BaseImagesFragment : Fragment(), ImageClickListener {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        settingsViewModel.getAnimationsEnabled().also {
+            if (it != settingsViewModel.animateTransition) {
+                settingsViewModel.animateTransition = it
+            }
+        }
+    }
+
     fun navigateToWall(imageView: View?, action: NavDirections) {
-        if (imageView == null) {
+        if (imageView == null || !settingsViewModel.animateTransition) {
             findNavController().navigate(action)
         } else {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(

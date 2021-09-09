@@ -79,6 +79,7 @@ class SettingsFragment : Fragment() {
         binding.columnCountSlider.value = settingsViewModel.getColumnCount().count.toFloat()
 
         binding.lowResPreviewsSwitch.isChecked = settingsViewModel.loadLowResPreviews()
+        binding.animationEnabledSwitch.isChecked = settingsViewModel.getAnimationsEnabled()
 
         val refreshOn = settingsViewModel.randomRefreshEnabled()
         binding.randomRefreshSwitch.isChecked = refreshOn
@@ -178,6 +179,7 @@ class SettingsFragment : Fragment() {
             ColumnCount.values().find { it.count == count } ?: ColumnCount.TWO
         )
         settingsViewModel.setLoadLowResPreviews(binding.lowResPreviewsSwitch.isChecked)
+        settingsViewModel.setAnimationsEnabled(binding.animationEnabledSwitch.isChecked)
 
         val randomRefreshEnabled = binding.randomRefreshSwitch.isChecked
         settingsViewModel.setRandomRefresh(randomRefreshEnabled)

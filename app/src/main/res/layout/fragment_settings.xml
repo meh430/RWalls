@@ -110,6 +110,14 @@
                 android:text="Load low resolution previews" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/animationEnabledSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:text="Enable image open animation" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/randomRefreshSwitch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

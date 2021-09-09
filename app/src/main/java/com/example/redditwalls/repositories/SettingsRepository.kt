@@ -18,10 +18,10 @@ class SettingsRepository @Inject constructor(private val prefs: SharedPreference
         private const val LOW_RES_PREVIEWS = "low_res_previews"
         private const val RANDOM_REFRESH = "random_refresh"
         private const val RANDOM_REFRESH_LOCATION = "random_refresh_location"
-        private const val REFRESH_PERIOD = "refresh_period"
         private const val REFRESH_INTERVAL = "refresh_interval"
         private const val THEME = "theme"
         private const val COLUMN_COUNT = "column_count"
+        private const val ANIMATION_ENABLED = "animation_enabled"
     }
 
     fun setDefaultSub(subreddit: String) {
@@ -78,6 +78,12 @@ class SettingsRepository @Inject constructor(private val prefs: SharedPreference
     }
 
     fun getColumnCount() = ColumnCount.fromId(prefs.getInt(COLUMN_COUNT, 1))
+
+    fun setAnimationsEnabled(animationsEnabled: Boolean) {
+        prefs.putValue(ANIMATION_ENABLED, animationsEnabled)
+    }
+
+    fun getAnimationsEnabled() = prefs.getBoolean(ANIMATION_ENABLED, true)
 }
 
 enum class Theme(override val id: Int, override val displayText: String, val mode: Int) :

@@ -15,6 +15,8 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
+    var animateTransition = settingsRepository.getAnimationsEnabled()
+
     fun getDefaultSub() = settingsRepository.getDefaultSub()
     fun setDefaultSub(subreddit: String) {
         val default = subreddit.removeSubPrefix()
@@ -70,4 +72,11 @@ class SettingsViewModel @Inject constructor(
     fun setColumnCount(count: ColumnCount) = settingsRepository.setColumnCount(count)
 
     fun getColumnCount() = settingsRepository.getColumnCount()
+
+    fun setAnimationsEnabled(animationsEnabled: Boolean) =
+        settingsRepository.setAnimationsEnabled(animationsEnabled).also {
+            animateTransition = animationsEnabled
+        }
+
+    fun getAnimationsEnabled() = settingsRepository.getAnimationsEnabled()
 }
