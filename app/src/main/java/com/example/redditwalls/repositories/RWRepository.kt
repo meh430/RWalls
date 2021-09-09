@@ -13,7 +13,7 @@ class RWRepository @Inject constructor(private val api: RWApi) {
         Pager(
             config = PagingConfig(
                 pageSize = RWApi.PAGE_SIZE,
-                prefetchDistance = 2,
+                prefetchDistance = 10,
                 initialLoadSize = RWApi.PAGE_SIZE
             ),
             pagingSourceFactory = { ImagesPagingDataSource(api, subreddit, query, sort) }
