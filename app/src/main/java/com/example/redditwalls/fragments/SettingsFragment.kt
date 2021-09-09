@@ -170,7 +170,9 @@ class SettingsFragment : Fragment() {
             RWApi.Sort.values().fromDisplayText(binding.sortButton.text.toString(), RWApi.Sort.HOT)
         )
 
-        settingsViewModel.setDefaultSub(binding.defaultSubreddit.editText?.text.toString())
+        settingsViewModel.setDefaultSub(
+            binding.defaultSubreddit.editText?.text.toString().trim().replace("\\s".toRegex(), "")
+        )
         val count = binding.columnCountSlider.value.toInt()
         settingsViewModel.setColumnCount(
             ColumnCount.values().find { it.count == count } ?: ColumnCount.TWO
