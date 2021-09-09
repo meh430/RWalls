@@ -1,18 +1,22 @@
 package com.example.redditwalls.adapters
 
 import android.annotation.SuppressLint
+import android.widget.RelativeLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.example.redditwalls.databinding.ImageItemBinding
 import com.example.redditwalls.misc.Utils
+import com.example.redditwalls.misc.toPx
 import com.example.redditwalls.models.Image
+import com.example.redditwalls.repositories.ColumnCount
 
 
 class ImageViewHolder(
     private val binding: ImageItemBinding,
     private val loadLowRes: Boolean,
+    private val columnCount: ColumnCount,
     private val imageListener: ImageClickListener
 ) :
     RecyclerView.ViewHolder(binding.root) {
@@ -49,6 +53,16 @@ class ImageViewHolder(
         binding.imagePreview.setOnLongClickListener {
             imageListener.onLongClick(image)
             true
+        }
+
+        binding.imagePreview.apply {
+            requestLayout()
+
+            layoutParams.height = if (columnCount.imageHeightDp == -1) {
+                RelativeLayout.LayoutParams.MATCH_PARENT
+            } else {
+                columnCount.imageHeightDp.toPx.toInt()
+            }
         }
 
         val requestOptions = RequestOptions()

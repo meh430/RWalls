@@ -19,6 +19,8 @@ class SubImagesViewModel @Inject constructor(
     var currentSort = settingsRepository.getDefaultSort()
     private var query = ""
 
+    var columnCount = settingsRepository.getColumnCount()
+
     private val params: MutableLiveData<ImagesParams> = MutableLiveData()
     val imagePages: LiveData<PagingData<Image>> = Transformations.switchMap(params) {
         rwRepository.getImages(it.subreddit, it.query, it.sort)

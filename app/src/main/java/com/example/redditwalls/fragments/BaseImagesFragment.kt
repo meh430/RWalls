@@ -4,15 +4,20 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.redditwalls.WallpaperHelper
 import com.example.redditwalls.adapters.ImageClickListener
 import com.example.redditwalls.models.Image
+import com.example.redditwalls.repositories.ColumnCount
 import com.example.redditwalls.viewmodels.FavoritesViewModel
+import com.example.redditwalls.viewmodels.SettingsViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 abstract class BaseImagesFragment : Fragment(), ImageClickListener {
     protected val favoritesViewModel: FavoritesViewModel by viewModels()
+    protected val settingsViewModel: SettingsViewModel by viewModels()
 
     @Inject
     lateinit var wallpaperHelper: WallpaperHelper
@@ -30,6 +35,14 @@ abstract class BaseImagesFragment : Fragment(), ImageClickListener {
             lifecycleScope.launch {
                 wallpaperHelper.setImageLinkAsWallpaper(requireContext(), image.imageLink, it)
             }
+        }
+    }
+
+    fun getLayoutManager() = settingsViewModel.getColumnCount().let {
+        if (it == ColumnCount.ONE) {
+            LinearLayoutManager(requireContext())
+        } else {
+            GridLayoutManager(requireContext(), it.count)
         }
     }
 }

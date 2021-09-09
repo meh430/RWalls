@@ -7,17 +7,14 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import com.example.redditwalls.R
 import com.example.redditwalls.adapters.FavoritesAdapter
 import com.example.redditwalls.databinding.FragmentFavoritesBinding
 import com.example.redditwalls.misc.ImageLoader
 import com.example.redditwalls.misc.Utils
 import com.example.redditwalls.models.Image
-import com.example.redditwalls.viewmodels.SettingsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -40,11 +37,10 @@ class FavoritesFragment : BaseImagesFragment() {
     @Inject
     lateinit var imageLoader: ImageLoader
 
-    private val settingsViewModel: SettingsViewModel by viewModels()
-
     private val favoritesAdapter: FavoritesAdapter by lazy {
         FavoritesAdapter(
             settingsViewModel.loadLowResPreviews(),
+            settingsViewModel.getColumnCount(),
             this
         )
     }
@@ -147,7 +143,7 @@ class FavoritesFragment : BaseImagesFragment() {
 
         binding.imageScroll.apply {
             adapter = favoritesAdapter
-            layoutManager = GridLayoutManager(requireContext(), 2)
+            layoutManager = this@FavoritesFragment.getLayoutManager()
         }
 
         favoritesViewModel.getFavorites().observe(viewLifecycleOwner) {

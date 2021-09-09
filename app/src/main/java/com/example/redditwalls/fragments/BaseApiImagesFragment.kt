@@ -7,7 +7,6 @@ import android.view.MenuItem
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.redditwalls.MainActivity
 import com.example.redditwalls.R
@@ -16,7 +15,6 @@ import com.example.redditwalls.adapters.LoadingStateAdapter
 import com.example.redditwalls.databinding.EmptyBinding
 import com.example.redditwalls.databinding.ErrorBinding
 import com.example.redditwalls.datasources.RWApi.Sort
-import com.example.redditwalls.viewmodels.SettingsViewModel
 import com.example.redditwalls.viewmodels.SubImagesViewModel
 import com.google.android.material.progressindicator.LinearProgressIndicator
 
@@ -26,13 +24,13 @@ abstract class BaseApiImagesFragment : BaseImagesFragment() {
 
     protected val imagesAdapter: ImagesAdapter by lazy {
         val loadLowRes = settingsViewModel.loadLowResPreviews()
-        ImagesAdapter(loadLowRes, this).apply {
+        val columnCount = settingsViewModel.getColumnCount()
+        ImagesAdapter(loadLowRes, columnCount, this).apply {
             withLoadStateFooter(
                 footer = LoadingStateAdapter(this)
             )
         }
     }
-    protected val settingsViewModel: SettingsViewModel by viewModels()
     protected val imagesViewModel: SubImagesViewModel by lazy {
         val vm: SubImagesViewModel by viewModels()
         vm.also {
@@ -48,7 +46,7 @@ abstract class BaseApiImagesFragment : BaseImagesFragment() {
     protected fun initRecyclerView(recyclerView: RecyclerView) {
         recyclerView.apply {
             adapter = imagesAdapter
-            layoutManager = GridLayoutManager(requireContext(), 2)
+            layoutManager = this@BaseApiImagesFragment.getLayoutManager()
         }
     }
 

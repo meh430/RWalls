@@ -115,7 +115,7 @@ enum class ColumnCount(
     val count: Int,
     val imageHeightDp: Int = -1
 ) : SettingsItem {
-    ONE(0, "One", 1, -1),
+    ONE(0, "One", 1, 420),
     TWO(1, "Two", 2, 340),
     THREE(2, "Three", 3, 220),
     FOUR(3, "Four", 4, 180);

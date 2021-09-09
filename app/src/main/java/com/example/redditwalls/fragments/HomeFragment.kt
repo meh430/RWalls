@@ -58,6 +58,15 @@ class HomeFragment : BaseApiImagesFragment() {
         if (imagesViewModel.subredditHasChanged(subreddit)) {
             imagesViewModel.setSubreddit(subreddit)
         }
+
+        // When column count is changed from settings, the recycler view needs to be re-rendered
+        settingsViewModel.getColumnCount().also {
+            if (it != imagesViewModel.columnCount) {
+                imagesViewModel.columnCount = it
+                imagesAdapter.setCount(it)
+                binding.imageScroll.adapter = imagesAdapter
+            }
+        }
     }
 
     override fun onDestroyView() {
