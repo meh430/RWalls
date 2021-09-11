@@ -69,6 +69,7 @@ abstract class BaseImagesFragment : Fragment(), ImageClickListener {
                 requireActivity(),
                 androidx.core.util.Pair.create(imageView, "redditImage")
             )
+
             val extras = ActivityNavigatorExtras(options)
             findNavController().navigate(action, extras)
         }

@@ -13,6 +13,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
+import androidx.navigation.ActivityNavigator
 import androidx.navigation.navArgs
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
@@ -76,6 +77,11 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
 
         binding = ActivityWallBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        window?.apply {
+            sharedElementEnterTransition.duration = 200
+            sharedElementExitTransition.duration = 200
+        }
 
         try {
             wallViewModel.initialize(wallArgs.image, wallArgs.postId, wallArgs.subreddit)
@@ -217,6 +223,11 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
                 Resource.Status.ERROR -> sheetBinding.postInfo = PostInfo.error(it.errorMessage)
             }
         }
+    }
+
+    override fun finish() {
+        super.finish()
+        ActivityNavigator.applyPopAnimationsToPendingTransition(this)
     }
 
 
