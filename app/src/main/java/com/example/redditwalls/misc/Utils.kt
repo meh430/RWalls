@@ -188,7 +188,7 @@ object Utils {
             val root = Environment.getExternalStorageDirectory().toString()
             val myDir = File("$root/RedditWalls")
             myDir.mkdirs()
-            val file = File(myDir, fName)
+            val file = File(myDir, "$fName.jpg")
             if (file.exists())
                 file.delete()
             try {

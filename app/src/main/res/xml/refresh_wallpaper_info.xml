@@ -5,7 +5,7 @@
     android:initialLayout="@layout/refresh_wallpaper"
     android:minWidth="40dp"
     android:minHeight="40dp"
-    android:previewImage="@drawable/example_appwidget_preview"
+    android:previewImage="@drawable/ic_refresh"
     android:previewLayout="@layout/refresh_wallpaper"
     android:targetCellWidth="1"
     android:targetCellHeight="1"
