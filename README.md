@@ -21,4 +21,4 @@ An app that uses the model-view-viewmodel pattern with the help of Android Jetpa
 <img src="screens/Screenshot_20210911-180312_RedditWalls.png" height="480" width="216"><img src="screens/Screenshot_20210911-180322_RedditWalls.png" height="480" width="216"><img src="screens/Screenshot_20210911-180332_RedditWalls.png" height="480" width="216"><img src="screens/Screenshot_20210911-180458_RedditWalls.png" height="480" width="216"><img src="screens/Screenshot_20210911-180543_RedditWalls.png" height="480" width="216">
 
 ## Download
-Download the apk [here](https://github.com/meh430/RedditWalls-rewrite/releases/download/1.0/rw1.0.apk)
+Download the apk [here](https://github.com/meh430/RedditWalls-rewrite/releases/download/1.0/rw1.apk)
