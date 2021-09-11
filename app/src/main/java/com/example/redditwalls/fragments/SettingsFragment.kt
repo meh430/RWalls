@@ -2,9 +2,7 @@ package com.example.redditwalls.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -21,6 +19,7 @@ import com.example.redditwalls.datasources.RWApi
 import com.example.redditwalls.misc.RadioDialog
 import com.example.redditwalls.misc.RandomRefreshWorker
 import com.example.redditwalls.misc.fromDisplayText
+import com.example.redditwalls.misc.launchBrowser
 import com.example.redditwalls.repositories.ColumnCount
 import com.example.redditwalls.repositories.RefreshInterval
 import com.example.redditwalls.repositories.SettingsRepository.Companion.FALLBACK_SUBREDDIT
@@ -34,6 +33,7 @@ class SettingsFragment : Fragment() {
 
     companion object {
         const val RANDOM_REFRESH_WORK = "random_refresh_work"
+        private const val REPO_LINK = "https://github.com/meh430/RedditWalls-rewrite"
     }
 
     private var _binding: FragmentSettingsBinding? = null
@@ -43,6 +43,11 @@ class SettingsFragment : Fragment() {
 
     @Inject
     lateinit var wallpaperHelper: WallpaperHelper
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,6 +67,18 @@ class SettingsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         populateSettings()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.favorites_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.actions -> REPO_LINK.launchBrowser(requireActivity()).let { true }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun populateSettings() {
