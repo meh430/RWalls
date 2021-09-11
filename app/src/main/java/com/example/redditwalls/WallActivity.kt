@@ -172,9 +172,14 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
         }
 
         sheetBinding.author.setOnClickListener {
-            wallViewModel.postInfo.value?.data?.author.let { author ->
-                val url = "https://www.reddit.com/${author}"
-                url.launchBrowser(this)
+            wallViewModel.postInfo.value?.data?.author?.let { author ->
+                "${RWApi.BASE}/$author".launchBrowser(this)
+            }
+        }
+
+        sheetBinding.subreddit.setOnClickListener {
+            wallViewModel.postInfo.value?.data?.subreddit?.let { sub ->
+                "${RWApi.BASE}/$sub".launchBrowser(this)
             }
         }
     }
