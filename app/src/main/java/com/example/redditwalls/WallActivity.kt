@@ -185,6 +185,10 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
     }
 
     private fun setWallpaper() {
+        if (isFinishing) {
+            return
+        }
+
         wallpaperHelper.showLocationPickerDialog(this) { location ->
             getBitmap()?.let {
                 wallpaperHelper.setBitmapAsWallpaper(this, it, location)
