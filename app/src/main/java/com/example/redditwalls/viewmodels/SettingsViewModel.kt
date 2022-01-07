@@ -1,21 +1,30 @@
 package com.example.redditwalls.viewmodels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.redditwalls.WallpaperLocation
 import com.example.redditwalls.datasources.RWApi
 import com.example.redditwalls.misc.removeSubPrefix
-import com.example.redditwalls.repositories.ColumnCount
-import com.example.redditwalls.repositories.RefreshInterval
-import com.example.redditwalls.repositories.SettingsRepository
-import com.example.redditwalls.repositories.Theme
+import com.example.redditwalls.repositories.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
+    private val favoriteSubsRepository: FavoriteSubredditsRepository
 ) : ViewModel() {
     var animateTransition = settingsRepository.getAnimationsEnabled()
+
+    fun setFeedAsDefault() {
+        viewModelScope.launch {
+            val favSubs = favoriteSubsRepository.getFavoriteSubreddits()
+            val feedName =
+                "r/" + favSubs.joinToString(separator = "+") { it.name.removeSubPrefix() }
+            setDefaultSub(feedName)
+        }
+    }
 
     fun getDefaultSub() = settingsRepository.getDefaultSub()
     fun setDefaultSub(subreddit: String) {
