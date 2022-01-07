@@ -92,4 +92,9 @@
         android:id="@+id/navigation_settings"
         android:name="com.example.redditwalls.fragments.SettingsFragment"
         android:label="Settings" />
+
+    <fragment
+        android:id="@+id/navigation_settings_compose"
+        android:name="com.example.redditwalls.fragments.SettingsComposeFragment"
+        android:label="Settings" />
 </navigation>
