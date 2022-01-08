@@ -22,7 +22,36 @@ class SettingsRepository @Inject constructor(private val prefs: SharedPreference
         private const val THEME = "theme"
         private const val COLUMN_COUNT = "column_count"
         private const val ANIMATION_ENABLED = "animation_enabled"
+
+        private const val SPECIFY_HOME = "specify_home" // what is loaded in home screen
+        private const val RANDOM_ORDER = "random_order" // order in which refresh occurs
+        private const val REFRESH_INDEX = "refresh_index"
+        private const val TOAST_ENABLED = "toast_enabled"
     }
+
+    fun setSpecifyHome(specifyHome: Boolean) {
+        prefs.putValue(SPECIFY_HOME, specifyHome)
+    }
+
+    fun specifyHome() = prefs.getBoolean(SPECIFY_HOME, true)
+
+    fun setRandomOrder(randomOrder: Boolean) {
+        prefs.putValue(RANDOM_ORDER, randomOrder)
+    }
+
+    fun randomOrder() = prefs.getBoolean(RANDOM_ORDER, true)
+
+    fun setRefreshIndex(index: Int) {
+        prefs.putValue(REFRESH_INTERVAL, index)
+    }
+
+    fun getRefreshIndex() = prefs.getInt(REFRESH_INDEX, 0)
+
+    fun setToastEnabled(toastEnabled: Boolean) {
+        prefs.putValue(TOAST_ENABLED, toastEnabled)
+    }
+
+    fun toastEnabled() = prefs.getBoolean(TOAST_ENABLED, true)
 
     fun setDefaultSub(subreddit: String) {
         prefs.putValue(DEFAULT_SUB, subreddit)
@@ -70,7 +99,8 @@ class SettingsRepository @Inject constructor(private val prefs: SharedPreference
     fun getDefaultSort() = RWApi.Sort.fromId(prefs.getInt(DEFAULT_SORT, RWApi.Sort.HOT.id))
 
     fun clearRandomRefreshSettings() {
-        prefs.edit().remove(REFRESH_INTERVAL).remove(RANDOM_REFRESH_LOCATION).apply()
+        prefs.edit().remove(REFRESH_INTERVAL).remove(RANDOM_REFRESH_LOCATION).remove(RANDOM_ORDER)
+            .apply()
     }
 
     fun setColumnCount(count: ColumnCount) {

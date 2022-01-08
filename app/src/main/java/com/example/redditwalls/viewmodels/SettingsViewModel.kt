@@ -17,6 +17,9 @@ class SettingsViewModel @Inject constructor(
 ) : ViewModel() {
     var animateTransition = settingsRepository.getAnimationsEnabled()
 
+    var location = getRandomRefreshLocation()
+    var interval = getRandomRefreshInterval()
+
     fun setFeedAsDefault() {
         viewModelScope.launch {
             val favSubs = favoriteSubsRepository.getFavoriteSubreddits()
@@ -51,10 +54,7 @@ class SettingsViewModel @Inject constructor(
     fun setRandomRefreshLocation(location: WallpaperLocation) =
         settingsRepository.setRandomRefreshLocation(location)
 
-    fun randomRefreshSettingsChanged(
-        interval: RefreshInterval,
-        location: WallpaperLocation
-    ): Boolean {
+    fun randomRefreshSettingsChanged(): Boolean {
         val savedInterval = getRandomRefreshInterval()
         val refreshChanged = interval != savedInterval
 
@@ -88,4 +88,28 @@ class SettingsViewModel @Inject constructor(
         }
 
     fun getAnimationsEnabled() = settingsRepository.getAnimationsEnabled()
+
+    fun setSpecifyHome(specifyHome: Boolean) {
+        settingsRepository.setSpecifyHome(specifyHome)
+    }
+
+    fun specifyHome() = settingsRepository.specifyHome()
+
+    fun setRandomOrder(randomOrder: Boolean) {
+        settingsRepository.setRandomOrder(randomOrder)
+    }
+
+    fun randomOrder() = settingsRepository.randomOrder()
+
+    fun setRefreshIndex(index: Int) {
+        settingsRepository.setRefreshIndex(index)
+    }
+
+    fun getRefreshIndex() = settingsRepository.getRefreshIndex()
+
+    fun setToastEnabled(toastEnabled: Boolean) {
+        settingsRepository.setToastEnabled(toastEnabled)
+    }
+
+    fun toastEnabled() = settingsRepository.toastEnabled()
 }

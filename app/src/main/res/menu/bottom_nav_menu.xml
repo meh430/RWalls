@@ -22,7 +22,7 @@
         android:title="Saved" />
 
     <item
-        android:id="@+id/navigation_settings"
+        android:id="@+id/navigation_settings_compose"
         android:icon="@drawable/ic_settings"
         android:title="@string/title_settings" />
 
