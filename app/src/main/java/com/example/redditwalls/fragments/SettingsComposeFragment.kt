@@ -28,6 +28,7 @@ import androidx.fragment.app.viewModels
 import com.example.redditwalls.datasources.RWApi
 import com.example.redditwalls.misc.RadioDialog
 import com.example.redditwalls.misc.fromId
+import com.example.redditwalls.repositories.ColumnCount
 import com.example.redditwalls.repositories.SettingsItem
 import com.example.redditwalls.repositories.Theme
 import com.example.redditwalls.viewmodels.SettingsViewModel
@@ -49,16 +50,18 @@ class SettingsComposeFragment : Fragment() {
         secondary = Color.Red,
         secondaryVariant = Color.Red
     )
+    private val sidesPadding = 14.dp
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        val currentDefault = settingsViewModel.getDefaultSub()
         return ComposeView(requireContext()).apply {
             // Dispose of the Composition when the view's LifecycleOwner is destroyed
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-            val sidesPadding = 14.dp
             setContent {
                 MaterialTheme(if (isSystemInDarkTheme()) darkColors else lightColors) {
                     Column(modifier = Modifier.padding(horizontal = sidesPadding)) {
@@ -78,7 +81,11 @@ class SettingsComposeFragment : Fragment() {
                         ) {
                             settingsViewModel.setDefaultSort(it)
                         }
+                        Spacer(modifier = Modifier.height(sidesPadding))
+                        ColumnCountSlider()
                         Toggles()
+                        Spacer(modifier = Modifier.height(sidesPadding))
+                        HomeFeedSetting(currentDefault)
                     }
 
                 }
@@ -143,20 +150,69 @@ class SettingsComposeFragment : Fragment() {
 
     @Composable
     fun Toggles() {
-        TextSwitch()
-        TextSwitch()
-        TextSwitch()
+        Spacer(modifier = Modifier.height(sidesPadding))
+        TextSwitch("Load low resolution previews", settingsViewModel.loadLowResPreviews()) {
+            settingsViewModel.setLoadLowResPreviews(it)
+        }
+        Spacer(modifier = Modifier.height(sidesPadding))
+        TextSwitch("Enable image opening animation", settingsViewModel.getAnimationsEnabled()) {
+            settingsViewModel.setAnimationsEnabled(it)
+        }
+        Spacer(modifier = Modifier.height(sidesPadding))
+        TextSwitch("Enable toast messages", settingsViewModel.toastEnabled()) {
+            settingsViewModel.setToastEnabled(it)
+        }
+    }
+
+    @Composable
+    fun ColumnCountSlider() {
+        var count by rememberSaveable { mutableStateOf(settingsViewModel.getColumnCount().count.toFloat()) }
+        DarkText(text = "Set column count: ${count.toInt()} columns")
+        Slider(
+            value = count,
+            onValueChange = { count = it },
+            onValueChangeFinished = { settingsViewModel.setColumnCount(ColumnCount.fromId(count.toInt() - 1)) },
+            steps = 2,
+            valueRange = 1f..4f,
+        )
+    }
+
+    @Composable
+    fun HomeFeedSetting(default: String) {
+        var specifyHome by rememberSaveable { mutableStateOf(settingsViewModel.specifyHome()) }
+
+        TextSwitch("Use specified default home sub", specifyHome) {
+            settingsViewModel.setSpecifyHome(it)
+            specifyHome = it
+        }
+        if (specifyHome) {
+            DarkText(
+                text = "Currently default is r/$default",
+                style = MaterialTheme.typography.caption,
+                fontWeight = FontWeight.Light
+            )
+        }
     }
 
     @Composable
     fun TextSwitch(
         text: String = "",
         checked: Boolean = true,
-        onChange: ((Boolean) -> Unit)? = null
+        onChange: ((Boolean) -> Unit)
     ) {
-        Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-            DarkText("This is a setting")
-            Switch(checked = true, onCheckedChange = null)
+        var isChecked by rememberSaveable { mutableStateOf(checked) }
+        val onClick = { value: Boolean ->
+            isChecked = value
+            onChange(value)
+        }
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .clickable { onClick(!isChecked) }
+                .fillMaxWidth()
+        ) {
+            DarkText(text)
+            Switch(checked = isChecked, onCheckedChange = onClick)
         }
     }
 
