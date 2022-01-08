@@ -1,14 +1,17 @@
 package com.example.redditwalls.fragments
 
 
-import android.os.Bundle
+import  android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,10 +28,15 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.work.*
+import com.example.redditwalls.R
+import com.example.redditwalls.WallpaperLocation
 import com.example.redditwalls.datasources.RWApi
 import com.example.redditwalls.misc.RadioDialog
+import com.example.redditwalls.misc.RandomRefreshWorker
 import com.example.redditwalls.misc.fromId
 import com.example.redditwalls.repositories.ColumnCount
+import com.example.redditwalls.repositories.RefreshInterval
 import com.example.redditwalls.repositories.SettingsItem
 import com.example.redditwalls.repositories.Theme
 import com.example.redditwalls.viewmodels.SettingsViewModel
@@ -59,12 +67,17 @@ class SettingsComposeFragment : Fragment() {
     ): View {
 
         val currentDefault = settingsViewModel.getDefaultSub()
+        val tips = resources.getStringArray(R.array.tips).joinToString(separator = "\n")
         return ComposeView(requireContext()).apply {
             // Dispose of the Composition when the view's LifecycleOwner is destroyed
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 MaterialTheme(if (isSystemInDarkTheme()) darkColors else lightColors) {
-                    Column(modifier = Modifier.padding(horizontal = sidesPadding)) {
+                    Column(
+                        modifier = Modifier
+                            .verticalScroll(rememberScrollState())
+                            .padding(horizontal = sidesPadding)
+                    ) {
                         OptionSelector(
                             "Select Theme",
                             settingsViewModel.getTheme(),
@@ -86,46 +99,13 @@ class SettingsComposeFragment : Fragment() {
                         Toggles()
                         Spacer(modifier = Modifier.height(sidesPadding))
                         HomeFeedSetting(currentDefault)
+                        Spacer(modifier = Modifier.height(sidesPadding))
+                        RandomRefreshSetting()
+                        Tips(tips)
                     }
 
                 }
             }
-        }
-    }
-
-    @Composable
-    fun <T : SettingsItem> OptionSelector(
-        dialogTitle: String,
-        currentSelection: T,
-        options: Array<T>,
-        onSelect: (T) -> Unit
-    ) {
-        var selected by rememberSaveable { mutableStateOf(currentSelection) }
-        val modifier = Modifier
-            .clickable {
-                RadioDialog(
-                    requireContext(),
-                    dialogTitle,
-                    options,
-                    selected.id
-                ).show {
-                    options
-                        .fromId(it, options[0])
-                        .also { o ->
-                            selected = o
-                            onSelect(o)
-                        }
-                }
-            }
-            .fillMaxWidth()
-        Column(modifier = modifier) {
-            DarkText(dialogTitle, style = MaterialTheme.typography.subtitle1)
-            DarkText(
-                selected.displayText,
-                style = MaterialTheme.typography.caption,
-                fontWeight = FontWeight.Light
-            )
-
         }
     }
 
@@ -194,11 +174,106 @@ class SettingsComposeFragment : Fragment() {
         }
     }
 
+
+    @Composable
+    fun RandomRefreshSetting() {
+        // switch, option for interval, location, and toggle for random order
+        var refreshEnabled by rememberSaveable { mutableStateOf(settingsViewModel.randomRefreshEnabled()) }
+        var randomOrder by rememberSaveable { mutableStateOf(settingsViewModel.randomOrder()) }
+
+        SectionDivider("Wallpaper Refresh")
+        TextSwitch("Enable periodic wallpaper refresh", refreshEnabled) {
+            settingsViewModel.setRandomRefresh(it)
+            refreshEnabled = it
+        }
+
+        if (refreshEnabled) {
+            Spacer(modifier = Modifier.height(sidesPadding))
+            TextSwitch("Refresh favorites in random order", randomOrder) {
+                settingsViewModel.setRandomOrder(it)
+                randomOrder = it
+            }
+            Spacer(modifier = Modifier.height(sidesPadding))
+            OptionSelector(
+                "Select refresh interval",
+                settingsViewModel.getRandomRefreshInterval(),
+                RefreshInterval.values()
+            ) {
+                settingsViewModel.setRandomRefreshInterval(it)
+            }
+            Spacer(modifier = Modifier.height(sidesPadding))
+            OptionSelector(
+                "Select wallpaper location",
+                settingsViewModel.getRandomRefreshLocation(),
+                WallpaperLocation.values()
+            ) {
+                settingsViewModel.setRandomRefreshLocation(it)
+            }
+        }
+        Spacer(modifier = Modifier.height(sidesPadding))
+    }
+
+    @Composable
+    fun Tips(tips: String) {
+        SectionDivider(label = "Tips")
+        DarkText(text = tips)
+        Spacer(modifier = Modifier.height(sidesPadding))
+    }
+
+    @Composable
+    fun SectionDivider(label: String) {
+        Divider(color = Color.Gray, thickness = 1.dp)
+        Spacer(modifier = Modifier.height(sidesPadding))
+        Text(
+            text = label,
+            color = MaterialTheme.colors.primary,
+            style = MaterialTheme.typography.h6,
+            fontWeight = FontWeight.Light
+        )
+        Spacer(modifier = Modifier.height(sidesPadding))
+    }
+
+    @Composable
+    fun <T : SettingsItem> OptionSelector(
+        dialogTitle: String,
+        currentSelection: T,
+        options: Array<T>,
+        onSelect: (T) -> Unit
+    ) {
+        var selected by rememberSaveable { mutableStateOf(currentSelection) }
+        val modifier = Modifier
+            .clickable {
+                RadioDialog(
+                    requireContext(),
+                    dialogTitle,
+                    options,
+                    selected.id
+                ).show {
+                    options
+                        .fromId(it, options[0])
+                        .also { o ->
+                            selected = o
+                            onSelect(o)
+                        }
+                }
+            }
+            .fillMaxWidth()
+        Column(modifier = modifier) {
+            DarkText(dialogTitle, style = MaterialTheme.typography.subtitle1)
+            DarkText(
+                selected.displayText,
+                style = MaterialTheme.typography.caption,
+                fontWeight = FontWeight.Light
+            )
+
+        }
+    }
+
     @Composable
     fun TextSwitch(
         text: String = "",
         checked: Boolean = true,
-        onChange: ((Boolean) -> Unit)
+        onChange: (Boolean) -> Unit
     ) {
         var isChecked by rememberSaveable { mutableStateOf(checked) }
         val onClick = { value: Boolean ->
@@ -217,4 +292,45 @@ class SettingsComposeFragment : Fragment() {
     }
 
     private fun getTextColor(darkTheme: Boolean) = if (darkTheme) Color.White else Color.Black
+
+    override fun onPause() {
+        super.onPause()
+        if (!settingsViewModel.specifyHome()) {
+            settingsViewModel.setFeedAsDefault()
+        }
+
+        if (settingsViewModel.randomRefreshEnabled() && settingsViewModel.randomRefreshSettingsChanged()) {
+            settingsViewModel.location = settingsViewModel.getRandomRefreshLocation()
+            settingsViewModel.interval = settingsViewModel.getRandomRefreshInterval()
+            val interval = settingsViewModel.getRandomRefreshInterval()
+            startRandomRefreshWork(interval)
+        } else if (!settingsViewModel.randomRefreshEnabled()) {
+            cancelRandomRefreshWork()
+            settingsViewModel.clearRandomRefreshSettings()
+        }
+    }
+
+    private fun startRandomRefreshWork(interval: RefreshInterval) {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val work = PeriodicWorkRequestBuilder<RandomRefreshWorker>(
+            interval.amount,
+            interval.timeUnit
+        ).setConstraints(constraints).build()
+        val workManager = WorkManager.getInstance(requireContext().applicationContext)
+        workManager.enqueueUniquePeriodicWork(
+            SettingsFragment.RANDOM_REFRESH_WORK,
+            ExistingPeriodicWorkPolicy.REPLACE,
+            work
+        )
+        Toast.makeText(requireContext(), "Start refresh", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun cancelRandomRefreshWork() {
+        val workManager = WorkManager.getInstance(requireContext().applicationContext)
+        workManager.cancelUniqueWork(SettingsFragment.RANDOM_REFRESH_WORK)
+        Toast.makeText(requireContext(), "Cancels refresh", Toast.LENGTH_SHORT).show()
+    }
 }

@@ -99,7 +99,8 @@ class SettingsRepository @Inject constructor(private val prefs: SharedPreference
     fun getDefaultSort() = RWApi.Sort.fromId(prefs.getInt(DEFAULT_SORT, RWApi.Sort.HOT.id))
 
     fun clearRandomRefreshSettings() {
-        prefs.edit().remove(REFRESH_INTERVAL).remove(RANDOM_REFRESH_LOCATION).apply()
+        prefs.edit().remove(REFRESH_INTERVAL).remove(RANDOM_REFRESH_LOCATION).remove(RANDOM_ORDER)
+            .apply()
     }
 
     fun setColumnCount(count: ColumnCount) {

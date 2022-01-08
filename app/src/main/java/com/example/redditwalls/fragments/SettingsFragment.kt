@@ -211,7 +211,7 @@ class SettingsFragment : Fragment() {
                 .fromDisplayText(binding.locationButton.text.toString(), WallpaperLocation.BOTH)
 
             // Only add new worker if settings changed
-            if (settingsViewModel.randomRefreshSettingsChanged(interval, location)) {
+            if (settingsViewModel.randomRefreshSettingsChanged()) {
                 settingsViewModel.setRandomRefreshInterval(interval)
                 settingsViewModel.setRandomRefreshLocation(location)
                 startRandomRefreshWork(interval)
