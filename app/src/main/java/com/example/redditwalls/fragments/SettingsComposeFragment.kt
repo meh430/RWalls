@@ -8,9 +8,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -29,6 +27,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.example.redditwalls.datasources.RWApi
 import com.example.redditwalls.misc.RadioDialog
 import com.example.redditwalls.misc.fromId
 import com.example.redditwalls.repositories.SettingsItem
@@ -60,6 +59,14 @@ class SettingsComposeFragment : Fragment() {
                         ) {
                             settingsViewModel.setTheme(it)
                             AppCompatDelegate.setDefaultNightMode(it.mode)
+                        }
+                        Spacer(modifier = Modifier.height(sidesPadding))
+                        OptionSelector(
+                            dialogTitle = "Select Default Sort",
+                            currentSelection = settingsViewModel.getDefaultSort(),
+                            options = RWApi.Sort.values()
+                        ) {
+                            settingsViewModel.setDefaultSort(it)
                         }
                     }
 
@@ -94,7 +101,7 @@ class SettingsComposeFragment : Fragment() {
             }
             .fillMaxWidth()
         Column(modifier = modifier) {
-            DarkText(dialogTitle, style = MaterialTheme.typography.body1)
+            DarkText(dialogTitle, style = MaterialTheme.typography.subtitle1)
             DarkText(
                 selected.displayText,
                 style = MaterialTheme.typography.caption,
