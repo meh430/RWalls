@@ -9,9 +9,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +37,18 @@ import dagger.hilt.android.AndroidEntryPoint
 class SettingsComposeFragment : Fragment() {
 
     private val settingsViewModel: SettingsViewModel by viewModels()
+    private val darkColors = darkColors(
+        primary = Color.Red,
+        primaryVariant = Color.Red,
+        secondary = Color.Red,
+        secondaryVariant = Color.Red
+    )
+    private val lightColors = lightColors(
+        primary = Color.Red,
+        primaryVariant = Color.Red,
+        secondary = Color.Red,
+        secondaryVariant = Color.Red
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,7 +60,7 @@ class SettingsComposeFragment : Fragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             val sidesPadding = 14.dp
             setContent {
-                MaterialTheme {
+                MaterialTheme(if (isSystemInDarkTheme()) darkColors else lightColors) {
                     Column(modifier = Modifier.padding(horizontal = sidesPadding)) {
                         OptionSelector(
                             "Select Theme",
@@ -68,6 +78,7 @@ class SettingsComposeFragment : Fragment() {
                         ) {
                             settingsViewModel.setDefaultSort(it)
                         }
+                        Toggles()
                     }
 
                 }
@@ -128,6 +139,25 @@ class SettingsComposeFragment : Fragment() {
             style = style,
             color = getTextColor(darkTheme)
         )
+    }
+
+    @Composable
+    fun Toggles() {
+        TextSwitch()
+        TextSwitch()
+        TextSwitch()
+    }
+
+    @Composable
+    fun TextSwitch(
+        text: String = "",
+        checked: Boolean = true,
+        onChange: ((Boolean) -> Unit)? = null
+    ) {
+        Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+            DarkText("This is a setting")
+            Switch(checked = true, onCheckedChange = null)
+        }
     }
 
     private fun getTextColor(darkTheme: Boolean) = if (darkTheme) Color.White else Color.Black
