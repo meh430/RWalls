@@ -88,4 +88,28 @@ class SettingsViewModel @Inject constructor(
         }
 
     fun getAnimationsEnabled() = settingsRepository.getAnimationsEnabled()
+
+    fun setSpecifyHome(specifyHome: Boolean) {
+        settingsRepository.setSpecifyHome(specifyHome)
+    }
+
+    fun specifyHome() = settingsRepository.specifyHome()
+
+    fun setRandomOrder(randomOrder: Boolean) {
+        settingsRepository.setRandomOrder(randomOrder)
+    }
+
+    fun randomOrder() = settingsRepository.randomOrder()
+
+    fun setRefreshIndex(index: Int) {
+        settingsRepository.setRefreshIndex(index)
+    }
+
+    fun getRefreshIndex() = settingsRepository.getRefreshIndex()
+
+    fun setToastEnabled(toastEnabled: Boolean) {
+        settingsRepository.setToastEnabled(toastEnabled)
+    }
+
+    fun toastEnabled() = settingsRepository.toastEnabled()
 }
