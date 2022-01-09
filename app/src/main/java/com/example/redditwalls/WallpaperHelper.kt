@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.widget.Toast
 import com.example.redditwalls.misc.ImageLoader
+import com.example.redditwalls.misc.Toaster
 import com.example.redditwalls.misc.Utils
 import com.example.redditwalls.misc.fromId
 import com.example.redditwalls.repositories.FavoriteImagesRepository
@@ -18,11 +19,12 @@ import javax.inject.Inject
 class WallpaperHelper @Inject constructor(
     private val imageLoader: ImageLoader,
     private val favoriteImagesRepository: FavoriteImagesRepository,
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
+    private val toaster: Toaster
 ) {
 
     suspend fun setRandomFavoriteWallpaper(context: Context) {
-        toast("Setting wallpaper...", context)
+        toast("Setting wallpaper...")
         val image = favoriteImagesRepository.getRandomFavoriteImage()
 
         image?.let {
@@ -33,7 +35,7 @@ class WallpaperHelper @Inject constructor(
             )
         }
         if (image == null) {
-            toast("No favorites to choose from :(", context)
+            toast("No favorites to choose from :(")
         }
     }
 
@@ -43,7 +45,7 @@ class WallpaperHelper @Inject constructor(
         location: WallpaperLocation
     ) {
         try {
-            toast("Setting wallpaper...", context)
+            toast("Setting wallpaper...")
             val resolution = Utils.getResolution(context)
             val wallpaper = imageLoader.loadImage(
                 context,
@@ -75,7 +77,7 @@ class WallpaperHelper @Inject constructor(
                 wm.setBitmap(bitmap)
             }
 
-            Toast.makeText(context, "Successfully set wallpaper", Toast.LENGTH_SHORT).show()
+            toaster.t("Successfully set wallpaper")
         } catch (e: Exception) {
             Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
         }
@@ -90,9 +92,9 @@ class WallpaperHelper @Inject constructor(
             }.show()
     }
 
-    private suspend fun toast(msg: String, context: Context) {
+    private suspend fun toast(msg: String) {
         withContext(Dispatchers.Main) {
-            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+            toaster.t(msg)
         }
     }
 }

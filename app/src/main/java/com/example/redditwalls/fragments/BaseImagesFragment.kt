@@ -1,7 +1,6 @@
 package com.example.redditwalls.fragments
 
 import android.view.View
-import android.widget.Toast
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.redditwalls.WallpaperHelper
 import com.example.redditwalls.adapters.ImageClickListener
+import com.example.redditwalls.misc.Toaster
 import com.example.redditwalls.models.Image
 import com.example.redditwalls.repositories.ColumnCount
 import com.example.redditwalls.viewmodels.FavoritesViewModel
@@ -28,11 +28,15 @@ abstract class BaseImagesFragment : Fragment(), ImageClickListener {
     @Inject
     lateinit var wallpaperHelper: WallpaperHelper
 
+    @Inject
+    lateinit var toaster: Toaster
+
     override fun onDoubleClick(image: Image) {
         lifecycleScope.launch {
             val added = favoritesViewModel.addFavorite(image)
             val msg = if (added) "Added to favorites" else "Removed from favorites"
-            Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+
+            toaster.t(msg)
         }
     }
 

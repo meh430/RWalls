@@ -26,6 +26,7 @@ import com.example.redditwalls.misc.toPx
 import com.example.redditwalls.models.Image
 import com.example.redditwalls.models.PostInfo
 import com.example.redditwalls.models.Resource
+import com.example.redditwalls.viewmodels.SettingsViewModel
 import com.example.redditwalls.viewmodels.WallViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,6 +47,7 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
     private val wallArgs: WallActivityArgs by navArgs()
     private lateinit var binding: ActivityWallBinding
     private val wallViewModel: WallViewModel by viewModels()
+    private val settingsViewModel: SettingsViewModel by viewModels()
 
     @Inject
     lateinit var wallpaperHelper: WallpaperHelper
@@ -158,7 +160,12 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
 
         sheetBinding.saveWallpaper.setOnClickListener {
             getBitmap()?.let {
-                Utils.saveBitmap(it, sheetBinding.postTitle.text?.toString(), this)
+                Utils.saveBitmap(
+                    it,
+                    sheetBinding.postTitle.text?.toString(),
+                    this,
+                    settingsViewModel.toastEnabled()
+                )
             }
         }
 

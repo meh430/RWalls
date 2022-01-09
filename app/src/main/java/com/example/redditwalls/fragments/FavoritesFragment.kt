@@ -5,7 +5,6 @@ import android.util.TypedValue
 import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.example.redditwalls.R
@@ -105,11 +104,7 @@ class FavoritesFragment : BaseImagesFragment() {
                         if (randomImage != null) {
                             onClick(null, randomImage)
                         } else {
-                            Toast.makeText(
-                                requireContext(),
-                                "No favorites found :(",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            toaster.t("No favorites found :(")
                         }
                     }
                     DELETE_ALL -> deleteFavorites()

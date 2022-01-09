@@ -5,7 +5,6 @@ import  android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -34,6 +33,7 @@ import com.example.redditwalls.WallpaperLocation
 import com.example.redditwalls.datasources.RWApi
 import com.example.redditwalls.misc.RadioDialog
 import com.example.redditwalls.misc.RandomRefreshWorker
+import com.example.redditwalls.misc.Toaster
 import com.example.redditwalls.misc.fromId
 import com.example.redditwalls.repositories.ColumnCount
 import com.example.redditwalls.repositories.RefreshInterval
@@ -41,9 +41,13 @@ import com.example.redditwalls.repositories.SettingsItem
 import com.example.redditwalls.repositories.Theme
 import com.example.redditwalls.viewmodels.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingsComposeFragment : Fragment() {
+
+    @Inject
+    lateinit var toaster: Toaster
 
     private val settingsViewModel: SettingsViewModel by viewModels()
     private val darkColors = darkColors(
@@ -325,12 +329,11 @@ class SettingsComposeFragment : Fragment() {
             ExistingPeriodicWorkPolicy.REPLACE,
             work
         )
-        Toast.makeText(requireContext(), "Start refresh", Toast.LENGTH_SHORT).show()
+        toaster.t("Start refresh")
     }
 
     private fun cancelRandomRefreshWork() {
         val workManager = WorkManager.getInstance(requireContext().applicationContext)
         workManager.cancelUniqueWork(SettingsFragment.RANDOM_REFRESH_WORK)
-        Toast.makeText(requireContext(), "Cancels refresh", Toast.LENGTH_SHORT).show()
     }
 }
