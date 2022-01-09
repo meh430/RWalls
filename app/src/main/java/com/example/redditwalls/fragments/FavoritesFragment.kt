@@ -177,6 +177,6 @@ class FavoritesFragment : BaseImagesFragment() {
                 null,
                 null
             )
-        navigateToWall(view, toWall)
+        navigateToWall(view, toWall, true)
     }
 }

@@ -96,5 +96,17 @@
     <fragment
         android:id="@+id/navigation_settings_compose"
         android:name="com.example.redditwalls.fragments.SettingsComposeFragment"
-        android:label="Settings" />
+        android:label="Settings">
+        <action
+            android:id="@+id/action_navigation_settings_compose_to_historyFragment"
+            app:destination="@id/navigation_history" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_history"
+        android:name="com.example.redditwalls.fragments.HistoryFragment"
+        android:label="History">
+        <action
+            android:id="@+id/action_historyFragment_to_navigation_wallpaper"
+            app:destination="@id/navigation_wallpaper" />
+    </fragment>
 </navigation>

@@ -8,18 +8,23 @@ import com.example.redditwalls.misc.ImageLoader
 import com.example.redditwalls.misc.Toaster
 import com.example.redditwalls.misc.Utils
 import com.example.redditwalls.misc.fromId
+import com.example.redditwalls.models.History
+import com.example.redditwalls.models.Image
 import com.example.redditwalls.repositories.FavoriteImagesRepository
+import com.example.redditwalls.repositories.HistoryRepository
 import com.example.redditwalls.repositories.SettingsItem
 import com.example.redditwalls.repositories.SettingsRepository
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.util.*
 import javax.inject.Inject
 
 class WallpaperHelper @Inject constructor(
     private val imageLoader: ImageLoader,
     private val favoriteImagesRepository: FavoriteImagesRepository,
     private val settingsRepository: SettingsRepository,
+    private val historyRepository: HistoryRepository,
     private val toaster: Toaster
 ) {
 
@@ -28,10 +33,11 @@ class WallpaperHelper @Inject constructor(
         val image = favoriteImagesRepository.getRandomFavoriteImage()
 
         image?.let {
-            setImageLinkAsWallpaper(
+            setImageAsWallpaper(
                 context,
-                it.imageLink,
-                settingsRepository.getRandomRefreshLocation()
+                it,
+                settingsRepository.getRandomRefreshLocation(),
+                true
             )
         }
         if (image == null) {
@@ -39,23 +45,32 @@ class WallpaperHelper @Inject constructor(
         }
     }
 
-    suspend fun setImageLinkAsWallpaper(
+    suspend fun setImageAsWallpaper(
         context: Context,
-        imageLink: String,
-        location: WallpaperLocation
+        image: Image,
+        location: WallpaperLocation,
+        refresh: Boolean = false
     ) {
         try {
             toast("Setting wallpaper...")
             val resolution = Utils.getResolution(context)
             val wallpaper = imageLoader.loadImage(
                 context,
-                imageLink,
+                image.imageLink,
                 resolution
             )
 
             withContext(Dispatchers.Main) {
                 setBitmapAsWallpaper(context, wallpaper, location)
             }
+            historyRepository.insertHistory(
+                History(
+                    image = image,
+                    dateCreated = Date().time,
+                    manuallySet = !refresh,
+                    location = location.id
+                )
+            )
         } catch (e: Exception) {
             withContext(Dispatchers.Main) {
                 Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
@@ -63,8 +78,12 @@ class WallpaperHelper @Inject constructor(
         }
     }
 
-    fun setBitmapAsWallpaper(context: Context, bitmap: Bitmap, location: WallpaperLocation) {
-        try {
+    fun setBitmapAsWallpaper(
+        context: Context,
+        bitmap: Bitmap,
+        location: WallpaperLocation
+    ): Boolean {
+        return try {
             val wm = context.getSystemService(Context.WALLPAPER_SERVICE) as WallpaperManager
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 val which = when (location) {
@@ -78,8 +97,10 @@ class WallpaperHelper @Inject constructor(
             }
 
             toaster.t("Successfully set wallpaper")
+            true
         } catch (e: Exception) {
             Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+            false
         }
     }
 

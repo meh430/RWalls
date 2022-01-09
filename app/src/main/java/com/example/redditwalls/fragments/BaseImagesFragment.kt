@@ -43,7 +43,7 @@ abstract class BaseImagesFragment : Fragment(), ImageClickListener {
     override fun onLongClick(image: Image) {
         wallpaperHelper.showLocationPickerDialog(requireContext()) {
             lifecycleScope.launch {
-                wallpaperHelper.setImageLinkAsWallpaper(requireContext(), image.imageLink, it)
+                wallpaperHelper.setImageAsWallpaper(requireContext(), image, it)
             }
         }
     }
@@ -65,8 +65,12 @@ abstract class BaseImagesFragment : Fragment(), ImageClickListener {
         }
     }
 
-    fun navigateToWall(imageView: View?, action: NavDirections) {
-        if (imageView == null || !settingsViewModel.animateTransition) {
+    fun navigateToWall(
+        imageView: View?,
+        action: NavDirections,
+        turnOffAnimations: Boolean = false
+    ) {
+        if (imageView == null || !settingsViewModel.animateTransition || turnOffAnimations) {
             findNavController().navigate(action)
         } else {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(

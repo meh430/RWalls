@@ -198,7 +198,9 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
 
         wallpaperHelper.showLocationPickerDialog(this) { location ->
             getBitmap()?.let {
-                wallpaperHelper.setBitmapAsWallpaper(this, it, location)
+                if (wallpaperHelper.setBitmapAsWallpaper(this, it, location)) {
+                    wallViewModel.insertHistory(location)
+                }
             }
         }
     }

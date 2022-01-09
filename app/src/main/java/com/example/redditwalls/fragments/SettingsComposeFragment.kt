@@ -27,14 +27,12 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.work.*
 import com.example.redditwalls.R
 import com.example.redditwalls.WallpaperLocation
 import com.example.redditwalls.datasources.RWApi
-import com.example.redditwalls.misc.RadioDialog
-import com.example.redditwalls.misc.RandomRefreshWorker
-import com.example.redditwalls.misc.Toaster
-import com.example.redditwalls.misc.fromId
+import com.example.redditwalls.misc.*
 import com.example.redditwalls.repositories.ColumnCount
 import com.example.redditwalls.repositories.RefreshInterval
 import com.example.redditwalls.repositories.SettingsItem
@@ -45,6 +43,10 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingsComposeFragment : Fragment() {
+
+    companion object {
+        private const val REPO_LINK = "https://github.com/meh430/RedditWalls-rewrite"
+    }
 
     @Inject
     lateinit var toaster: Toaster
@@ -106,6 +108,16 @@ class SettingsComposeFragment : Fragment() {
                         Spacer(modifier = Modifier.height(sidesPadding))
                         RandomRefreshSetting()
                         Tips(tips)
+                        TB("History") {
+                            val toHistory =
+                                SettingsComposeFragmentDirections.actionNavigationSettingsComposeToHistoryFragment()
+                            findNavController().navigate(toHistory)
+                        }
+                        Spacer(modifier = Modifier.height(sidesPadding))
+                        TB("Github") {
+                            REPO_LINK.launchBrowser(requireActivity())
+                        }
+                        Spacer(modifier = Modifier.height(sidesPadding))
                     }
 
                 }
@@ -292,6 +304,13 @@ class SettingsComposeFragment : Fragment() {
         ) {
             DarkText(text)
             Switch(checked = isChecked, onCheckedChange = onClick)
+        }
+    }
+
+    @Composable
+    fun TB(label: String, onClick: () -> Unit) {
+        TextButton(onClick = onClick, modifier = Modifier.fillMaxWidth()) {
+            Text(label)
         }
     }
 
