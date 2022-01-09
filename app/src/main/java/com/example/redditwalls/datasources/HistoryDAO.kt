@@ -18,7 +18,7 @@ interface HistoryDAO {
     @Query("DELETE FROM History WHERE id = :id")
     suspend fun deleteHistoryItem(id: Long)
 
-    @Query("SELECT * FROM History ORDER BY dateCreated")
+    @Query("SELECT * FROM History ORDER BY dateCreated DESC")
     fun getHistoryFlow(): Flow<List<History>>
 
     @Query("SELECT * FROM History")

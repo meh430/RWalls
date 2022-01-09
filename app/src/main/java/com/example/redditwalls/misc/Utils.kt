@@ -20,6 +20,8 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.example.redditwalls.models.Image
 import com.example.redditwalls.models.Resolution
 import kotlinx.coroutines.Dispatchers
@@ -134,6 +136,12 @@ object Utils {
     fun getDate(): String {
         return SimpleDateFormat("MM-dd-yyyy 'at' HH:mm:ss", Locale.CANADA).format(Date())
     }
+
+    fun getGlideRequestOptions() = RequestOptions()
+        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+        .centerCrop()
+        .dontAnimate()
+        .dontTransform()
 
     @Suppress("Deprecation")
     fun saveBitmap(

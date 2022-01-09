@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_settings_compose
             )
         )
+        val noBottomBar = setOf(R.id.navigation_search_images, R.id.navigation_history)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
@@ -50,7 +51,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             binding.appbar.setExpanded(true, true)
-            binding.bottomNavView.isVisible = destination.id != R.id.navigation_search_images
+            binding.bottomNavView.isVisible = !noBottomBar.contains(destination.id)
 
             if (destination.id == R.id.navigation_search_images) {
                 val subreddit =
