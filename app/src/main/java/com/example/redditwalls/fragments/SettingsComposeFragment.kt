@@ -299,9 +299,6 @@ class SettingsComposeFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        if (!settingsViewModel.specifyHome()) {
-            settingsViewModel.setFeedAsDefault()
-        }
 
         if (settingsViewModel.randomRefreshEnabled() && settingsViewModel.randomRefreshSettingsChanged()) {
             settingsViewModel.location = settingsViewModel.getRandomRefreshLocation()

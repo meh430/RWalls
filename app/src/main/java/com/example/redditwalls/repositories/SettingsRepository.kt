@@ -27,7 +27,15 @@ class SettingsRepository @Inject constructor(private val prefs: SharedPreference
         private const val RANDOM_ORDER = "random_order" // order in which refresh occurs
         private const val REFRESH_INDEX = "refresh_index"
         private const val TOAST_ENABLED = "toast_enabled"
+        private const val FEED_URL = "feed_url"
     }
+
+    fun setFeedURL(feed: String) {
+        prefs.putValue(FEED_URL, feed)
+    }
+
+    fun getFeedURL() = prefs.getString(FEED_URL, FALLBACK_SUBREDDIT) ?: FALLBACK_SUBREDDIT
+
 
     fun setSpecifyHome(specifyHome: Boolean) {
         prefs.putValue(SPECIFY_HOME, specifyHome)
@@ -58,7 +66,7 @@ class SettingsRepository @Inject constructor(private val prefs: SharedPreference
     }
 
     fun getDefaultSub() =
-        prefs.getString(DEFAULT_SUB, "").takeIf { !it.isNullOrBlank() } ?: FALLBACK_SUBREDDIT
+        prefs.getString(DEFAULT_SUB, FALLBACK_SUBREDDIT) ?: FALLBACK_SUBREDDIT
 
     fun setLoadLowResPreviews(loadLowRes: Boolean) {
         prefs.putValue(LOW_RES_PREVIEWS, loadLowRes)

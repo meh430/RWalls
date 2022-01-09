@@ -15,7 +15,7 @@ class HomeFragment : BaseApiImagesFragment() {
     private val binding get() = _binding!!
 
     override val subreddit: String
-        get() = settingsViewModel.getDefaultSub()
+        get() = settingsViewModel.getCurrentHome()
 
     override fun scrollToTop() {
         binding.imageScroll.scrollToPosition(0)
@@ -54,8 +54,9 @@ class HomeFragment : BaseApiImagesFragment() {
 
     override fun onResume() {
         super.onResume()
-        if (imagesViewModel.subredditHasChanged(subreddit)) {
-            imagesViewModel.setSubreddit(subreddit)
+        val current = settingsViewModel.getCurrentHome()
+        if (imagesViewModel.subredditHasChanged(current)) {
+            imagesViewModel.setSubreddit(current)
         }
 
         // When column count is changed from settings, the recycler view needs to be re-rendered

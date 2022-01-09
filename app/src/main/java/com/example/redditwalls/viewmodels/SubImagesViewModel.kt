@@ -64,7 +64,9 @@ class SubImagesViewModel @Inject constructor(
         )
     }
 
-    fun subredditHasChanged(subreddit: String) = this.subreddit != subreddit
+    fun subredditHasChanged(subreddit: String): Boolean {
+        return this.subreddit != subreddit
+    }
 
     fun initialize(subreddit: String, sort: Sort = Sort.HOT, query: String = "") {
         this.subreddit = subreddit
@@ -76,8 +78,8 @@ class SubImagesViewModel @Inject constructor(
             query = query
         )
     }
-
 }
+
 
 data class ImagesParams(
     val subreddit: String = "",
