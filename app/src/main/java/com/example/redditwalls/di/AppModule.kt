@@ -24,6 +24,9 @@ object AppModule {
     fun provideFavoriteSubredditsDAO(db: RWDatabase) = db.getSubredditDAO()
 
     @Provides
+    fun provideHistoryDAO(db: RWDatabase) = db.getHistoryDAO()
+
+    @Provides
     fun providesPreferences(@ApplicationContext context: Context): SharedPreferences =
         context.getSharedPreferences(
             "settings",
