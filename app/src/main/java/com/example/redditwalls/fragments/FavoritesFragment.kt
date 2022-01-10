@@ -152,7 +152,7 @@ class FavoritesFragment : BaseImagesFragment() {
         }
     }
 
-    fun deleteFavorites() {
+    private fun deleteFavorites() {
         lifecycleScope.launch {
             val numFavs = favoritesViewModel.getFavoritesAsList().size
             MaterialAlertDialogBuilder(requireContext())

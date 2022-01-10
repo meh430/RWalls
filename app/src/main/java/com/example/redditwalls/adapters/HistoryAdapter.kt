@@ -47,7 +47,7 @@ class HistoryAdapter(private val loadLowRes: Boolean, private val onClick: (Hist
 
             val info =
                 StringBuilder("Set on ${WallpaperLocation.fromId(history.location).displayText}")
-            if (history.manuallySet) {
+            if (!history.manuallySet) {
                 info.append(" through refresh")
             }
 
