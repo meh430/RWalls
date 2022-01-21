@@ -29,4 +29,10 @@ interface FavoritesDAO {
 
     @Query("SELECT * FROM Favorites ORDER BY RANDOM() LIMIT 1")
     suspend fun getRandomFavoriteImage(): Image?
+
+    @Query("SELECT * FROM Favorites LIMIT :limit")
+    suspend fun getLimitedFavoriteImages(limit: Int): List<Image>
+
+    @Query("SELECT COUNT(id) FROM Favorites")
+    suspend fun getFavoriteImagesCount(): Int
 }

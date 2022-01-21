@@ -32,4 +32,13 @@ class FavoriteImagesRepository @Inject constructor(private val favoritesDAO: Fav
     suspend fun getRandomFavoriteImage() = withContext(Dispatchers.IO) {
         favoritesDAO.getRandomFavoriteImage()
     }
+
+    suspend fun getFavoriteImage(index: Int) = withContext(Dispatchers.IO) {
+        val favorites = favoritesDAO.getLimitedFavoriteImages(index + 1)
+        favorites[index]
+    }
+
+    suspend fun getFavoriteImagesCount() = withContext(Dispatchers.IO) {
+        favoritesDAO.getFavoriteImagesCount()
+    }
 }
