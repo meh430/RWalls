@@ -63,6 +63,11 @@ class WallpaperHelper @Inject constructor(
             withContext(Dispatchers.Main) {
                 setBitmapAsWallpaper(context, wallpaper, location)
             }
+        } catch (e: Exception) {
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+            }
+        } finally {
             historyRepository.insertHistory(
                 History(
                     image = image,
@@ -71,10 +76,6 @@ class WallpaperHelper @Inject constructor(
                     location = location.id
                 )
             )
-        } catch (e: Exception) {
-            withContext(Dispatchers.Main) {
-                Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
-            }
         }
     }
 
