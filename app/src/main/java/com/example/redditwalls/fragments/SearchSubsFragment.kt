@@ -18,6 +18,7 @@ import com.example.redditwalls.models.Resource.Status
 import com.example.redditwalls.models.Subreddit
 import com.example.redditwalls.viewmodels.SearchSubViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.FlowPreview
 
 
 @AndroidEntryPoint
@@ -48,13 +49,6 @@ class SearchSubsFragment : BaseSubsFragment() {
                 binding.searchBar.clearFocus()
                 (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
                     .hideSoftInputFromWindow(binding.searchBar.windowToken, 0)
-
-                val query = binding.searchBar.text.toString()
-
-                if (!showBanner(query)) {
-                    // Search with new query
-                    searchSubsViewModel.searchSubs(query)
-                }
                 true
             } else {
                 false
@@ -66,7 +60,9 @@ class SearchSubsFragment : BaseSubsFragment() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                showBanner(s.toString())
+                if (!showBanner(s.toString())) {
+                    searchSubsViewModel.setQuery(s.toString())
+                }
             }
         })
 
@@ -93,8 +89,9 @@ class SearchSubsFragment : BaseSubsFragment() {
         }
     }
 
+    @FlowPreview
     private fun observeSearchResults() {
-        searchSubsViewModel.searchResults.observe(viewLifecycleOwner) {
+        searchSubsViewModel.queriedResults.observe(viewLifecycleOwner) {
             binding.loading.isVisible = false
             binding.subScroll.isVisible = false
             binding.error.error.isVisible = false
