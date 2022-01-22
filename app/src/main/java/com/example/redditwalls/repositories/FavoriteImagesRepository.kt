@@ -34,8 +34,7 @@ class FavoriteImagesRepository @Inject constructor(private val favoritesDAO: Fav
     }
 
     suspend fun getFavoriteImage(index: Int) = withContext(Dispatchers.IO) {
-        val favorites = favoritesDAO.getLimitedFavoriteImages(index + 1)
-        favorites[index]
+        favoritesDAO.getLimitedFavoriteImages(index)
     }
 
     suspend fun getFavoriteImagesCount() = withContext(Dispatchers.IO) {

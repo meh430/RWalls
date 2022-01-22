@@ -53,7 +53,7 @@ class RefreshWallpaper : AppWidgetProvider() {
         }
 
         coroutineScope.launch {
-            wallpaperHelper.setRandomFavoriteWallpaper(context)
+            wallpaperHelper.refreshWallpaper(context)
         }
     }
 }

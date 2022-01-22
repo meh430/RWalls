@@ -52,7 +52,7 @@ class SettingsRepository @Inject constructor(private val prefs: SharedPreference
     fun randomOrder() = prefs.getBoolean(RANDOM_ORDER, true)
 
     fun setRefreshIndex(index: Int) {
-        prefs.putValue(REFRESH_INTERVAL, index)
+        prefs.putValue(REFRESH_INDEX, index)
     }
 
     fun getRefreshIndex() = prefs.getInt(REFRESH_INDEX, 0)

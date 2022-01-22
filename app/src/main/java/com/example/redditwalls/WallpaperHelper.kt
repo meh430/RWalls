@@ -28,6 +28,38 @@ class WallpaperHelper @Inject constructor(
     private val toaster: Toaster
 ) {
 
+    suspend fun refreshWallpaper(context: Context) {
+        val numFavs = favoriteImagesRepository.getFavoriteImagesCount()
+        val randomOrder = settingsRepository.randomOrder()
+        var image: Image? = null
+        if (numFavs == 0) {
+            toast("No favorites to choose from :(")
+            return
+        } else if (numFavs == 1 || randomOrder) {
+            image = favoriteImagesRepository.getRandomFavoriteImage()
+        } else if (!randomOrder) {
+            val index = settingsRepository.getRefreshIndex()
+            image = getNextWallpaper(index)
+        }
+
+        toast("Setting wallpaper...")
+        image?.let {
+            setImageAsWallpaper(
+                context,
+                it,
+                settingsRepository.getRandomRefreshLocation(),
+                true
+            )
+        }
+    }
+
+    private suspend fun getNextWallpaper(index: Int): Image {
+        val image = favoriteImagesRepository.getFavoriteImage(index)
+        return image?.also {
+            settingsRepository.setRefreshIndex(index + 1)
+        } ?: getNextWallpaper(0)
+    }
+
     suspend fun setRandomFavoriteWallpaper(context: Context) {
         toast("Setting wallpaper...")
         val image = favoriteImagesRepository.getRandomFavoriteImage()

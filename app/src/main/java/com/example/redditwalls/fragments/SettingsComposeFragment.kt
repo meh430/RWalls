@@ -210,6 +210,15 @@ class SettingsComposeFragment : Fragment() {
                 randomOrder = it
             }
             Spacer(modifier = Modifier.height(sidesPadding))
+
+            if (!randomOrder) {
+                TB("Reset refresh position") {
+                    settingsViewModel.setRefreshIndex(0)
+                    toaster.t("Successfully reset position")
+                }
+                Spacer(modifier = Modifier.height(sidesPadding))
+            }
+
             OptionSelector(
                 "Select refresh interval",
                 settingsViewModel.getRandomRefreshInterval(),

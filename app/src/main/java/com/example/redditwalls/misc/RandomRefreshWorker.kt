@@ -15,7 +15,7 @@ class RandomRefreshWorker @AssistedInject constructor(
     val wallpaperHelper: WallpaperHelper
 ) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result {
-        wallpaperHelper.setRandomFavoriteWallpaper(context)
+        wallpaperHelper.refreshWallpaper(context)
         return Result.success()
     }
 }
