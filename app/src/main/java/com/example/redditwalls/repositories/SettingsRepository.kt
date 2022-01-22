@@ -28,6 +28,8 @@ class SettingsRepository @Inject constructor(private val prefs: SharedPreference
         private const val REFRESH_INDEX = "refresh_index"
         private const val TOAST_ENABLED = "toast_enabled"
         private const val FEED_URL = "feed_url"
+
+        private const val PREV_RANDOM_REFRESH = "prev_random_refresh"
     }
 
     fun setFeedURL(feed: String) {
@@ -79,6 +81,12 @@ class SettingsRepository @Inject constructor(private val prefs: SharedPreference
     }
 
     fun randomRefreshEnabled() = prefs.getBoolean(RANDOM_REFRESH, false)
+
+    fun prevRandomRefreshEnabled() = prefs.getBoolean(PREV_RANDOM_REFRESH, false)
+
+    fun setPrevRandomRefreshEnabled(randomRefresh: Boolean) {
+        prefs.putValue(PREV_RANDOM_REFRESH, randomRefresh)
+    }
 
     fun getRandomRefreshLocation() =
         WallpaperLocation.fromId(prefs.getInt(RANDOM_REFRESH_LOCATION, 0))

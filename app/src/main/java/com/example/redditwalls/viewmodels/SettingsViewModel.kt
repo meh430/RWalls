@@ -60,7 +60,16 @@ class SettingsViewModel @Inject constructor(
         val savedLocation = getRandomRefreshLocation()
         val locationChanged = location != savedLocation
 
-        return refreshChanged || locationChanged
+        return refreshChanged || locationChanged || randomRefreshEnabledChanged()
+    }
+
+    fun randomRefreshEnabledChanged(): Boolean {
+        val curr = randomRefreshEnabled()
+        return (settingsRepository.prevRandomRefreshEnabled() != curr).also {
+            if (it) {
+                settingsRepository.setPrevRandomRefreshEnabled(curr)
+            }
+        }
     }
 
     fun setTheme(theme: Theme) {

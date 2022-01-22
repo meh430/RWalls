@@ -324,7 +324,7 @@ class SettingsComposeFragment : Fragment() {
             settingsViewModel.interval = settingsViewModel.getRandomRefreshInterval()
             val interval = settingsViewModel.getRandomRefreshInterval()
             startRandomRefreshWork(interval)
-        } else if (!settingsViewModel.randomRefreshEnabled()) {
+        } else if (!settingsViewModel.randomRefreshEnabled() && settingsViewModel.randomRefreshEnabledChanged()) {
             cancelRandomRefreshWork()
             settingsViewModel.clearRandomRefreshSettings()
         }
