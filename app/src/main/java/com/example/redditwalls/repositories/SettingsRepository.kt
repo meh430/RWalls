@@ -30,6 +30,7 @@ class SettingsRepository @Inject constructor(private val prefs: SharedPreference
         private const val FEED_URL = "feed_url"
 
         private const val PREV_RANDOM_REFRESH = "prev_random_refresh"
+        private const val ALLOW_NSFW = "allow_nsfw"
     }
 
     fun setFeedURL(feed: String) {
@@ -130,6 +131,12 @@ class SettingsRepository @Inject constructor(private val prefs: SharedPreference
     }
 
     fun getAnimationsEnabled() = prefs.getBoolean(ANIMATION_ENABLED, true)
+
+    fun setNsfwAllowed(allow: Boolean) {
+        prefs.putValue(ALLOW_NSFW, allow)
+    }
+
+    fun nsfwAllowed() = prefs.getBoolean(ALLOW_NSFW, false)
 }
 
 enum class Theme(override val id: Int, override val displayText: String, val mode: Int) :

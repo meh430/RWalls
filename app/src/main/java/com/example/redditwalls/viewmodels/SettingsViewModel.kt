@@ -120,4 +120,10 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun toastEnabled() = settingsRepository.toastEnabled()
+
+    fun setNsfwAllowed(allow: Boolean) {
+        settingsRepository.setNsfwAllowed(allow)
+    }
+
+    fun nsfwAllowed() = settingsRepository.nsfwAllowed()
 }

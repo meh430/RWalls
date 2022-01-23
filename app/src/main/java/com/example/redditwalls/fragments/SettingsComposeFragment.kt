@@ -147,6 +147,10 @@ class SettingsComposeFragment : Fragment() {
     @Composable
     fun Toggles() {
         Spacer(modifier = Modifier.height(sidesPadding))
+        TextSwitch("Allow NSFW results", settingsViewModel.nsfwAllowed()) {
+            settingsViewModel.setNsfwAllowed(it)
+        }
+        Spacer(modifier = Modifier.height(sidesPadding))
         TextSwitch("Load low resolution previews", settingsViewModel.loadLowResPreviews()) {
             settingsViewModel.setLoadLowResPreviews(it)
         }

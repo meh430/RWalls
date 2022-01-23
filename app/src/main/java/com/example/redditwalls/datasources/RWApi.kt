@@ -13,6 +13,7 @@ import com.example.redditwalls.models.Image
 import com.example.redditwalls.models.PostInfo
 import com.example.redditwalls.models.Subreddit
 import com.example.redditwalls.repositories.SettingsItem
+import com.example.redditwalls.repositories.SettingsRepository
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -25,7 +26,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import javax.inject.Inject
 
-class RWApi @Inject constructor() {
+class RWApi @Inject constructor(private val settingsRepository: SettingsRepository) {
 
     companion object {
         const val PAGE_SIZE = 25
@@ -125,7 +126,7 @@ class RWApi @Inject constructor() {
             append(trailing)
             append("&limit=25")
             append("&after=$after")
-            append("&include_over_18=true")
+            append("&include_over_18=${settingsRepository.nsfwAllowed()}")
             append("&$RAW_JSON_QUERY")
         }.toString()
     }
@@ -143,9 +144,15 @@ class RWApi @Inject constructor() {
         val childrenArr = json.getJSONArray("children")
 
         val images = mutableListOf<Image>()
-
+        val nsfwAllowed = settingsRepository.nsfwAllowed()
         childrenArr.forEach {
             val data = it.getJSONObject("data")
+
+            val over18 = data.getBoolean("over_18")
+
+            if (over18 && !nsfwAllowed) {
+                return@forEach
+            }
 
             val postLink = data.getString("permalink")
             val (previewLink, imageLink) = try {
