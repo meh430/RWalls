@@ -10,12 +10,15 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.redditwalls.databinding.FragmentSearchSubsBinding
 import com.example.redditwalls.datasources.RWApi
 import com.example.redditwalls.models.Resource.Status
 import com.example.redditwalls.models.Subreddit
+import com.example.redditwalls.viewmodels.BottomNavDestinations
+import com.example.redditwalls.viewmodels.MainViewModel
 import com.example.redditwalls.viewmodels.SearchSubViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
@@ -25,6 +28,7 @@ import kotlinx.coroutines.FlowPreview
 class SearchSubsFragment : BaseSubsFragment() {
 
     private val searchSubsViewModel: SearchSubViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     private var _binding: FragmentSearchSubsBinding? = null
     private val binding get() = _binding!!
@@ -79,6 +83,14 @@ class SearchSubsFragment : BaseSubsFragment() {
 
         binding.linkBanner.no.setOnClickListener {
             binding.linkBanner.linkBanner.isVisible = false
+        }
+
+        mainViewModel.navIconClicked.observe(viewLifecycleOwner) {
+            it?.takeIf { it.first == BottomNavDestinations.SEARCH }?.let {
+                binding.searchBar.requestFocus()
+                (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+                    .showSoftInput(binding.searchBar, InputMethodManager.SHOW_IMPLICIT)
+            }
         }
     }
 

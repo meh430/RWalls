@@ -6,6 +6,7 @@ import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.redditwalls.R
 import com.example.redditwalls.adapters.FavoritesAdapter
@@ -13,6 +14,8 @@ import com.example.redditwalls.databinding.FragmentFavoritesBinding
 import com.example.redditwalls.misc.ImageLoader
 import com.example.redditwalls.misc.Utils
 import com.example.redditwalls.models.Image
+import com.example.redditwalls.viewmodels.BottomNavDestinations
+import com.example.redditwalls.viewmodels.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -42,6 +45,8 @@ class FavoritesFragment : BaseImagesFragment() {
             this
         )
     }
+
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -148,6 +153,12 @@ class FavoritesFragment : BaseImagesFragment() {
 
             if (hasFavs) {
                 favoritesAdapter.submitList(it)
+            }
+        }
+
+        mainViewModel.navIconClicked.observe(viewLifecycleOwner) {
+            it?.takeIf { it.first == BottomNavDestinations.FAVORITES }?.let {
+                binding.imageScroll.smoothScrollToPosition(0)
             }
         }
     }

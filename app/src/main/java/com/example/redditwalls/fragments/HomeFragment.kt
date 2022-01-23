@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import com.example.redditwalls.databinding.FragmentHomeBinding
 import com.example.redditwalls.models.Image
+import com.example.redditwalls.viewmodels.BottomNavDestinations
+import com.example.redditwalls.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -13,6 +16,8 @@ class HomeFragment : BaseApiImagesFragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     override val subreddit: String
         get() = settingsViewModel.getCurrentHome()
@@ -44,6 +49,11 @@ class HomeFragment : BaseApiImagesFragment() {
             binding.error,
             binding.empty
         )
+        mainViewModel.navIconClicked.observe(viewLifecycleOwner) {
+            it?.takeIf { it.first == BottomNavDestinations.HOME }?.let {
+                binding.imageScroll.smoothScrollToPosition(0)
+            }
+        }
     }
 
     override fun onClick(view: View?, image: Image) {

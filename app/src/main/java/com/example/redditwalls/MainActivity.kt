@@ -1,6 +1,7 @@
 package com.example.redditwalls
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.navigation.findNavController
@@ -9,6 +10,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.redditwalls.databinding.ActivityMainBinding
 import com.example.redditwalls.repositories.SettingsRepository
+import com.example.redditwalls.viewmodels.MainViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -16,6 +18,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    private val mainViewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +63,10 @@ class MainActivity : AppCompatActivity() {
 
                 setToolbarTitle(subreddit)
             }
+        }
+
+        binding.bottomNavView.setOnItemReselectedListener {
+            mainViewModel.onBottomNavItemClicked(it.itemId)
         }
     }
 

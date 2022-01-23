@@ -5,9 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.redditwalls.databinding.FragmentFavoriteSubsBinding
 import com.example.redditwalls.models.Subreddit
+import com.example.redditwalls.viewmodels.BottomNavDestinations
+import com.example.redditwalls.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -15,6 +18,8 @@ class FavoriteSubsFragment : BaseSubsFragment() {
 
     private var _binding: FragmentFavoriteSubsBinding? = null
     private val binding get() = _binding!!
+
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,6 +35,11 @@ class FavoriteSubsFragment : BaseSubsFragment() {
 
         initRecyclerView(binding.subScroll)
         observeFavorites()
+        mainViewModel.navIconClicked.observe(viewLifecycleOwner) {
+            it?.takeIf { it.first == BottomNavDestinations.SAVED_SUBS }?.let {
+                binding.subScroll.smoothScrollToPosition(0)
+            }
+        }
     }
 
     private fun observeFavorites() {
