@@ -81,10 +81,13 @@ class WallViewModel @Inject constructor(
 
     fun insertHistory(location: WallpaperLocation) {
         viewModelScope.launch {
-            currentImage.value?.data?.let {
+            val image = currentImage.value?.data
+            val info = postInfo.value?.data
+
+            if (image != null && info != null) {
                 historyRepository.insertHistory(
                     History(
-                        image = it,
+                        image = image.copy(subreddit = info.subreddit),
                         dateCreated = Date().time,
                         true,
                         location = location.id

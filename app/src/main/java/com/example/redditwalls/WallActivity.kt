@@ -194,6 +194,9 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
     private fun setWallpaper() {
         if (isFinishing) {
             return
+        } else if (wallViewModel.postInfo.value?.data == null) {
+            Toast.makeText(this, "Please wait", Toast.LENGTH_SHORT).show()
+            return
         }
 
         wallpaperHelper.showLocationPickerDialog(this) { location ->
