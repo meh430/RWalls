@@ -24,11 +24,13 @@ class HistoryViewModel @Inject constructor(private val historyRepository: Histor
         }
     }
 
-    suspend fun deleteHistoryItem(id: Long) {
+    fun deleteHistoryItem(id: Long) {
         viewModelScope.launch {
             historyRepository.deleteHistoryItem(id)
         }
     }
+
+    suspend fun getHistoryCount() = historyRepository.getHistoryCount()
 
     fun getHistory() =
         historyRepository.getHistoryFlow().asLiveData(viewModelScope.coroutineContext)

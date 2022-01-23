@@ -25,4 +25,6 @@ class HistoryRepository @Inject constructor(private val historyDAO: HistoryDAO) 
     suspend fun getHistory(): List<History> = withContext(Dispatchers.IO) {
         historyDAO.getHistory()
     }
+
+    suspend fun getHistoryCount() = withContext(Dispatchers.IO) { historyDAO.getHistoryCount() }
 }

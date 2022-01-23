@@ -37,4 +37,6 @@ class FavoritesViewModel @Inject constructor(
 
         return !exists
     }
+
+    suspend fun getFavoritesCount() = favoriteImagesRepository.getFavoriteImagesCount()
 }

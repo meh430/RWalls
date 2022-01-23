@@ -23,4 +23,7 @@ interface HistoryDAO {
 
     @Query("SELECT * FROM History")
     suspend fun getHistory(): List<History>
+
+    @Query("SELECT COUNT(id) FROM History")
+    suspend fun getHistoryCount(): Int
 }
