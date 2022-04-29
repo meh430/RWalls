@@ -26,4 +26,7 @@ interface SubredditsDAO {
 
     @Query("SELECT EXISTS(SELECT * FROM FavoriteSubreddits WHERE name = :name)")
     suspend fun isSaved(name: String): Boolean
+
+    @Query("SELECT COUNT(id) FROM FavoriteSubreddits")
+    suspend fun getFavoriteSubsCount(): Int
 }

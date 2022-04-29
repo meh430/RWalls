@@ -39,6 +39,15 @@ class FavoriteSubsViewModel @Inject constructor(
         }
     }
 
+    fun deleteFavoriteSubs() {
+        viewModelScope.launch {
+            subsRepository.deleteAllFavorites()
+            settingsRepository.setFeedURL(null)
+        }
+    }
+
+    suspend fun getFavoriteSubsCount() = subsRepository.getFavoriteSubsCount()
+
     private suspend fun buildFeedURL() = subsRepository.getFavoriteSubreddits().let { favSubs ->
         if (favSubs.isNotEmpty()) {
             "r/" + favSubs.joinToString(separator = "+") { it.name.removeSubPrefix() }

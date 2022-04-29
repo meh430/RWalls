@@ -1,17 +1,19 @@
 package com.example.redditwalls.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.redditwalls.R
 import com.example.redditwalls.databinding.FragmentFavoriteSubsBinding
 import com.example.redditwalls.models.Subreddit
 import com.example.redditwalls.viewmodels.BottomNavDestinations
 import com.example.redditwalls.viewmodels.MainViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class FavoriteSubsFragment : BaseSubsFragment() {
@@ -28,6 +30,23 @@ class FavoriteSubsFragment : BaseSubsFragment() {
     ): View {
         _binding = FragmentFavoriteSubsBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.history_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.delete -> showDeleteSubsDialog().let { true }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,5 +85,18 @@ class FavoriteSubsFragment : BaseSubsFragment() {
             FavoriteSubsFragmentDirections.actionNavigationSavedToSearchImagesFragment(subreddit.name)
 
         findNavController().navigate(toImages)
+    }
+
+    private fun showDeleteSubsDialog() {
+        lifecycleScope.launch {
+            val count = favoriteSubsViewModel.getFavoriteSubsCount()
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Are you sure?")
+                .setMessage("Do you want to delete $count saved subreddits?")
+                .setPositiveButton("Yes") { _, _ ->
+                    favoriteSubsViewModel.deleteFavoriteSubs()
+                }
+                .setNegativeButton("No") { _, _ -> }.show()
+        }
     }
 }

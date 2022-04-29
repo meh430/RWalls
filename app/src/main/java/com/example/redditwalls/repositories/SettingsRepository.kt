@@ -34,8 +34,8 @@ class SettingsRepository @Inject constructor(private val prefs: SharedPreference
         private const val SWIPE_ENABLED = "swipe_enabled"
     }
 
-    fun setFeedURL(feed: String) {
-        prefs.putValue(FEED_URL, feed)
+    fun setFeedURL(feed: String?) {
+        prefs.putValue(FEED_URL, feed ?: FALLBACK_SUBREDDIT)
     }
 
     fun getFeedURL() = prefs.getString(FEED_URL, FALLBACK_SUBREDDIT) ?: FALLBACK_SUBREDDIT

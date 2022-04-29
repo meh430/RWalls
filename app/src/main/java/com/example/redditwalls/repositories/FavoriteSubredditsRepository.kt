@@ -28,4 +28,8 @@ class FavoriteSubredditsRepository @Inject constructor(private val subredditsDAO
 
     suspend fun isSaved(name: String) = subredditsDAO.isSaved(name)
 
+    suspend fun getFavoriteSubsCount() = withContext(Dispatchers.IO) {
+        subredditsDAO.getFavoriteSubsCount()
+    }
+
 }
