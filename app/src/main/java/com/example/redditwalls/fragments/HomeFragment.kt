@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.example.redditwalls.databinding.FragmentHomeBinding
 import com.example.redditwalls.models.Image
@@ -23,7 +24,11 @@ class HomeFragment : BaseApiImagesFragment() {
         get() = settingsViewModel.getCurrentHome()
 
     override fun scrollToTop() {
-        binding.imageScroll.scrollToPosition(0)
+        if (enableSwipe()) {
+            binding.imagePager.currentItem = 0
+        } else {
+            binding.imageScroll.scrollToPosition(0)
+        }
     }
 
     override fun onCreateView(
@@ -37,22 +42,32 @@ class HomeFragment : BaseApiImagesFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initRecyclerView(binding.imageScroll)
+        initImageViewer(binding.imageScroll, binding.imagePager)
+        if (!enableSwipe()) {
+            binding.swipeRefreshRecycler.isVisible = true
+        }
         observeImages()
-        binding.swipeRefresh.setOnRefreshListener {
+        binding.swipeRefreshRecycler.setOnRefreshListener {
             imagesAdapter.refresh()
-            binding.swipeRefresh.isRefreshing = false
+            scrollToTop()
+            binding.swipeRefreshRecycler.isRefreshing = false
         }
         addLoadStateListener(
-            binding.imageScroll,
+            if (enableSwipe()) binding.imagePager else binding.imageScroll,
             binding.loading,
             binding.error,
             binding.empty
         )
         mainViewModel.navIconClicked.observe(viewLifecycleOwner) {
-            it?.takeIf { it.first == BottomNavDestinations.HOME }?.let {
-                binding.imageScroll.smoothScrollToPosition(0)
-            }
+            it?.takeIf { it.first == BottomNavDestinations.HOME }
+                ?.let {
+                    if (enableSwipe()) {
+                        imagesAdapter.refresh()
+                        binding.imagePager.currentItem = 0
+                    } else {
+                        binding.imageScroll.smoothScrollToPosition(0)
+                    }
+                }
         }
     }
 
@@ -64,13 +79,14 @@ class HomeFragment : BaseApiImagesFragment() {
 
     override fun onResume() {
         super.onResume()
+
         val current = settingsViewModel.getCurrentHome()
         if (imagesViewModel.subredditHasChanged(current)) {
             imagesViewModel.setSubreddit(current)
         }
 
         // When column count is changed from settings, the recycler view needs to be re-rendered
-        settingsViewModel.getColumnCount().also {
+        settingsViewModel.getColumnCount().takeIf { !enableSwipe() }?.also {
             if (it != imagesViewModel.columnCount) {
                 imagesViewModel.columnCount = it
                 imagesAdapter.setCount(it)
@@ -83,4 +99,10 @@ class HomeFragment : BaseApiImagesFragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    override fun onClickInfo(image: Image) {
+        onClick(image = image, view = null)
+    }
+
+    override fun enableSwipe(): Boolean = settingsViewModel.swipeEnabled()
 }

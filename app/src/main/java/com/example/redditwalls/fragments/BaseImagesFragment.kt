@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.redditwalls.WallpaperHelper
-import com.example.redditwalls.adapters.ImageClickListener
+import com.example.redditwalls.adapters.ImagePageListener
 import com.example.redditwalls.misc.Toaster
 import com.example.redditwalls.models.Image
 import com.example.redditwalls.repositories.ColumnCount
@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-abstract class BaseImagesFragment : Fragment(), ImageClickListener {
+abstract class BaseImagesFragment : Fragment(), ImagePageListener {
     protected val favoritesViewModel: FavoritesViewModel by viewModels()
     protected val settingsViewModel: SettingsViewModel by viewModels()
 
@@ -36,7 +36,7 @@ abstract class BaseImagesFragment : Fragment(), ImageClickListener {
             val added = favoritesViewModel.addFavorite(image)
             val msg = if (added) "Added to favorites" else "Removed from favorites"
 
-            toaster.t(msg)
+            toaster.t(msg, force = true)
         }
     }
 
@@ -47,6 +47,14 @@ abstract class BaseImagesFragment : Fragment(), ImageClickListener {
             }
         }
     }
+
+    override fun onSetWallpaper(image: Image) {
+        onLongClick(image)
+    }
+
+    override fun onClickInfo(image: Image) {}
+
+    override fun onLike(image: Image) {}
 
     fun getLayoutManager() = settingsViewModel.getColumnCount().let {
         if (it == ColumnCount.ONE) {

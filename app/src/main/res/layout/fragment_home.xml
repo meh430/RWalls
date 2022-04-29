@@ -18,10 +18,19 @@
             android:indeterminate="true"
             android:visibility="gone" />
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefresh"
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/imagePager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true" />
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:visibility="gone">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/imageScroll"
@@ -29,8 +38,8 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:paddingTop="2dp"
                 android:paddingStart="2dp"
+                android:paddingTop="2dp"
                 android:paddingEnd="2dp" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

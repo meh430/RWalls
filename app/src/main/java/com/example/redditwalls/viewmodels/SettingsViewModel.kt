@@ -126,4 +126,10 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun nsfwAllowed() = settingsRepository.nsfwAllowed()
+
+    fun setSwipeEnabled(swipeEnabled: Boolean) {
+        settingsRepository.setSwipeEnabled(swipeEnabled)
+    }
+
+    fun swipeEnabled() = settingsRepository.swipeEnabled()
 }

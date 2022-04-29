@@ -7,16 +7,29 @@ import com.example.redditwalls.datasources.ImagesPagingDataSource
 import com.example.redditwalls.datasources.RWApi
 import javax.inject.Inject
 
-class RWRepository @Inject constructor(private val api: RWApi) {
+class RWRepository @Inject constructor(
+    private val api: RWApi
+) {
 
-    fun getImages(subreddit: String, query: String = "", sort: RWApi.Sort) =
+    fun getImages(
+        subreddit: String,
+        query: String = "",
+        sort: RWApi.Sort
+    ) =
         Pager(
             config = PagingConfig(
                 pageSize = RWApi.PAGE_SIZE,
                 prefetchDistance = 10,
                 initialLoadSize = RWApi.PAGE_SIZE
             ),
-            pagingSourceFactory = { ImagesPagingDataSource(api, subreddit, query, sort) }
+            pagingSourceFactory = {
+                ImagesPagingDataSource(
+                    api = api,
+                    subreddit = subreddit,
+                    query = query,
+                    sort = sort
+                )
+            }
         ).liveData
 
     suspend fun searchSubs(query: String) = api.searchSubs(query)

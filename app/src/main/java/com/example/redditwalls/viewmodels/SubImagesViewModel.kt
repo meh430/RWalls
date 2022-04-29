@@ -26,9 +26,6 @@ class SubImagesViewModel @Inject constructor(
         rwRepository.getImages(it.subreddit, it.query, it.sort)
     }.cachedIn(viewModelScope)
 
-    fun getImages(subreddit: String, query: String = "", sort: Sort = Sort.HOT) =
-        rwRepository.getImages(subreddit, query, sort).cachedIn(viewModelScope)
-
     fun setSort(sort: Sort) {
         currentSort = sort
         params.value = ImagesParams(
@@ -68,7 +65,11 @@ class SubImagesViewModel @Inject constructor(
         return this.subreddit != subreddit
     }
 
-    fun initialize(subreddit: String, sort: Sort = Sort.HOT, query: String = "") {
+    fun initialize(
+        subreddit: String,
+        sort: Sort = Sort.HOT,
+        query: String = ""
+    ) {
         this.subreddit = subreddit
         this.currentSort = sort
         this.query = query

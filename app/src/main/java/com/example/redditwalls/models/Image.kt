@@ -2,6 +2,7 @@ package com.example.redditwalls.models
 
 import android.os.Parcelable
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
@@ -9,9 +10,10 @@ import kotlinx.parcelize.Parcelize
 @Entity(tableName = "Favorites")
 data class Image(
     @PrimaryKey(autoGenerate = true)
-    val id: Long = 0L,
-    val imageLink: String = "",
-    val postLink: String = "",
-    val subreddit: String = "",
-    val previewLink: String = ""
+    var id: Long = 0L,
+    var imageLink: String = "",
+    var postLink: String = "",
+    var subreddit: String = "",
+    var previewLink: String = "",
+    @Ignore var liked: Boolean = false
 ) : Parcelable
