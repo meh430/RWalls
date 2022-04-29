@@ -1,8 +1,11 @@
 package com.example.redditwalls.misc
 
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -22,6 +25,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.example.redditwalls.MainActivity
 import com.example.redditwalls.models.Image
 import com.example.redditwalls.models.Resolution
 import kotlinx.coroutines.Dispatchers
@@ -254,4 +258,14 @@ object Utils {
             val statusBarHeightId = resources.getIdentifier("status_bar_height", "dimen", "android")
             resources.getDimensionPixelSize(statusBarHeightId)
         }
+
+    fun triggerRebirth(context: Context) {
+        val intent = Intent(context, MainActivity::class.java)
+        intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
+        if (context is Activity) {
+            context.finish()
+        }
+        Runtime.getRuntime().exit(0)
+    }
 }

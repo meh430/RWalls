@@ -38,6 +38,7 @@ import com.example.redditwalls.repositories.RefreshInterval
 import com.example.redditwalls.repositories.SettingsItem
 import com.example.redditwalls.repositories.Theme
 import com.example.redditwalls.viewmodels.SettingsViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -166,15 +167,44 @@ class SettingsComposeFragment : Fragment() {
 
     @Composable
     fun ColumnCountSlider() {
+        var swipeEnabled by rememberSaveable { mutableStateOf(settingsViewModel.swipeEnabled()) }
         var count by rememberSaveable { mutableStateOf(settingsViewModel.getColumnCount().count.toFloat()) }
-        DarkText(text = "Set column count: ${count.toInt()} columns")
-        Slider(
-            value = count,
-            onValueChange = { count = it },
-            onValueChangeFinished = { settingsViewModel.setColumnCount(ColumnCount.fromId(count.toInt() - 1)) },
-            steps = 2,
-            valueRange = 1f..4f,
-        )
+
+        val onClick: (Boolean) -> Unit = { value: Boolean ->
+            swipeEnabled = value
+            settingsViewModel.setSwipeEnabled(value)
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Restart app?")
+                .setMessage("Changing feed style requires app restart")
+                .setPositiveButton("Yes") { _, _ ->
+                    Utils.triggerRebirth(requireContext())
+                }
+                .setNegativeButton("No") { _, _ ->
+                    swipeEnabled = !value
+                    settingsViewModel.setSwipeEnabled(!value)
+                }.show()
+        }
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .clickable { onClick(!swipeEnabled) }
+                .fillMaxWidth()
+        ) {
+            DarkText("Enable swipeable home feed")
+            Switch(checked = swipeEnabled, onCheckedChange = onClick)
+        }
+
+        if (!swipeEnabled) {
+            Spacer(modifier = Modifier.height(sidesPadding))
+            DarkText(text = "Set column count: ${count.toInt()} columns")
+            Slider(
+                value = count,
+                onValueChange = { count = it },
+                onValueChangeFinished = { settingsViewModel.setColumnCount(ColumnCount.fromId(count.toInt() - 1)) },
+                steps = 2,
+                valueRange = 1f..4f,
+            )
+        }
     }
 
     @Composable

@@ -14,6 +14,7 @@
         <entry key="app/src/main/res/drawable/grapple.xml" value="0.296875" />
         <entry key="app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/drawable/ic_download.xml" value="0.15260416666666668" />
+        <entry key="app/src/main/res/drawable/ic_favorite.xml" value="0.18" />
         <entry key="app/src/main/res/drawable/ic_favorite_filled.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/drawable/ic_info.xml" value="0.296875" />
@@ -22,10 +23,12 @@
         <entry key="app/src/main/res/drawable/ic_search.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/drawable/ic_settings.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/drawable/ic_sort.xml" value="0.28229166666666666" />
+        <entry key="app/src/main/res/drawable/ic_wallpaper.xml" value="0.18" />
         <entry key="app/src/main/res/drawable/rounded_icon.xml" value="0.296875" />
         <entry key="app/src/main/res/drawable/rounded_top.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/drawable/search_focus.xml" value="0.296875" />
         <entry key="app/src/main/res/drawable/up.xml" value="0.1625" />
+        <entry key="app/src/main/res/drawable/up2.xml" value="0.2445" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_wall.xml" value="0.25815217391304346" />
         <entry key="app/src/main/res/layout/dialog_radiobutton.xml" value="0.37447916666666664" />
@@ -43,6 +46,7 @@
         <entry key="app/src/main/res/layout/fragment_sub.xml" value="0.1" />
         <entry key="app/src/main/res/layout/history_item.xml" value="0.2667572463768116" />
         <entry key="app/src/main/res/layout/image_item.xml" value="0.2608695652173913" />
+        <entry key="app/src/main/res/layout/image_page_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/link_banner.xml" value="0.37447916666666664" />
         <entry key="app/src/main/res/layout/old_activity.xml" value="0.25" />
         <entry key="app/src/main/res/layout/refresh_wallpaper.xml" value="0.2554347826086957" />

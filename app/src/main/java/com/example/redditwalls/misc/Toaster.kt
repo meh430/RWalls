@@ -10,8 +10,8 @@ class Toaster @Inject constructor(
     @ApplicationContext val context: Context,
     private val settingsRepository: SettingsRepository
 ) {
-    fun t(message: String) {
-        if (settingsRepository.toastEnabled()) {
+    fun t(message: String, force: Boolean = false) {
+        if (force || settingsRepository.toastEnabled()) {
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
     }

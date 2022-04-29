@@ -147,6 +147,7 @@ class RWApi @Inject constructor(private val settingsRepository: SettingsReposito
         val nsfwAllowed = settingsRepository.nsfwAllowed()
         childrenArr.forEach {
             val data = it.getJSONObject("data")
+            val sub = data.getString("subreddit")
 
             val over18 = data.getBoolean("over_18")
 
@@ -168,7 +169,7 @@ class RWApi @Inject constructor(private val settingsRepository: SettingsReposito
             val image = Image(
                 imageLink = imageLink,
                 postLink = "https://m.reddit.com$postLink",
-                subreddit = subreddit,
+                subreddit = sub,
                 previewLink = previewLink
             )
             images.add(image)
