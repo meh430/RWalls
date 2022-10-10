@@ -36,6 +36,4 @@
     <string name="appwidget_text">Refresh Wallpaper</string>
     <string name="add_widget">Add widget</string>
     <string name="app_widget_description">This widget will refresh the wallpaper if clicked</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

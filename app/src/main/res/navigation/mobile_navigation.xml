@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.redditwalls.fragments.HomeFragment"
+        android:name="mp.redditwalls.fragments.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home">
         <action
@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/navigation_favorites"
-        android:name="com.example.redditwalls.fragments.FavoritesFragment"
+        android:name="mp.redditwalls.fragments.FavoritesFragment"
         android:label="Favorites"
         tools:layout="@layout/fragment_favorites">
 
@@ -29,10 +29,10 @@
 
     <activity
         android:id="@+id/navigation_wallpaper"
-        android:name="com.example.redditwalls.WallActivity">
+        android:name="mp.redditwalls.WallActivity">
         <argument
             android:name="image"
-            app:argType="com.example.redditwalls.models.Image"
+            app:argType="mp.redditwalls.models.Image"
             app:nullable="true" />
         <argument
             android:name="postId"
@@ -58,7 +58,7 @@
 
     <fragment
         android:id="@+id/navigation_search"
-        android:name="com.example.redditwalls.fragments.SearchSubsFragment"
+        android:name="mp.redditwalls.fragments.SearchSubsFragment"
         android:label="Search">
         <action
             android:id="@+id/action_navigation_search_to_searchImagesFragment"
@@ -70,7 +70,7 @@
 
     <fragment
         android:id="@+id/navigation_saved"
-        android:name="com.example.redditwalls.fragments.FavoriteSubsFragment"
+        android:name="mp.redditwalls.fragments.FavoriteSubsFragment"
         android:label="Saved">
         <action
             android:id="@+id/action_navigation_saved_to_searchImagesFragment"
@@ -78,7 +78,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_search_images"
-        android:name="com.example.redditwalls.fragments.SearchImagesFragment"
+        android:name="mp.redditwalls.fragments.SearchImagesFragment"
         android:label="Search Images">
         <action
             android:id="@+id/action_searchImagesFragment_to_navigation_wallpaper"
@@ -90,12 +90,12 @@
 
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="com.example.redditwalls.fragments.SettingsFragment"
+        android:name="mp.redditwalls.fragments.SettingsFragment"
         android:label="Settings" />
 
     <fragment
         android:id="@+id/navigation_settings_compose"
-        android:name="com.example.redditwalls.fragments.SettingsComposeFragment"
+        android:name="mp.redditwalls.fragments.SettingsComposeFragment"
         android:label="Settings">
         <action
             android:id="@+id/action_navigation_settings_compose_to_historyFragment"
@@ -103,7 +103,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_history"
-        android:name="com.example.redditwalls.fragments.HistoryFragment"
+        android:name="mp.redditwalls.fragments.HistoryFragment"
         android:label="History">
         <action
             android:id="@+id/action_historyFragment_to_navigation_wallpaper"

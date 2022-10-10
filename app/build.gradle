@@ -8,12 +8,12 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.redditwalls"
+        applicationId "mp.redditwalls"
         minSdk 23
-        targetSdk 31
+        targetSdk 33
         versionCode 2
         versionName "1.0"
 
@@ -39,21 +39,24 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.0.5'
+        kotlinCompilerExtensionVersion '1.3.2'
     }
+    namespace 'mp.redditwalls'
 }
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.0'
-    implementation 'com.google.android.material:material:1.6.0-alpha01'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
+    implementation project(":network")
+
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
-    def nav_version = "2.4.0-rc01"
+    def nav_version = "2.5.2"
 
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
@@ -64,13 +67,13 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     // hilt
-    implementation 'com.google.dagger:hilt-android:2.38.1'
-    kapt 'com.google.dagger:hilt-compiler:2.38.1'
+    implementation 'com.google.dagger:hilt-android:2.42'
+    kapt 'com.google.dagger:hilt-compiler:2.42'
 
     implementation 'com.jakewharton.timber:timber:5.0.1'
 
     // room
-    def room_version = "2.4.0"
+    def room_version = "2.4.3"
 
     implementation("androidx.room:room-runtime:$room_version") {
         exclude(group: 'org.xerial')
@@ -81,9 +84,9 @@ dependencies {
     implementation("androidx.room:room-ktx:$room_version") {
         exclude(group: 'org.xerial')
     }
-    implementation 'org.xerial:sqlite-jdbc:3.34.0'
+    implementation 'org.xerial:sqlite-jdbc:3.36.0'
 
-    def paging_version = "3.1.0"
+    def paging_version = "3.1.1"
     implementation("androidx.paging:paging-runtime-ktx:$paging_version")
 
     implementation 'com.github.bumptech.glide:glide:4.12.0'
@@ -97,15 +100,15 @@ dependencies {
     kapt 'androidx.hilt:hilt-compiler:1.0.0'
 
     // Integration with activities
-    implementation 'androidx.activity:activity-compose:1.4.0'
+    implementation 'androidx.activity:activity-compose:1.6.0'
     // Compose Material Design
-    implementation 'androidx.compose.material:material:1.0.5'
+    implementation 'androidx.compose.material:material:1.2.1'
     // Animations
-    implementation 'androidx.compose.animation:animation:1.0.5'
+    implementation 'androidx.compose.animation:animation:1.2.1'
 
     // Integration with ViewModels
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1'
     // UI Tests
-    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.0.5'
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.2.1'
 
 }

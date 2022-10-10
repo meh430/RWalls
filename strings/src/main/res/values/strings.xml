@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="rwalls">RWalls</string>
+
+    <string name="sort_hot">Hot</string>
+    <string name="sort_new">New</string>
+    <string name="sort_top_hour">Top Hour</string>
+    <string name="sort_top_day">Top Day</string>
+    <string name="sort_top_week">Top Week</string>
+    <string name="sort_top_month">Top Month</string>
+    <string name="sort_top_year">Top Year</string>
+    <string name="sort_top_all">Top All</string>
+
+    <string name="low_quality">Low Quality</string>
+    <string name="medium_quality">Medium Quality</string>
+    <string name="high_quality">High Quality</string>
+
+    <string name="wifi_only">Wi-Fi Only</string>
+    <string name="data_only">Data Only</string>
+    <string name="wifi_and_data">Wi-Fi and Data</string>
+
+    <string name="dark_theme">Dark Theme</string>
+    <string name="light_theme">Light Theme</string>
+    <string name="system_theme">System Theme</string>
+
+    <string name="fifteen_minutes">Every Fifteen Minutes</string>
+    <string name="thirty_minutes">Every Thirty Minutes</string>
+    <string name="one_hour">Every Hour</string>
+    <string name="six_hours">Every Six Hours</string>
+    <string name="twelve_hours">Every Twelve Hours</string>
+    <string name="twenty_four_hours">Every Twenty-four Hours</string>
+</resources>
