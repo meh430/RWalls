@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="search">Search...</string>
+
     <string name="rwalls">RWalls</string>
 
     <string name="sort_hot">Hot</string>

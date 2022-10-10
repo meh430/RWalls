@@ -22,6 +22,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -131,24 +132,26 @@ fun ImageCard(
 fun ImageCardPreview() {
     var isLiked by remember { mutableStateOf(false) }
     RwTheme {
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 150.dp),
-            contentPadding = PaddingValues(8.dp),
-        ) {
-            items(5) {
-                ImageCard(
-                    imageUrl = "https://htmlcolorcodes.com/assets/images/colors/red-color-solid-background-1920x1080.png",
-                    title = "Cool Wallpaper",
-                    subTitle = "r/wallpaper",
-                    isLiked = isLiked,
-                    onLikeClicked = { newValue ->
-                        isLiked = newValue
-                    },
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth()
-                        .height(275.dp)
-                )
+        Surface(color = MaterialTheme.colorScheme.surface) {
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(minSize = 150.dp),
+                contentPadding = PaddingValues(8.dp),
+            ) {
+                items(6) {
+                    ImageCard(
+                        imageUrl = "https://static.wikia.nocookie.net/starwars/images/d/dd/Attack-Clones-Poster.jpg/revision/latest?cb=20180318125654",
+                        title = "Cool Wallpaper",
+                        subTitle = "r/wallpaper",
+                        isLiked = isLiked,
+                        onLikeClicked = { newValue ->
+                            isLiked = newValue
+                        },
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth()
+                            .height(275.dp)
+                    )
+                }
             }
         }
     }
