@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.Color
 // custom colors
 val secondaryWhite = Color.White.copy(alpha = 0.80f)
 val imageBackgroundGradient = Brush.verticalGradient(
-    colors = listOf(Color.Transparent, Color(0x80000000))
+    colors = listOf(Color.Transparent, Color(0x99000000))
 )
 
 // generated colors

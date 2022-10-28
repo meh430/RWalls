@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="search">Search...</string>
+    <string name="retry">Retry</string>
+    <string name="empty_state_title">Nothing to see here…</string>
+
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="set_wallpaper">Set wallpaper</string>
+    <string name="home_screen">Home screen</string>
+    <string name="lock_screen">Lock screen</string>
+    <string name="both_screens">Both screens</string>
+
+    <string name="search">Search…</string>
 
     <string name="rwalls">RWalls</string>
 

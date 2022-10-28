@@ -25,6 +25,7 @@ import mp.redditwalls.network.services.SubredditsService
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -36,41 +37,52 @@ internal object NetworkModule {
 
     @Provides
     fun provideImagesService(
-        @Named("MainRetrofit") retrofit: Retrofit
+        @Named("RedditRetrofit") retrofit: Retrofit
     ) = retrofit.create(ImagesService::class.java)
 
     @Provides
     fun provideSubredditsService(
-        @Named("MainRetrofit") retrofit: Retrofit
+        @Named("RedditRetrofit") retrofit: Retrofit
     ) = retrofit.create(SubredditsService::class.java)
 
-    @Named("MainRetrofit")
+    @Named("RedditRetrofit")
     @Provides
-    fun provideMainRetrofit(
-        @Named("MainOkhttpClient")
+    fun provideRedditRetrofit(
+        @Named("RedditOkhttpClient")
         client: OkHttpClient,
         gson: Gson
     ) = Retrofit.Builder()
-        .baseUrl(Constants.BASE_OAUTH_URL)
+        .baseUrl(Constants.BASE_REDDIT_OAUTH_URL)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .client(client)
         .build()
 
-    @Named("AuthRetrofit")
+    @Named("RedditAuthRetrofit")
     @Provides
-    fun provideAuthRetrofit(
-        @Named("AuthOkhttpClient")
+    fun provideRedditAuthRetrofit(
+        @Named("RedditAuthOkhttpClient")
         client: OkHttpClient,
         gson: Gson
     ) = Retrofit.Builder()
-        .baseUrl(Constants.BASE_URL)
+        .baseUrl(Constants.BASE_REDDIT_URL)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .client(client)
         .build()
 
-    @Named("AuthOkhttpClient")
+    @Named("ImgurRetrofit")
     @Provides
-    fun provideAuthOkhttpClient() = OkHttpClient.Builder()
+    fun provideImgurRetrofit(
+        @Named("ImgurOkhttpClient")
+        client: OkHttpClient,
+    ) = Retrofit.Builder()
+        .baseUrl(Constants.BASE_IMGUR_URL)
+        .addConverterFactory(MoshiConverterFactory.create())
+        .client(client)
+        .build()
+
+    @Named("RedditAuthOkhttpClient")
+    @Provides
+    fun provideRedditAuthOkhttpClient() = OkHttpClient.Builder()
         .readTimeout(1, TimeUnit.MINUTES)
         .connectTimeout(1, TimeUnit.MINUTES)
         .addInterceptor {
@@ -81,9 +93,9 @@ internal object NetworkModule {
             it.proceed(request)
         }.build()
 
-    @Named("MainOkhttpClient")
+    @Named("RedditOkhttpClient")
     @Provides
-    fun provideMainOkhttpClient(authenticator: TokenAuthenticator) = OkHttpClient.Builder()
+    fun provideRedditOkhttpClient(authenticator: TokenAuthenticator) = OkHttpClient.Builder()
         .readTimeout(1, TimeUnit.MINUTES)
         .connectTimeout(1, TimeUnit.MINUTES)
         .addInterceptor {
@@ -93,6 +105,19 @@ internal object NetworkModule {
                 .build()
             it.proceed(request)
         }.authenticator(authenticator).build()
+
+    @Named("ImgurOkhttpClient")
+    @Provides
+    fun provideImgurOkhttpClient() = OkHttpClient.Builder()
+        .readTimeout(1, TimeUnit.MINUTES)
+        .connectTimeout(1, TimeUnit.MINUTES)
+        .addInterceptor {
+            val request = it.request()
+                .newBuilder()
+                .header("Authorization", "Bearer ${Constants.IMGUR_CLIENT_ID}")
+                .build()
+            it.proceed(request)
+        }.build()
 
     @Provides
     fun provideGson(

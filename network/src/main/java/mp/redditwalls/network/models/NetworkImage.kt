@@ -26,6 +26,7 @@ data class NetworkImage(
     val numComments: Int = 0,
     @SerializedName("permalink")
     val postUrl: String = "",
+    val imgurAlbumId: String = "",
     val galleryItems: List<GalleryItem> = emptyList()
 ) {
     companion object {
@@ -41,6 +42,21 @@ data class NetworkImage(
                     GalleryItem.fromPreviewJson(json.getAsJsonObject("preview"))
                 )
             }
+
+            var imgurAlbumId = ""
+            if (json.has("media")) {
+                val media = json.getAsJsonObject("media")
+                val type = media.getString("type")
+                imgurAlbumId = if (type == "imgur.com" && media.has("oembed")) {
+                    val oembed = media.getAsJsonObject("oembed")
+                    oembed.getString("url").takeIf {
+                        it.contains("/a/")
+                    }?.split("/")?.last().orEmpty()
+                } else {
+                    ""
+                }
+            }
+
             return galleryItems?.let {
                 NetworkImage(
                     id = "t3_" + json.getString("id"),
@@ -50,7 +66,9 @@ data class NetworkImage(
                     createdUtc = json.getLong("created_utc"),
                     numUpvotes = json.getInt("ups"),
                     numComments = json.getInt("num_comments"),
-                    postUrl = Constants.BASE_MOBILE_URL + json.getString("permalink")
+                    imgurAlbumId = imgurAlbumId,
+                    postUrl = Constants.BASE_REDDIT_MOBILE_URL + json.getString("permalink"),
+                    galleryItems = it
                 )
             }
         }
