@@ -31,7 +31,9 @@ data class NetworkSubreddit(
                     numSubscribers = getInt("subscribers"),
                     numOnline = getInt("active_user_count"),
                     description = getString("public_description"),
-                    subredditIconUrl = getString("community_icon").cleanImageUrl(),
+                    subredditIconUrl = getString("community_icon").cleanImageUrl().ifBlank {
+                        getString("icon_img").cleanImageUrl()
+                    },
                     headerImageUrl = getString("banner_background_image").cleanImageUrl(),
                     createdUtc = getLong("created_utc")
                 )

@@ -9,9 +9,5 @@ data class DbSubreddit(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val createdAt: Long = System.currentTimeMillis().toSeconds(),
-    val name: String = "",
-    val description: String = "",
-    val numSubscribers: Int,
-    val subredditIconUrl: String = "",
-    val headerImageUrl: String = "",
+    val name: String = ""
 )

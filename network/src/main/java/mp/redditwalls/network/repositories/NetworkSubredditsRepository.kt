@@ -6,8 +6,12 @@ import kotlinx.coroutines.withContext
 import mp.redditwalls.network.services.SubredditsService
 
 class NetworkSubredditsRepository @Inject constructor(private val subredditsService: SubredditsService) {
-    suspend fun getSubredditInfo(subreddit: String) = withContext(Dispatchers.IO) {
-        subredditsService.getSubredditInfo(subreddit)
+    suspend fun getSubredditDetail(subreddit: String) = withContext(Dispatchers.IO) {
+        subredditsService.getSubredditDetail(subreddit)
+    }
+
+    suspend fun getSubredditsInfo(subreddits: List<String>) = withContext(Dispatchers.IO) {
+        subredditsService.getSubredditsInfo(subreddits.joinToString { "," })
     }
 
     suspend fun searchSubreddits(

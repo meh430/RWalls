@@ -8,7 +8,10 @@ import retrofit2.http.Query
 
 interface SubredditsService {
     @GET("/r/{subreddit}/about")
-    suspend fun getSubredditInfo(@Path("subreddit") subreddit: String): NetworkSubreddit
+    suspend fun getSubredditDetail(@Path("subreddit") subreddit: String): NetworkSubreddit
+
+    @GET("/api/info")
+    suspend fun getSubredditsInfo(@Path("sr_name") subreddits: String): NetworkSubreddits
 
     @GET("/api/subreddit_autocomplete_v2")
     suspend fun searchSubreddits(
