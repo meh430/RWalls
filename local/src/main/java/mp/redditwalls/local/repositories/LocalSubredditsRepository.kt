@@ -5,7 +5,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import mp.redditwalls.local.daos.DbSubredditDao
-import mp.redditwalls.local.models.DbImage
 import mp.redditwalls.local.models.DbSubreddit
 
 class LocalSubredditsRepository @Inject constructor(private val dbSubredditDao: DbSubredditDao) {
@@ -21,9 +20,9 @@ class LocalSubredditsRepository @Inject constructor(private val dbSubredditDao: 
         }
     }
 
-    suspend fun deleteDbSubreddit(dbImage: DbImage) {
+    suspend fun deleteDbSubreddit(id: Int) {
         withContext(Dispatchers.IO) {
-            dbSubredditDao.deleteDbSubreddit(dbImage)
+            dbSubredditDao.deleteDbSubreddit(id)
         }
     }
 

@@ -1,6 +1,7 @@
 package mp.redditwalls.design.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,16 +16,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -45,28 +45,44 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
+import java.util.UUID
 import mp.redditwalls.design.RwTheme
 import mp.redditwalls.design.imageBackgroundGradient
 import mp.redditwalls.design.secondaryWhite
+
+data class ImageCardModel(
+    val key: String = UUID.randomUUID().toString(),
+    val imageUrl: String,
+    val title: String,
+    val subTitle: String,
+    val isAlbum: Boolean = false,
+    val isLiked: Boolean,
+    val onLikeClick: (Boolean) -> Unit,
+    val onClick: () -> Unit,
+    val onLongPress: () -> Unit
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ImageCard(
     modifier: Modifier = Modifier,
-    imageUrl: String,
-    title: String,
-    subTitle: String,
-    isLiked: Boolean,
-    onLikeClick: (Boolean) -> Unit,
-    onClick: () -> Unit
+    imageCardModel: ImageCardModel
 ) {
-    val icon = if (isLiked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
-    val iconTint = if (isLiked) Color.Red else MaterialTheme.colorScheme.onSecondaryContainer
+    val icon = if (imageCardModel.isLiked) {
+        Icons.Filled.Favorite
+    } else {
+        Icons.Filled.FavoriteBorder
+    }
+    val iconTint = if (imageCardModel.isLiked) {
+        Color.Red
+    } else {
+        Color.White
+    }
     var playAnimation by remember { mutableStateOf(false) }
     ElevatedCard(
         modifier = modifier
             .fillMaxWidth(),
-        onClick = onClick,
+        onClick = imageCardModel.onClick,
         shape = MaterialTheme.shapes.large,
         colors = CardDefaults.elevatedCardColors(
             containerColor = Color.Black
@@ -79,13 +95,14 @@ fun ImageCard(
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onDoubleTap = {
-                                onLikeClick(true)
+                                imageCardModel.onLikeClick(true)
                                 playAnimation = true
-                            }
+                            },
+                            onLongPress = { imageCardModel.onLongPress() }
                         )
                     },
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(imageUrl)
+                    .data(imageCardModel.imageUrl)
                     .crossfade(true)
                     .build(),
                 loading = { CircularProgressIndicator() },
@@ -105,30 +122,35 @@ fun ImageCard(
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = if (imageCardModel.isAlbum) {
+                        Arrangement.SpaceBetween
+                    } else {
+                        Arrangement.End
+                    }
                 ) {
-                    IconButton(
-                        modifier = Modifier
-                            .background(
-                                color = MaterialTheme.colorScheme.secondaryContainer,
-                                shape = CircleShape
-                            )
-                            .size(38.dp),
-                        onClick = { onLikeClick(!isLiked) },
-                    ) {
+                    if (imageCardModel.isAlbum) {
                         Icon(
                             modifier = Modifier.size(24.dp),
-                            imageVector = icon,
+                            tint = Color.White,
+                            imageVector = Icons.Default.PhotoLibrary,
                             contentDescription = null,
-                            tint = iconTint
                         )
                     }
+                    Icon(
+                        modifier = Modifier
+                            .clickable { imageCardModel.onLikeClick(!imageCardModel.isLiked) }
+                            .size(24.dp),
+                        imageVector = icon,
+                        contentDescription = null,
+                        tint = iconTint
+                    )
                 }
                 Column(
                     modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start
                 ) {
                     Text(
-                        text = title,
+                        text = imageCardModel.title,
                         style = MaterialTheme.typography.bodyLarge,
                         color = Color.White,
                         textAlign = TextAlign.Start,
@@ -137,7 +159,7 @@ fun ImageCard(
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
-                        text = subTitle,
+                        text = imageCardModel.subTitle,
                         style = MaterialTheme.typography.bodySmall,
                         color = secondaryWhite,
                         textAlign = TextAlign.Start,
@@ -170,14 +192,18 @@ fun ImageCardPreview() {
             ) {
                 items(6) {
                     ImageCard(
-                        imageUrl = "https://w0.peakpx.com/wallpaper/1000/9/HD-wallpaper-star-wars-material-minimalism.jpg",
-                        title = "Cool Wallpaper",
-                        subTitle = "r/wallpaper",
-                        isLiked = isLiked,
-                        onLikeClick = { newValue ->
-                            isLiked = newValue
-                        },
-                        onClick = {},
+                        imageCardModel = ImageCardModel(
+                            imageUrl = "https://c4.wallpaperflare.com/wallpaper/165/600/954/iphone-ios-ipad-ipod-wallpaper-preview.jpg",
+                            title = "Cool Wallpaper",
+                            subTitle = "r/wallpaper",
+                            isAlbum = true,
+                            isLiked = isLiked,
+                            onLikeClick = { newValue ->
+                                isLiked = newValue
+                            },
+                            onClick = {},
+                            onLongPress = {}
+                        ),
                         modifier = Modifier
                             .padding(8.dp)
                             .fillMaxWidth()

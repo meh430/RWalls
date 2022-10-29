@@ -47,9 +47,6 @@ class PreferencesRepository @Inject constructor(
 
     fun getAllowNsfw() = getValue(PreferenceKeys.ALLOW_NSFW, true)
 
-    fun getEnableDataSaver() = getValue(PreferenceKeys.ENABLE_DATA_SAVER, false)
-
-
     // setters
     suspend fun setDefaultHomeSort(sortOrder: SortOrder) {
         setValue(PreferenceKeys.DEFAULT_HOME_SORT, sortOrder.name)
@@ -81,10 +78,6 @@ class PreferencesRepository @Inject constructor(
 
     suspend fun setAllowNsfw(allowNsfw: Boolean) {
         setValue(PreferenceKeys.ALLOW_NSFW, allowNsfw)
-    }
-
-    suspend fun setDataSaverEnabled(dataSaverEnabled: Boolean) {
-        setValue(PreferenceKeys.ENABLE_DATA_SAVER, dataSaverEnabled)
     }
 
     private fun <T> getValue(key: Preferences.Key<T>, default: T): Flow<T> =

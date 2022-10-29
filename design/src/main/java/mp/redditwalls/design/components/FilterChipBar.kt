@@ -14,8 +14,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,24 +30,21 @@ import mp.redditwalls.design.RwTheme
 fun FilterChipBar(
     modifier: Modifier = Modifier,
     filters: List<Pair<String, ImageVector?>>,
-    onSelectionChanged: (List<String>) -> Unit
+    initialSelection: Int = 0,
+    onSelectionChanged: (Int) -> Unit
 ) {
-    val selectedChips = remember { mutableStateListOf<String>() }
+    var selectedChipIndex by remember { mutableStateOf(initialSelection) }
     FlowRow(
         modifier = modifier.fillMaxWidth()
     ) {
-        filters.forEach {
-            val selected = selectedChips.contains(it.first)
+        filters.forEachIndexed { index, it ->
+            val selected = selectedChipIndex == index
             FilterChip(
                 modifier = Modifier.padding(horizontal = 4.dp),
                 selected = selected,
                 onClick = {
-                    if (selected) {
-                        selectedChips.remove(it.first)
-                    } else {
-                        selectedChips.add(it.first)
-                    }
-                    onSelectionChanged(selectedChips)
+                    selectedChipIndex = index
+                    onSelectionChanged(index)
                 },
                 label = { Text(text = it.first) },
                 leadingIcon = {

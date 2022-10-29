@@ -13,6 +13,8 @@ data class DbImage(
     val networkId: String = "",
     val createdAt: Long = System.currentTimeMillis().toSeconds(),
     val postTitle: String = "",
+    val subredditName: String = "",
+    val postUrl: String = "",
     val lowQualityUrl: String = "",
     val mediumQualityUrl: String = "",
     val sourceUrl: String = "",

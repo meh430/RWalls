@@ -80,6 +80,7 @@ fun ListOptionsDialog(
 @Composable
 fun WallpaperOptionsDialog(
     modifier: Modifier = Modifier,
+    title: String = stringResource(R.string.set_wallpaper),
     show: Boolean,
     onSelect: (Int) -> Unit,
     onDismiss: () -> Unit
@@ -87,7 +88,7 @@ fun WallpaperOptionsDialog(
     ListOptionsDialog(
         modifier = modifier,
         show = show,
-        title = stringResource(R.string.set_wallpaper),
+        title = title,
         options = listOf(
             stringResource(R.string.home_screen) to Icons.Default.Home,
             stringResource(R.string.lock_screen) to Icons.Default.Lock,

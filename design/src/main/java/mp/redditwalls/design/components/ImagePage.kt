@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Comment
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.Wallpaper
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
@@ -53,13 +54,14 @@ fun ImagePage(
     title: String,
     subredditName: String,
     authorName: String,
+    isAlbum: Boolean = false,
     isLiked: Boolean,
     numUpvotes: String,
     numComments: String,
     openPost: () -> Unit,
     onLikeChanged: (Boolean) -> Unit,
     onSetWallpaperClick: () -> Unit,
-    onLongPress: () -> Unit
+    onInfoTextClick: () -> Unit
 ) {
     var playAnimation by remember { mutableStateOf(false) }
     ElevatedCard(
@@ -76,7 +78,7 @@ fun ImagePage(
                                 onLikeChanged(true)
                                 playAnimation = true
                             },
-                            onLongPress = { onLongPress() }
+                            onLongPress = { onSetWallpaperClick() }
                         )
                     },
                 model = ImageRequest.Builder(LocalContext.current)
@@ -107,7 +109,7 @@ fun ImagePage(
                     title = title,
                     subredditName = subredditName,
                     authorName = authorName,
-                    onClick = onLongPress
+                    onClick = onInfoTextClick
                 )
                 IconColumn(
                     modifier = Modifier.padding(20.dp),
@@ -124,6 +126,20 @@ fun ImagePage(
                 show = playAnimation,
                 onAnimationComplete = { playAnimation = false }
             )
+            if (isAlbum) {
+                Row(
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .padding(20.dp)
+                ) {
+                    Icon(
+                        modifier = Modifier.size(24.dp),
+                        tint = Color.White,
+                        imageVector = Icons.Default.PhotoLibrary,
+                        contentDescription = null,
+                    )
+                }
+            }
         }
     }
 }
@@ -138,7 +154,7 @@ fun InfoText(
 ) {
     Column(
         modifier = modifier.clickable { onClick() },
-        verticalArrangement = Arrangement.spacedBy(2.dp)
+        verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Text(
             text = title,
@@ -181,7 +197,7 @@ fun IconColumn(
 ) {
     val iconSize = 32.dp
     val icon = if (isLiked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
-    val iconTint = if (isLiked) Color.Red else MaterialTheme.colorScheme.onSecondaryContainer
+    val iconTint = if (isLiked) Color.Red else Color.White
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -203,6 +219,7 @@ fun IconColumn(
             Icon(
                 modifier = Modifier.size(iconSize),
                 imageVector = Icons.Default.Wallpaper,
+                tint = Color.White,
                 contentDescription = null,
             )
         }
@@ -215,10 +232,15 @@ fun IconColumn(
                 Icon(
                     modifier = Modifier.size(iconSize),
                     imageVector = Icons.Default.ArrowUpward,
+                    tint = Color.White,
                     contentDescription = null,
                 )
             }
-            Text(numUpvotes)
+            Text(
+                text = numUpvotes,
+                color = Color.White,
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
@@ -229,10 +251,15 @@ fun IconColumn(
                 Icon(
                     modifier = Modifier.size(iconSize),
                     imageVector = Icons.Default.Comment,
+                    tint = Color.White,
                     contentDescription = null,
                 )
             }
-            Text(numComments)
+            Text(
+                text = numComments,
+                color = Color.White,
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
     }
 }
@@ -255,13 +282,14 @@ fun ImagePagePreview() {
                 title = LoremIpsum(words = 15).values.first(),
                 subredditName = "r/wallpaper",
                 authorName = "u/author",
+                isAlbum = true,
                 isLiked = isLiked,
                 numComments = "1.2k",
                 numUpvotes = "16.8k",
                 openPost = {},
                 onLikeChanged = { isLiked = it },
                 onSetWallpaperClick = {},
-                onLongPress = {}
+                onInfoTextClick = {}
             )
         }
     }
