@@ -5,6 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 import mp.redditwalls.domain.models.DomainResult
 import mp.redditwalls.domain.models.DomainSubreddit
 import mp.redditwalls.domain.models.toDomainSubreddit
@@ -17,7 +18,7 @@ class SearchSubredditsUseCase @Inject constructor(
     private val localSubredditsRepository: LocalSubredditsRepository,
     private val preferencesRepository: PreferencesRepository
 ) : FlowUseCase<List<DomainSubreddit>, String>(emptyList()) {
-    override suspend operator fun invoke(params: String) {
+    override suspend operator fun invoke(params: String) = withContext(Dispatchers.IO) {
         combine(
             localSubredditsRepository.getDbSubreddits(),
             preferencesRepository.getAllowNsfw()

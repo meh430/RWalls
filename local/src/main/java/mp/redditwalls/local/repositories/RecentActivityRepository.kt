@@ -1,6 +1,5 @@
 package mp.redditwalls.local.repositories
 
-import androidx.room.Query
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -16,21 +15,14 @@ class RecentActivityRepository @Inject constructor(
         }
     }
 
-    suspend fun deleteDbRecentActivityItem(dbRecentActivityItem: DbRecentActivityItem) {
+    suspend fun deleteDbRecentActivityItem(id: Int) {
         withContext(Dispatchers.IO) {
-            dbRecentActivityItemDao.deleteDbRecentActivityItem(dbRecentActivityItem)
-        }
-    }
-
-    suspend fun deleteDbRecentActivityItems(dbRecentActivityItems: List<DbRecentActivityItem>) {
-        withContext(Dispatchers.IO) {
-            dbRecentActivityItemDao.deleteDbRecentActivityItems(dbRecentActivityItems)
+            dbRecentActivityItemDao.deleteDbRecentActivityItem(id)
         }
     }
 
     fun getDbRecentActivityItems() = dbRecentActivityItemDao.getDbRecentActivityItems()
 
-    @Query("SELECT * FROM RecentActivity ORDER BY createdAt DESC LIMIT :limit")
     fun getLimitedDbRecentActivityItems(limit: Int) =
         dbRecentActivityItemDao.getLimitedDbRecentActivityItems(limit)
 }

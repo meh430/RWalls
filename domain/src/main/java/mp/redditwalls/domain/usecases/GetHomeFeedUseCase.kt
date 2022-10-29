@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
+import mp.redditwalls.domain.Utils.getImageUrl
 import mp.redditwalls.domain.Utils.toTimeFilter
 import mp.redditwalls.domain.models.DomainResult
 import mp.redditwalls.domain.models.FeedResult
@@ -14,7 +15,6 @@ import mp.redditwalls.local.repositories.LocalImagesRepository
 import mp.redditwalls.local.repositories.LocalSubredditsRepository
 import mp.redditwalls.network.repositories.NetworkImagesRepository
 import mp.redditwalls.preferences.PreferencesRepository
-import mp.redditwalls.preferences.enums.ImageQuality
 import mp.redditwalls.preferences.enums.SortOrder
 
 class GetHomeFeedUseCase @Inject constructor(
@@ -49,11 +49,11 @@ class GetHomeFeedUseCase @Inject constructor(
             }.map {
                 val galleryItem = it.galleryItems.first()
                 it.toDomainImage(
-                    imageUrl = when (previewResolution) {
-                        ImageQuality.LOW -> galleryItem.lowQualityUrl
-                        ImageQuality.MEDIUM -> galleryItem.mediumQualityUrl
-                        ImageQuality.HIGH -> galleryItem.sourceUrl
-                    },
+                    imageUrl = previewResolution.getImageUrl(
+                        galleryItem.lowQualityUrl,
+                        galleryItem.mediumQualityUrl,
+                        galleryItem.sourceUrl
+                    ),
                     isLiked = dbImagesNetworkIds.contains(it.id),
                     dbId = dbImagesNetworkIds[it.id] ?: -1
                 )

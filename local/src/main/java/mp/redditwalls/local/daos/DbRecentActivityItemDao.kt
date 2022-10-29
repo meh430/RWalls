@@ -1,7 +1,6 @@
 package mp.redditwalls.local.daos
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -13,11 +12,8 @@ interface DbRecentActivityItemDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDbRecentActivityItem(dbRecentActivityItem: DbRecentActivityItem)
 
-    @Delete
-    suspend fun deleteDbRecentActivityItem(dbRecentActivityItem: DbRecentActivityItem)
-
-    @Delete
-    suspend fun deleteDbRecentActivityItems(dbRecentActivityItems: List<DbRecentActivityItem>)
+    @Query("DELETE FROM RecentActivity WHERE id = :id")
+    suspend fun deleteDbRecentActivityItem(id: Int)
 
     @Query("SELECT * FROM RecentActivity ORDER BY createdAt DESC")
     fun getDbRecentActivityItems(): Flow<List<DbRecentActivityItem>>

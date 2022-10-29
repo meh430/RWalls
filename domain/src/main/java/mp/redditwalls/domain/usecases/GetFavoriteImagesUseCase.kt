@@ -5,19 +5,20 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
+import mp.redditwalls.domain.Utils.getImageUrl
 import mp.redditwalls.domain.models.DomainResult
 import mp.redditwalls.domain.models.FeedResult
 import mp.redditwalls.domain.models.toDomainImage
 import mp.redditwalls.local.enums.WallpaperLocation
 import mp.redditwalls.local.repositories.LocalImagesRepository
 import mp.redditwalls.preferences.PreferencesRepository
-import mp.redditwalls.preferences.enums.ImageQuality
 
 class GetFavoriteImagesUseCase @Inject constructor(
     private val localImagesRepository: LocalImagesRepository,
     private val preferencesRepository: PreferencesRepository
 ): FlowUseCase<FeedResult, WallpaperLocation>(FeedResult()) {
-    override suspend operator fun invoke(params: WallpaperLocation) {
+    override suspend operator fun invoke(params: WallpaperLocation) = withContext(Dispatchers.IO) {
         combine(
             localImagesRepository.getDbImagesFlow(),
             preferencesRepository.getPreviewResolution()
@@ -26,11 +27,11 @@ class GetFavoriteImagesUseCase @Inject constructor(
                 it.refreshLocation == params.name
             }.map {
                 it.toDomainImage(
-                    imageUrl = when (previewResolution) {
-                        ImageQuality.LOW -> it.lowQualityUrl
-                        ImageQuality.MEDIUM -> it.mediumQualityUrl
-                        ImageQuality.HIGH -> it.sourceUrl
-                    },
+                    imageUrl = previewResolution.getImageUrl(
+                        it.lowQualityUrl,
+                        it.mediumQualityUrl,
+                        it.sourceUrl
+                    ),
                     isLiked = true
                 )
             }
