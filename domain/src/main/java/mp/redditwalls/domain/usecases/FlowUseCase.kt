@@ -18,7 +18,7 @@ abstract class FlowUseCase<D : Any, P : Any>(private val initialData: D) {
         data = initialData
     }
 
-    protected suspend fun updateData(data: DomainResult<D>) {
+    private suspend fun updateData(data: DomainResult<D>) {
         _sharedFlow.emit(data)
         this.data = data.data ?: initialData
     }
