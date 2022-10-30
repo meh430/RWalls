@@ -4,8 +4,10 @@ import javax.inject.Inject
 import mp.redditwalls.preferences.PreferencesData
 import mp.redditwalls.preferences.PreferencesRepository
 
-class GetPreferencesUseCase @Inject constructor(
+class SavePreferencesUseCase @Inject constructor(
     private val preferencesRepository: PreferencesRepository
-) : FlowUseCase<PreferencesData, Unit>(PreferencesData()) {
-    override fun execute(params: Unit) = preferencesRepository.getAllPreferences()
+): UseCase<PreferencesData, Unit>() {
+    override suspend fun execute(params: PreferencesData) {
+        preferencesRepository.setAllPreferences(params)
+    }
 }

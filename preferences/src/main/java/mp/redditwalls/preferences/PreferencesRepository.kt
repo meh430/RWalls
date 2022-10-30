@@ -47,6 +47,29 @@ class PreferencesRepository @Inject constructor(
 
     fun getAllowNsfw() = getValue(PreferenceKeys.ALLOW_NSFW, true)
 
+    fun getAllPreferences() = Prefs.getDataStore(context).data.map { prefs ->
+        PreferencesData(
+            defaultHomeSort = prefs[PreferenceKeys.DEFAULT_HOME_SORT]?.let {
+                SortOrder.valueOf(it)
+            } ?: SortOrder.HOT,
+            previewResolution = prefs[PreferenceKeys.PREVIEW_RESOLUTION]?.let {
+                ImageQuality.valueOf(it)
+            } ?: ImageQuality.HIGH,
+            theme = prefs[PreferenceKeys.THEME]?.let {
+                Theme.valueOf(it)
+            } ?: Theme.SYSTEM,
+            refreshEnabled = prefs[PreferenceKeys.REFRESH_ENABLED] ?: true,
+            refreshInterval = prefs[PreferenceKeys.REFRESH_INTERVAL]?.let {
+                RefreshInterval.valueOf(it)
+            } ?: RefreshInterval.TWENTY_FOUR_H,
+            dataSetting = prefs[PreferenceKeys.DATA_SETTING]?.let {
+                DataSetting.valueOf(it)
+            } ?: DataSetting.BOTH,
+            verticalSwipeFeedEnabled = prefs[PreferenceKeys.VERTICAL_SWIPE_FEED_ENABLED] ?: false,
+            allowNsfw = prefs[PreferenceKeys.ALLOW_NSFW] ?: false
+        )
+    }
+
     // setters
     suspend fun setDefaultHomeSort(sortOrder: SortOrder) {
         setValue(PreferenceKeys.DEFAULT_HOME_SORT, sortOrder.name)
@@ -78,6 +101,21 @@ class PreferencesRepository @Inject constructor(
 
     suspend fun setAllowNsfw(allowNsfw: Boolean) {
         setValue(PreferenceKeys.ALLOW_NSFW, allowNsfw)
+    }
+
+    suspend fun setAllPreferences(preferencesData: PreferencesData) {
+        Prefs.getDataStore(context).edit { prefs ->
+            preferencesData.run {
+                prefs[PreferenceKeys.DEFAULT_HOME_SORT] = defaultHomeSort.name
+                prefs[PreferenceKeys.PREVIEW_RESOLUTION] = previewResolution.name
+                prefs[PreferenceKeys.THEME] = theme.name
+                prefs[PreferenceKeys.REFRESH_ENABLED] = refreshEnabled
+                prefs[PreferenceKeys.REFRESH_INTERVAL] = refreshInterval.name
+                prefs[PreferenceKeys.DATA_SETTING] = dataSetting.name
+                prefs[PreferenceKeys.VERTICAL_SWIPE_FEED_ENABLED] = verticalSwipeFeedEnabled
+                prefs[PreferenceKeys.ALLOW_NSFW] = allowNsfw
+            }
+        }
     }
 
     private fun <T> getValue(key: Preferences.Key<T>, default: T): Flow<T> =
