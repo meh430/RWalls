@@ -18,18 +18,18 @@ abstract class FlowUseCase<D : Any, P : Any>(private val initialData: D) {
         data = initialData
     }
 
-    private suspend fun updateData(data: DomainResult<D>) {
-        _sharedFlow.emit(data)
-        this.data = data.data ?: initialData
-    }
+    protected abstract fun execute(params: P): Flow<D>
 
-    protected suspend fun Flow<D>.resolveResult() {
-        catch { e ->
+    suspend operator fun invoke(params: P) {
+        execute(params).catch { e ->
             updateData(DomainResult.Error(message = e.localizedMessage.orEmpty()))
         }.flowOn(Dispatchers.IO).collect {
             updateData(DomainResult.Success(it))
         }
     }
 
-    abstract suspend operator fun invoke(params: P)
+    private suspend fun updateData(data: DomainResult<D>) {
+        _sharedFlow.emit(data)
+        this.data = data.data ?: initialData
+    }
 }
