@@ -2,7 +2,6 @@ package mp.redditwalls.domain.usecases
 
 import javax.inject.Inject
 import kotlinx.coroutines.flow.combine
-import mp.redditwalls.domain.Utils.getImageUrl
 import mp.redditwalls.domain.models.DiscoverResult
 import mp.redditwalls.domain.models.RecommendedSubreddit
 import mp.redditwalls.domain.models.toDomainImage
@@ -57,13 +56,8 @@ class GetDiscoverUseCase @Inject constructor(
                     timeFilter = TimeFilter.ALL,
                     after = ""
                 ).images.map { networkImage ->
-                    val galleryItem = networkImage.galleryItems.first()
                     networkImage.toDomainImage(
-                        imageUrl = previewResolution.getImageUrl(
-                            galleryItem.lowQualityUrl,
-                            galleryItem.mediumQualityUrl,
-                            galleryItem.sourceUrl
-                        ),
+                        previewResolution = previewResolution,
                         isLiked = imageNetworkIdToDbId.containsKey(networkImage.id),
                         dbId = imageNetworkIdToDbId[networkImage.id] ?: -1
                     )

@@ -3,13 +3,13 @@ package mp.redditwalls.domain.models
 import mp.redditwalls.network.models.NetworkSubreddit
 
 data class DomainSubreddit(
-    val name: String,
-    val numSubscribers: Int,
-    val numOnline: Int,
-    val description: String,
+    val name: String = "",
+    val numSubscribers: Int = 0,
+    val numOnline: Int = 0,
+    val description: String = "",
     val subredditIconUrl: String = "",
-    val isSaved: Boolean,
-    val dbId: Int
+    val isSaved: Boolean = false,
+    val dbId: Int = 0
 )
 
 fun NetworkSubreddit.toDomainSubreddit(isSaved: Boolean, dbId: Int) = DomainSubreddit(

@@ -2,7 +2,6 @@ package mp.redditwalls.domain.usecases
 
 import javax.inject.Inject
 import kotlinx.coroutines.flow.combine
-import mp.redditwalls.domain.Utils.getImageUrl
 import mp.redditwalls.domain.Utils.toTimeFilter
 import mp.redditwalls.domain.models.FeedResult
 import mp.redditwalls.domain.models.toDomainImage
@@ -40,13 +39,8 @@ class GetHomeFeedUseCase @Inject constructor(
             // filter sfw images when not allowing nsfw
             !allowNsfw && !it.isOver18
         }.map {
-            val galleryItem = it.galleryItems.first()
             it.toDomainImage(
-                imageUrl = previewResolution.getImageUrl(
-                    galleryItem.lowQualityUrl,
-                    galleryItem.mediumQualityUrl,
-                    galleryItem.sourceUrl
-                ),
+                previewResolution = previewResolution,
                 isLiked = dbImagesNetworkIds.contains(it.id),
                 dbId = dbImagesNetworkIds[it.id] ?: -1
             )

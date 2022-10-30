@@ -2,6 +2,7 @@ package mp.redditwalls.domain
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import mp.redditwalls.domain.models.ImageUrl
 import mp.redditwalls.network.models.TimeFilter
 import mp.redditwalls.preferences.enums.ImageQuality
 import mp.redditwalls.preferences.enums.SortOrder
@@ -16,11 +17,18 @@ internal object Utils {
         else -> TimeFilter.ALL
     }
 
-    fun ImageQuality.getImageUrl(low: String, medium: String, high: String) = when (this) {
-        ImageQuality.LOW -> low
-        ImageQuality.MEDIUM -> medium
-        ImageQuality.HIGH -> high
-    }
+    fun ImageQuality.getImageUrl(
+        low: String, medium: String, high: String
+    ) = ImageUrl(
+        url = when (this) {
+            ImageQuality.LOW -> low
+            ImageQuality.MEDIUM -> medium
+            ImageQuality.HIGH -> high
+        },
+        lowQualityUrl = low,
+        mediumQualityUrl = medium,
+        highQualityUrl = high
+    )
 
     fun <T1, T2, T3, T4, T5, T6, T7, T8, R : Any> combine(
         flow: Flow<T1>,

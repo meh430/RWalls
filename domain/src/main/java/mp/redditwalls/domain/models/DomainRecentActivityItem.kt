@@ -34,7 +34,7 @@ sealed class DomainRecentActivityItem(
         dbId: Int,
         createdAt: Date,
         val subredditName: String,
-        val imageUrl: String,
+        val imageUrl: ImageUrl,
         val imageNetworkId: String,
         val wallpaperLocation: WallpaperLocation
     ) : DomainRecentActivityItem(dbId, createdAt)
@@ -43,7 +43,7 @@ sealed class DomainRecentActivityItem(
         dbId: Int,
         createdAt: Date,
         val subredditName: String,
-        val imageUrl: String,
+        val imageUrl: ImageUrl,
         val imageNetworkId: String,
         val wallpaperLocation: WallpaperLocation
     ) : DomainRecentActivityItem(dbId, createdAt)
@@ -76,7 +76,7 @@ fun DbRecentActivityItem.toDomainRecentActivityItem(previewResolution: ImageQual
                 mediumQualityUrl,
                 sourceUrl
             ),
-            imageNetworkId = networkId,
+            imageNetworkId = imageNetworkId,
             wallpaperLocation = WallpaperLocation.valueOf(wallpaperLocation)
         )
         RecentActivityType.REFRESH_WALLPAPER -> DomainRecentActivityItem.DomainRefreshWallpaperActivityItem(
@@ -88,7 +88,7 @@ fun DbRecentActivityItem.toDomainRecentActivityItem(previewResolution: ImageQual
                 mediumQualityUrl,
                 sourceUrl
             ),
-            imageNetworkId = networkId,
+            imageNetworkId = imageNetworkId,
             wallpaperLocation = WallpaperLocation.valueOf(wallpaperLocation)
         )
     }

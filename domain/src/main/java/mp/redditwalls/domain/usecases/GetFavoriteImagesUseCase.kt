@@ -2,7 +2,6 @@ package mp.redditwalls.domain.usecases
 
 import javax.inject.Inject
 import kotlinx.coroutines.flow.combine
-import mp.redditwalls.domain.Utils.getImageUrl
 import mp.redditwalls.domain.models.FeedResult
 import mp.redditwalls.domain.models.toDomainImage
 import mp.redditwalls.local.enums.WallpaperLocation
@@ -21,11 +20,7 @@ class GetFavoriteImagesUseCase @Inject constructor(
             params.wallpaperLocation?.let { it.name == dbImage.refreshLocation } ?: true
         }.map {
             it.toDomainImage(
-                imageUrl = previewResolution.getImageUrl(
-                    it.lowQualityUrl,
-                    it.mediumQualityUrl,
-                    it.sourceUrl
-                ),
+                previewResolution = previewResolution,
                 isLiked = true
             )
         }

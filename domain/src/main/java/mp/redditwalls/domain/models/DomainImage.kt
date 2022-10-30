@@ -1,7 +1,9 @@
 package mp.redditwalls.domain.models
 
+import mp.redditwalls.domain.Utils.getImageUrl
 import mp.redditwalls.local.models.DbImage
 import mp.redditwalls.network.models.NetworkImage
+import mp.redditwalls.preferences.enums.ImageQuality
 
 data class DomainImage(
     val postTitle: String = "",
@@ -12,13 +14,20 @@ data class DomainImage(
     val postUrl: String = "",
     val networkId: String = "",
     val dbId: Int = 0,
-    val imageUrl: String = "",
+    val imageUrls: List<ImageUrl> = emptyList(),
     val isLiked: Boolean = false,
     val isAlbum: Boolean = false
 )
 
+data class ImageUrl(
+    val url: String = "", // url to use based on prefs
+    val lowQualityUrl: String = "",
+    val mediumQualityUrl: String = "",
+    val highQualityUrl: String = "",
+)
+
 fun NetworkImage.toDomainImage(
-    imageUrl: String,
+    previewResolution: ImageQuality,
     isLiked: Boolean,
     dbId: Int
 ) = DomainImage(
@@ -29,13 +38,19 @@ fun NetworkImage.toDomainImage(
     author = author,
     numUpvotes = numUpvotes,
     postUrl = postUrl,
-    imageUrl = imageUrl,
+    imageUrls = galleryItems.map {
+        previewResolution.getImageUrl(
+            it.lowQualityUrl,
+            it.mediumQualityUrl,
+            it.sourceUrl
+        )
+    },
     isLiked = isLiked,
     isAlbum = imgurAlbumId.isNotEmpty()
 )
 
 fun DbImage.toDomainImage(
-    imageUrl: String,
+    previewResolution: ImageQuality,
     isLiked: Boolean
 ) = DomainImage(
     postTitle = postTitle,
@@ -43,6 +58,12 @@ fun DbImage.toDomainImage(
     postUrl = postUrl,
     networkId = networkId,
     dbId = id,
-    imageUrl = imageUrl,
+    imageUrls = listOf(
+        previewResolution.getImageUrl(
+            lowQualityUrl,
+            mediumQualityUrl,
+            sourceUrl
+        )
+    ),
     isLiked = isLiked
 )
