@@ -47,7 +47,7 @@ class GetDiscoverUseCase @Inject constructor(
             val recommendations =
                 recommendedSubredditsRepository.getRecommendedSubreddits().filter {
                     !subredditNameToDbId.containsKey(it)
-                }.let { subredditNames ->
+                }.shuffled().take(RECOMMENDATION_LIMIT).let { subredditNames ->
                     networkSubredditsRepository.getSubredditsInfo(subredditNames).subreddits
                 }.map { networkSubreddit ->
                     networkSubreddit.toDomainSubreddit(
@@ -90,5 +90,6 @@ class GetDiscoverUseCase @Inject constructor(
 
     companion object {
         private const val RECENT_ACTIVITY_LIMIT = 10
+        private const val RECOMMENDATION_LIMIT = 3
     }
 }

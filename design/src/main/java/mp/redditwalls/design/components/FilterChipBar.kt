@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowRow
 import mp.redditwalls.design.RwTheme
 
+// -1 if no selection
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilterChipBar(
@@ -43,8 +44,12 @@ fun FilterChipBar(
                 modifier = Modifier.padding(horizontal = 4.dp),
                 selected = selected,
                 onClick = {
-                    selectedChipIndex = index
-                    onSelectionChanged(index)
+                    selectedChipIndex = if (selected) {
+                        -1
+                    } else {
+                        index
+                    }
+                    onSelectionChanged(selectedChipIndex)
                 },
                 label = { Text(text = it.first) },
                 leadingIcon = {

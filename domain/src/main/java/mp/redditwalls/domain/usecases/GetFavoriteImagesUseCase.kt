@@ -14,14 +14,14 @@ import mp.redditwalls.preferences.PreferencesRepository
 class GetFavoriteImagesUseCase @Inject constructor(
     private val localImagesRepository: LocalImagesRepository,
     private val preferencesRepository: PreferencesRepository
-): FlowUseCase<FeedResult, WallpaperLocation>(FeedResult()) {
-    override suspend operator fun invoke(params: WallpaperLocation) = withContext(Dispatchers.IO) {
+) : FlowUseCase<FeedResult, GetFavoriteImagesUseCase.Params>(FeedResult()) {
+    override suspend operator fun invoke(params: Params) = withContext(Dispatchers.IO) {
         combine(
             localImagesRepository.getDbImagesFlow(),
             preferencesRepository.getPreviewResolution()
         ) { dbImages, previewResolution ->
-            val domainImages = dbImages.filter {
-                it.refreshLocation == params.name
+            val domainImages = dbImages.filter { dbImage ->
+                params.wallpaperLocation?.let { it.name == dbImage.refreshLocation } ?: true
             }.map {
                 it.toDomainImage(
                     imageUrl = previewResolution.getImageUrl(
@@ -38,4 +38,8 @@ class GetFavoriteImagesUseCase @Inject constructor(
             )
         }.resolveResult()
     }
+
+    data class Params(
+        val wallpaperLocation: WallpaperLocation? = null
+    )
 }
