@@ -2,11 +2,8 @@ package mp.redditwalls.domain.usecases
 
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import mp.redditwalls.domain.models.DomainResult
 import mp.redditwalls.domain.models.DomainSubreddit
 import mp.redditwalls.domain.models.toDomainSubreddit
 import mp.redditwalls.local.repositories.LocalSubredditsRepository
@@ -29,11 +26,7 @@ class GetSavedSubredditsUseCase @Inject constructor(
                         dbId = nameToDbIds[it.name] ?: -1
                     )
                 }
-            }.catch { e ->
-                updateData(DomainResult.Error(e.localizedMessage.orEmpty()))
-            }.flowOn(Dispatchers.IO).collect {
-                updateData(DomainResult.Success(it))
-            }
+            }.resolveResult()
         }
     }
 }

@@ -1,7 +1,11 @@
 package mp.redditwalls.domain.usecases
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flowOn
 import mp.redditwalls.domain.models.DomainResult
 
 abstract class FlowUseCase<D : Any, P : Any>(private val initialData: D) {
@@ -17,6 +21,14 @@ abstract class FlowUseCase<D : Any, P : Any>(private val initialData: D) {
     protected suspend fun updateData(data: DomainResult<D>) {
         _sharedFlow.emit(data)
         this.data = data.data ?: initialData
+    }
+
+    protected suspend fun Flow<D>.resolveResult() {
+        catch { e ->
+            updateData(DomainResult.Error(message = e.localizedMessage.orEmpty()))
+        }.flowOn(Dispatchers.IO).collect {
+            updateData(DomainResult.Success(it))
+        }
     }
 
     abstract suspend operator fun invoke(params: P)

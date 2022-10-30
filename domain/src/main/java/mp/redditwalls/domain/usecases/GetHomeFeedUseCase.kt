@@ -2,13 +2,10 @@ package mp.redditwalls.domain.usecases
 
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import mp.redditwalls.domain.Utils.getImageUrl
 import mp.redditwalls.domain.Utils.toTimeFilter
-import mp.redditwalls.domain.models.DomainResult
 import mp.redditwalls.domain.models.FeedResult
 import mp.redditwalls.domain.models.toDomainImage
 import mp.redditwalls.local.repositories.LocalImagesRepository
@@ -63,11 +60,7 @@ class GetHomeFeedUseCase @Inject constructor(
                 images = data.images + domainImages,
                 nextPageId = networkImages.nextPageId
             )
-        }.catch { e ->
-            updateData(DomainResult.Error(message = e.localizedMessage.orEmpty()))
-        }.flowOn(Dispatchers.IO).collect {
-            updateData(DomainResult.Success(data = it))
-        }
+        }.resolveResult()
     }
 
     data class Params(
