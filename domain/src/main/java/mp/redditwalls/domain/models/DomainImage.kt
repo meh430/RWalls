@@ -14,12 +14,12 @@ data class DomainImage(
     val postUrl: String = "",
     val networkId: String = "",
     val dbId: Int = 0,
-    val imageUrls: List<ImageUrl> = emptyList(),
+    val domainImageUrls: List<DomainImageUrl> = emptyList(),
     val isLiked: Boolean = false,
     val isAlbum: Boolean = false
 )
 
-data class ImageUrl(
+data class DomainImageUrl(
     val url: String = "", // url to use based on prefs
     val lowQualityUrl: String = "",
     val mediumQualityUrl: String = "",
@@ -37,8 +37,9 @@ fun NetworkImage.toDomainImage(
     subredditName = subredditName,
     author = author,
     numUpvotes = numUpvotes,
+    numComments = numComments,
     postUrl = postUrl,
-    imageUrls = galleryItems.map {
+    domainImageUrls = galleryItems.map {
         previewResolution.getImageUrl(
             it.lowQualityUrl,
             it.mediumQualityUrl,
@@ -58,7 +59,7 @@ fun DbImage.toDomainImage(
     postUrl = postUrl,
     networkId = networkId,
     dbId = id,
-    imageUrls = listOf(
+    domainImageUrls = listOf(
         previewResolution.getImageUrl(
             lowQualityUrl,
             mediumQualityUrl,

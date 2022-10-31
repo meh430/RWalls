@@ -11,7 +11,6 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.progressindicator.LinearProgressIndicator
-import mp.redditwalls.MainActivity
 import mp.redditwalls.R
 import mp.redditwalls.adapters.ImagesAdapter
 import mp.redditwalls.adapters.LoadingStateAdapter
@@ -98,7 +97,6 @@ abstract class BaseApiImagesFragment : BaseImagesFragment() {
 
     private fun setSort(sort: Sort = Sort.HOT) {
         scrollToTop()
-        (activity as? MainActivity)?.setToolbarSubtitle(sort.displayText)
         imagesViewModel.setSort(sort)
     }
 
@@ -139,7 +137,6 @@ abstract class BaseApiImagesFragment : BaseImagesFragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as? MainActivity)?.setToolbarSubtitle(imagesViewModel.currentSort.displayText)
     }
 
     override fun onLike(image: Image) {

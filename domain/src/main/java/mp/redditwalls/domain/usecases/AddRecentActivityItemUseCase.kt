@@ -14,9 +14,9 @@ class AddRecentActivityItemUseCase @Inject constructor(
             is DomainRecentActivityItem.DomainRefreshWallpaperActivityItem -> DbRecentActivityItem(
                 activityType = RecentActivityType.REFRESH_WALLPAPER.name,
                 subredditName = params.subredditName,
-                lowQualityUrl = params.imageUrl.lowQualityUrl,
-                mediumQualityUrl = params.imageUrl.mediumQualityUrl,
-                sourceUrl = params.imageUrl.highQualityUrl,
+                lowQualityUrl = params.domainImageUrl.lowQualityUrl,
+                mediumQualityUrl = params.domainImageUrl.mediumQualityUrl,
+                sourceUrl = params.domainImageUrl.highQualityUrl,
                 imageNetworkId = params.imageNetworkId,
                 wallpaperLocation = params.wallpaperLocation.name
             )
@@ -32,9 +32,9 @@ class AddRecentActivityItemUseCase @Inject constructor(
             is DomainRecentActivityItem.DomainSetWallpaperActivityItem -> DbRecentActivityItem(
                 activityType = RecentActivityType.SET_WALLPAPER.name,
                 subredditName = params.subredditName,
-                lowQualityUrl = params.imageUrl.lowQualityUrl,
-                mediumQualityUrl = params.imageUrl.mediumQualityUrl,
-                sourceUrl = params.imageUrl.highQualityUrl,
+                lowQualityUrl = params.domainImageUrl.lowQualityUrl,
+                mediumQualityUrl = params.domainImageUrl.mediumQualityUrl,
+                sourceUrl = params.domainImageUrl.highQualityUrl,
                 imageNetworkId = params.imageNetworkId,
                 wallpaperLocation = params.wallpaperLocation.name
             )
