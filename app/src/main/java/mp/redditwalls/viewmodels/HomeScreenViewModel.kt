@@ -11,7 +11,6 @@ import kotlinx.coroutines.launch
 import mp.redditwalls.domain.models.DomainResult
 import mp.redditwalls.domain.usecases.GetHomeFeedUseCase
 import mp.redditwalls.models.HomeScreenUiState
-import mp.redditwalls.models.LoadingState
 import mp.redditwalls.models.UiResult
 import mp.redditwalls.models.toImageItemScreenState
 import mp.redditwalls.preferences.enums.SortOrder
@@ -25,8 +24,9 @@ class HomeScreenViewModel @Inject constructor(
         private set
 
     init {
+        favoriteImageViewModelDelegate.coroutineScope = viewModelScope
         fetchHomeFeed(null)
-        updateState()
+        subscribe()
     }
 
     fun fetchHomeFeed(sort: SortOrder?) {
@@ -35,16 +35,8 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-    private fun updateState() {
-        homeScreenUiState = homeScreenUiState.copy(
-            uiResult = UiResult.Loading(
-                loadingState = if (homeScreenUiState.images.isEmpty()) {
-                    LoadingState.LOADING_FIRST
-                } else {
-                    LoadingState.LOADING_SUBSEQUENT
-                }
-            )
-        )
+    private fun subscribe() {
+        homeScreenUiState = homeScreenUiState.copy(uiResult = UiResult.Loading())
         viewModelScope.launch {
             getHomeFeedUseCase.sharedFlow.collect {
                 homeScreenUiState = when (it) {

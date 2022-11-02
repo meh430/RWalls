@@ -10,20 +10,20 @@ interface ImagesService {
     @GET("/r/{subreddit}/hot")
     suspend fun getHotImages(
         @Path("subreddit") subreddit: String,
-        @Query("after") after: String = ""
+        @Query("after") after: String? = null
     ): NetworkImages
 
     @GET("/r/{subreddit}/new")
     suspend fun getNewImages(
         @Path("subreddit") subreddit: String,
-        @Query("after") after: String = ""
+        @Query("after") after: String? = null
     ): NetworkImages
 
     @GET("/r/{subreddit}/top")
     suspend fun getTopImages(
         @Path("subreddit") subreddit: String,
         @Query("t") time: String,
-        @Query("after") after: String = ""
+        @Query("after") after: String? = null
     ): NetworkImages
 
     @GET("/search")
@@ -31,7 +31,7 @@ interface ImagesService {
         @Query("q") query: String,
         @Query("sort") sort: String,
         @Query("t") time: String,
-        @Query("after") after: String = ""
+        @Query("after") after: String? = null
     ): NetworkImages
 
     @GET("/r/{subreddit}/search")
@@ -41,7 +41,7 @@ interface ImagesService {
         @Query("sort") sort: String,
         @Query("t") time: String,
         @Query("restrict_sr") restrictSubreddit: Boolean = true,
-        @Query("after") after: String = ""
+        @Query("after") after: String? = null
     ): NetworkImages
 
     @GET("/api/info")

@@ -1,9 +1,10 @@
 package mp.redditwalls.models
 
+import mp.redditwalls.design.components.ImageCardModel
 import mp.redditwalls.domain.models.DomainImage
 import mp.redditwalls.domain.models.DomainImageUrl
 
-data class ImageScreenState(
+data class ImageItemUiState(
     val postTitle: String = "",
     val subredditName: String = "",
     val author: String = "",
@@ -17,7 +18,7 @@ data class ImageScreenState(
     val isAlbum: Boolean = false
 )
 
-fun DomainImage.toImageItemScreenState() = ImageScreenState(
+fun DomainImage.toImageItemScreenState() = ImageItemUiState(
     postTitle = postTitle,
     subredditName = subredditName,
     author = author,
@@ -38,7 +39,7 @@ fun DomainImage.toImageItemScreenState() = ImageScreenState(
     isAlbum = isAlbum
 )
 
-fun ImageScreenState.toDomainImage() = DomainImage(
+fun ImageItemUiState.toDomainImage() = DomainImage(
     postTitle = postTitle,
     subredditName = subredditName,
     author = author,
@@ -57,6 +58,22 @@ fun ImageScreenState.toDomainImage() = DomainImage(
     ),
     isLiked = isLiked,
     isAlbum = isAlbum
+)
+
+fun ImageItemUiState.toImageCardModel(
+    onLikeClick: (Boolean) -> Unit,
+    onClick: () -> Unit,
+    onLongPress: () -> Unit
+) = ImageCardModel(
+    key = networkId,
+    imageUrl = imageUrl.url,
+    title = postTitle,
+    subTitle = subredditName,
+    isAlbum = isAlbum,
+    isLiked = isLiked,
+    onLikeClick = onLikeClick,
+    onClick = onClick,
+    onLongPress = onLongPress
 )
 
 data class ImageUrl(

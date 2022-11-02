@@ -31,8 +31,8 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 @InstallIn(SingletonComponent::class)
 internal object NetworkModule {
     @Provides
-    fun provideAuthService(
-        @Named("AuthRetrofit") retrofit: Retrofit
+    fun provideRedditAuthService(
+        @Named("RedditAuthRetrofit") retrofit: Retrofit
     ) = retrofit.create(AuthService::class.java)
 
     @Provides
@@ -89,6 +89,7 @@ internal object NetworkModule {
             val request = it.request()
                 .newBuilder()
                 .header("Authorization", Constants.CREDENTIALS)
+                .header("Content-Type", "application/json")
                 .build()
             it.proceed(request)
         }.build()
@@ -101,6 +102,7 @@ internal object NetworkModule {
         .addInterceptor {
             val request = it.request()
                 .newBuilder()
+                .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer ${AccessToken.accessToken}")
                 .build()
             it.proceed(request)
@@ -115,6 +117,7 @@ internal object NetworkModule {
             val request = it.request()
                 .newBuilder()
                 .header("Authorization", "Bearer ${Constants.IMGUR_CLIENT_ID}")
+                .header("Content-Type", "application/json")
                 .build()
             it.proceed(request)
         }.build()
@@ -126,6 +129,7 @@ internal object NetworkModule {
         networkSubredditDeserializer: NetworkSubredditDeserializer,
         networkSubredditsDeserializer: NetworkSubredditsDeserializer
     ) = GsonBuilder()
+        .setLenient()
         .registerTypeAdapter(NetworkImage::class.java, networkImageDeserializer)
         .registerTypeAdapter(NetworkImages::class.java, networkImagesDeserializer)
         .registerTypeAdapter(NetworkSubreddit::class.java, networkSubredditDeserializer)

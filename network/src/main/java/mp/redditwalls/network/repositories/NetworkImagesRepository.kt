@@ -7,14 +7,14 @@ import mp.redditwalls.network.models.TimeFilter
 import mp.redditwalls.network.services.ImagesService
 
 class NetworkImagesRepository @Inject constructor(private val imagesService: ImagesService) {
-    suspend fun getHotImages(subreddit: String, after: String) = withContext(Dispatchers.IO) {
+    suspend fun getHotImages(subreddit: String, after: String?) = withContext(Dispatchers.IO) {
         imagesService.getHotImages(
             subreddit = subreddit,
             after = after
         )
     }
 
-    suspend fun getNewImages(subreddit: String, after: String) = withContext(Dispatchers.IO) {
+    suspend fun getNewImages(subreddit: String, after: String?) = withContext(Dispatchers.IO) {
         imagesService.getNewImages(
             subreddit = subreddit,
             after = after
@@ -24,7 +24,7 @@ class NetworkImagesRepository @Inject constructor(private val imagesService: Ima
     suspend fun getTopImages(
         subreddit: String,
         timeFilter: TimeFilter,
-        after: String
+        after: String?
     ) = withContext(Dispatchers.IO) {
         imagesService.getTopImages(
             subreddit = subreddit,
@@ -37,7 +37,7 @@ class NetworkImagesRepository @Inject constructor(private val imagesService: Ima
         query: String,
         sort: String,
         time: TimeFilter,
-        after: String
+        after: String?
     ) = withContext(Dispatchers.IO) {
         imagesService.searchAllImages(
             query = query,
@@ -52,7 +52,7 @@ class NetworkImagesRepository @Inject constructor(private val imagesService: Ima
         query: String,
         sort: String,
         time: TimeFilter,
-        after: String
+        after: String?
     ) = withContext(Dispatchers.IO) {
         imagesService.searchImagesInSubreddit(
             subreddit = subreddit,

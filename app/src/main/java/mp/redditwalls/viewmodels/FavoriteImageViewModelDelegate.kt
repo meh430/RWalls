@@ -12,8 +12,9 @@ class FavoriteImageViewModelDelegate @Inject constructor(
     private val addFavoriteImageUseCase: AddFavoriteImageUseCase,
     private val removeFavoriteImageUseCase: RemoveFavoriteImageUseCase
 ) : FavoriteImageViewModel {
+    override lateinit var coroutineScope: CoroutineScope
+
     override fun addFavoriteImage(
-        coroutineScope: CoroutineScope,
         domainImage: DomainImage,
         index: Int,
         refreshLocation: WallpaperLocation
@@ -29,10 +30,7 @@ class FavoriteImageViewModelDelegate @Inject constructor(
         }
     }
 
-    override fun removeFavoriteImage(
-        coroutineScope: CoroutineScope,
-        id: Int
-    ) {
+    override fun removeFavoriteImage(id: Int) {
         coroutineScope.launch {
             removeFavoriteImageUseCase(id)
         }
