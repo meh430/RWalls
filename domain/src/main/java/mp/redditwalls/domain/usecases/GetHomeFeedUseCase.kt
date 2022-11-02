@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.combine
 import mp.redditwalls.domain.Utils.toTimeFilter
 import mp.redditwalls.domain.models.FeedResult
 import mp.redditwalls.domain.models.toDomainImage
+import mp.redditwalls.local.Constants.DEFAULT_SUBREDDIT
 import mp.redditwalls.local.repositories.LocalImagesRepository
 import mp.redditwalls.local.repositories.LocalSubredditsRepository
 import mp.redditwalls.network.repositories.NetworkImagesRepository
@@ -24,7 +25,11 @@ class GetHomeFeedUseCase @Inject constructor(
         preferencesRepository.getPreviewResolution(),
         preferencesRepository.getDefaultHomeSort()
     ) { savedSubreddits, dbImages, allowNsfw, previewResolution, defaultSortOrder ->
-        val subreddit = savedSubreddits.joinToString(separator = "+") { it.name }
+        val subreddit = savedSubreddits.joinToString(separator = "+") {
+            it.name
+        }.ifEmpty {
+            DEFAULT_SUBREDDIT
+        }
         val dbImagesNetworkIds = dbImages.associate { it.networkId to it.id }
         val after = data.nextPageId
         val networkImages = when (val sortOrder = params.sortOrder ?: defaultSortOrder) {

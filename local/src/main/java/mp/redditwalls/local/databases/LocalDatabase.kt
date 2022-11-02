@@ -7,8 +7,8 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import mp.redditwalls.local.Constants.DEFAULT_SUBREDDIT
 import mp.redditwalls.local.daos.DbImageDao
 import mp.redditwalls.local.daos.DbRecentActivityItemDao
 import mp.redditwalls.local.daos.DbSubredditDao
@@ -49,7 +49,7 @@ abstract class LocalDatabase : RoomDatabase() {
         private fun getCallback(context: Context) = object : Callback() {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
-                CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
+                CoroutineScope(Dispatchers.IO).launch {
                     getDatabase(context).run {
                         prePopulateSubredditDb(getDbSubredditDao())
                     }
@@ -60,7 +60,7 @@ abstract class LocalDatabase : RoomDatabase() {
         private suspend fun prePopulateSubredditDb(dbSubredditDao: DbSubredditDao) {
             dbSubredditDao.insertDbSubreddit(
                 DbSubreddit(
-                    name = "mobilewallpaper"
+                    name = DEFAULT_SUBREDDIT
                 )
             )
         }
