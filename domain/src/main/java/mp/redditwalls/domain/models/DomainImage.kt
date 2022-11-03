@@ -47,7 +47,7 @@ fun NetworkImage.toDomainImage(
         )
     },
     isLiked = isLiked,
-    isAlbum = imgurAlbumId.isNotEmpty()
+    isAlbum = galleryItems.size > 1
 )
 
 fun DbImage.toDomainImage(

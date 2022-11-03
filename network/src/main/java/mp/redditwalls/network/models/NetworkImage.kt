@@ -30,21 +30,22 @@ data class NetworkImage(
     val galleryItems: List<GalleryItem> = emptyList()
 ) {
     companion object {
-        fun fromJson(json: JsonObject): NetworkImage? {
-            var galleryItems: List<GalleryItem>? = null
-            if (json.has("media_metadata")) {
+        fun fromJson(json: JsonObject): NetworkImage? = try {
+            val galleryItems = if (json.has("media_metadata")) {
                 val metadataJson = json.getAsJsonObject("media_metadata")
-                galleryItems = metadataJson.keySet().map {
+                metadataJson.keySet().map {
                     GalleryItem.fromGalleryJson(metadataJson.getAsJsonObject(it))
                 }
             } else if (json.has("preview")) {
-                galleryItems = listOf(
+                listOf(
                     GalleryItem.fromPreviewJson(json.getAsJsonObject("preview"))
                 )
+            } else {
+                null
             }
 
             var imgurAlbumId = ""
-            if (json.has("media")) {
+            if (json.has("media") && !json.get("media").isJsonNull) {
                 val media = json.getAsJsonObject("media")
                 val type = media.getString("type")
                 imgurAlbumId = if (type == "imgur.com" && media.has("oembed")) {
@@ -57,7 +58,7 @@ data class NetworkImage(
                 }
             }
 
-            return galleryItems?.let {
+            galleryItems?.let {
                 NetworkImage(
                     id = "t3_" + json.getString("id"),
                     postTitle = json.getString("title"),
@@ -71,6 +72,8 @@ data class NetworkImage(
                     galleryItems = it
                 )
             }
+        } catch (e: Exception) {
+            null
         }
     }
 }

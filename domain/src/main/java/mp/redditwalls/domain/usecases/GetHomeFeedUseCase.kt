@@ -41,8 +41,7 @@ class GetHomeFeedUseCase @Inject constructor(
         }
 
         val domainImages = networkImages.images.filter {
-            // filter sfw images when not allowing nsfw
-            !allowNsfw && !it.isOver18
+            (!allowNsfw && !it.isOver18) || allowNsfw
         }.map {
             it.toDomainImage(
                 previewResolution = previewResolution,
