@@ -106,6 +106,13 @@ internal object NetworkModule {
                 .header("Authorization", "Bearer ${AccessToken.accessToken}")
                 .build()
             it.proceed(request)
+        }.addNetworkInterceptor {
+            val response = it.proceed(it.request())
+            if (response.code == 301 || response.code == 403) {
+                response.newBuilder().code(401).build()
+            } else {
+                response
+            }
         }.authenticator(authenticator).build()
 
     @Named("ImgurOkhttpClient")
