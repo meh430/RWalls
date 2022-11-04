@@ -28,8 +28,8 @@ data class DomainImageUrl(
 
 fun NetworkImage.toDomainImage(
     previewResolution: ImageQuality,
-    isLiked: Boolean,
-    dbId: Int
+    isLiked: Boolean = false,
+    dbId: Int = -1
 ) = DomainImage(
     networkId = id,
     dbId = dbId,

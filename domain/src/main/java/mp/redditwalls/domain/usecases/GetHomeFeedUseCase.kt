@@ -43,15 +43,18 @@ class GetHomeFeedUseCase @Inject constructor(
         val domainImages = networkImages.images.filter {
             (!allowNsfw && !it.isOver18) || allowNsfw
         }.map {
-            it.toDomainImage(
-                previewResolution = previewResolution,
-                isLiked = dbImagesNetworkIds.contains(it.id),
-                dbId = dbImagesNetworkIds[it.id] ?: -1
+            it.toDomainImage(previewResolution = previewResolution)
+        }
+
+        val allImages = (data.images + domainImages).map {
+            it.copy(
+                isLiked = dbImagesNetworkIds.contains(it.networkId),
+                dbId = dbImagesNetworkIds[it.networkId] ?: -1
             )
         }
 
         data.copy(
-            images = data.images + domainImages,
+            images = allImages,
             nextPageId = networkImages.nextPageId
         )
     }

@@ -30,13 +30,13 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     fun fetchHomeFeed(sort: SortOrder?) {
+        homeScreenUiState = homeScreenUiState.copy(uiResult = UiResult.Loading())
         viewModelScope.launch {
             getHomeFeedUseCase(GetHomeFeedUseCase.Params(sortOrder = sort))
         }
     }
 
     private fun subscribe() {
-        homeScreenUiState = homeScreenUiState.copy(uiResult = UiResult.Loading())
         viewModelScope.launch {
             getHomeFeedUseCase.sharedFlow.collect {
                 homeScreenUiState = when (it) {
