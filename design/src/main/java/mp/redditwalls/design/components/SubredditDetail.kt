@@ -16,7 +16,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -33,14 +32,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.SubcomposeAsyncImage
-import coil.request.ImageRequest
 import mp.redditwalls.design.RwTheme
 import mp.redditwalls.design.imageBackgroundGradient
 
@@ -103,16 +98,9 @@ fun SubredditHeaderImage(
         )
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            SubcomposeAsyncImage(
+            Image(
                 modifier = Modifier.fillMaxSize(),
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(headerImageUrl)
-                    .crossfade(true)
-                    .build(),
-                loading = { CircularProgressIndicator() },
-                alignment = Alignment.Center,
-                contentScale = ContentScale.Crop,
-                contentDescription = null,
+                imageUrl = headerImageUrl
             )
             Box(
                 modifier = Modifier

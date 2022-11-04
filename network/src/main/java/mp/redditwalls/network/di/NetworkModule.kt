@@ -108,7 +108,7 @@ internal object NetworkModule {
             it.proceed(request)
         }.addNetworkInterceptor {
             val response = it.proceed(it.request())
-            if (response.code == 301 || response.code == 403) {
+            if (response.code in setOf(301, 302, 403)) {
                 response.newBuilder().code(401).build()
             } else {
                 response

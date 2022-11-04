@@ -18,7 +18,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -30,14 +29,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.SubcomposeAsyncImage
-import coil.request.ImageRequest
 import mp.redditwalls.design.RwTheme
 import mp.redditwalls.design.imageBackgroundGradient
 import mp.redditwalls.design.secondaryWhite
@@ -63,16 +58,9 @@ fun ImageRecentActivityCard(
         )
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            SubcomposeAsyncImage(
+            Image(
                 modifier = Modifier.fillMaxSize(),
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(imageUrl)
-                    .crossfade(true)
-                    .build(),
-                loading = { CircularProgressIndicator() },
-                alignment = Alignment.Center,
-                contentScale = ContentScale.Crop,
-                contentDescription = null,
+                imageUrl = imageUrl
             )
             Box(
                 modifier = Modifier
