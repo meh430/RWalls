@@ -8,7 +8,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
-import mp.redditwalls.network.AccessToken
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import mp.redditwalls.network.Constants
 import mp.redditwalls.network.TokenAuthenticator
 import mp.redditwalls.network.deserializers.NetworkImageDeserializer
@@ -22,6 +23,7 @@ import mp.redditwalls.network.models.NetworkSubreddits
 import mp.redditwalls.network.services.AuthService
 import mp.redditwalls.network.services.ImagesService
 import mp.redditwalls.network.services.SubredditsService
+import mp.redditwalls.preferences.PreferencesRepository
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -96,16 +98,22 @@ internal object NetworkModule {
 
     @Named("RedditOkhttpClient")
     @Provides
-    fun provideRedditOkhttpClient(authenticator: TokenAuthenticator) = OkHttpClient.Builder()
+    fun provideRedditOkhttpClient(
+        authenticator: TokenAuthenticator,
+        preferencesRepository: PreferencesRepository
+    ) = OkHttpClient.Builder()
         .readTimeout(1, TimeUnit.MINUTES)
         .connectTimeout(1, TimeUnit.MINUTES)
         .addInterceptor {
-            val request = it.request()
-                .newBuilder()
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer ${AccessToken.accessToken}")
-                .build()
-            it.proceed(request)
+            runBlocking {
+                val accessToken = preferencesRepository.getAccessToken().first()
+                val request = it.request()
+                    .newBuilder()
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", "Bearer $accessToken")
+                    .build()
+                it.proceed(request)
+            }
         }.addNetworkInterceptor {
             val response = it.proceed(it.request())
             if (response.code in setOf(301, 302, 403)) {

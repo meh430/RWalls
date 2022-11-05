@@ -70,6 +70,8 @@ class PreferencesRepository @Inject constructor(
         )
     }
 
+    fun getAccessToken() = getValue(PreferenceKeys.ACCESS_TOKEN, "")
+
     // setters
     suspend fun setDefaultHomeSort(sortOrder: SortOrder) {
         setValue(PreferenceKeys.DEFAULT_HOME_SORT, sortOrder.name)
@@ -101,6 +103,10 @@ class PreferencesRepository @Inject constructor(
 
     suspend fun setAllowNsfw(allowNsfw: Boolean) {
         setValue(PreferenceKeys.ALLOW_NSFW, allowNsfw)
+    }
+
+    suspend fun setAccessToken(accessToken: String) {
+        setValue(PreferenceKeys.ACCESS_TOKEN, accessToken)
     }
 
     suspend fun setAllPreferences(preferencesData: PreferencesData) {

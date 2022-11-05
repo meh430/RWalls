@@ -12,4 +12,5 @@ internal object PreferenceKeys {
     val DATA_SETTING = stringPreferencesKey("data_setting") // when to refresh
     val VERTICAL_SWIPE_FEED_ENABLED = booleanPreferencesKey("vertical_swipe_feed_enabled")
     val ALLOW_NSFW = booleanPreferencesKey("allow_nsfw")
+    val ACCESS_TOKEN = stringPreferencesKey("access_token")
 }
