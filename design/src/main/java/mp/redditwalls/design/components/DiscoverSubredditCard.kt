@@ -12,11 +12,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.BookmarkBorder
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -71,17 +66,7 @@ fun DiscoverSubredditCard(
                     )
                 }
             }
-            IconButton(onClick = { onSaveChanged(!isSaved) }) {
-                Icon(
-                    imageVector = if (isSaved) {
-                        Icons.Default.Bookmark
-                    } else {
-                        Icons.Default.BookmarkBorder
-                    },
-                    tint = MaterialTheme.colorScheme.primary,
-                    contentDescription = null
-                )
-            }
+            SaveButton(isSaved = isSaved, onClick = onSaveChanged)
         }
         LazyRow(
             modifier = Modifier.fillMaxWidth(),
