@@ -21,6 +21,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.flow.filter
 import mp.redditwalls.design.components.EmptyState
 import mp.redditwalls.design.components.ImageCard
 import mp.redditwalls.design.components.ThreeDotsLoader
@@ -110,7 +111,8 @@ fun LazyGridState.OnBottomReached(
     }
 
     LaunchedEffect(shouldLoadMore) {
-        snapshotFlow { shouldLoadMore.value }
-            .collect { if (it) onLoadMore() }
+        snapshotFlow { shouldLoadMore.value }.filter { it }.collect {
+            onLoadMore()
+        }
     }
 }

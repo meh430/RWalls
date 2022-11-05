@@ -54,7 +54,7 @@ class PreferencesRepository @Inject constructor(
             } ?: SortOrder.HOT,
             previewResolution = prefs[PreferenceKeys.PREVIEW_RESOLUTION]?.let {
                 ImageQuality.valueOf(it)
-            } ?: ImageQuality.HIGH,
+            } ?: ImageQuality.MEDIUM,
             theme = prefs[PreferenceKeys.THEME]?.let {
                 Theme.valueOf(it)
             } ?: Theme.SYSTEM,
