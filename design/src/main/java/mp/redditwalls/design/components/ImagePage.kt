@@ -6,15 +6,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Comment
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.Wallpaper
 import androidx.compose.material3.ElevatedCard
@@ -177,23 +177,17 @@ fun IconColumn(
     onSetWallpaperClick: () -> Unit,
 ) {
     val iconSize = 32.dp
-    val icon = if (isLiked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
-    val iconTint = if (isLiked) Color.Red else Color.White
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        IconButton(
-            onClick = { onLikeChanged(!isLiked) },
-        ) {
-            Icon(
-                modifier = Modifier.size(iconSize),
-                imageVector = icon,
-                tint = iconTint,
-                contentDescription = null,
-            )
-        }
+        LikeButton(
+            modifier = Modifier.size(iconSize),
+            isLiked = isLiked,
+            onLikeClick = onLikeChanged
+        )
+        Spacer(modifier = Modifier.height(4.dp))
         IconButton(
             onClick = { onSetWallpaperClick() },
         ) {

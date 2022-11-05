@@ -1,7 +1,6 @@
 package mp.redditwalls.design.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -118,13 +117,10 @@ fun ImageCard(
                             contentDescription = null,
                         )
                     }
-                    Icon(
-                        modifier = Modifier
-                            .clickable { imageCardModel.onLikeClick(!imageCardModel.isLiked) }
-                            .size(24.dp),
-                        imageVector = icon,
-                        contentDescription = null,
-                        tint = iconTint
+                    LikeButton(
+                        modifier = Modifier.size(24.dp),
+                        isLiked = imageCardModel.isLiked,
+                        onLikeClick = imageCardModel.onLikeClick
                     )
                 }
                 Column(
