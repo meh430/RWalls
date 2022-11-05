@@ -21,7 +21,7 @@ fun HomeScreen(
     homeScreenViewModel: HomeScreenViewModel = viewModel()
 ) {
     val uiState = homeScreenViewModel.homeScreenUiState
-    val uiResult = uiState.uiResult
+    val uiResult = uiState.uiResult.value
     when {
         uiResult is UiResult.Error -> ErrorState(
             errorMessage = uiResult.errorMessage.orEmpty()
@@ -37,6 +37,7 @@ fun HomeScreen(
             images = uiState.images,
             isLoading = uiResult is UiResult.Loading,
             onLikeClick = { image, isLiked ->
+                image.isLiked.value = isLiked
                 if (isLiked) {
                     homeScreenViewModel.addFavoriteImage(
                         domainImage = image.toDomainImage(),

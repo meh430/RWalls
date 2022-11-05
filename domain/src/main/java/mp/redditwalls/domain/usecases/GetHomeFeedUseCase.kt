@@ -20,17 +20,17 @@ class GetHomeFeedUseCase @Inject constructor(
 ) : FlowUseCase<FeedResult, GetHomeFeedUseCase.Params>(FeedResult()) {
     override fun execute(params: Params) = combine(
         subredditsRepository.getDbSubreddits(),
-        localImagesRepository.getDbImagesFlow(),
         preferencesRepository.getAllowNsfw(),
         preferencesRepository.getPreviewResolution(),
         preferencesRepository.getDefaultHomeSort()
-    ) { savedSubreddits, dbImages, allowNsfw, previewResolution, defaultSortOrder ->
+    ) { savedSubreddits, allowNsfw, previewResolution, defaultSortOrder ->
         val subreddit = savedSubreddits.joinToString(separator = "+") {
             it.name
         }.ifEmpty {
             DEFAULT_SUBREDDIT
         }
-        val dbImagesNetworkIds = dbImages.associate { it.networkId to it.id }
+        val dbImagesNetworkIds =
+            localImagesRepository.getDbImages().associate { it.networkId to it.id }
         val after = data.nextPageId
         val networkImages = when (val sortOrder = params.sortOrder ?: defaultSortOrder) {
             SortOrder.HOT -> networkImagesRepository.getHotImages(subreddit, after)
@@ -43,18 +43,15 @@ class GetHomeFeedUseCase @Inject constructor(
         val domainImages = networkImages.images.filter {
             (!allowNsfw && !it.isOver18) || allowNsfw
         }.map {
-            it.toDomainImage(previewResolution = previewResolution)
-        }
-
-        val allImages = (data.images + domainImages).map {
-            it.copy(
-                isLiked = dbImagesNetworkIds.contains(it.networkId),
-                dbId = dbImagesNetworkIds[it.networkId] ?: -1
+            it.toDomainImage(
+                previewResolution = previewResolution,
+                isLiked = dbImagesNetworkIds.contains(it.id),
+                dbId = dbImagesNetworkIds[it.id] ?: -1
             )
         }
 
         data.copy(
-            images = allImages,
+            images = domainImages,
             nextPageId = networkImages.nextPageId
         )
     }

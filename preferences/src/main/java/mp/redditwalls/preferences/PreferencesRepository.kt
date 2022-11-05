@@ -23,7 +23,7 @@ class PreferencesRepository @Inject constructor(
         }
 
     fun getPreviewResolution() =
-        getValue(PreferenceKeys.PREVIEW_RESOLUTION, ImageQuality.HIGH.name).map {
+        getValue(PreferenceKeys.PREVIEW_RESOLUTION, ImageQuality.MEDIUM.name).map {
             ImageQuality.valueOf(it)
         }
 

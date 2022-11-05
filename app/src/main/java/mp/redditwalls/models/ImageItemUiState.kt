@@ -1,5 +1,7 @@
 package mp.redditwalls.models
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import mp.redditwalls.design.components.ImageCardModel
 import mp.redditwalls.domain.models.DomainImage
 import mp.redditwalls.domain.models.DomainImageUrl
@@ -14,7 +16,7 @@ data class ImageItemUiState(
     val networkId: String = "",
     val dbId: Int = 0,
     val imageUrl: ImageUrl,
-    val isLiked: Boolean = false,
+    val isLiked: MutableState<Boolean> = mutableStateOf(false),
     val isAlbum: Boolean = false
 )
 
@@ -35,7 +37,7 @@ fun DomainImage.toImageItemScreenState() = ImageItemUiState(
             lowQualityUrl = it.lowQualityUrl
         )
     },
-    isLiked = isLiked,
+    isLiked = mutableStateOf(isLiked),
     isAlbum = isAlbum
 )
 
@@ -56,7 +58,7 @@ fun ImageItemUiState.toDomainImage() = DomainImage(
             highQualityUrl = imageUrl.highQualityUrl
         )
     ),
-    isLiked = isLiked,
+    isLiked = isLiked.value,
     isAlbum = isAlbum
 )
 
@@ -70,7 +72,7 @@ fun ImageItemUiState.toImageCardModel(
     title = postTitle,
     subTitle = subredditName,
     isAlbum = isAlbum,
-    isLiked = isLiked,
+    isLiked = isLiked.value,
     onLikeClick = onLikeClick,
     onClick = onClick,
     onLongPress = onLongPress
