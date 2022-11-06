@@ -11,7 +11,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/bottomNavView"
+            android:layout_above="@+id/bottom_nav_bar"
             android:layout_centerHorizontal="true">
 
             <fragment
@@ -23,17 +23,11 @@
                 app:navGraph="@navigation/mobile_navigation" />
         </FrameLayout>
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNavView"
-            style="@style/Widget.Material3.BottomNavigationView"
+        <mp.redditwalls.ui.components.BottomNavigationBarView
+            android:id="@+id/bottom_nav_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:elevation="8dp"
-            android:paddingStart="6dp"
-            android:paddingEnd="6dp"
-            app:itemIconSize="24dp"
-            app:menu="@menu/bottom_nav_menu" />
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

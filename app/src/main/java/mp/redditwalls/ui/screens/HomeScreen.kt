@@ -1,4 +1,4 @@
-package mp.redditwalls.composables.screens
+package mp.redditwalls.ui.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,8 +28,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import mp.redditwalls.composables.components.ImagePager
-import mp.redditwalls.composables.components.ImagesList
+import mp.redditwalls.ui.components.ImagePager
+import mp.redditwalls.ui.components.ImagesList
 import mp.redditwalls.design.components.EmptyState
 import mp.redditwalls.design.components.ErrorState
 import mp.redditwalls.design.components.IconText

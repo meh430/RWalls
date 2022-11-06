@@ -1,4 +1,4 @@
-package mp.redditwalls.composables.components
+package mp.redditwalls.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

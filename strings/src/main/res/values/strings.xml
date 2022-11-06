@@ -39,4 +39,10 @@
     <string name="six_hours">Every Six Hours</string>
     <string name="twelve_hours">Every Twelve Hours</string>
     <string name="twenty_four_hours">Every Twenty-four Hours</string>
+
+    <string name="home">Home</string>
+    <string name="favorites">Favorites</string>
+    <string name="discover">Discover</string>
+    <string name="saved">Saved</string>
+    <string name="settings">Settings</string>
 </resources>

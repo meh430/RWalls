@@ -11,6 +11,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import mp.redditwalls.design.typography.RwTypography
 
 private val LightColors = lightColorScheme(
@@ -79,13 +80,16 @@ fun RwTheme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val dynamicColor = true//Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+    val dynamicColor = false//Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
     val colors = when {
         dynamicColor && useDarkTheme -> dynamicDarkColorScheme(LocalContext.current)
         dynamicColor && !useDarkTheme -> dynamicLightColorScheme(LocalContext.current)
         useDarkTheme -> DarkColors
         else -> LightColors
     }
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setSystemBarsColor(colors.surface)
+
     MaterialTheme(
         colorScheme = colors,
         typography = RwTypography,
