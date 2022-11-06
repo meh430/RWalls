@@ -42,7 +42,7 @@ fun ImagesList(
     } else {
         val listState = rememberLazyGridState()
         LazyVerticalGrid(
-            modifier = modifier,
+            modifier = modifier.fillMaxWidth(),
             state = listState,
             columns = GridCells.Adaptive(minSize = 150.dp),
             contentPadding = contentPadding,

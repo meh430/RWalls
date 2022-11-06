@@ -25,12 +25,16 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowRow
 import mp.redditwalls.design.RwTheme
 
-// -1 if no selection
+data class IconText(
+    val text: String,
+    val icon: ImageVector? = null
+)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilterChipBar(
     modifier: Modifier = Modifier,
-    filters: List<Pair<String, ImageVector?>>,
+    filters: List<IconText>,
     initialSelection: Int = 0,
     onSelectionChanged: (Int) -> Unit
 ) {
@@ -44,16 +48,12 @@ fun FilterChipBar(
                 modifier = Modifier.padding(horizontal = 4.dp),
                 selected = selected,
                 onClick = {
-                    selectedChipIndex = if (selected) {
-                        -1
-                    } else {
-                        index
-                    }
+                    selectedChipIndex = index
                     onSelectionChanged(selectedChipIndex)
                 },
-                label = { Text(text = it.first) },
+                label = { Text(text = it.text) },
                 leadingIcon = {
-                    it.second?.let { imageVector ->
+                    it.icon?.let { imageVector ->
                         Icon(
                             modifier = Modifier.size(16.dp),
                             imageVector = imageVector,
@@ -84,7 +84,7 @@ fun FilterChipBarPreview() {
                     "option 5" to null,
                     "option 6" to null,
                     "option 7" to null,
-                )
+                ).map { IconText(text = it.first, icon = it.second) }
             ) {}
         }
     }

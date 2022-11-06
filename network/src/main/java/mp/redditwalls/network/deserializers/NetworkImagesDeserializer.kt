@@ -21,9 +21,10 @@ class NetworkImagesDeserializer @Inject constructor() : JsonDeserializer<Network
             val childData = it.asJsonObject.getAsJsonObject("data")
             NetworkImage.fromJson(childData)
         }
+        val after = data.get("after")?.takeIf { !it.isJsonNull }?.asString
         return NetworkImages(
             images = images.filterNotNull(),
-            nextPageId = data.get("after")?.asString.orEmpty()
+            nextPageId = after
         )
     }
 

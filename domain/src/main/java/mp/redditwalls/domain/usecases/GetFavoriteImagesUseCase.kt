@@ -17,7 +17,7 @@ class GetFavoriteImagesUseCase @Inject constructor(
         preferencesRepository.getPreviewResolution()
     ) { dbImages, previewResolution ->
         val domainImages = dbImages.filter { dbImage ->
-            params.wallpaperLocation?.let { it.name == dbImage.refreshLocation } ?: true
+            params.wallpaperLocation.name == dbImage.refreshLocation
         }.map {
             it.toDomainImage(
                 previewResolution = previewResolution,
@@ -31,6 +31,6 @@ class GetFavoriteImagesUseCase @Inject constructor(
     }
 
     data class Params(
-        val wallpaperLocation: WallpaperLocation? = null
+        val wallpaperLocation: WallpaperLocation
     )
 }

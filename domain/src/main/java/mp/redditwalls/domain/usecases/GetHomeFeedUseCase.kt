@@ -21,9 +21,8 @@ class GetHomeFeedUseCase @Inject constructor(
     override fun execute(params: Params) = combine(
         subredditsRepository.getDbSubreddits(),
         preferencesRepository.getAllowNsfw(),
-        preferencesRepository.getPreviewResolution(),
-        preferencesRepository.getDefaultHomeSort()
-    ) { savedSubreddits, allowNsfw, previewResolution, defaultSortOrder ->
+        preferencesRepository.getPreviewResolution()
+    ) { savedSubreddits, allowNsfw, previewResolution ->
         val subreddit = savedSubreddits.joinToString(separator = "+") {
             it.name
         }.ifEmpty {
@@ -31,8 +30,8 @@ class GetHomeFeedUseCase @Inject constructor(
         }
         val dbImagesNetworkIds =
             localImagesRepository.getDbImages().associate { it.networkId to it.id }
-        val after = data.nextPageId
-        val networkImages = when (val sortOrder = params.sortOrder ?: defaultSortOrder) {
+        val after = data.nextPageId?.takeIf { !params.reload }
+        val networkImages = when (val sortOrder = params.sortOrder) {
             SortOrder.HOT -> networkImagesRepository.getHotImages(subreddit, after)
             SortOrder.NEW -> networkImagesRepository.getNewImages(subreddit, after)
             else -> networkImagesRepository.getTopImages(
@@ -57,6 +56,7 @@ class GetHomeFeedUseCase @Inject constructor(
     }
 
     data class Params(
-        val sortOrder: SortOrder? = null
+        val sortOrder: SortOrder,
+        val reload: Boolean = false
     )
 }
