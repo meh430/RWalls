@@ -89,7 +89,10 @@ class HomeScreenViewModel @Inject constructor(
             when (it) {
                 is DomainResult.Error -> {}
                 is DomainResult.Success -> it.data?.let { preferences ->
-                    homeScreenUiState.sortOrder.value = preferences.defaultHomeSort
+                    homeScreenUiState.apply {
+                        sortOrder.value = preferences.defaultHomeSort
+                        verticalSwipeFeedEnabled.value = preferences.verticalSwipeFeedEnabled
+                    }
                     fetchHomeFeed()
                 }
             }

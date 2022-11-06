@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import mp.redditwalls.composables.components.ImagePager
 import mp.redditwalls.composables.components.ImagesList
 import mp.redditwalls.design.components.EmptyState
 import mp.redditwalls.design.components.ErrorState
@@ -35,6 +36,7 @@ import mp.redditwalls.design.components.IconText
 import mp.redditwalls.design.components.PopupMenu
 import mp.redditwalls.design.components.ThreeDotsLoader
 import mp.redditwalls.local.enums.WallpaperLocation
+import mp.redditwalls.models.ImageItemUiState
 import mp.redditwalls.models.UiResult
 import mp.redditwalls.models.toDomainImage
 import mp.redditwalls.preferences.enums.SortOrder
@@ -57,46 +59,60 @@ fun HomeScreen(
             IconText(text = context.getString(it.stringId))
         }
     }
+
+    val onLikeClick = { image: ImageItemUiState, isLiked: Boolean ->
+        image.isLiked.value = isLiked
+        if (isLiked) {
+            homeScreenViewModel.addFavoriteImage(
+                domainImage = image.toDomainImage(),
+                refreshLocation = WallpaperLocation.BOTH
+            )
+        } else {
+            homeScreenViewModel.removeFavoriteImage(image.dbId)
+        }
+    }
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            CenterAlignedTopAppBar(
-                modifier = Modifier,
-                title = {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = "RWalls",
-                        )
-                        Text(
-                            text = uiState.sortOrder.value?.stringId?.let {
-                                stringResource(it).lowercase()
-                            }.orEmpty(),
-                            style = MaterialTheme.typography.bodySmall,
-                        )
-                    }
-                },
-                navigationIcon = {},
-                actions = {
-                    Box {
-                        IconButton(
-                            onClick = { sortMenuExpanded = true }
+            if (!uiState.verticalSwipeFeedEnabled.value) {
+                CenterAlignedTopAppBar(
+                    modifier = Modifier,
+                    scrollBehavior = scrollBehavior,
+                    title = {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Icon(imageVector = Icons.Default.Sort, contentDescription = null)
+                            Text(
+                                text = "RWalls",
+                            )
+                            Text(
+                                text = uiState.sortOrder.value?.stringId?.let {
+                                    stringResource(it).lowercase()
+                                }.orEmpty(),
+                                style = MaterialTheme.typography.bodySmall,
+                            )
                         }
-                        PopupMenu(
-                            expanded = sortMenuExpanded,
-                            options = sortMenuOptions,
-                            onOptionSelected = {
-                                homeScreenViewModel.setSortOrder(SortOrder.values()[it])
-                            },
-                            onDismiss = { sortMenuExpanded = false }
-                        )
-                    }
-                },
-                scrollBehavior = scrollBehavior
-            )
+                    },
+                    navigationIcon = {},
+                    actions = {
+                        Box {
+                            IconButton(
+                                onClick = { sortMenuExpanded = true }
+                            ) {
+                                Icon(imageVector = Icons.Default.Sort, contentDescription = null)
+                            }
+                            PopupMenu(
+                                expanded = sortMenuExpanded,
+                                options = sortMenuOptions,
+                                onOptionSelected = {
+                                    homeScreenViewModel.setSortOrder(SortOrder.values()[it])
+                                },
+                                onDismiss = { sortMenuExpanded = false }
+                            )
+                        }
+                    },
+                )
+            }
         },
         content = { innerPadding ->
             Column(
@@ -114,22 +130,20 @@ fun HomeScreen(
                         ThreeDotsLoader(modifier = Modifier.align(Alignment.Center))
                     }
                     uiResult is UiResult.Success && uiState.images.isEmpty() -> EmptyState()
-                    else -> ImagesList(
+                    uiState.verticalSwipeFeedEnabled.value -> {
+                        ImagePager(
+                            modifier = modifier,
+                            images = uiState.images,
+                            onLoadMore = { homeScreenViewModel.fetchHomeFeed() },
+                            onLikeClick = onLikeClick
+                        )
+                    }
+                    !uiState.verticalSwipeFeedEnabled.value -> ImagesList(
                         modifier = modifier,
                         contentPadding = PaddingValues(8.dp),
                         images = uiState.images,
                         isLoading = uiResult is UiResult.Loading,
-                        onLikeClick = { image, isLiked ->
-                            image.isLiked.value = isLiked
-                            if (isLiked) {
-                                homeScreenViewModel.addFavoriteImage(
-                                    domainImage = image.toDomainImage(),
-                                    refreshLocation = WallpaperLocation.BOTH
-                                )
-                            } else {
-                                homeScreenViewModel.removeFavoriteImage(image.dbId)
-                            }
-                        },
+                        onLikeClick = onLikeClick,
                         onLoadMore = { homeScreenViewModel.fetchHomeFeed() }
                     )
                 }

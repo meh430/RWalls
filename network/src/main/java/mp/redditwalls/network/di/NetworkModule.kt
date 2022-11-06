@@ -28,6 +28,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
+import timber.log.Timber
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -115,7 +116,9 @@ internal object NetworkModule {
                 it.proceed(request)
             }
         }.addNetworkInterceptor {
-            val response = it.proceed(it.request())
+            val request = it.request()
+            Timber.d(request.url.toString())
+            val response = it.proceed(request)
             if (response.code in setOf(301, 302, 403)) {
                 response.newBuilder().code(401).build()
             } else {

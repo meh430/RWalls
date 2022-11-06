@@ -11,6 +11,10 @@ import android.util.TypedValue
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.lifecycle.MutableLiveData
+import java.text.DecimalFormat
+import kotlin.math.floor
+import kotlin.math.log10
+import kotlin.math.pow
 import mp.redditwalls.repositories.SettingsItem
 import org.json.JSONArray
 import org.json.JSONObject
@@ -94,5 +98,19 @@ fun <T> SharedPreferences.putValue(key: String, value: T) {
         }
 
         apply()
+    }
+}
+
+fun Int.toFriendlyCount(): String {
+    val suffix = charArrayOf(' ', 'k', 'M', 'B', 'T', 'P', 'E')
+    val numValue = toLong()
+    val value = floor(log10(numValue.toDouble())).toInt()
+    val base = value / 3
+    return if (value >= 3 && base < suffix.size) {
+        DecimalFormat("#0.0").format(
+            numValue / 10.0.pow((base * 3).toDouble())
+        ) + suffix[base]
+    } else {
+        DecimalFormat("#,##0").format(numValue)
     }
 }
