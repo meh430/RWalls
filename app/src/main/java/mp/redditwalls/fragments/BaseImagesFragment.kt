@@ -43,7 +43,7 @@ abstract class BaseImagesFragment : Fragment(), ImagePageListener {
     override fun onLongClick(image: Image) {
         wallpaperHelper.showLocationPickerDialog(requireContext()) {
             lifecycleScope.launch {
-                wallpaperHelper.setImageAsWallpaper(requireContext(), image, it)
+                wallpaperHelper.setImageAsWallpaper(requireContext(), image.imageLink, it)
             }
         }
     }

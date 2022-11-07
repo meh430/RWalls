@@ -6,11 +6,16 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import dagger.hilt.android.AndroidEntryPoint
-import mp.redditwalls.ui.screens.HomeScreen
+import javax.inject.Inject
+import mp.redditwalls.WallpaperHelper
 import mp.redditwalls.design.RwTheme
+import mp.redditwalls.ui.screens.HomeScreen
 
 @AndroidEntryPoint
 class HomeScreenFragment : Fragment() {
+    @Inject
+    lateinit var wallpaperHelper: WallpaperHelper
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -18,7 +23,7 @@ class HomeScreenFragment : Fragment() {
     ) = ComposeView(requireContext()).apply {
         setContent {
             RwTheme {
-                HomeScreen()
+                HomeScreen(wallpaperHelper = wallpaperHelper)
             }
         }
     }

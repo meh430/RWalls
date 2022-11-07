@@ -5,7 +5,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.widget.Toast
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import java.util.Date
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -13,7 +12,6 @@ import mp.redditwalls.misc.ImageLoader
 import mp.redditwalls.misc.Toaster
 import mp.redditwalls.misc.Utils
 import mp.redditwalls.misc.fromId
-import mp.redditwalls.models.History
 import mp.redditwalls.models.Image
 import mp.redditwalls.repositories.FavoriteImagesRepository
 import mp.redditwalls.repositories.HistoryRepository
@@ -46,7 +44,7 @@ class WallpaperHelper @Inject constructor(
         image?.let {
             setImageAsWallpaper(
                 context,
-                it,
+                it.imageLink,
                 settingsRepository.getRandomRefreshLocation(),
                 true
             )
@@ -67,7 +65,7 @@ class WallpaperHelper @Inject constructor(
         image?.let {
             setImageAsWallpaper(
                 context,
-                it,
+                it.imageLink,
                 settingsRepository.getRandomRefreshLocation(),
                 true
             )
@@ -79,7 +77,7 @@ class WallpaperHelper @Inject constructor(
 
     suspend fun setImageAsWallpaper(
         context: Context,
-        image: Image,
+        imageUrl: String,
         location: WallpaperLocation,
         refresh: Boolean = false
     ) {
@@ -88,7 +86,7 @@ class WallpaperHelper @Inject constructor(
             val resolution = Utils.getResolution(context)
             val wallpaper = imageLoader.loadImage(
                 context,
-                image.imageLink,
+                imageUrl,
                 resolution
             )
 
@@ -100,14 +98,7 @@ class WallpaperHelper @Inject constructor(
                 Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
             }
         } finally {
-            historyRepository.insertHistory(
-                History(
-                    image = image,
-                    dateCreated = Date().time,
-                    manuallySet = !refresh,
-                    location = location.id
-                )
-            )
+            // set history
         }
     }
 

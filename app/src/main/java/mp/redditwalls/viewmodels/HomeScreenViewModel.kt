@@ -57,6 +57,10 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
+    fun setLongPressIndex(index: Int?) {
+        homeScreenUiState.longPressedIndex.value = index
+    }
+
     private fun subscribeToHomeFeed() {
         viewModelScope.launch {
             getHomeFeedUseCase.sharedFlow.collect {

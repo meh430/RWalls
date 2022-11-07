@@ -21,7 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,7 +32,7 @@ fun ListOptionsDialog(
     modifier: Modifier = Modifier,
     show: Boolean,
     title: String,
-    options: List<Pair<String, ImageVector>>,
+    options: List<IconText>,
     onSelect: (Int) -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -55,18 +54,23 @@ fun ListOptionsDialog(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(52.dp)
-                                .clickable(onClick = { onSelect(index) }),
+                                .clickable(
+                                    onClick = {
+                                        onSelect(index)
+                                        onDismiss()
+                                    }
+                                ),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
                                 modifier = Modifier
                                     .padding(end = 16.dp)
                                     .size(24.dp),
-                                imageVector = it.second,
+                                imageVector = it.icon!!,
                                 contentDescription = null
                             )
                             Text(
-                                text = it.first,
+                                text = it.text,
                                 style = MaterialTheme.typography.bodyLarge
                             )
                         }
@@ -93,7 +97,7 @@ fun WallpaperOptionsDialog(
             stringResource(R.string.home_screen) to Icons.Default.Home,
             stringResource(R.string.lock_screen) to Icons.Default.Lock,
             stringResource(R.string.both_screens) to Icons.Default.Smartphone
-        ),
+        ).map { IconText(it.first, it.second) },
         onSelect = onSelect,
         onDismiss = onDismiss
     )

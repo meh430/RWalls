@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,25 +29,29 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import mp.redditwalls.ui.components.ImagePager
-import mp.redditwalls.ui.components.ImagesList
+import kotlinx.coroutines.launch
+import mp.redditwalls.WallpaperHelper
 import mp.redditwalls.design.components.EmptyState
 import mp.redditwalls.design.components.ErrorState
 import mp.redditwalls.design.components.IconText
 import mp.redditwalls.design.components.PopupMenu
 import mp.redditwalls.design.components.ThreeDotsLoader
+import mp.redditwalls.design.components.WallpaperOptionsDialog
 import mp.redditwalls.local.enums.WallpaperLocation
 import mp.redditwalls.models.ImageItemUiState
 import mp.redditwalls.models.UiResult
 import mp.redditwalls.models.toDomainImage
 import mp.redditwalls.preferences.enums.SortOrder
+import mp.redditwalls.ui.components.ImagePager
+import mp.redditwalls.ui.components.ImagesList
 import mp.redditwalls.viewmodels.HomeScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    homeScreenViewModel: HomeScreenViewModel = viewModel()
+    homeScreenViewModel: HomeScreenViewModel = viewModel(),
+    wallpaperHelper: WallpaperHelper
 ) {
     val context = LocalContext.current
     val uiState = homeScreenViewModel.homeScreenUiState
@@ -115,11 +120,30 @@ fun HomeScreen(
             }
         },
         content = { innerPadding ->
+            val scope = rememberCoroutineScope()
             Column(
                 modifier = Modifier
                     .padding(innerPadding)
                     .consumedWindowInsets(innerPadding)
             ) {
+                WallpaperOptionsDialog(
+                    show = uiState.longPressedIndex.value != null,
+                    onSelect = { selection ->
+                        val index = uiState.longPressedIndex.value
+                        scope.launch {
+                            index?.let {
+                                wallpaperHelper.setImageAsWallpaper(
+                                    context = context,
+                                    imageUrl = uiState.images[it].imageUrl.highQualityUrl,
+                                    location = mp.redditwalls.WallpaperLocation.values()[selection]
+                                )
+                            }
+                        }
+                    },
+                    onDismiss = {
+                        homeScreenViewModel.setLongPressIndex(null)
+                    }
+                )
                 when {
                     uiResult is UiResult.Error -> ErrorState(
                         errorMessage = uiResult.errorMessage.orEmpty()
@@ -134,6 +158,7 @@ fun HomeScreen(
                         ImagePager(
                             modifier = modifier,
                             images = uiState.images,
+                            onImageSetWallpaperClick = homeScreenViewModel::setLongPressIndex,
                             onLoadMore = { homeScreenViewModel.fetchHomeFeed() },
                             onLikeClick = onLikeClick
                         )
@@ -143,6 +168,7 @@ fun HomeScreen(
                         contentPadding = PaddingValues(8.dp),
                         images = uiState.images,
                         isLoading = uiResult is UiResult.Loading,
+                        onImageLongPress = homeScreenViewModel::setLongPressIndex,
                         onLikeClick = onLikeClick,
                         onLoadMore = { homeScreenViewModel.fetchHomeFeed() }
                     )
