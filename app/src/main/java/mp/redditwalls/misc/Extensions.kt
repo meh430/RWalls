@@ -1,6 +1,6 @@
 package mp.redditwalls.misc
 
-import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Resources
@@ -55,10 +55,10 @@ fun WindowManager.currentWindowMetricsPointCompat(): Point {
     }
 }
 
-fun String.launchBrowser(activity: Activity) {
+fun String.launchBrowser(context: Context) {
     Intent(Intent.ACTION_VIEW).apply {
         data = Uri.parse(this@launchBrowser)
-    }.also { activity.startActivity(it) }
+    }.also { context.startActivity(it) }
 }
 
 fun String.removeSubPrefix(): String =

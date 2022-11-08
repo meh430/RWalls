@@ -20,6 +20,7 @@ import mp.redditwalls.models.ImageItemUiState
 fun ImagePager(
     modifier: Modifier = Modifier,
     images: List<ImageItemUiState>,
+    navigateToPost: (Int) -> Unit,
     onImageSetWallpaperClick: (Int) -> Unit,
     onLoadMore: () -> Unit,
     onLikeClick: (ImageItemUiState, Boolean) -> Unit
@@ -51,7 +52,7 @@ fun ImagePager(
                 isLiked = image.isLiked.value,
                 numUpvotes = image.numUpvotes.toFriendlyCount(),
                 numComments = image.numComments.toFriendlyCount(),
-                openPost = { },
+                openPost = { navigateToPost(index) },
                 onLikeChanged = { onLikeClick(image, it) },
                 onSetWallpaperClick = { onImageSetWallpaperClick(index) },
                 onInfoTextClick = { }

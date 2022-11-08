@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import java.util.Date
 import kotlinx.coroutines.launch
 import mp.redditwalls.WallpaperHelper
 import mp.redditwalls.design.components.EmptyState
@@ -37,7 +38,10 @@ import mp.redditwalls.design.components.IconText
 import mp.redditwalls.design.components.PopupMenu
 import mp.redditwalls.design.components.ThreeDotsLoader
 import mp.redditwalls.design.components.WallpaperOptionsDialog
+import mp.redditwalls.domain.models.DomainImageUrl
+import mp.redditwalls.domain.models.DomainRecentActivityItem.DomainSetWallpaperActivityItem
 import mp.redditwalls.local.enums.WallpaperLocation
+import mp.redditwalls.misc.launchBrowser
 import mp.redditwalls.models.ImageItemUiState
 import mp.redditwalls.models.UiResult
 import mp.redditwalls.models.toDomainImage
@@ -132,10 +136,26 @@ fun HomeScreen(
                         val index = uiState.longPressedIndex.value
                         scope.launch {
                             index?.let {
+                                val location = mp.redditwalls.WallpaperLocation.values()[selection]
                                 wallpaperHelper.setImageAsWallpaper(
                                     context = context,
                                     imageUrl = uiState.images[it].imageUrl.highQualityUrl,
-                                    location = mp.redditwalls.WallpaperLocation.values()[selection]
+                                    location = location,
+                                    recentActivityItem = uiState.images[it].run {
+                                        DomainSetWallpaperActivityItem(
+                                            dbId = 0,
+                                            createdAt = Date(),
+                                            subredditName = subredditName,
+                                            domainImageUrl = DomainImageUrl(
+                                                url = imageUrl.url,
+                                                lowQualityUrl = imageUrl.lowQualityUrl,
+                                                mediumQualityUrl = imageUrl.mediumQualityUrl,
+                                                highQualityUrl = imageUrl.highQualityUrl
+                                            ),
+                                            imageNetworkId = networkId,
+                                            wallpaperLocation = WallpaperLocation.values()[selection]
+                                        )
+                                    }
                                 )
                             }
                         }
@@ -158,6 +178,7 @@ fun HomeScreen(
                         ImagePager(
                             modifier = modifier,
                             images = uiState.images,
+                            navigateToPost = { uiState.images[it].postUrl.launchBrowser(context) },
                             onImageSetWallpaperClick = homeScreenViewModel::setLongPressIndex,
                             onLoadMore = { homeScreenViewModel.fetchHomeFeed() },
                             onLikeClick = onLikeClick

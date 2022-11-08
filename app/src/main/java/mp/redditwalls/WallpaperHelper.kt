@@ -8,13 +8,14 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import mp.redditwalls.domain.models.DomainRecentActivityItem
+import mp.redditwalls.domain.usecases.AddRecentActivityItemUseCase
 import mp.redditwalls.misc.ImageLoader
 import mp.redditwalls.misc.Toaster
 import mp.redditwalls.misc.Utils
 import mp.redditwalls.misc.fromId
 import mp.redditwalls.models.Image
 import mp.redditwalls.repositories.FavoriteImagesRepository
-import mp.redditwalls.repositories.HistoryRepository
 import mp.redditwalls.repositories.SettingsItem
 import mp.redditwalls.repositories.SettingsRepository
 
@@ -22,7 +23,7 @@ class WallpaperHelper @Inject constructor(
     private val imageLoader: ImageLoader,
     private val favoriteImagesRepository: FavoriteImagesRepository,
     private val settingsRepository: SettingsRepository,
-    private val historyRepository: HistoryRepository,
+    private val addRecentActivityItemUseCase: AddRecentActivityItemUseCase,
     private val toaster: Toaster
 ) {
 
@@ -45,8 +46,7 @@ class WallpaperHelper @Inject constructor(
             setImageAsWallpaper(
                 context,
                 it.imageLink,
-                settingsRepository.getRandomRefreshLocation(),
-                true
+                settingsRepository.getRandomRefreshLocation()
             )
         }
     }
@@ -66,8 +66,7 @@ class WallpaperHelper @Inject constructor(
             setImageAsWallpaper(
                 context,
                 it.imageLink,
-                settingsRepository.getRandomRefreshLocation(),
-                true
+                settingsRepository.getRandomRefreshLocation()
             )
         }
         if (image == null) {
@@ -79,7 +78,7 @@ class WallpaperHelper @Inject constructor(
         context: Context,
         imageUrl: String,
         location: WallpaperLocation,
-        refresh: Boolean = false
+        recentActivityItem: DomainRecentActivityItem? = null
     ) {
         try {
             toast("Setting wallpaper...")
@@ -98,7 +97,9 @@ class WallpaperHelper @Inject constructor(
                 Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
             }
         } finally {
-            // set history
+            recentActivityItem?.let {
+                addRecentActivityItemUseCase(it)
+            }
         }
     }
 
