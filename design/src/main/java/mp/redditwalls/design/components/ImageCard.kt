@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
@@ -42,14 +40,22 @@ import mp.redditwalls.design.RwTheme
 import mp.redditwalls.design.imageBackgroundGradient
 import mp.redditwalls.design.secondaryWhite
 
+enum class SelectionState {
+    NOT_SELECTABLE,
+    SELECTABLE,
+    SELECTED
+}
+
 data class ImageCardModel(
     val key: String = UUID.randomUUID().toString(),
     val imageUrl: String,
     val title: String,
     val subTitle: String,
     val isAlbum: Boolean = false,
+    val selectionState: SelectionState = SelectionState.NOT_SELECTABLE,
     val isLiked: Boolean,
     val onLikeClick: (Boolean) -> Unit,
+    val onSelect: (SelectionState) -> Unit = {},
     val onClick: () -> Unit,
     val onLongPress: () -> Unit
 )
@@ -60,16 +66,6 @@ fun ImageCard(
     modifier: Modifier = Modifier,
     imageCardModel: ImageCardModel
 ) {
-    val icon = if (imageCardModel.isLiked) {
-        Icons.Filled.Favorite
-    } else {
-        Icons.Filled.FavoriteBorder
-    }
-    val iconTint = if (imageCardModel.isLiked) {
-        Color.Red
-    } else {
-        Color.White
-    }
     var playAnimation by remember { mutableStateOf(false) }
     ElevatedCard(
         modifier = modifier
@@ -101,13 +97,16 @@ fun ImageCard(
                     .padding(16.dp),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
+                val showSelectionIndicator =
+                    imageCardModel.selectionState != SelectionState.NOT_SELECTABLE
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = if (imageCardModel.isAlbum) {
+                    horizontalArrangement = if (imageCardModel.isAlbum || showSelectionIndicator) {
                         Arrangement.SpaceBetween
                     } else {
                         Arrangement.End
-                    }
+                    },
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     if (imageCardModel.isAlbum) {
                         Icon(
@@ -115,6 +114,18 @@ fun ImageCard(
                             tint = Color.White,
                             imageVector = Icons.Default.PhotoLibrary,
                             contentDescription = null,
+                        )
+                    } else if (showSelectionIndicator) {
+                        CircleCheckbox(
+                            checked = imageCardModel.selectionState == SelectionState.SELECTED,
+                            onCheckedChange = {
+                                val state = if (it) {
+                                    SelectionState.SELECTED
+                                } else {
+                                    SelectionState.SELECTABLE
+                                }
+                                imageCardModel.onSelect(state)
+                            }
                         )
                     }
                     LikeButton(
@@ -158,6 +169,7 @@ fun ImageCard(
 @Composable
 fun ImageCardPreview() {
     var isLiked by remember { mutableStateOf(false) }
+    var selectionState by remember { mutableStateOf(SelectionState.SELECTABLE) }
     RwTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -173,13 +185,17 @@ fun ImageCardPreview() {
                             imageUrl = "https://c4.wallpaperflare.com/wallpaper/165/600/954/iphone-ios-ipad-ipod-wallpaper-preview.jpg",
                             title = "Cool Wallpaper",
                             subTitle = "r/wallpaper",
-                            isAlbum = true,
+                            isAlbum = false,
+                            selectionState = selectionState,
                             isLiked = isLiked,
                             onLikeClick = { newValue ->
                                 isLiked = newValue
                             },
                             onClick = {},
-                            onLongPress = {}
+                            onLongPress = {},
+                            onSelect = {
+                                selectionState = it
+                            }
                         ),
                         modifier = Modifier
                             .padding(8.dp)

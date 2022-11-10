@@ -39,7 +39,7 @@ fun ImagesList(
     onLoadMore: () -> Unit
 ) {
     if (images.isEmpty() && !isLoading) {
-        EmptyState()
+        EmptyState(modifier = Modifier.padding(12.dp))
     } else {
         val listState = rememberLazyGridState()
         LazyVerticalGrid(
@@ -105,8 +105,6 @@ fun LazyGridState.OnBottomReached(
         derivedStateOf {
             val lastVisibleItem = layoutInfo.visibleItemsInfo.lastOrNull()
                 ?: return@derivedStateOf true
-
-            // subtract buffer from the total items
             lastVisibleItem.index >= layoutInfo.totalItemsCount - 1 - buffer
         }
     }

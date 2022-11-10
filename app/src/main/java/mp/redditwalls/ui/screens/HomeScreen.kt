@@ -166,6 +166,7 @@ fun HomeScreen(
                 )
                 when {
                     uiResult is UiResult.Error -> ErrorState(
+                        modifier = Modifier.padding(12.dp),
                         errorMessage = uiResult.errorMessage.orEmpty()
                     ) {
                         homeScreenViewModel.fetchHomeFeed(true)
