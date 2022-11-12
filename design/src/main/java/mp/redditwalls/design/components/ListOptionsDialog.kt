@@ -82,6 +82,13 @@ fun ListOptionsDialog(
 }
 
 @Composable
+fun getWallpaperOptions() = listOf(
+    stringResource(R.string.home_screen) to Icons.Default.Home,
+    stringResource(R.string.lock_screen) to Icons.Default.Lock,
+    stringResource(R.string.both_screens) to Icons.Default.Smartphone
+).map { IconText(it.first, it.second) }
+
+@Composable
 fun WallpaperOptionsDialog(
     modifier: Modifier = Modifier,
     title: String = stringResource(R.string.set_wallpaper),
@@ -93,11 +100,7 @@ fun WallpaperOptionsDialog(
         modifier = modifier,
         show = show,
         title = title,
-        options = listOf(
-            stringResource(R.string.home_screen) to Icons.Default.Home,
-            stringResource(R.string.lock_screen) to Icons.Default.Lock,
-            stringResource(R.string.both_screens) to Icons.Default.Smartphone
-        ).map { IconText(it.first, it.second) },
+        options = getWallpaperOptions(),
         onSelect = onSelect,
         onDismiss = onDismiss
     )

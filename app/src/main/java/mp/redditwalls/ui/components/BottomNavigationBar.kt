@@ -26,19 +26,19 @@ import mp.redditwalls.design.components.IconText
 @Composable
 fun BottomNavigationBar(
     modifier: Modifier = Modifier,
-    menuItems: Map<Int, IconText>,
+    menuItems: List<Pair<Int, IconText>>,
     selectedItem: Int,
-    onSelected: (Int) -> Unit
+    onSelected: (Int, Int) -> Unit
 ) {
     NavigationBar(
         modifier = modifier.fillMaxWidth()
     ) {
-        for ((k, v) in menuItems) {
+        menuItems.forEachIndexed { index, pair ->
             NavigationBarItem(
-                icon = { Icon(v.icon!!, contentDescription = null) },
-                label = { Text(v.text) },
-                selected = selectedItem == k,
-                onClick = { onSelected(k) }
+                icon = { Icon(pair.second.icon!!, contentDescription = null) },
+                label = { Text(pair.second.text) },
+                selected = selectedItem == pair.first,
+                onClick = { onSelected(pair.first, index) }
             )
         }
     }
@@ -50,12 +50,12 @@ class BottomNavigationBarView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : AbstractComposeView(context, attrs, defStyleAttr) {
 
-    private val menuItems = mutableMapOf(
+    private val menuItems = listOf(
         R.id.navigation_home_screen to IconText(
             context.getString(R.string.home),
             Icons.Default.Home
         ),
-        R.id.navigation_favorites to IconText(
+        R.id.navigation_favorite_images_screen to IconText(
             context.getString(R.string.favorites),
             Icons.Filled.Favorite
         ),
@@ -73,8 +73,8 @@ class BottomNavigationBarView @JvmOverloads constructor(
         )
     )
 
-    private var selectedItem by mutableStateOf(R.id.navigation_home_screen)
-    private var onSelected: (Int) -> Unit by mutableStateOf({})
+    var selectedItem by mutableStateOf(R.id.navigation_home_screen)
+    var onSelected: (Int, Int) -> Unit by mutableStateOf({ _, _ -> })
 
     @Composable
     override fun Content() {
@@ -82,7 +82,11 @@ class BottomNavigationBarView @JvmOverloads constructor(
             BottomNavigationBar(
                 menuItems = menuItems,
                 selectedItem = selectedItem,
-                onSelected = onSelected
+                onSelected = { id, index ->
+                    if (selectedItem != id) {
+                        onSelected(id, index)
+                    }
+                }
             )
         }
     }

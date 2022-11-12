@@ -5,8 +5,8 @@ import android.widget.RelativeLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import mp.redditwalls.databinding.ImageItemBinding
-import mp.redditwalls.misc.Utils
-import mp.redditwalls.misc.toPx
+import mp.redditwalls.utils.Utils
+import mp.redditwalls.utils.toPx
 import mp.redditwalls.models.Image
 import mp.redditwalls.repositories.ColumnCount
 

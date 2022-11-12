@@ -6,7 +6,7 @@ import android.view.MotionEvent
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import mp.redditwalls.databinding.ImagePageItemBinding
-import mp.redditwalls.misc.Utils
+import mp.redditwalls.utils.Utils
 import mp.redditwalls.models.Image
 
 interface ImagePageListener : ImageClickListener {

@@ -9,13 +9,13 @@ class UpdateFavoriteImageUseCase @Inject constructor(
 ) : UseCase<UpdateFavoriteImageUseCase.Params, Unit>() {
     override suspend fun execute(params: Params) {
         localImagesRepository.updateDbImage(
-            id = params.dbImageId,
+            id = params.id,
             refreshLocation = params.refreshLocation
         )
     }
 
     data class Params(
-        val dbImageId: Int,
+        val id: String,
         val refreshLocation: WallpaperLocation
     )
 }

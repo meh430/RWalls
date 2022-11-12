@@ -16,8 +16,8 @@ interface DbSubredditDao {
     @Update
     suspend fun updateDbSubreddits(dbSubreddits: List<DbSubreddit>)
 
-    @Query("DELETE FROM SavedSubreddits WHERE id = :id")
-    suspend fun deleteDbSubreddit(id: Int)
+    @Query("DELETE FROM SavedSubreddits WHERE name = :name")
+    suspend fun deleteDbSubreddit(name: String)
 
     @Query("SELECT * FROM SavedSubreddits")
     fun getDbSubreddits(): Flow<List<DbSubreddit>>

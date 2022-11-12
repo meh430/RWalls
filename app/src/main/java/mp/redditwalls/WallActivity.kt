@@ -25,9 +25,9 @@ import kotlin.math.roundToInt
 import mp.redditwalls.databinding.ActivityWallBinding
 import mp.redditwalls.databinding.WallSheetBinding
 import mp.redditwalls.datasources.RWApi
-import mp.redditwalls.misc.Utils
-import mp.redditwalls.misc.launchBrowser
-import mp.redditwalls.misc.toPx
+import mp.redditwalls.utils.Utils
+import mp.redditwalls.utils.launchBrowser
+import mp.redditwalls.utils.toPx
 import mp.redditwalls.models.Image
 import mp.redditwalls.models.PostInfo
 import mp.redditwalls.models.Resource

@@ -28,8 +28,8 @@ class GetHomeFeedUseCase @Inject constructor(
         }.ifEmpty {
             DEFAULT_SUBREDDIT
         }
-        val dbImagesNetworkIds =
-            localImagesRepository.getDbImages().associate { it.networkId to it.id }
+        val dbImageIds =
+            localImagesRepository.getDbImages().map { it.networkId }.toSet()
         val after = data.nextPageId?.takeIf { !params.reload }
         val networkImages = when (val sortOrder = params.sortOrder) {
             SortOrder.HOT -> networkImagesRepository.getHotImages(subreddit, after)
@@ -44,8 +44,7 @@ class GetHomeFeedUseCase @Inject constructor(
         }.map {
             it.toDomainImage(
                 previewResolution = previewResolution,
-                isLiked = dbImagesNetworkIds.contains(it.id),
-                dbId = dbImagesNetworkIds[it.id] ?: -1
+                isLiked = dbImageIds.contains(it.id),
             )
         }
 

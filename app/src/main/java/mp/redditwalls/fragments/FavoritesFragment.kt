@@ -21,8 +21,8 @@ import kotlinx.coroutines.launch
 import mp.redditwalls.R
 import mp.redditwalls.adapters.FavoritesAdapter
 import mp.redditwalls.databinding.FragmentFavoritesBinding
-import mp.redditwalls.misc.ImageLoader
-import mp.redditwalls.misc.Utils
+import mp.redditwalls.utils.ImageLoader
+import mp.redditwalls.utils.Utils
 import mp.redditwalls.models.Image
 import mp.redditwalls.viewmodels.BottomNavDestinations
 import mp.redditwalls.viewmodels.MainViewModel

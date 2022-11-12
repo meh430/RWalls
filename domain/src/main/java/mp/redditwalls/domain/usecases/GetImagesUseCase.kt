@@ -26,8 +26,8 @@ class GetImagesUseCase @Inject constructor(
         localSubredditsRepository.getDbSubreddits(),
         preferencesRepository.getPreviewResolution()
     ) { dbImages, dbSubreddits, previewResolution ->
-        val subredditNameToDbId = dbSubreddits.associate { it.name to it.id }
-        val imageNetworkIdToDbId = dbImages.associate { it.networkId to it.id }
+        val dbSubredditNames = dbSubreddits.map { it.name }.toSet()
+        val dbImageIds = dbImages.map { it.networkId }.toSet()
 
         val networkImages: NetworkImages =
             if (params.subreddit != null && params.query == null) {
@@ -71,16 +71,14 @@ class GetImagesUseCase @Inject constructor(
         val domainImages = networkImages.images.map {
             it.toDomainImage(
                 previewResolution = previewResolution,
-                isLiked = imageNetworkIdToDbId.containsKey(it.id),
-                dbId = imageNetworkIdToDbId[it.id] ?: -1
+                isLiked = dbImageIds.contains(it.id),
             )
         }
 
         val domainSubreddit = params.subreddit?.takeIf { data.subreddit == null }?.let {
             networkSubredditsRepository.getSubredditDetail(it).let { networkSubreddit ->
                 networkSubreddit.toDomainSubreddit(
-                    isSaved = subredditNameToDbId.containsKey(networkSubreddit.name),
-                    dbId = subredditNameToDbId[networkSubreddit.name] ?: -1
+                    isSaved = dbSubredditNames.contains(networkSubreddit.name),
                 )
             }
         } ?: data.subreddit

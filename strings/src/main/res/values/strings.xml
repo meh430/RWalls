@@ -2,6 +2,8 @@
 <resources>
     <string name="retry">Retry</string>
     <string name="empty_state_title">Nothing to see here…</string>
+    <string name="error_state_title">Something went wrong…</string>
+
 
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -9,6 +11,10 @@
     <string name="home_screen">Home screen</string>
     <string name="lock_screen">Lock screen</string>
     <string name="both_screens">Both screens</string>
+
+    <string name="lock">Lock</string>
+    <string name="both">Both</string>
+
 
     <string name="search">Search…</string>
 

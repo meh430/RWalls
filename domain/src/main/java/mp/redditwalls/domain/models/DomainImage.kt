@@ -13,7 +13,6 @@ data class DomainImage(
     val numComments: Int = 0,
     val postUrl: String = "",
     val networkId: String = "",
-    val dbId: Int = 0,
     val domainImageUrls: List<DomainImageUrl> = emptyList(),
     val isLiked: Boolean = false,
     val isAlbum: Boolean = false
@@ -28,11 +27,9 @@ data class DomainImageUrl(
 
 fun NetworkImage.toDomainImage(
     previewResolution: ImageQuality,
-    isLiked: Boolean,
-    dbId: Int
+    isLiked: Boolean
 ) = DomainImage(
     networkId = id,
-    dbId = dbId,
     postTitle = postTitle,
     subredditName = subredditName,
     author = author,
@@ -58,7 +55,6 @@ fun DbImage.toDomainImage(
     subredditName = subredditName,
     postUrl = postUrl,
     networkId = networkId,
-    dbId = id,
     domainImageUrls = listOf(
         previewResolution.getImageUrl(
             lowQualityUrl,

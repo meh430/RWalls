@@ -16,8 +16,8 @@ import mp.redditwalls.adapters.SubredditsAdapter.SubredditMenuOptions.FAVORITE
 import mp.redditwalls.adapters.SubredditsAdapter.SubredditMenuOptions.LAUNCH_WEB
 import mp.redditwalls.adapters.SubredditsAdapter.SubredditMenuOptions.UNFAVORITE
 import mp.redditwalls.datasources.RWApi.Companion.BASE
-import mp.redditwalls.misc.launchBrowser
-import mp.redditwalls.misc.removeSubPrefix
+import mp.redditwalls.utils.launchBrowser
+import mp.redditwalls.utils.removeSubPrefix
 import mp.redditwalls.models.Subreddit
 import mp.redditwalls.viewmodels.FavoriteSubsViewModel
 import mp.redditwalls.viewmodels.SettingsViewModel

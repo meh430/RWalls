@@ -24,6 +24,12 @@
             app:destination="@id/navigation_wallpaper" />
     </fragment>
 
+    <fragment
+        android:id="@+id/navigation_favorite_images_screen"
+        android:name="mp.redditwalls.fragments.FavoriteImagesScreenFragment"
+        android:label="@string/favorites">
+    </fragment>
+
 
     <fragment
         android:id="@+id/navigation_favorites"

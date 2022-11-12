@@ -11,6 +11,10 @@ class AddFavoriteImageUseCase @Inject constructor(
 ) : UseCase<AddFavoriteImageUseCase.Params, Unit>() {
     override suspend fun execute(params: Params) {
         params.image.run {
+            if (localImagesRepository.dbImageExists(networkId)) {
+                return@run
+            }
+
             localImagesRepository.insertDbImage(
                 DbImage(
                     networkId = networkId,

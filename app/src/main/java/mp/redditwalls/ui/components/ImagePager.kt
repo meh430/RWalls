@@ -12,7 +12,7 @@ import com.google.accompanist.pager.VerticalPager
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.flow.Flow
 import mp.redditwalls.design.components.ImagePage
-import mp.redditwalls.misc.toFriendlyCount
+import mp.redditwalls.utils.toFriendlyCount
 import mp.redditwalls.models.ImageItemUiState
 
 @OptIn(ExperimentalPagerApi::class)

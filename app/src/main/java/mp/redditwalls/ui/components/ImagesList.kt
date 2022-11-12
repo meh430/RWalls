@@ -48,7 +48,12 @@ fun ImagesList(
             columns = GridCells.Adaptive(minSize = 150.dp),
             contentPadding = contentPadding,
         ) {
-            itemsIndexed(images, { _, it -> it.networkId }) { index, it ->
+            itemsIndexed(
+                items = images,
+                key = { _, it ->
+                    it.networkId
+                }
+            ) { index, it ->
                 ImageCard(
                     modifier = Modifier
                         .padding(8.dp)

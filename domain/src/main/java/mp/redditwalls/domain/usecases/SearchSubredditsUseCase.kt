@@ -17,14 +17,13 @@ class SearchSubredditsUseCase @Inject constructor(
         localSubredditsRepository.getDbSubreddits(),
         preferencesRepository.getAllowNsfw()
     ) { dbSubreddits, allowNsfw ->
-        val nameToDbIdMap = dbSubreddits.associate { it.name to it.id }
+        val dbSubredditNames = dbSubreddits.map { it.name }.toSet()
         networkSubredditsRepository.searchSubreddits(
             params,
             allowNsfw
         ).subreddits.map {
             it.toDomainSubreddit(
-                isSaved = nameToDbIdMap.containsKey(it.name),
-                dbId = nameToDbIdMap[it.name] ?: -1
+                isSaved = dbSubredditNames.contains(it.name),
             )
         }
     }

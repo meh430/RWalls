@@ -14,7 +14,6 @@ data class ImageItemUiState(
     val numComments: Int = 0,
     val postUrl: String = "",
     val networkId: String = "",
-    val dbId: Int = 0,
     val imageUrl: ImageUrl,
     val isLiked: MutableState<Boolean> = mutableStateOf(false),
     val isAlbum: Boolean = false
@@ -28,7 +27,6 @@ fun DomainImage.toImageItemScreenState() = ImageItemUiState(
     numComments = numComments,
     postUrl = postUrl,
     networkId = networkId,
-    dbId = dbId,
     imageUrl = domainImageUrls.first().let {
         ImageUrl(
             url = it.url,
@@ -49,7 +47,6 @@ fun ImageItemUiState.toDomainImage() = DomainImage(
     numComments = numComments,
     postUrl = postUrl,
     networkId = networkId,
-    dbId = dbId,
     domainImageUrls = listOf(
         DomainImageUrl(
             url = imageUrl.url,

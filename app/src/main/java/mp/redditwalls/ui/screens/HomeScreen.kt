@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import java.util.Date
 import kotlinx.coroutines.launch
+import mp.redditwalls.R
 import mp.redditwalls.WallpaperHelper
 import mp.redditwalls.design.components.EmptyState
 import mp.redditwalls.design.components.ErrorState
@@ -41,13 +42,11 @@ import mp.redditwalls.design.components.WallpaperOptionsDialog
 import mp.redditwalls.domain.models.DomainImageUrl
 import mp.redditwalls.domain.models.DomainRecentActivityItem.DomainSetWallpaperActivityItem
 import mp.redditwalls.local.enums.WallpaperLocation
-import mp.redditwalls.misc.launchBrowser
-import mp.redditwalls.models.ImageItemUiState
 import mp.redditwalls.models.UiResult
-import mp.redditwalls.models.toDomainImage
 import mp.redditwalls.preferences.enums.SortOrder
 import mp.redditwalls.ui.components.ImagePager
 import mp.redditwalls.ui.components.ImagesList
+import mp.redditwalls.utils.launchBrowser
 import mp.redditwalls.viewmodels.HomeScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -69,17 +68,6 @@ fun HomeScreen(
         }
     }
 
-    val onLikeClick = { image: ImageItemUiState, isLiked: Boolean ->
-        image.isLiked.value = isLiked
-        if (isLiked) {
-            homeScreenViewModel.addFavoriteImage(
-                domainImage = image.toDomainImage(),
-                refreshLocation = WallpaperLocation.BOTH
-            )
-        } else {
-            homeScreenViewModel.removeFavoriteImage(image.dbId)
-        }
-    }
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -167,7 +155,8 @@ fun HomeScreen(
                 when {
                     uiResult is UiResult.Error -> ErrorState(
                         modifier = Modifier.padding(12.dp),
-                        errorMessage = uiResult.errorMessage.orEmpty()
+                        errorMessage = uiResult.errorMessage
+                            ?: stringResource(id = R.string.error_state_title)
                     ) {
                         homeScreenViewModel.fetchHomeFeed(true)
                     }
@@ -182,7 +171,7 @@ fun HomeScreen(
                             navigateToPost = { uiState.images[it].postUrl.launchBrowser(context) },
                             onImageSetWallpaperClick = homeScreenViewModel::setLongPressIndex,
                             onLoadMore = { homeScreenViewModel.fetchHomeFeed() },
-                            onLikeClick = onLikeClick
+                            onLikeClick = homeScreenViewModel::onLikeClick
                         )
                     }
                     !uiState.verticalSwipeFeedEnabled.value -> ImagesList(
@@ -191,7 +180,7 @@ fun HomeScreen(
                         images = uiState.images,
                         isLoading = uiResult is UiResult.Loading,
                         onImageLongPress = homeScreenViewModel::setLongPressIndex,
-                        onLikeClick = onLikeClick,
+                        onLikeClick = homeScreenViewModel::onLikeClick,
                         onLoadMore = { homeScreenViewModel.fetchHomeFeed() }
                     )
                 }

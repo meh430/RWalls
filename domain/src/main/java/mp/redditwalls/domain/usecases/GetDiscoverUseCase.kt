@@ -38,17 +38,16 @@ class GetDiscoverUseCase @Inject constructor(
         preferencesRepository.getAllowNsfw(),
         preferencesRepository.getPreviewResolution()
     ) { dbSubreddits, dbImages, recentActivities, allowNsfw, previewResolution ->
-        val subredditNameToDbId = dbSubreddits.associate { it.name to it.id }
-        val imageNetworkIdToDbId = dbImages.associate { it.networkId to it.id }
+        val dbSubredditNames = dbSubreddits.map { it.name }.toSet()
+        val dbImageIds = dbImages.map { it.networkId }.toSet()
         val recommendations =
             recommendedSubredditsRepository.getRecommendedSubreddits().filter {
-                !subredditNameToDbId.containsKey(it)
+                !dbSubredditNames.contains(it)
             }.shuffled().take(RECOMMENDATION_LIMIT).let { subredditNames ->
                 networkSubredditsRepository.getSubredditsInfo(subredditNames).subreddits
             }.map { networkSubreddit ->
                 networkSubreddit.toDomainSubreddit(
-                    isSaved = subredditNameToDbId.containsKey(networkSubreddit.name),
-                    dbId = subredditNameToDbId[networkSubreddit.name] ?: -1
+                    isSaved = dbSubredditNames.contains(networkSubreddit.name)
                 )
             }.map { domainSubreddit ->
                 val images = networkImagesRepository.getTopImages(
@@ -58,8 +57,7 @@ class GetDiscoverUseCase @Inject constructor(
                 ).images.map { networkImage ->
                     networkImage.toDomainImage(
                         previewResolution = previewResolution,
-                        isLiked = imageNetworkIdToDbId.containsKey(networkImage.id),
-                        dbId = imageNetworkIdToDbId[networkImage.id] ?: -1
+                        isLiked = dbImageIds.contains(networkImage.id)
                     )
                 }
                 RecommendedSubreddit(

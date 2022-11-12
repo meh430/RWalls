@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.launch
-import mp.redditwalls.misc.removeSubPrefix
+import mp.redditwalls.utils.removeSubPrefix
 import mp.redditwalls.models.Subreddit
 import mp.redditwalls.repositories.FavoriteSubredditsRepository
 import mp.redditwalls.repositories.SettingsRepository

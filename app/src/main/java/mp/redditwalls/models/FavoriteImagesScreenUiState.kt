@@ -4,12 +4,12 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import mp.redditwalls.preferences.enums.SortOrder
+import mp.redditwalls.local.enums.WallpaperLocation
 
-data class HomeScreenUiState(
+data class FavoriteImagesScreenUiState(
     val images: SnapshotStateList<ImageItemUiState> = mutableStateListOf(),
+    val filter: MutableState<WallpaperLocation> = mutableStateOf(WallpaperLocation.HOME),
     val longPressedIndex: MutableState<Int?> = mutableStateOf(null),
-    val sortOrder: MutableState<SortOrder?> = mutableStateOf(null),
-    val verticalSwipeFeedEnabled: MutableState<Boolean> = mutableStateOf(false),
+    val showWallpaperDialog: MutableState<Boolean> = mutableStateOf(false),
     val uiResult: MutableState<UiResult> = mutableStateOf(UiResult.Loading())
 )

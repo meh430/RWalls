@@ -1,4 +1,4 @@
-package mp.redditwalls.misc
+package mp.redditwalls.utils
 
 import android.app.NotificationChannel
 import android.app.NotificationManager

@@ -8,16 +8,14 @@ data class DomainSubreddit(
     val numOnline: Int = 0,
     val description: String = "",
     val subredditIconUrl: String = "",
-    val isSaved: Boolean = false,
-    val dbId: Int = 0
+    val isSaved: Boolean = false
 )
 
-fun NetworkSubreddit.toDomainSubreddit(isSaved: Boolean, dbId: Int) = DomainSubreddit(
+fun NetworkSubreddit.toDomainSubreddit(isSaved: Boolean) = DomainSubreddit(
     name = name,
     numSubscribers = numSubscribers,
     numOnline = numOnline,
     description = description,
     subredditIconUrl = subredditIconUrl,
-    isSaved = isSaved,
-    dbId = dbId
+    isSaved = isSaved
 )

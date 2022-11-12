@@ -14,7 +14,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.launch
 import mp.redditwalls.WallpaperHelper
 import mp.redditwalls.adapters.ImagePageListener
-import mp.redditwalls.misc.Toaster
+import mp.redditwalls.utils.Toaster
 import mp.redditwalls.models.Image
 import mp.redditwalls.repositories.ColumnCount
 import mp.redditwalls.viewmodels.FavoritesViewModel

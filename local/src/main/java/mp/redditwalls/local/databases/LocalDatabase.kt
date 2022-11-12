@@ -22,7 +22,7 @@ import mp.redditwalls.local.models.DbSubreddit
         DbSubreddit::class,
         DbRecentActivityItem::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 abstract class LocalDatabase : RoomDatabase() {

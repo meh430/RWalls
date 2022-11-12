@@ -25,24 +25,22 @@ class GetDetailedImageUseCase @Inject constructor(
         localImagesRepository.getDbImagesFlow(),
         localSubredditsRepository.getDbSubreddits()
     ) { dbImages, dbSubreddits ->
-        val subredditNameToDbId = dbSubreddits.associate { it.name to it.id }
-        val imageNetworkIdToDbId = dbImages.associate { it.networkId to it.id }
+        val dbSubredditNames = dbSubreddits.map { it.name }.toSet()
+        val dbImageIds = dbImages.map { it.networkId }.toSet()
 
         val networkImage = networkImagesRepository.getImage(params)
 
         val domainSubreddit = networkSubredditsRepository.getSubredditDetail(
             networkImage.subredditName
         ).toDomainSubreddit(
-            isSaved = subredditNameToDbId.containsKey(networkImage.subredditName),
-            dbId = subredditNameToDbId[networkImage.subredditName] ?: -1
+            isSaved = dbSubredditNames.contains(networkImage.subredditName)
         )
 
         val domainImage = if (networkImage.imgurAlbumId.isNotEmpty()) {
             // fetch all images from imgur
             networkImage.toDomainImage(
                 previewResolution = ImageQuality.HIGH,
-                isLiked = imageNetworkIdToDbId.containsKey(networkImage.id),
-                dbId = imageNetworkIdToDbId[networkImage.id] ?: -1
+                isLiked = dbImageIds.contains(networkImage.id),
             ).copy(
                 domainImageUrls = imgurRepository.getAlbum(networkImage.imgurAlbumId).images.map {
                     DomainImageUrl(
@@ -56,8 +54,7 @@ class GetDetailedImageUseCase @Inject constructor(
         } else {
             networkImage.toDomainImage(
                 previewResolution = ImageQuality.HIGH,
-                isLiked = imageNetworkIdToDbId.containsKey(networkImage.id),
-                dbId = imageNetworkIdToDbId[networkImage.id] ?: -1
+                isLiked = dbImageIds.contains(networkImage.id),
             )
         }
 

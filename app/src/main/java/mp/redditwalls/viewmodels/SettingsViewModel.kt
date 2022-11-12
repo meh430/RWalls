@@ -5,7 +5,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import mp.redditwalls.WallpaperLocation
 import mp.redditwalls.datasources.RWApi
-import mp.redditwalls.misc.removeSubPrefix
+import mp.redditwalls.utils.removeSubPrefix
 import mp.redditwalls.repositories.ColumnCount
 import mp.redditwalls.repositories.RefreshInterval
 import mp.redditwalls.repositories.SettingsRepository

@@ -1,4 +1,4 @@
-package mp.redditwalls.misc
+package mp.redditwalls.utils
 
 import android.content.Context
 import androidx.hilt.work.HiltWorker

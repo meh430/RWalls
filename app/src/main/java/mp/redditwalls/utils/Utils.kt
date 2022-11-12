@@ -1,4 +1,4 @@
-package mp.redditwalls.misc
+package mp.redditwalls.utils
 
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.Activity

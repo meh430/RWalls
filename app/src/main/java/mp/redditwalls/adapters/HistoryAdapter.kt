@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import mp.redditwalls.WallpaperLocation
 import mp.redditwalls.databinding.HistoryItemBinding
-import mp.redditwalls.misc.Utils
+import mp.redditwalls.utils.Utils
 import mp.redditwalls.models.History
 
 class HistoryAdapter(private val loadLowRes: Boolean, private val onClick: (History) -> Unit) :

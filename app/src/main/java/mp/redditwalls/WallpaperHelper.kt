@@ -10,10 +10,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import mp.redditwalls.domain.models.DomainRecentActivityItem
 import mp.redditwalls.domain.usecases.AddRecentActivityItemUseCase
-import mp.redditwalls.misc.ImageLoader
-import mp.redditwalls.misc.Toaster
-import mp.redditwalls.misc.Utils
-import mp.redditwalls.misc.fromId
+import mp.redditwalls.utils.ImageLoader
+import mp.redditwalls.utils.Toaster
+import mp.redditwalls.utils.Utils
+import mp.redditwalls.utils.fromId
 import mp.redditwalls.models.Image
 import mp.redditwalls.repositories.FavoriteImagesRepository
 import mp.redditwalls.repositories.SettingsItem

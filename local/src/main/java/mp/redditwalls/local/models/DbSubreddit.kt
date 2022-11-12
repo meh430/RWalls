@@ -6,8 +6,7 @@ import mp.redditwalls.utilities.toSeconds
 
 @Entity(tableName = "SavedSubreddits")
 data class DbSubreddit(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    @PrimaryKey
+    val name: String,
     val createdAt: Long = System.currentTimeMillis().toSeconds(),
-    val name: String = ""
 )

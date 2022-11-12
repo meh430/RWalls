@@ -14,13 +14,9 @@ class GetSavedSubredditsUseCase @Inject constructor(
     override fun execute(params: Unit) =
         localSubredditsRepository.getDbSubreddits().map { dbSubreddits ->
             val subreddits = dbSubreddits.map { dbSubreddit -> dbSubreddit.name }
-            val nameToDbIds = dbSubreddits.associate { dbSubreddit ->
-                dbSubreddit.name to dbSubreddit.id
-            }
             networkSubredditsRepository.getSubredditsInfo(subreddits).subreddits.map {
                 it.toDomainSubreddit(
                     isSaved = true,
-                    dbId = nameToDbIds[it.name] ?: -1
                 )
             }
         }

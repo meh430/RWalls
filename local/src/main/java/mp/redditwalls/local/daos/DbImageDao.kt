@@ -12,14 +12,17 @@ interface DbImageDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDbImage(dbImage: DbImage)
 
-    @Query("UPDATE FavoriteImages SET refreshLocation = :refreshLocation WHERE id = :id")
-    suspend fun updateDbImageRefreshLocation(id: Int, refreshLocation: String)
+    @Query("UPDATE FavoriteImages SET refreshLocation = :refreshLocation WHERE networkId = :id")
+    suspend fun updateDbImageRefreshLocation(id: String, refreshLocation: String)
 
-    @Query("DELETE FROM FavoriteImages WHERE id = :id")
-    suspend fun deleteDbImage(id: Int)
+    @Query("SELECT EXISTS(SELECT * FROM FavoriteImages WHERE networkId = :networkId)")
+    fun dbImageExists(networkId : String) : Boolean
 
-    @Query("DELETE FROM FavoriteImages WHERE id IN (:ids)")
-    suspend fun deleteDbImages(ids: List<Int>)
+    @Query("DELETE FROM FavoriteImages WHERE networkId = :id")
+    suspend fun deleteDbImage(id: String)
+
+    @Query("DELETE FROM FavoriteImages WHERE networkId IN (:ids)")
+    suspend fun deleteDbImages(ids: List<String>)
 
     @Query("SELECT * FROM FavoriteImages")
     fun getDbImages(): Flow<List<DbImage>>

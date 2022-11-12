@@ -8,9 +8,8 @@ import mp.redditwalls.utilities.toSeconds
 
 @Entity(tableName = "FavoriteImages")
 data class DbImage(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-    val networkId: String = "",
+    @PrimaryKey
+    val networkId: String,
     val createdAt: Long = System.currentTimeMillis().toSeconds(),
     val postTitle: String = "",
     val subredditName: String = "",

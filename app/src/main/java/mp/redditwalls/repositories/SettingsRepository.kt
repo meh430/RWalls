@@ -6,8 +6,8 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import mp.redditwalls.WallpaperLocation
 import mp.redditwalls.datasources.RWApi
-import mp.redditwalls.misc.fromId
-import mp.redditwalls.misc.putValue
+import mp.redditwalls.utils.fromId
+import mp.redditwalls.utils.putValue
 
 class SettingsRepository @Inject constructor(private val prefs: SharedPreferences) {
 

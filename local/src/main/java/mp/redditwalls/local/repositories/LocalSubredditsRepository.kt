@@ -20,9 +20,9 @@ class LocalSubredditsRepository @Inject constructor(private val dbSubredditDao: 
         }
     }
 
-    suspend fun deleteDbSubreddit(id: Int) {
+    suspend fun deleteDbSubreddit(name: String) {
         withContext(Dispatchers.IO) {
-            dbSubredditDao.deleteDbSubreddit(id)
+            dbSubredditDao.deleteDbSubreddit(name)
         }
     }
 

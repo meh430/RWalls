@@ -1,4 +1,4 @@
-package mp.redditwalls.misc
+package mp.redditwalls.utils
 
 import android.content.Context
 import android.content.Intent
@@ -10,7 +10,10 @@ import android.net.Uri
 import android.util.TypedValue
 import android.view.WindowInsets
 import android.view.WindowManager
+import androidx.annotation.IdRes
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hierarchy
 import java.text.DecimalFormat
 import kotlin.math.floor
 import kotlin.math.log10
@@ -114,3 +117,6 @@ fun Int.toFriendlyCount(): String {
         DecimalFormat("#,##0").format(numValue)
     }
 }
+
+fun NavDestination.matchDestination(@IdRes destId: Int): Boolean =
+    hierarchy.any { it.id == destId }

@@ -3,6 +3,7 @@ package mp.redditwalls.viewmodels
 import kotlinx.coroutines.CoroutineScope
 import mp.redditwalls.domain.models.DomainImage
 import mp.redditwalls.local.enums.WallpaperLocation
+import mp.redditwalls.models.ImageItemUiState
 
 interface FavoriteImageViewModel {
     var coroutineScope: CoroutineScope
@@ -14,6 +15,8 @@ interface FavoriteImageViewModel {
     )
 
     fun removeFavoriteImage(
-        id: Int
+        id: String
     )
+
+    fun onLikeClick(image: ImageItemUiState, isLiked: Boolean)
 }

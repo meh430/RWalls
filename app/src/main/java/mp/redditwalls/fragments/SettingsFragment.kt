@@ -27,10 +27,10 @@ import mp.redditwalls.WallpaperHelper
 import mp.redditwalls.WallpaperLocation
 import mp.redditwalls.databinding.FragmentSettingsBinding
 import mp.redditwalls.datasources.RWApi
-import mp.redditwalls.misc.RadioDialog
-import mp.redditwalls.misc.RandomRefreshWorker
-import mp.redditwalls.misc.fromDisplayText
-import mp.redditwalls.misc.launchBrowser
+import mp.redditwalls.utils.RadioDialog
+import mp.redditwalls.utils.RandomRefreshWorker
+import mp.redditwalls.utils.fromDisplayText
+import mp.redditwalls.utils.launchBrowser
 import mp.redditwalls.repositories.ColumnCount
 import mp.redditwalls.repositories.RefreshInterval
 import mp.redditwalls.repositories.SettingsRepository.Companion.FALLBACK_SUBREDDIT

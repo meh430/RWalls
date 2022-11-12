@@ -14,10 +14,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import mp.redditwalls.R
-import mp.redditwalls.misc.Utils
-import mp.redditwalls.misc.forEach
-import mp.redditwalls.misc.fromId
-import mp.redditwalls.misc.removeSubPrefix
+import mp.redditwalls.utils.Utils
+import mp.redditwalls.utils.forEach
+import mp.redditwalls.utils.fromId
+import mp.redditwalls.utils.removeSubPrefix
 import mp.redditwalls.models.Image
 import mp.redditwalls.models.PostInfo
 import mp.redditwalls.models.Subreddit
