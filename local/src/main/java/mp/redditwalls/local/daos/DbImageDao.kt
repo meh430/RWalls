@@ -15,6 +15,9 @@ interface DbImageDao {
     @Query("UPDATE FavoriteImages SET refreshLocation = :refreshLocation WHERE networkId = :id")
     suspend fun updateDbImageRefreshLocation(id: String, refreshLocation: String)
 
+    @Query("UPDATE FavoriteImages SET refreshLocation = :refreshLocation WHERE networkId IN (:ids)")
+    suspend fun updateDbImageRefreshLocations(ids: List<String>, refreshLocation: String)
+
     @Query("SELECT EXISTS(SELECT * FROM FavoriteImages WHERE networkId = :networkId)")
     fun dbImageExists(networkId : String) : Boolean
 

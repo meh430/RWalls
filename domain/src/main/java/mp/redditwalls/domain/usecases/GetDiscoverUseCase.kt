@@ -31,7 +31,7 @@ class GetDiscoverUseCase @Inject constructor(
      * get top images for each subreddit and whether they have been liked or not
      * get most recent activity
      */
-    override fun execute(params: Unit) = combine(
+    override fun execute() = combine(
         localSubredditsRepository.getDbSubreddits(),
         localImagesRepository.getDbImagesFlow(),
         recentActivityRepository.getLimitedDbRecentActivityItems(RECENT_ACTIVITY_LIMIT),

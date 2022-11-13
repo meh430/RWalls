@@ -21,11 +21,12 @@ class GetImagesUseCase @Inject constructor(
     private val localSubredditsRepository: LocalSubredditsRepository,
     private val preferencesRepository: PreferencesRepository
 ) : FlowUseCase<FeedResult, GetImagesUseCase.Params>(FeedResult()) {
-    override fun execute(params: Params) = combine(
+    override fun execute() = combine(
+        paramsFlow,
         localImagesRepository.getDbImagesFlow(),
         localSubredditsRepository.getDbSubreddits(),
         preferencesRepository.getPreviewResolution()
-    ) { dbImages, dbSubreddits, previewResolution ->
+    ) { params, dbImages, dbSubreddits, previewResolution ->
         val dbSubredditNames = dbSubreddits.map { it.name }.toSet()
         val dbImageIds = dbImages.map { it.networkId }.toSet()
 

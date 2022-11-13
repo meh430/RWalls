@@ -21,10 +21,11 @@ class GetDetailedImageUseCase @Inject constructor(
     private val imgurRepository: ImgurRepository
 ) : FlowUseCase<DetailedImageResult, String>(DetailedImageResult()) {
     // takes network image id
-    override fun execute(params: String) = combine(
+    override fun execute() = combine(
+        paramsFlow,
         localImagesRepository.getDbImagesFlow(),
         localSubredditsRepository.getDbSubreddits()
-    ) { dbImages, dbSubreddits ->
+    ) { params, dbImages, dbSubreddits ->
         val dbSubredditNames = dbSubreddits.map { it.name }.toSet()
         val dbImageIds = dbImages.map { it.networkId }.toSet()
 

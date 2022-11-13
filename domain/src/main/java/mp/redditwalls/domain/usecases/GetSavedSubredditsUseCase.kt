@@ -11,7 +11,7 @@ class GetSavedSubredditsUseCase @Inject constructor(
     private val localSubredditsRepository: LocalSubredditsRepository,
     private val networkSubredditsRepository: NetworkSubredditsRepository
 ) : FlowUseCase<List<DomainSubreddit>, Unit>(emptyList()) {
-    override fun execute(params: Unit) =
+    override fun execute() =
         localSubredditsRepository.getDbSubreddits().map { dbSubreddits ->
             val subreddits = dbSubreddits.map { dbSubreddit -> dbSubreddit.name }
             networkSubredditsRepository.getSubredditsInfo(subreddits).subreddits.map {

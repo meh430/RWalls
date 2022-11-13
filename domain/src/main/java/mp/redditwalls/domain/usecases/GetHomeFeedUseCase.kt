@@ -18,11 +18,12 @@ class GetHomeFeedUseCase @Inject constructor(
     private val subredditsRepository: LocalSubredditsRepository,
     private val preferencesRepository: PreferencesRepository
 ) : FlowUseCase<FeedResult, GetHomeFeedUseCase.Params>(FeedResult()) {
-    override fun execute(params: Params) = combine(
+    override fun execute() = combine(
+        paramsFlow,
         subredditsRepository.getDbSubreddits(),
         preferencesRepository.getAllowNsfw(),
         preferencesRepository.getPreviewResolution()
-    ) { savedSubreddits, allowNsfw, previewResolution ->
+    ) { params, savedSubreddits, allowNsfw, previewResolution ->
         val subreddit = savedSubreddits.joinToString(separator = "+") {
             it.name
         }.ifEmpty {

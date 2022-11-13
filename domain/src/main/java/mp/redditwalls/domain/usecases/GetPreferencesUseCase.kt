@@ -7,5 +7,5 @@ import mp.redditwalls.preferences.PreferencesRepository
 class GetPreferencesUseCase @Inject constructor(
     private val preferencesRepository: PreferencesRepository
 ) : FlowUseCase<PreferencesData, Unit>(PreferencesData()) {
-    override fun execute(params: Unit) = preferencesRepository.getAllPreferences()
+    override fun execute() = preferencesRepository.getAllPreferences()
 }

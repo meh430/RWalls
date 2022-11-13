@@ -29,6 +29,8 @@ class HomeScreenViewModel @Inject constructor(
         favoriteImageViewModelDelegate.coroutineScope = viewModelScope
         subscribeToHomeFeed()
         subscribeToPreferences()
+        getPreferencesUseCase.init(viewModelScope)
+        getHomeFeedUseCase.init(viewModelScope)
         getPreferences()
     }
 

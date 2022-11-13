@@ -17,10 +17,11 @@ class GetRecentActivityUseCase @Inject constructor(
     private val recentActivityRepository: RecentActivityRepository,
     private val preferencesRepository: PreferencesRepository
 ) : FlowUseCase<List<DomainRecentActivityItem>, RecentActivityFilter>(emptyList()) {
-    override fun execute(params: RecentActivityFilter) = combine(
+    override fun execute() = combine(
+        paramsFlow,
         recentActivityRepository.getDbRecentActivityItems(),
         preferencesRepository.getPreviewResolution()
-    ) { recentActivities, previewResolution ->
+    ) { params, recentActivities, previewResolution ->
         recentActivities.map {
             it.toDomainRecentActivityItem(previewResolution)
         }.filter {

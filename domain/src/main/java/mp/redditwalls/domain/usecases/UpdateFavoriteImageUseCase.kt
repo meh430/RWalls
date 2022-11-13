@@ -7,15 +7,23 @@ import mp.redditwalls.local.repositories.LocalImagesRepository
 class UpdateFavoriteImageUseCase @Inject constructor(
     private val localImagesRepository: LocalImagesRepository
 ) : UseCase<UpdateFavoriteImageUseCase.Params, Unit>() {
+
     override suspend fun execute(params: Params) {
-        localImagesRepository.updateDbImage(
-            id = params.id,
-            refreshLocation = params.refreshLocation
-        )
+        if (params.ids.size == 1) {
+            localImagesRepository.updateDbImage(
+                id = params.ids[0],
+                refreshLocation = params.refreshLocation
+            )
+        } else if (params.ids.isNotEmpty()) {
+            localImagesRepository.updateDbImages(
+                ids = params.ids,
+                refreshLocation = params.refreshLocation
+            )
+        }
     }
 
     data class Params(
-        val id: String,
+        val ids: List<String>,
         val refreshLocation: WallpaperLocation
     )
 }

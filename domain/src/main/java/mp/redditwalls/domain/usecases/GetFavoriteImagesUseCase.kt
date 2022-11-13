@@ -12,10 +12,11 @@ class GetFavoriteImagesUseCase @Inject constructor(
     private val localImagesRepository: LocalImagesRepository,
     private val preferencesRepository: PreferencesRepository
 ) : FlowUseCase<FeedResult, GetFavoriteImagesUseCase.Params>(FeedResult()) {
-    override fun execute(params: Params) = combine(
+    override fun execute() = combine(
+        paramsFlow,
         localImagesRepository.getDbImagesFlow(),
         preferencesRepository.getPreviewResolution()
-    ) { dbImages, previewResolution ->
+    ) { params, dbImages, previewResolution ->
         val domainImages = dbImages.filter { dbImage ->
             params.wallpaperLocation.name == dbImage.refreshLocation
         }.map {

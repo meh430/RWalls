@@ -21,7 +21,7 @@ class FavoriteImagesScreenViewModel @Inject constructor(
     init {
         favoriteImageViewModelDelegate.coroutineScope = viewModelScope
         subscribeToFavoriteImages()
-        fetchFavoriteImages()
+        getFavoriteImagesUseCase.init(viewModelScope)
     }
 
     fun setFilter(wallpaperLocation: WallpaperLocation) {

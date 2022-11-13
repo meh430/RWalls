@@ -1,31 +1,48 @@
 package mp.redditwalls.domain.usecases
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.launch
 import mp.redditwalls.domain.models.DomainResult
 
 abstract class FlowUseCase<D : Any, P : Any>(private val initialData: D) {
+    private var initialized = false
     protected var data: D
         private set
+
     private val _sharedFlow: MutableSharedFlow<DomainResult<D>> = MutableSharedFlow()
     val sharedFlow = _sharedFlow.asSharedFlow()
+
+    private val _paramsFlow: MutableSharedFlow<P> = MutableSharedFlow()
+    protected val paramsFlow = _paramsFlow.asSharedFlow()
 
     init {
         data = initialData
     }
 
-    protected abstract fun execute(params: P): Flow<D>
+    fun init(coroutineScope: CoroutineScope) {
+        coroutineScope.launch {
+            initialized = true
+            execute().catch { e ->
+                updateData(DomainResult.Error(message = e.localizedMessage.orEmpty()))
+            }.flowOn(Dispatchers.IO).collect { result ->
+                updateData(DomainResult.Success(result))
+            }
+        }
+    }
+
+    protected abstract fun execute(): Flow<D>
 
     suspend operator fun invoke(params: P) {
-        execute(params).catch { e ->
-            updateData(DomainResult.Error(message = e.localizedMessage.orEmpty()))
-        }.flowOn(Dispatchers.IO).collect {
-            updateData(DomainResult.Success(it))
+        if (!initialized) {
+            throw IllegalStateException("init method must be called first")
         }
+        _paramsFlow.emit(params)
     }
 
     private suspend fun updateData(data: DomainResult<D>) {

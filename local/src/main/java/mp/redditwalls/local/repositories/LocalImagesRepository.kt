@@ -24,6 +24,13 @@ class LocalImagesRepository @Inject constructor(private val dbImageDao: DbImageD
         }
     }
 
+    suspend fun updateDbImages(ids: List<String>, refreshLocation: WallpaperLocation) {
+        withContext(Dispatchers.IO) {
+            dbImageDao.updateDbImageRefreshLocations(ids, refreshLocation.name)
+        }
+    }
+
+
     suspend fun deleteDbImage(id: String) {
         withContext(Dispatchers.IO) {
             dbImageDao.deleteDbImage(id)
