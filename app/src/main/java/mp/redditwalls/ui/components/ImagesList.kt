@@ -36,57 +36,53 @@ fun ImagesList(
     isLoading: Boolean,
     onImageLongPress: (Int) -> Unit,
     onLikeClick: (ImageItemUiState, Boolean) -> Unit,
-    onLoadMore: () -> Unit
+    onLoadMore: () -> Unit,
+    header: (@Composable () -> Unit)? = null
 ) {
-    if (images.isEmpty() && !isLoading) {
-        EmptyState(modifier = Modifier.padding(12.dp))
-    } else {
-        val listState = rememberLazyGridState()
-        LazyVerticalGrid(
-            modifier = modifier.fillMaxWidth(),
-            state = listState,
-            columns = GridCells.Adaptive(minSize = 150.dp),
-            contentPadding = contentPadding,
-        ) {
-            itemsIndexed(
-                items = images,
-                key = { _, it ->
-                    it.networkId
-                }
-            ) { index, it ->
-                ImageCard(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth()
-                        .height(275.dp),
-                    imageCardModel = it.toImageCardModel(
-                        onLikeClick = { isLiked -> onLikeClick(it, isLiked) },
-                        onClick = {},
-                        onLongPress = { onImageLongPress(index) }
-                    )
-                )
+    val listState = rememberLazyGridState()
+    LazyVerticalGrid(
+        modifier = modifier.fillMaxWidth(),
+        state = listState,
+        columns = GridCells.Adaptive(minSize = 150.dp),
+        contentPadding = contentPadding,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        if (header != null) {
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                header()
             }
-            if (isLoading) {
-                item(span = { GridItemSpan(maxLineSpan) }) {
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Spacer(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(64.dp)
-                        )
-                        ThreeDotsLoader()
-                        Spacer(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(128.dp)
-                        )
-                    }
-                }
-            } else {
-                item(span = { GridItemSpan(maxLineSpan) }) {
+        }
+
+        itemsIndexed(
+            items = images,
+            key = { _, it ->
+                it.networkId
+            }
+        ) { index, it ->
+            ImageCard(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+                    .height(275.dp),
+                imageCardModel = it.toImageCardModel(
+                    onLikeClick = { isLiked -> onLikeClick(it, isLiked) },
+                    onClick = {},
+                    onLongPress = { onImageLongPress(index) }
+                )
+            )
+        }
+        if (isLoading) {
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(64.dp)
+                    )
+                    ThreeDotsLoader()
                     Spacer(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -94,10 +90,22 @@ fun ImagesList(
                     )
                 }
             }
+        } else if (images.isEmpty()) {
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                EmptyState(modifier = Modifier.padding(vertical = 48.dp))
+            }
+        } else {
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(128.dp)
+                )
+            }
         }
-        listState.OnBottomReached {
-            onLoadMore()
-        }
+    }
+    listState.OnBottomReached {
+        onLoadMore()
     }
 }
 

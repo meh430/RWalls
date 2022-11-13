@@ -33,7 +33,6 @@ import java.util.Date
 import kotlinx.coroutines.launch
 import mp.redditwalls.R
 import mp.redditwalls.WallpaperHelper
-import mp.redditwalls.design.components.EmptyState
 import mp.redditwalls.design.components.ErrorState
 import mp.redditwalls.design.components.IconText
 import mp.redditwalls.design.components.PopupMenu
@@ -163,7 +162,6 @@ fun HomeScreen(
                     uiResult is UiResult.Loading && uiState.images.isEmpty() -> Box {
                         ThreeDotsLoader(modifier = Modifier.align(Alignment.Center))
                     }
-                    uiResult is UiResult.Success && uiState.images.isEmpty() -> EmptyState()
                     uiState.verticalSwipeFeedEnabled.value -> {
                         ImagePager(
                             modifier = modifier,

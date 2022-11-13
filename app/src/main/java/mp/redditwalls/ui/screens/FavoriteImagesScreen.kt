@@ -19,11 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import mp.redditwalls.R
 import mp.redditwalls.WallpaperHelper
-import mp.redditwalls.design.components.EmptyState
 import mp.redditwalls.design.components.ErrorState
 import mp.redditwalls.design.components.FilterChipBar
 import mp.redditwalls.design.components.IconText
@@ -44,7 +42,7 @@ fun FavoriteImagesScreen(
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             LargeTopAppBar(
                 modifier = Modifier,
@@ -84,35 +82,30 @@ fun FavoriteImagesScreen(
                     )
                 }
                 else -> {
-                    FilterChipBar(
-                        modifier = Modifier.padding(
-                            horizontal = 16.dp,
-                            vertical = 8.dp
-                        ),
-                        filters = listOf(
-                            stringResource(R.string.home) to Icons.Default.Home,
-                            stringResource(R.string.lock) to Icons.Default.Lock,
-                            stringResource(R.string.both) to Icons.Default.Smartphone
-                        ).map { IconText(it.first, it.second) },
-                        initialSelection = uiState.filter.value.ordinal,
-                        onSelectionChanged = {
-                            favoriteImagesScreenViewModel.setFilter(
-                                WallpaperLocation.values()[it]
+
+                    ImagesList(
+                        modifier = Modifier,
+                        images = uiState.images,
+                        isLoading = uiResult is UiResult.Loading,
+                        onImageLongPress = {},
+                        onLikeClick = favoriteImagesScreenViewModel::onLikeClick,
+                        onLoadMore = {},
+                        header = {
+                            FilterChipBar(
+                                filters = listOf(
+                                    stringResource(R.string.home) to Icons.Default.Home,
+                                    stringResource(R.string.lock) to Icons.Default.Lock,
+                                    stringResource(R.string.both) to Icons.Default.Smartphone
+                                ).map { IconText(it.first, it.second) },
+                                initialSelection = uiState.filter.value.ordinal,
+                                onSelectionChanged = {
+                                    favoriteImagesScreenViewModel.setFilter(
+                                        WallpaperLocation.values()[it]
+                                    )
+                                }
                             )
                         }
                     )
-                    if (uiState.images.isEmpty() && uiResult is UiResult.Success) {
-                        EmptyState()
-                    } else {
-                        ImagesList(
-                            modifier = Modifier,
-                            images = uiState.images,
-                            isLoading = uiResult is UiResult.Loading,
-                            onImageLongPress = {},
-                            onLikeClick = favoriteImagesScreenViewModel::onLikeClick,
-                            onLoadMore = {}
-                        )
-                    }
                 }
             }
         }
