@@ -11,7 +11,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,7 +34,8 @@ fun ImagesList(
     contentPadding: PaddingValues = PaddingValues(8.dp),
     images: List<ImageItemUiState>,
     isLoading: Boolean,
-    onImageLongPress: (Int) -> Unit,
+    onClick: (ImageItemUiState) -> Unit,
+    onImageLongPress: (ImageItemUiState) -> Unit,
     onLikeClick: (ImageItemUiState, Boolean) -> Unit,
     onLoadMore: () -> Unit,
     header: (@Composable () -> Unit)? = null
@@ -53,12 +54,10 @@ fun ImagesList(
             }
         }
 
-        itemsIndexed(
+        items(
             items = images,
-            key = { _, it ->
-                it.networkId
-            }
-        ) { index, it ->
+            key = { it.networkId }
+        ) {
             ImageCard(
                 modifier = Modifier
                     .padding(8.dp)
@@ -66,8 +65,8 @@ fun ImagesList(
                     .height(275.dp),
                 imageCardModel = it.toImageCardModel(
                     onLikeClick = { isLiked -> onLikeClick(it, isLiked) },
-                    onClick = {},
-                    onLongPress = { onImageLongPress(index) }
+                    onClick = { onClick(it) },
+                    onLongPress = { onImageLongPress(it) }
                 )
             )
         }

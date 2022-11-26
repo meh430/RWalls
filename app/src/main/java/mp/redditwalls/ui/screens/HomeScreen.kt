@@ -118,17 +118,17 @@ fun HomeScreen(
                     .consumedWindowInsets(innerPadding)
             ) {
                 WallpaperOptionsDialog(
-                    show = uiState.longPressedIndex.value != null,
+                    show = uiState.longPressedImage.value != null,
                     onSelect = { selection ->
-                        val index = uiState.longPressedIndex.value
+                        val index = uiState.longPressedImage.value
                         scope.launch {
                             index?.let {
                                 val location = mp.redditwalls.WallpaperLocation.values()[selection]
                                 wallpaperHelper.setImageAsWallpaper(
                                     context = context,
-                                    imageUrl = uiState.images[it].imageUrl.highQualityUrl,
+                                    imageUrl = it.imageUrl.highQualityUrl,
                                     location = location,
-                                    recentActivityItem = uiState.images[it].run {
+                                    recentActivityItem = it.run {
                                         DomainSetWallpaperActivityItem(
                                             dbId = 0,
                                             createdAt = Date(),
@@ -148,7 +148,7 @@ fun HomeScreen(
                         }
                     },
                     onDismiss = {
-                        homeScreenViewModel.setLongPressIndex(null)
+                        homeScreenViewModel.setLongPressImage(null)
                     }
                 )
                 when {
@@ -167,7 +167,7 @@ fun HomeScreen(
                             modifier = modifier,
                             images = uiState.images,
                             navigateToPost = { uiState.images[it].postUrl.launchBrowser(context) },
-                            onImageSetWallpaperClick = homeScreenViewModel::setLongPressIndex,
+                            onImageSetWallpaperClick = homeScreenViewModel::setLongPressImage,
                             onLoadMore = { homeScreenViewModel.fetchHomeFeed() },
                             onLikeClick = homeScreenViewModel::onLikeClick
                         )
@@ -177,7 +177,8 @@ fun HomeScreen(
                         contentPadding = PaddingValues(8.dp),
                         images = uiState.images,
                         isLoading = uiResult is UiResult.Loading,
-                        onImageLongPress = homeScreenViewModel::setLongPressIndex,
+                        onClick = {},
+                        onImageLongPress = homeScreenViewModel::setLongPressImage,
                         onLikeClick = homeScreenViewModel::onLikeClick,
                         onLoadMore = { homeScreenViewModel.fetchHomeFeed() }
                     )

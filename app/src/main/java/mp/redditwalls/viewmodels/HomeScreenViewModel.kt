@@ -12,6 +12,7 @@ import mp.redditwalls.domain.models.DomainResult
 import mp.redditwalls.domain.usecases.GetHomeFeedUseCase
 import mp.redditwalls.domain.usecases.GetPreferencesUseCase
 import mp.redditwalls.models.HomeScreenUiState
+import mp.redditwalls.models.ImageItemUiState
 import mp.redditwalls.models.UiResult
 import mp.redditwalls.models.toImageItemScreenState
 import mp.redditwalls.preferences.enums.SortOrder
@@ -59,8 +60,8 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-    fun setLongPressIndex(index: Int?) {
-        homeScreenUiState.longPressedIndex.value = index
+    fun setLongPressImage(image: ImageItemUiState?) {
+        homeScreenUiState.longPressedImage.value = image
     }
 
     private fun subscribeToHomeFeed() {

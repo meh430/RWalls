@@ -2,6 +2,7 @@ package mp.redditwalls
 
 import android.os.Bundle
 import android.view.Menu
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.ActivityNavigator
 import androidx.navigation.NavController
@@ -11,11 +12,14 @@ import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import mp.redditwalls.databinding.ActivityMainBinding
 import mp.redditwalls.utils.matchDestination
+import mp.redditwalls.viewmodels.MainViewModel
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    private val mainViewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,9 +27,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.bottomNavBar.selectedItem = mainViewModel.selectedItem
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         binding.bottomNavBar.apply {
             onSelected = { id, index ->
+                mainViewModel.selectedItem = id
                 selectedItem = id
                 onNavDestinationSelected(navController, id, index)
             }

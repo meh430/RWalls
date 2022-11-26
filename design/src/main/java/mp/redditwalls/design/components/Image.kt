@@ -18,6 +18,7 @@ import coil.request.ImageRequest
 fun Image(
     modifier: Modifier = Modifier,
     imageUrl: String,
+    onTap: () -> Unit = {},
     onDoubleTap: () -> Unit = {},
     onLongPress: () -> Unit = {}
 ) {
@@ -26,6 +27,7 @@ fun Image(
             .pointerInput(Unit) {
                 detectTapGestures(
                     onDoubleTap = { onDoubleTap() },
+                    onTap = { onTap() },
                     onLongPress = { onLongPress() }
                 )
             },

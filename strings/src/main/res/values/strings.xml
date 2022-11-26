@@ -51,4 +51,6 @@
     <string name="discover">Discover</string>
     <string name="saved">Saved</string>
     <string name="settings">Settings</string>
+
+    <string name="selected_count">Selected %1$d</string>
 </resources>

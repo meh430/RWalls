@@ -8,7 +8,7 @@ import mp.redditwalls.preferences.enums.SortOrder
 
 data class HomeScreenUiState(
     val images: SnapshotStateList<ImageItemUiState> = mutableStateListOf(),
-    val longPressedIndex: MutableState<Int?> = mutableStateOf(null),
+    val longPressedImage: MutableState<ImageItemUiState?> = mutableStateOf(null),
     val sortOrder: MutableState<SortOrder?> = mutableStateOf(null),
     val verticalSwipeFeedEnabled: MutableState<Boolean> = mutableStateOf(false),
     val uiResult: MutableState<UiResult> = mutableStateOf(UiResult.Loading())

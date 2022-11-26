@@ -5,11 +5,14 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.consumedWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Smartphone
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.LargeTopAppBar
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -20,7 +23,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import mp.redditwalls.R
 import mp.redditwalls.WallpaperHelper
 import mp.redditwalls.design.components.ErrorState
@@ -38,6 +43,7 @@ fun FavoriteImagesScreen(
     favoriteImagesScreenViewModel: FavoriteImagesScreenViewModel = viewModel(),
     wallpaperHelper: WallpaperHelper
 ) {
+    val systemUiController = rememberSystemUiController()
     LaunchedEffect(Unit) {
         favoriteImagesScreenViewModel.setFilter(WallpaperLocation.HOME)
     }
@@ -45,11 +51,17 @@ fun FavoriteImagesScreen(
     val uiState = favoriteImagesScreenViewModel.favoriteImagesScreenUiState
     val uiResult = uiState.uiResult.value
 
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val topBarColor = if (uiState.selecting.value) {
+        MaterialTheme.colorScheme.primaryContainer
+    } else {
+        MaterialTheme.colorScheme.surface
+    }
+    systemUiController.setSystemBarsColor(topBarColor)
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            LargeTopAppBar(
+            CenterAlignedTopAppBar(
                 modifier = Modifier,
                 scrollBehavior = scrollBehavior,
                 title = {
@@ -57,16 +69,31 @@ fun FavoriteImagesScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = stringResource(id = R.string.favorites),
+                            text = if (uiState.selecting.value) {
+                                stringResource(
+                                    R.string.selected_count,
+                                    uiState.selectedCount.value
+                                )
+                            } else {
+                                stringResource(R.string.favorites)
+                            },
                         )
                     }
                 },
-                navigationIcon = {},
+                navigationIcon = {
+                    if (uiState.selecting.value) {
+                        IconButton(
+                            onClick = { favoriteImagesScreenViewModel.stopSelecting() }
+                        ) {
+                            Icon(imageVector = Icons.Default.Close, contentDescription = null)
+                        }
+                    }
+                },
                 actions = {
 
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    scrolledContainerColor = MaterialTheme.colorScheme.surface
+                    containerColor = topBarColor
                 )
             )
         }
@@ -91,11 +118,21 @@ fun FavoriteImagesScreen(
                         modifier = Modifier,
                         images = uiState.images,
                         isLoading = uiResult is UiResult.Loading,
-                        onImageLongPress = {},
+                        onClick = {
+                            if (uiState.selecting.value) {
+                                favoriteImagesScreenViewModel.selectImage(it)
+                            }
+                        },
+                        onImageLongPress = {
+                            if (!uiState.selecting.value) {
+                                favoriteImagesScreenViewModel.selectImage(it)
+                            }
+                        },
                         onLikeClick = favoriteImagesScreenViewModel::onLikeClick,
                         onLoadMore = {},
                         header = {
                             FilterChipBar(
+                                modifier = Modifier.padding(horizontal = 4.dp),
                                 filters = listOf(
                                     stringResource(R.string.home) to Icons.Default.Home,
                                     stringResource(R.string.lock) to Icons.Default.Lock,

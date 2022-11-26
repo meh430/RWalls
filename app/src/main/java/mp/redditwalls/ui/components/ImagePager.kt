@@ -12,8 +12,8 @@ import com.google.accompanist.pager.VerticalPager
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.flow.Flow
 import mp.redditwalls.design.components.ImagePage
-import mp.redditwalls.utils.toFriendlyCount
 import mp.redditwalls.models.ImageItemUiState
+import mp.redditwalls.utils.toFriendlyCount
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -21,7 +21,7 @@ fun ImagePager(
     modifier: Modifier = Modifier,
     images: List<ImageItemUiState>,
     navigateToPost: (Int) -> Unit,
-    onImageSetWallpaperClick: (Int) -> Unit,
+    onImageSetWallpaperClick: (ImageItemUiState) -> Unit,
     onLoadMore: () -> Unit,
     onLikeClick: (ImageItemUiState, Boolean) -> Unit
 ) {
@@ -54,7 +54,7 @@ fun ImagePager(
                 numComments = image.numComments.toFriendlyCount(),
                 openPost = { navigateToPost(index) },
                 onLikeChanged = { onLikeClick(image, it) },
-                onSetWallpaperClick = { onImageSetWallpaperClick(index) },
+                onSetWallpaperClick = { onImageSetWallpaperClick(image) },
                 onInfoTextClick = { }
             )
         }

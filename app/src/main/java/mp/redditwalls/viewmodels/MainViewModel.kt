@@ -6,6 +6,8 @@ import mp.redditwalls.R
 
 // pass down bottom nav click events
 class MainViewModel : ViewModel() {
+    var selectedItem: Int = R.id.navigation_home_screen
+
     val navIconClicked = MutableLiveData<Pair<BottomNavDestinations, Boolean>>()
 
     fun onBottomNavItemClicked(id: Int) {

@@ -3,6 +3,7 @@ package mp.redditwalls.models
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import mp.redditwalls.design.components.ImageCardModel
+import mp.redditwalls.design.components.SelectionState
 import mp.redditwalls.domain.models.DomainImage
 import mp.redditwalls.domain.models.DomainImageUrl
 
@@ -15,6 +16,7 @@ data class ImageItemUiState(
     val postUrl: String = "",
     val networkId: String = "",
     val imageUrl: ImageUrl,
+    val selectionState: MutableState<SelectionState> = mutableStateOf(SelectionState.NOT_SELECTABLE),
     val isLiked: MutableState<Boolean> = mutableStateOf(false),
     val isAlbum: Boolean = false
 )
@@ -70,8 +72,10 @@ fun ImageItemUiState.toImageCardModel(
     subTitle = subredditName,
     isAlbum = isAlbum,
     isLiked = isLiked.value,
+    selectionState = selectionState.value,
     onLikeClick = onLikeClick,
     onClick = onClick,
+    onSelect = { onClick() },
     onLongPress = onLongPress
 )
 

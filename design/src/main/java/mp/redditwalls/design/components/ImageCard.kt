@@ -1,6 +1,7 @@
 package mp.redditwalls.design.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,7 +19,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -60,7 +60,6 @@ data class ImageCardModel(
     val onLongPress: () -> Unit
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ImageCard(
     modifier: Modifier = Modifier,
@@ -69,8 +68,18 @@ fun ImageCard(
     var playAnimation by remember { mutableStateOf(false) }
     ElevatedCard(
         modifier = modifier
-            .fillMaxWidth(),
-        onClick = imageCardModel.onClick,
+            .fillMaxWidth()
+            .then(
+                if (imageCardModel.selectionState == SelectionState.SELECTED) {
+                    Modifier.border(
+                        width = 4.dp,
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = MaterialTheme.shapes.large
+                    )
+                } else {
+                    Modifier
+                }
+            ),
         shape = MaterialTheme.shapes.large,
         colors = CardDefaults.elevatedCardColors(
             containerColor = Color.Black
@@ -80,11 +89,12 @@ fun ImageCard(
             Image(
                 modifier = Modifier.fillMaxSize(),
                 imageUrl = imageCardModel.imageUrl,
+                onTap = imageCardModel.onClick,
                 onDoubleTap = {
                     imageCardModel.onLikeClick(true)
                     playAnimation = true
                 },
-                onLongPress = { imageCardModel.onLongPress() }
+                onLongPress = imageCardModel.onLongPress
             )
             Box(
                 modifier = Modifier
