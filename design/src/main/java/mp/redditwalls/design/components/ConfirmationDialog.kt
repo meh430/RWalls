@@ -8,7 +8,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import mp.redditwalls.design.R
 import mp.redditwalls.design.RwTheme
 
 @Composable
@@ -44,6 +46,26 @@ fun ConfirmationDialog(
             }
         )
     }
+}
+
+@Composable
+fun DeleteConfirmationDialog(
+    show: Boolean,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    ConfirmationDialog(
+        show = show,
+        title = stringResource(R.string.confirm),
+        body = stringResource(R.string.delete_confirmation),
+        confirmButtonText = stringResource(R.string.ok),
+        cancelButtonText = stringResource(R.string.cancel),
+        onConfirmButtonClick = {
+            onConfirm()
+            onDismiss()
+        },
+        onDismiss = onDismiss
+    )
 }
 
 @Preview

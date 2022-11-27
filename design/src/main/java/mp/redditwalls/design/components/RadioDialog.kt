@@ -21,8 +21,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import mp.redditwalls.design.R
 import mp.redditwalls.design.RwTheme
 
 @Composable
@@ -84,6 +86,34 @@ fun RadioDialog(
         )
     }
 }
+
+@Composable
+fun WallpaperLocationRadioDialog(
+    show: Boolean,
+    onSubmit: (Int) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var selection by remember { mutableStateOf(0) }
+    RadioDialog(
+        show = show,
+        title = "Choose Location",
+        selection = selection,
+        options = listOf(
+            stringResource(R.string.home_screen),
+            stringResource(R.string.lock_screen),
+            stringResource(R.string.both_screens)
+        ),
+        confirmButtonText = stringResource(R.string.ok),
+        cancelButtonText = stringResource(R.string.cancel),
+        onSelectionChanged = { selection = it },
+        onConfirmButtonClick = {
+            onSubmit(selection)
+            onDismiss()
+        },
+        onDismiss = onDismiss
+    )
+}
+
 
 @Preview
 @Composable

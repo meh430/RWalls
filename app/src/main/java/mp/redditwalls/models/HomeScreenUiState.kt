@@ -11,5 +11,6 @@ data class HomeScreenUiState(
     val longPressedImage: MutableState<ImageItemUiState?> = mutableStateOf(null),
     val sortOrder: MutableState<SortOrder?> = mutableStateOf(null),
     val verticalSwipeFeedEnabled: MutableState<Boolean> = mutableStateOf(false),
-    val uiResult: MutableState<UiResult> = mutableStateOf(UiResult.Loading())
+    val uiResult: MutableState<UiResult> = mutableStateOf(UiResult.Loading()),
+    val hasMoreImages: MutableState<Boolean> = mutableStateOf(true)
 )

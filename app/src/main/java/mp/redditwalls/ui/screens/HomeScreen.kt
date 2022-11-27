@@ -52,11 +52,11 @@ import mp.redditwalls.viewmodels.HomeScreenViewModel
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    homeScreenViewModel: HomeScreenViewModel = viewModel(),
+    vm: HomeScreenViewModel = viewModel(),
     wallpaperHelper: WallpaperHelper
 ) {
     val context = LocalContext.current
-    val uiState = homeScreenViewModel.homeScreenUiState
+    val uiState = vm.uiState
     val uiResult = uiState.uiResult.value
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
@@ -101,7 +101,7 @@ fun HomeScreen(
                                 expanded = sortMenuExpanded,
                                 options = sortMenuOptions,
                                 onOptionSelected = {
-                                    homeScreenViewModel.setSortOrder(SortOrder.values()[it])
+                                    vm.setSortOrder(SortOrder.values()[it])
                                 },
                                 onDismiss = { sortMenuExpanded = false }
                             )
@@ -148,7 +148,7 @@ fun HomeScreen(
                         }
                     },
                     onDismiss = {
-                        homeScreenViewModel.setLongPressImage(null)
+                        vm.setLongPressImage(null)
                     }
                 )
                 when {
@@ -157,7 +157,7 @@ fun HomeScreen(
                         errorMessage = uiResult.errorMessage
                             ?: stringResource(id = R.string.error_state_title)
                     ) {
-                        homeScreenViewModel.fetchHomeFeed(true)
+                        vm.fetchHomeFeed(true)
                     }
                     uiResult is UiResult.Loading && uiState.images.isEmpty() -> Box {
                         ThreeDotsLoader(modifier = Modifier.align(Alignment.Center))
@@ -167,9 +167,9 @@ fun HomeScreen(
                             modifier = modifier,
                             images = uiState.images,
                             navigateToPost = { uiState.images[it].postUrl.launchBrowser(context) },
-                            onImageSetWallpaperClick = homeScreenViewModel::setLongPressImage,
-                            onLoadMore = { homeScreenViewModel.fetchHomeFeed() },
-                            onLikeClick = homeScreenViewModel::onLikeClick
+                            onImageSetWallpaperClick = vm::setLongPressImage,
+                            onLoadMore = { vm.fetchHomeFeed() },
+                            onLikeClick = vm::onLikeClick
                         )
                     }
                     !uiState.verticalSwipeFeedEnabled.value -> ImagesList(
@@ -178,9 +178,9 @@ fun HomeScreen(
                         images = uiState.images,
                         isLoading = uiResult is UiResult.Loading,
                         onClick = {},
-                        onImageLongPress = homeScreenViewModel::setLongPressImage,
-                        onLikeClick = homeScreenViewModel::onLikeClick,
-                        onLoadMore = { homeScreenViewModel.fetchHomeFeed() }
+                        onImageLongPress = vm::setLongPressImage,
+                        onLikeClick = vm::onLikeClick,
+                        onLoadMore = { vm.fetchHomeFeed() }
                     )
                 }
             }

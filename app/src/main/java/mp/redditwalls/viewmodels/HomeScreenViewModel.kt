@@ -1,8 +1,5 @@
 package mp.redditwalls.viewmodels
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,8 +20,7 @@ class HomeScreenViewModel @Inject constructor(
     private val favoriteImageViewModelDelegate: FavoriteImageViewModelDelegate,
     private val getPreferencesUseCase: GetPreferencesUseCase
 ) : FavoriteImageViewModel by favoriteImageViewModelDelegate, ViewModel() {
-    val homeScreenUiState = HomeScreenUiState()
-    private var hasMoreImages by mutableStateOf(true)
+    val uiState = HomeScreenUiState()
 
     init {
         favoriteImageViewModelDelegate.coroutineScope = viewModelScope
@@ -36,19 +32,19 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     fun setSortOrder(sortOrder: SortOrder) {
-        hasMoreImages = true
-        homeScreenUiState.sortOrder.value = sortOrder
+        uiState.hasMoreImages.value = true
+        uiState.sortOrder.value = sortOrder
         fetchHomeFeed(true)
     }
 
     fun fetchHomeFeed(reload: Boolean = false) {
-        val sortOrder = homeScreenUiState.sortOrder.value
-        if (!hasMoreImages || sortOrder == null) {
+        val sortOrder = uiState.sortOrder.value
+        if (!uiState.hasMoreImages.value || sortOrder == null) {
             return
         }
-        homeScreenUiState.uiResult.value = UiResult.Loading()
+        uiState.uiResult.value = UiResult.Loading()
         if (reload) {
-            homeScreenUiState.images.clear()
+            uiState.images.clear()
         }
         viewModelScope.launch {
             getHomeFeedUseCase(
@@ -61,14 +57,14 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     fun setLongPressImage(image: ImageItemUiState?) {
-        homeScreenUiState.longPressedImage.value = image
+        uiState.longPressedImage.value = image
     }
 
     private fun subscribeToHomeFeed() {
         viewModelScope.launch {
             getHomeFeedUseCase.sharedFlow.collect {
-                hasMoreImages = it.data?.nextPageId != null
-                homeScreenUiState.apply {
+                uiState.hasMoreImages.value = it.data?.nextPageId != null
+                uiState.apply {
                     when (it) {
                         is DomainResult.Error -> {
                             uiResult.value = UiResult.Error(it.message)
@@ -96,7 +92,7 @@ class HomeScreenViewModel @Inject constructor(
             when (it) {
                 is DomainResult.Error -> {}
                 is DomainResult.Success -> it.data?.let { preferences ->
-                    homeScreenUiState.apply {
+                    uiState.apply {
                         sortOrder.value = preferences.defaultHomeSort
                         verticalSwipeFeedEnabled.value = preferences.verticalSwipeFeedEnabled
                     }
