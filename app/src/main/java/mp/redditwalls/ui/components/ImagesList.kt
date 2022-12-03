@@ -30,7 +30,7 @@ import mp.redditwalls.models.toImageCardModel
 
 @Composable
 fun ImagesList(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(8.dp),
     images: List<ImageItemUiState>,
     isLoading: Boolean,

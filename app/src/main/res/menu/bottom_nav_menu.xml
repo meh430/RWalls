@@ -12,6 +12,11 @@
         android:title="@string/title_favorites" />
 
     <item
+        android:id="@+id/navigation_discover_screen"
+        android:icon="@drawable/ic_search"
+        android:title="@string/discover" />
+
+    <item
         android:id="@+id/navigation_search"
         android:icon="@drawable/ic_search"
         android:title="@string/title_search" />

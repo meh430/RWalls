@@ -59,7 +59,7 @@ class BottomNavigationBarView @JvmOverloads constructor(
             context.getString(R.string.favorites),
             Icons.Filled.Favorite
         ),
-        R.id.navigation_search to IconText(
+        R.id.navigation_discover_screen to IconText(
             context.getString(R.string.discover),
             Icons.Default.Explore
         ),

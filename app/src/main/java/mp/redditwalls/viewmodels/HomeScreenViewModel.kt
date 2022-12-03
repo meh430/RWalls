@@ -11,7 +11,7 @@ import mp.redditwalls.domain.usecases.GetPreferencesUseCase
 import mp.redditwalls.models.HomeScreenUiState
 import mp.redditwalls.models.ImageItemUiState
 import mp.redditwalls.models.UiResult
-import mp.redditwalls.models.toImageItemScreenState
+import mp.redditwalls.models.toImageItemItemUiState
 import mp.redditwalls.preferences.enums.SortOrder
 
 @HiltViewModel
@@ -73,7 +73,7 @@ class HomeScreenViewModel @Inject constructor(
                             uiResult.value = UiResult.Success()
                             images.addAll(
                                 it.data?.images?.map { domainImage ->
-                                    domainImage.toImageItemScreenState()
+                                    domainImage.toImageItemItemUiState()
                                 }.orEmpty()
                             )
                         }

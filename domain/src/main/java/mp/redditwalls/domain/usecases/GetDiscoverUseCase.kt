@@ -38,11 +38,11 @@ class GetDiscoverUseCase @Inject constructor(
         preferencesRepository.getAllowNsfw(),
         preferencesRepository.getPreviewResolution()
     ) { dbSubreddits, dbImages, recentActivities, allowNsfw, previewResolution ->
-        val dbSubredditNames = dbSubreddits.map { it.name }.toSet()
+        val dbSubredditNames = dbSubreddits.map { it.name.uppercase() }.toSet()
         val dbImageIds = dbImages.map { it.networkId }.toSet()
         val recommendations =
             recommendedSubredditsRepository.getRecommendedSubreddits().filter {
-                !dbSubredditNames.contains(it)
+                !dbSubredditNames.contains(it.uppercase())
             }.shuffled().take(RECOMMENDATION_LIMIT).let { subredditNames ->
                 networkSubredditsRepository.getSubredditsInfo(subredditNames).subreddits
             }.map { networkSubreddit ->

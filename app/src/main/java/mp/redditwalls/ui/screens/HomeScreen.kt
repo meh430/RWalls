@@ -51,7 +51,6 @@ import mp.redditwalls.viewmodels.HomeScreenViewModel
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier,
     vm: HomeScreenViewModel = viewModel(),
     wallpaperHelper: WallpaperHelper
 ) {
@@ -164,7 +163,6 @@ fun HomeScreen(
                     }
                     uiState.verticalSwipeFeedEnabled.value -> {
                         ImagePager(
-                            modifier = modifier,
                             images = uiState.images,
                             navigateToPost = { uiState.images[it].postUrl.launchBrowser(context) },
                             onImageSetWallpaperClick = vm::setLongPressImage,
@@ -173,7 +171,6 @@ fun HomeScreen(
                         )
                     }
                     !uiState.verticalSwipeFeedEnabled.value -> ImagesList(
-                        modifier = modifier,
                         contentPadding = PaddingValues(8.dp),
                         images = uiState.images,
                         isLoading = uiResult is UiResult.Loading,

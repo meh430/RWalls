@@ -21,7 +21,7 @@ data class ImageItemUiState(
     val isAlbum: Boolean = false
 )
 
-fun DomainImage.toImageItemScreenState() = ImageItemUiState(
+fun DomainImage.toImageItemItemUiState() = ImageItemUiState(
     postTitle = postTitle,
     subredditName = subredditName,
     author = author,
@@ -29,14 +29,7 @@ fun DomainImage.toImageItemScreenState() = ImageItemUiState(
     numComments = numComments,
     postUrl = postUrl,
     networkId = networkId,
-    imageUrl = domainImageUrls.first().let {
-        ImageUrl(
-            url = it.url,
-            highQualityUrl = it.highQualityUrl,
-            mediumQualityUrl = it.mediumQualityUrl,
-            lowQualityUrl = it.lowQualityUrl
-        )
-    },
+    imageUrl = domainImageUrls.first().toImageUrl(),
     isLiked = mutableStateOf(isLiked),
     isAlbum = isAlbum
 )
@@ -84,4 +77,11 @@ data class ImageUrl(
     val lowQualityUrl: String = "",
     val mediumQualityUrl: String = "",
     val highQualityUrl: String = "",
+)
+
+fun DomainImageUrl.toImageUrl() = ImageUrl(
+    url = url,
+    highQualityUrl = highQualityUrl,
+    mediumQualityUrl = mediumQualityUrl,
+    lowQualityUrl = lowQualityUrl
 )

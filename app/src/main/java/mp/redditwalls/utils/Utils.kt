@@ -47,13 +47,13 @@ object Utils {
         "INIT",
         "Jan",
         "Feb",
-        "March",
-        "April",
+        "Mar",
+        "Apr",
         "May",
-        "June",
-        "July",
+        "Jun",
+        "Jul",
         "Aug",
-        "Sept",
+        "Sep",
         "Oct",
         "Nov",
         "Dec"
@@ -269,5 +269,26 @@ object Utils {
             context.finish()
         }
         Runtime.getRuntime().exit(0)
+    }
+
+    fun getFormattedDate(date: Date): String {
+        val dateString =
+            SimpleDateFormat("MM-dd-yyyy 'at' HH:mm:ss", Locale.getDefault()).format(date)
+        val tempDate = dateString.trim().split(" at ")
+        val dateArr = tempDate[0].trim().split("-")
+        val timeArr = tempDate[1].trim().split(":")
+        val day = dateArr[1]
+        val year = dateArr[3].slice(2..3)
+        val month = MONTHS[Integer.parseInt(dateArr[0])]
+        var hours = Integer.parseInt(timeArr[0])
+        var minutes = Integer.parseInt(timeArr[1])
+        val pmam = if (hours > 12) {
+            hours -= 12
+            "PM"
+        } else {
+            "AM"
+        }
+
+        return "$hours:$minutes $pmam · $day $month $year"
     }
 }

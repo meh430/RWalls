@@ -15,7 +15,7 @@ import mp.redditwalls.local.enums.WallpaperLocation
 import mp.redditwalls.models.FavoriteImagesScreenUiState
 import mp.redditwalls.models.ImageItemUiState
 import mp.redditwalls.models.UiResult
-import mp.redditwalls.models.toImageItemScreenState
+import mp.redditwalls.models.toImageItemItemUiState
 import mp.redditwalls.utils.DownloadUtils
 
 @HiltViewModel
@@ -154,7 +154,7 @@ class FavoriteImagesScreenViewModel @Inject constructor(
                     images.clear()
                     images.addAll(
                         it.data?.images?.map { domainImage ->
-                            domainImage.toImageItemScreenState()
+                            domainImage.toImageItemItemUiState()
                         }.orEmpty()
                     )
                 }

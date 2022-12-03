@@ -11,7 +11,7 @@ interface SubredditsService {
     suspend fun getSubredditDetail(@Path("subreddit") subreddit: String): NetworkSubreddit
 
     @GET("/api/info")
-    suspend fun getSubredditsInfo(@Path("sr_name") subreddits: String): NetworkSubreddits
+    suspend fun getSubredditsInfo(@Query("sr_name") subreddits: String): NetworkSubreddits
 
     @GET("/api/subreddit_autocomplete_v2")
     suspend fun searchSubreddits(

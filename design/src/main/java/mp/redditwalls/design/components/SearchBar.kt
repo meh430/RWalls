@@ -36,14 +36,15 @@ import mp.redditwalls.design.RwTheme
 @Composable
 fun SearchBar(
     modifier: Modifier = Modifier,
-    value: String,
-    onValueChanged: (String) -> Unit,
-    onSearch: () -> Unit,
-    hint: String
+    value: String = "",
+    onValueChanged: (String) -> Unit = {},
+    onSearch: () -> Unit = {},
+    hint: String,
+    enabled: Boolean = true
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     Row(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(
                 top = 24.dp,
@@ -51,7 +52,8 @@ fun SearchBar(
                 start = 16.dp,
                 end = 16.dp
             )
-            .background(MaterialTheme.colorScheme.surfaceVariant, CircleShape),
+            .background(MaterialTheme.colorScheme.surfaceVariant, CircleShape)
+            .then(modifier),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -66,6 +68,7 @@ fun SearchBar(
                 .padding(16.dp)
         ) {
             BasicTextField(
+                enabled = enabled,
                 value = value,
                 onValueChange = onValueChanged,
                 singleLine = true,

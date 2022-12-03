@@ -70,7 +70,7 @@ fun ImageRecentActivityCard(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(12.dp),
+                    .padding(18.dp),
                 verticalArrangement = Arrangement.Bottom,
                 horizontalAlignment = Alignment.Start
             ) {
@@ -203,7 +203,7 @@ fun RecentActivityPreview() {
                         title = "Searched images with 'query'",
                         subTitle = "",
                         date = "4:06 PM · 10 Oct 22",
-                        onClick = { /*TODO*/ },
+                        onClick = {},
                         modifier = Modifier.padding(8.dp)
                     )
                 }

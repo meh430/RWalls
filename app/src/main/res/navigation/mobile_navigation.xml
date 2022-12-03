@@ -30,6 +30,11 @@
         android:label="@string/favorites">
     </fragment>
 
+    <fragment
+        android:id="@+id/navigation_discover_screen"
+        android:name="mp.redditwalls.fragments.DiscoverScreenFragment"
+        android:label="@string/discover">
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_favorites"

@@ -11,7 +11,7 @@ class NetworkSubredditsRepository @Inject constructor(private val subredditsServ
     }
 
     suspend fun getSubredditsInfo(subreddits: List<String>) = withContext(Dispatchers.IO) {
-        subredditsService.getSubredditsInfo(subreddits.joinToString { "," })
+        subredditsService.getSubredditsInfo(subreddits.joinToString(separator = ",") { it })
     }
 
     suspend fun searchSubreddits(
