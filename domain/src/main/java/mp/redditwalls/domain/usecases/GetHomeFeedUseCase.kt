@@ -1,6 +1,7 @@
 package mp.redditwalls.domain.usecases
 
 import javax.inject.Inject
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import mp.redditwalls.domain.Utils.toTimeFilter
 import mp.redditwalls.domain.models.FeedResult
@@ -53,6 +54,16 @@ class GetHomeFeedUseCase @Inject constructor(
             images = domainImages,
             nextPageId = networkImages.nextPageId
         )
+    }
+
+    suspend fun shouldReFetchHomeFeed(onReFetch: (SortOrder, Boolean) -> Unit) {
+        combine(
+            subredditsRepository.getDbSubreddits(),
+            preferencesRepository.getAllowNsfw(),
+            preferencesRepository.getPreviewResolution(),
+            preferencesRepository.getDefaultHomeSort(),
+            preferencesRepository.getVerticalSwipeFeedEnabled()
+        ) { _, _, _, defaultSort, swipeEnabled -> onReFetch(defaultSort, swipeEnabled) }.collect()
     }
 
     data class Params(

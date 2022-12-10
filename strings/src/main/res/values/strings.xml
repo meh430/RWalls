@@ -63,4 +63,10 @@
 
     <string name="confirm">Confirm</string>
     <string name="delete_confirmation">Are you sure you want to delete?</string>
+
+    <string name="recommendations">Recommendations</string>
+    <string name="recent_activity">Recent Activity</string>
+
+    <string name="view_more">View More</string>
+
 </resources>

@@ -278,10 +278,10 @@ object Utils {
         val dateArr = tempDate[0].trim().split("-")
         val timeArr = tempDate[1].trim().split(":")
         val day = dateArr[1]
-        val year = dateArr[3].slice(2..3)
+        val year = dateArr[2].slice(2..3)
         val month = MONTHS[Integer.parseInt(dateArr[0])]
         var hours = Integer.parseInt(timeArr[0])
-        var minutes = Integer.parseInt(timeArr[1])
+        val minutes = Integer.parseInt(timeArr[1])
         val pmam = if (hours > 12) {
             hours -= 12
             "PM"

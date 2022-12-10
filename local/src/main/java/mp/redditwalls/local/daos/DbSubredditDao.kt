@@ -21,4 +21,7 @@ interface DbSubredditDao {
 
     @Query("SELECT * FROM SavedSubreddits")
     fun getDbSubreddits(): Flow<List<DbSubreddit>>
+
+    @Query("SELECT * FROM SavedSubreddits")
+    suspend fun getDbSubredditsList(): List<DbSubreddit>
 }

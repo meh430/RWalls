@@ -7,7 +7,6 @@ import javax.inject.Inject
 import kotlinx.coroutines.launch
 import mp.redditwalls.domain.models.DomainResult
 import mp.redditwalls.domain.usecases.GetHomeFeedUseCase
-import mp.redditwalls.domain.usecases.GetPreferencesUseCase
 import mp.redditwalls.models.HomeScreenUiState
 import mp.redditwalls.models.ImageItemUiState
 import mp.redditwalls.models.UiResult
@@ -17,18 +16,15 @@ import mp.redditwalls.preferences.enums.SortOrder
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
     private val getHomeFeedUseCase: GetHomeFeedUseCase,
-    private val favoriteImageViewModelDelegate: FavoriteImageViewModelDelegate,
-    private val getPreferencesUseCase: GetPreferencesUseCase
-) : FavoriteImageViewModel by favoriteImageViewModelDelegate, ViewModel() {
+    val favoriteImageViewModel: FavoriteImageViewModel
+) : ViewModel() {
     val uiState = HomeScreenUiState()
 
     init {
-        favoriteImageViewModelDelegate.coroutineScope = viewModelScope
+        favoriteImageViewModel.init(viewModelScope)
+
         subscribeToHomeFeed()
-        subscribeToPreferences()
-        getPreferencesUseCase.init(viewModelScope)
         getHomeFeedUseCase.init(viewModelScope)
-        getPreferences()
     }
 
     fun setSortOrder(sortOrder: SortOrder) {
@@ -81,23 +77,13 @@ class HomeScreenViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    private fun getPreferences() = viewModelScope.launch {
-        getPreferencesUseCase(Unit)
-    }
-
-    private fun subscribeToPreferences() = viewModelScope.launch {
-        getPreferencesUseCase.sharedFlow.collect {
-            when (it) {
-                is DomainResult.Error -> {}
-                is DomainResult.Success -> it.data?.let { preferences ->
-                    uiState.apply {
-                        sortOrder.value = preferences.defaultHomeSort
-                        verticalSwipeFeedEnabled.value = preferences.verticalSwipeFeedEnabled
-                    }
-                    fetchHomeFeed()
+        viewModelScope.launch {
+            getHomeFeedUseCase.shouldReFetchHomeFeed { defaultSortOrder, swipeFeedEnabled ->
+                uiState.apply {
+                    sortOrder.value = defaultSortOrder
+                    verticalSwipeFeedEnabled.value = swipeFeedEnabled
                 }
+                fetchHomeFeed(reload = true)
             }
         }
     }

@@ -9,24 +9,28 @@ import mp.redditwalls.domain.models.DomainResult
 import mp.redditwalls.domain.usecases.GetDiscoverUseCase
 import mp.redditwalls.models.DiscoverScreenUiState
 import mp.redditwalls.models.UiResult
+import mp.redditwalls.models.clear
 import mp.redditwalls.models.toRecentActivityItem
 import mp.redditwalls.models.toRecommendedSubredditUiState
 
 @HiltViewModel
 class DiscoverScreenViewModel @Inject constructor(
     private val getDiscoverUseCase: GetDiscoverUseCase,
-    private val favoriteImageViewModelDelegate: FavoriteImageViewModelDelegate
-) : FavoriteImageViewModel by favoriteImageViewModelDelegate, ViewModel() {
+    val favoriteImageViewModel: FavoriteImageViewModel,
+    val savedSubredditViewModel: SavedSubredditViewModel
+) : ViewModel() {
+
     val discoverScreenUiState = DiscoverScreenUiState()
 
     init {
-        favoriteImageViewModelDelegate.coroutineScope = viewModelScope
+        favoriteImageViewModel.init(viewModelScope)
+        savedSubredditViewModel.init(viewModelScope)
         subscribeToDiscoverFeed()
         getDiscoverUseCase.init(viewModelScope)
         getDiscoverFeed()
     }
 
-    private fun getDiscoverFeed() {
+    fun getDiscoverFeed() {
         viewModelScope.launch {
             getDiscoverUseCase(Unit)
         }
@@ -41,6 +45,7 @@ class DiscoverScreenViewModel @Inject constructor(
                     }
                     is DomainResult.Success -> {
                         discoverScreenUiState.apply {
+                            clear()
                             uiResult.value = UiResult.Success()
                             allowNsfw.value = it.data?.allowNsfw == true
                             recommendedSubreddits.addAll(

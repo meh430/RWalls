@@ -191,7 +191,7 @@ fun FavoriteImagesScreen(
                                 vm.startSelecting(it)
                             }
                         },
-                        onLikeClick = vm::onLikeClick,
+                        onLikeClick = vm.favoriteImageViewModel::onLikeClick,
                         onLoadMore = {},
                         header = {
                             FilterChipBar(

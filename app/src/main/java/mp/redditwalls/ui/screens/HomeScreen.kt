@@ -167,7 +167,7 @@ fun HomeScreen(
                             navigateToPost = { uiState.images[it].postUrl.launchBrowser(context) },
                             onImageSetWallpaperClick = vm::setLongPressImage,
                             onLoadMore = { vm.fetchHomeFeed() },
-                            onLikeClick = vm::onLikeClick
+                            onLikeClick = vm.favoriteImageViewModel::onLikeClick
                         )
                     }
                     !uiState.verticalSwipeFeedEnabled.value -> ImagesList(
@@ -176,7 +176,7 @@ fun HomeScreen(
                         isLoading = uiResult is UiResult.Loading,
                         onClick = {},
                         onImageLongPress = vm::setLongPressImage,
-                        onLikeClick = vm::onLikeClick,
+                        onLikeClick = vm.favoriteImageViewModel::onLikeClick,
                         onLoadMore = { vm.fetchHomeFeed() }
                     )
                 }

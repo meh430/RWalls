@@ -111,7 +111,7 @@ fun TextRecentActivityCard(
     modifier: Modifier = Modifier,
     icon: ImageVector,
     title: String,
-    subTitle: String,
+    subTitle: String = "",
     date: String,
     onClick: () -> Unit
 ) {

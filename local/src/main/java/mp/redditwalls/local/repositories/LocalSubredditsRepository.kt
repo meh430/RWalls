@@ -26,5 +26,9 @@ class LocalSubredditsRepository @Inject constructor(private val dbSubredditDao: 
         }
     }
 
+    suspend fun getDbSubredditsList(): List<DbSubreddit> = withContext(Dispatchers.IO) {
+        dbSubredditDao.getDbSubredditsList()
+    }
+
     fun getDbSubreddits(): Flow<List<DbSubreddit>> = dbSubredditDao.getDbSubreddits()
 }

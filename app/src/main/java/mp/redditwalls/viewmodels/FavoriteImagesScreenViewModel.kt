@@ -21,14 +21,14 @@ import mp.redditwalls.utils.DownloadUtils
 @HiltViewModel
 class FavoriteImagesScreenViewModel @Inject constructor(
     private val getFavoriteImagesUseCase: GetFavoriteImagesUseCase,
-    private val favoriteImageViewModelDelegate: FavoriteImageViewModelDelegate,
     private val removeFavoriteImagesUseCase: RemoveFavoriteImagesUseCase,
-    private val updateFavoriteImageUseCase: UpdateFavoriteImageUseCase
-) : FavoriteImageViewModel by favoriteImageViewModelDelegate, ViewModel() {
+    private val updateFavoriteImageUseCase: UpdateFavoriteImageUseCase,
+    val favoriteImageViewModel: FavoriteImageViewModel
+) : ViewModel() {
     val uiState = FavoriteImagesScreenUiState()
 
     init {
-        favoriteImageViewModelDelegate.coroutineScope = viewModelScope
+        favoriteImageViewModel.init(viewModelScope)
         subscribeToFavoriteImages()
         getFavoriteImagesUseCase.init(viewModelScope)
     }

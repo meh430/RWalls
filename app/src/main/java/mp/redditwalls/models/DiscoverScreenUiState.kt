@@ -11,3 +11,8 @@ data class DiscoverScreenUiState(
     val recentActivityItems: SnapshotStateList<RecentActivityItem> = mutableStateListOf(),
     val uiResult: MutableState<UiResult> = mutableStateOf(UiResult.Loading())
 )
+
+fun DiscoverScreenUiState.clear() {
+    recommendedSubreddits.clear()
+    recentActivityItems.clear()
+}

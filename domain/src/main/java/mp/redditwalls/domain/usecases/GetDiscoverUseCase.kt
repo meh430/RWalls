@@ -32,18 +32,17 @@ class GetDiscoverUseCase @Inject constructor(
      * get most recent activity
      */
     override fun execute() = combine(
-        localSubredditsRepository.getDbSubreddits(),
-        localImagesRepository.getDbImagesFlow(),
         recentActivityRepository.getLimitedDbRecentActivityItems(RECENT_ACTIVITY_LIMIT),
         preferencesRepository.getAllowNsfw(),
         preferencesRepository.getPreviewResolution()
-    ) { dbSubreddits, dbImages, recentActivities, allowNsfw, previewResolution ->
-        val dbSubredditNames = dbSubreddits.map { it.name.uppercase() }.toSet()
-        val dbImageIds = dbImages.map { it.networkId }.toSet()
-        val recommendations =
-            recommendedSubredditsRepository.getRecommendedSubreddits().filter {
-                !dbSubredditNames.contains(it.uppercase())
-            }.shuffled().take(RECOMMENDATION_LIMIT).let { subredditNames ->
+    ) { recentActivities, allowNsfw, previewResolution ->
+        val dbSubredditNames = localSubredditsRepository.getDbSubredditsList().map {
+            it.name.uppercase()
+        }.toSet()
+        val dbImageIds = localImagesRepository.getDbImages().map { it.networkId }.toSet()
+        val recommendations = recommendedSubredditsRepository.getRecommendedSubreddits()
+            .shuffled()
+            .take(RECOMMENDATION_LIMIT).let { subredditNames ->
                 networkSubredditsRepository.getSubredditsInfo(subredditNames).subreddits
             }.map { networkSubreddit ->
                 networkSubreddit.toDomainSubreddit(
@@ -52,7 +51,11 @@ class GetDiscoverUseCase @Inject constructor(
             }.map { domainSubreddit ->
                 val images = networkImagesRepository.getTopImages(
                     subreddit = domainSubreddit.name,
-                    timeFilter = TimeFilter.ALL,
+                    timeFilter = listOf(
+                        TimeFilter.YEAR,
+                        TimeFilter.ALL,
+                        TimeFilter.MONTH
+                    ).random(),
                     after = ""
                 ).images.map { networkImage ->
                     networkImage.toDomainImage(
@@ -78,6 +81,6 @@ class GetDiscoverUseCase @Inject constructor(
 
     companion object {
         private const val RECENT_ACTIVITY_LIMIT = 10
-        private const val RECOMMENDATION_LIMIT = 3
+        private const val RECOMMENDATION_LIMIT = 2
     }
 }
