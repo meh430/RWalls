@@ -3,14 +3,17 @@ package mp.redditwalls.domain.usecases
 import javax.inject.Inject
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import mp.redditwalls.domain.Utils.toTimeFilter
 import mp.redditwalls.domain.models.FeedResult
 import mp.redditwalls.domain.models.toDomainImage
 import mp.redditwalls.local.Constants.DEFAULT_SUBREDDIT
+import mp.redditwalls.local.models.DbSubreddit
 import mp.redditwalls.local.repositories.LocalImagesRepository
 import mp.redditwalls.local.repositories.LocalSubredditsRepository
 import mp.redditwalls.network.repositories.NetworkImagesRepository
 import mp.redditwalls.preferences.PreferencesRepository
+import mp.redditwalls.preferences.enums.ImageQuality
 import mp.redditwalls.preferences.enums.SortOrder
 
 class GetHomeFeedUseCase @Inject constructor(
@@ -19,13 +22,11 @@ class GetHomeFeedUseCase @Inject constructor(
     private val subredditsRepository: LocalSubredditsRepository,
     private val preferencesRepository: PreferencesRepository
 ) : FlowUseCase<FeedResult, GetHomeFeedUseCase.Params>(FeedResult()) {
-    override fun execute() = combine(
-        paramsFlow,
-        subredditsRepository.getDbSubreddits(),
-        preferencesRepository.getAllowNsfw(),
-        preferencesRepository.getPreviewResolution()
-    ) { params, savedSubreddits, allowNsfw, previewResolution ->
-        val subreddit = savedSubreddits.joinToString(separator = "+") {
+
+    private lateinit var extras: Extras
+
+    override fun execute() = paramsFlow.map { params ->
+        val subreddit = extras.savedSubreddits.joinToString(separator = "+") {
             it.name
         }.ifEmpty {
             DEFAULT_SUBREDDIT
@@ -42,10 +43,10 @@ class GetHomeFeedUseCase @Inject constructor(
         }
 
         val domainImages = networkImages.images.filter {
-            (!allowNsfw && !it.isOver18) || allowNsfw
+            (!extras.allowNsfw && !it.isOver18) || extras.allowNsfw
         }.map {
             it.toDomainImage(
-                previewResolution = previewResolution,
+                previewResolution = extras.previewResolution,
                 isLiked = dbImageIds.contains(it.id),
             )
         }
@@ -63,11 +64,24 @@ class GetHomeFeedUseCase @Inject constructor(
             preferencesRepository.getPreviewResolution(),
             preferencesRepository.getDefaultHomeSort(),
             preferencesRepository.getVerticalSwipeFeedEnabled()
-        ) { _, _, _, defaultSort, swipeEnabled -> onReFetch(defaultSort, swipeEnabled) }.collect()
+        ) { savedSubreddits, allowNsfw, previewResolution, defaultSort, swipeEnabled ->
+            extras = Extras(
+                savedSubreddits = savedSubreddits,
+                allowNsfw = allowNsfw,
+                previewResolution = previewResolution
+            )
+            onReFetch(defaultSort, swipeEnabled)
+        }.collect()
     }
 
     data class Params(
         val sortOrder: SortOrder,
         val reload: Boolean = false
+    )
+
+    private data class Extras(
+        val savedSubreddits: List<DbSubreddit>,
+        val allowNsfw: Boolean,
+        val previewResolution: ImageQuality
     )
 }

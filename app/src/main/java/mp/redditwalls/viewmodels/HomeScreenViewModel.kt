@@ -1,5 +1,6 @@
 package mp.redditwalls.viewmodels
 
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,6 +20,7 @@ class HomeScreenViewModel @Inject constructor(
     val favoriteImageViewModel: FavoriteImageViewModel
 ) : ViewModel() {
     val uiState = HomeScreenUiState()
+    val listState = LazyGridState()
 
     init {
         favoriteImageViewModel.init(viewModelScope)
@@ -35,12 +37,15 @@ class HomeScreenViewModel @Inject constructor(
 
     fun fetchHomeFeed(reload: Boolean = false) {
         val sortOrder = uiState.sortOrder.value
-        if (!uiState.hasMoreImages.value || sortOrder == null) {
+        if ((!reload && !uiState.hasMoreImages.value) || sortOrder == null) {
             return
         }
         uiState.uiResult.value = UiResult.Loading()
         if (reload) {
             uiState.images.clear()
+            viewModelScope.launch {
+                listState.scrollToItem(0)
+            }
         }
         viewModelScope.launch {
             getHomeFeedUseCase(

@@ -46,7 +46,7 @@ class GetDiscoverUseCase @Inject constructor(
                 networkSubredditsRepository.getSubredditsInfo(subredditNames).subreddits
             }.map { networkSubreddit ->
                 networkSubreddit.toDomainSubreddit(
-                    isSaved = dbSubredditNames.contains(networkSubreddit.name)
+                    isSaved = dbSubredditNames.contains(networkSubreddit.name.uppercase())
                 )
             }.map { domainSubreddit ->
                 val images = networkImagesRepository.getTopImages(

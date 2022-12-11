@@ -171,6 +171,7 @@ fun HomeScreen(
                         )
                     }
                     !uiState.verticalSwipeFeedEnabled.value -> ImagesList(
+                        listState = vm.listState,
                         contentPadding = PaddingValues(8.dp),
                         images = uiState.images,
                         isLoading = uiResult is UiResult.Loading,

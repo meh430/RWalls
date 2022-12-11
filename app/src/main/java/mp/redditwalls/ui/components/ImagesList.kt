@@ -31,6 +31,7 @@ import mp.redditwalls.models.toImageCardModel
 @Composable
 fun ImagesList(
     modifier: Modifier = Modifier,
+    listState: LazyGridState = rememberLazyGridState(),
     contentPadding: PaddingValues = PaddingValues(8.dp),
     images: List<ImageItemUiState>,
     isLoading: Boolean,
@@ -40,7 +41,6 @@ fun ImagesList(
     onLoadMore: () -> Unit,
     header: (@Composable () -> Unit)? = null
 ) {
-    val listState = rememberLazyGridState()
     LazyVerticalGrid(
         modifier = modifier.fillMaxWidth(),
         state = listState,
