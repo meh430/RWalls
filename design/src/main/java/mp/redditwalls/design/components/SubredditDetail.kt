@@ -38,6 +38,7 @@ fun SubredditDetail(
     description: String,
     headerImageUrl: String,
     iconImageUrl: String,
+    subredditName: String,
     title: String,
     subTitle: String,
     isSaved: Boolean,
@@ -50,6 +51,7 @@ fun SubredditDetail(
             modifier = Modifier.padding(bottom = 12.dp),
             headerImageUrl = headerImageUrl,
             iconImageUrl = iconImageUrl,
+            subredditName = subredditName,
             title = title,
             subTitle = subTitle,
             isSaved = isSaved,
@@ -69,6 +71,7 @@ fun SubredditHeaderImage(
     modifier: Modifier = Modifier,
     headerImageUrl: String,
     iconImageUrl: String,
+    subredditName: String,
     title: String,
     subTitle: String,
     isSaved: Boolean,
@@ -107,7 +110,10 @@ fun SubredditHeaderImage(
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.Bottom
             ) {
-                SubredditIcon(subredditIconUrl = iconImageUrl)
+                SubredditIcon(
+                    subredditIconUrl = iconImageUrl,
+                    subredditName = subredditName
+                )
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -155,6 +161,7 @@ fun SubredditDetailPreview() {
         ) {
             SubredditDetail(
                 modifier = Modifier.padding(12.dp),
+                subredditName = "",
                 description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer accumsan, ante eu ullamcorper porttitor, dui dolor malesuada purus, sed fringilla mauris lorem quis augue. Proin commodo bibendum condimentum.",
                 headerImageUrl = "https://styles.redditmedia.com/t5_2ss60/styles/bannerBackgroundImage_x2tx5ryggi711.png?width=4000&s=69f12cf2d5d63fde1adc9820764f9cd1182436db",
                 iconImageUrl = "https://styles.redditmedia.com/t5_2ss60/styles/communityIcon_bx5asf07hi711.png?width=256&s=aa64b672872834f8d49bf3ae560543a9d9bd7ee6",

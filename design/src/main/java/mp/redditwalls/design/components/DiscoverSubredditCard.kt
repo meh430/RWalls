@@ -52,6 +52,7 @@ fun DiscoverSubredditCard(
             ) {
                 SubredditIcon(
                     subredditIconUrl = subredditIconUrl,
+                    subredditName = subredditName
                 )
                 Column(modifier = Modifier.padding(horizontal = 8.dp)) {
                     Text(

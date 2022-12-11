@@ -1,7 +1,9 @@
 package mp.redditwalls.design.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -25,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -72,6 +75,7 @@ fun SubredditCard(
                 ) {
                     SubredditIcon(
                         subredditIconUrl = subredditIconUrl,
+                        subredditName = subredditName
                     )
                     Column(modifier = Modifier.padding(horizontal = 8.dp)) {
                         Text(
@@ -107,16 +111,34 @@ fun SubredditCard(
 fun SubredditIcon(
     modifier: Modifier = Modifier,
     subredditIconUrl: String,
+    subredditName: String,
     size: Dp = 48.dp
 ) {
     Card(
         modifier = modifier.size(size),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
-        Image(
-            modifier = Modifier.fillMaxSize(),
-            imageUrl = subredditIconUrl
-        )
+        if (subredditIconUrl.isEmpty()) {
+            val initial = subredditName.replaceFirst("r/", "").firstOrNull()
+            Box(
+                modifier = Modifier
+                    .background(MaterialTheme.colorScheme.primary)
+                    .fillMaxSize()
+            ) {
+                Text(
+                    modifier = Modifier.align(Alignment.Center),
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    text = initial?.toString().orEmpty().uppercase(),
+                    style = MaterialTheme.typography.headlineMedium,
+                    textAlign = TextAlign.Center
+                )
+            }
+        } else {
+            Image(
+                modifier = Modifier.fillMaxSize(),
+                imageUrl = subredditIconUrl
+            )
+        }
     }
 }
 
