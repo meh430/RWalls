@@ -47,6 +47,18 @@
             app:destination="@id/navigation_wallpaper" />
     </fragment>
 
+    <fragment
+        android:id="@+id/navigation_saved_subreddits_screen"
+        android:name="mp.redditwalls.fragments.SavedSubredditsScreenFragment"
+        android:label="@string/saved">
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_settings_screen"
+        android:name="mp.redditwalls.fragments.SettingsScreenFragment"
+        android:label="@string/settings">
+    </fragment>
+
     <activity
         android:id="@+id/navigation_wallpaper"
         android:name="mp.redditwalls.WallActivity">

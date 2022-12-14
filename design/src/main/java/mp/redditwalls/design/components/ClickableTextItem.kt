@@ -51,7 +51,7 @@ fun ClickableTextPreview() {
             ClickableTextItem(
                 modifier = Modifier.padding(12.dp),
                 title = "Enable this setting we have here",
-                subtitle = "Explain in detail what this setting does",
+                subtitle = "Explain in detail what this setting does, for example what if it is a really really long setting explanation, then it should wrap around onto the other line into as many lines as we would even need.",
                 onClick = {}
             )
         }

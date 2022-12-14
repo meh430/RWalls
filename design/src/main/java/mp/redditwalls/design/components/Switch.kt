@@ -4,9 +4,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -37,7 +39,7 @@ fun SubtitleSwitch(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Column {
+        Column(modifier = Modifier.weight(1f)) {
             Text(
                 modifier = Modifier.padding(bottom = 4.dp),
                 text = title,
@@ -52,6 +54,7 @@ fun SubtitleSwitch(
                 )
             }
         }
+        Spacer(modifier = Modifier.width(4.dp))
         Switch(checked = checked, onCheckedChange = onCheckChanged)
     }
 }
@@ -68,7 +71,7 @@ fun SwitchPreview() {
             SubtitleSwitch(
                 modifier = Modifier.padding(12.dp),
                 title = "Enable this setting we have here",
-                subtitle = "Explain in detail what this setting does",
+                subtitle = "Explain in detail what this setting does if this is a really big text then what the heck happens i wonder",
                 checked = checked,
                 onCheckChanged = { checked = it }
             )

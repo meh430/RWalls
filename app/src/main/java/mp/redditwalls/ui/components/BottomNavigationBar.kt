@@ -63,11 +63,11 @@ class BottomNavigationBarView @JvmOverloads constructor(
             context.getString(R.string.discover),
             Icons.Default.Explore
         ),
-        R.id.navigation_saved to IconText(
+        R.id.navigation_saved_subreddits_screen to IconText(
             context.getString(R.string.saved),
             Icons.Default.CollectionsBookmark
         ),
-        R.id.navigation_settings_compose to IconText(
+        R.id.navigation_settings_screen to IconText(
             context.getString(R.string.settings),
             Icons.Default.Settings
         )

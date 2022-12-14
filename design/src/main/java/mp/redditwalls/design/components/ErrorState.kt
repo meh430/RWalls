@@ -27,7 +27,7 @@ import mp.redditwalls.design.RwTheme
 fun ErrorState(
     modifier: Modifier = Modifier,
     errorMessage: String,
-    onRetryClick: (() -> Unit)?,
+    onRetryClick: (() -> Unit)? = null,
 ) {
     Column(
         modifier = modifier.fillMaxSize(),

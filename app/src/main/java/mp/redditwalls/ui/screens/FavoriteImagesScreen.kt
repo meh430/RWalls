@@ -60,9 +60,6 @@ fun FavoriteImagesScreen(
 ) {
     val context = LocalContext.current
     val systemUiController = rememberSystemUiController()
-    LaunchedEffect(Unit) {
-        vm.setFilter(WallpaperLocation.HOME, true)
-    }
 
     val uiState = vm.uiState
     val uiResult = uiState.uiResult.value
@@ -213,5 +210,9 @@ fun FavoriteImagesScreen(
                 }
             }
         }
+    }
+
+    LaunchedEffect(Unit) {
+        vm.setFilter(WallpaperLocation.HOME, true)
     }
 }
