@@ -12,6 +12,8 @@ import mp.redditwalls.domain.models.DomainRecentActivityItem
 import mp.redditwalls.domain.models.DomainResult
 import mp.redditwalls.domain.usecases.AddRecentActivityItemUseCase
 import mp.redditwalls.domain.usecases.GetRandomFavoriteImage
+import mp.redditwalls.models.toDomainWallpaperRecentActivityItem
+import mp.redditwalls.models.toImageItemItemUiState
 import mp.redditwalls.repositories.SettingsItem
 import mp.redditwalls.utils.ImageLoader
 import mp.redditwalls.utils.Utils
@@ -29,12 +31,20 @@ class WallpaperHelper @Inject constructor(
                 setImageAsWallpaper(
                     context,
                     home.domainImageUrls[0].url,
-                    WallpaperLocation.HOME
+                    WallpaperLocation.HOME,
+                    home.toImageItemItemUiState().toDomainWallpaperRecentActivityItem(
+                        location = mp.redditwalls.local.enums.WallpaperLocation.HOME,
+                        refresh = true
+                    )
                 )
                 setImageAsWallpaper(
                     context,
                     lock.domainImageUrls[0].url,
-                    WallpaperLocation.LOCK
+                    WallpaperLocation.LOCK,
+                    lock.toImageItemItemUiState().toDomainWallpaperRecentActivityItem(
+                        location = mp.redditwalls.local.enums.WallpaperLocation.LOCK_SCREEN,
+                        refresh = true
+                    )
                 )
             }
         }

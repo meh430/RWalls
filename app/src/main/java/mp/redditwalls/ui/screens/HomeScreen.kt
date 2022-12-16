@@ -29,7 +29,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import java.util.Date
 import kotlinx.coroutines.launch
 import mp.redditwalls.R
 import mp.redditwalls.WallpaperHelper
@@ -38,10 +37,9 @@ import mp.redditwalls.design.components.IconText
 import mp.redditwalls.design.components.PopupMenu
 import mp.redditwalls.design.components.ThreeDotsLoader
 import mp.redditwalls.design.components.WallpaperOptionsDialog
-import mp.redditwalls.domain.models.DomainImageUrl
-import mp.redditwalls.domain.models.DomainRecentActivityItem.DomainSetWallpaperActivityItem
 import mp.redditwalls.local.enums.WallpaperLocation
 import mp.redditwalls.models.UiResult
+import mp.redditwalls.models.toDomainWallpaperRecentActivityItem
 import mp.redditwalls.preferences.enums.SortOrder
 import mp.redditwalls.ui.components.ImagePager
 import mp.redditwalls.ui.components.ImagesList
@@ -127,21 +125,9 @@ fun HomeScreen(
                                     context = context,
                                     imageUrl = it.imageUrl.highQualityUrl,
                                     location = location,
-                                    recentActivityItem = it.run {
-                                        DomainSetWallpaperActivityItem(
-                                            dbId = 0,
-                                            createdAt = Date(),
-                                            subredditName = subredditName,
-                                            domainImageUrl = DomainImageUrl(
-                                                url = imageUrl.url,
-                                                lowQualityUrl = imageUrl.lowQualityUrl,
-                                                mediumQualityUrl = imageUrl.mediumQualityUrl,
-                                                highQualityUrl = imageUrl.highQualityUrl
-                                            ),
-                                            imageNetworkId = networkId,
-                                            wallpaperLocation = WallpaperLocation.values()[selection]
-                                        )
-                                    }
+                                    recentActivityItem = it.toDomainWallpaperRecentActivityItem(
+                                        location = WallpaperLocation.values()[selection]
+                                    )
                                 )
                             }
                         }
