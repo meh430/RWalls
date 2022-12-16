@@ -60,17 +60,14 @@ class GetHomeFeedUseCase @Inject constructor(
     suspend fun shouldReFetchHomeFeed(onReFetch: (SortOrder, Boolean) -> Unit) {
         combine(
             subredditsRepository.getDbSubreddits(),
-            preferencesRepository.getAllowNsfw(),
-            preferencesRepository.getPreviewResolution(),
-            preferencesRepository.getDefaultHomeSort(),
-            preferencesRepository.getVerticalSwipeFeedEnabled()
-        ) { savedSubreddits, allowNsfw, previewResolution, defaultSort, swipeEnabled ->
+            preferencesRepository.getAllPreferences()
+        ) { savedSubreddits, preferences ->
             extras = Extras(
                 savedSubreddits = savedSubreddits,
-                allowNsfw = allowNsfw,
-                previewResolution = previewResolution
+                allowNsfw = preferences.allowNsfw,
+                previewResolution = preferences.previewResolution
             )
-            onReFetch(defaultSort, swipeEnabled)
+            onReFetch(preferences.defaultHomeSort, preferences.verticalSwipeFeedEnabled)
         }.collect()
     }
 

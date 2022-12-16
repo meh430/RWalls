@@ -33,9 +33,8 @@ class GetDiscoverUseCase @Inject constructor(
      */
     override fun execute() = combine(
         recentActivityRepository.getLimitedDbRecentActivityItems(RECENT_ACTIVITY_LIMIT),
-        preferencesRepository.getAllowNsfw(),
-        preferencesRepository.getPreviewResolution()
-    ) { recentActivities, allowNsfw, previewResolution ->
+        preferencesRepository.getAllPreferences()
+    ) { recentActivities, preferences ->
         val dbSubredditNames = localSubredditsRepository.getDbSubredditsList().map {
             it.name.uppercase()
         }.toSet()
@@ -59,7 +58,7 @@ class GetDiscoverUseCase @Inject constructor(
                     after = ""
                 ).images.map { networkImage ->
                     networkImage.toDomainImage(
-                        previewResolution = previewResolution,
+                        previewResolution = preferences.previewResolution,
                         isLiked = dbImageIds.contains(networkImage.id)
                     )
                 }
@@ -69,11 +68,11 @@ class GetDiscoverUseCase @Inject constructor(
                 )
             }
         val mostRecentActivities = recentActivities.map {
-            it.toDomainRecentActivityItem(previewResolution)
+            it.toDomainRecentActivityItem(preferences.previewResolution)
         }
 
         DiscoverResult(
-            allowNsfw = allowNsfw,
+            allowNsfw = preferences.allowNsfw,
             recommendations = recommendations,
             mostRecentActivities = mostRecentActivities
         )

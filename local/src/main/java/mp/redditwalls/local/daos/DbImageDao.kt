@@ -31,5 +31,5 @@ interface DbImageDao {
     fun getDbImages(): Flow<List<DbImage>>
 
     @Query("SELECT * FROM FavoriteImages WHERE refreshLocation IN (:locations) ORDER BY RANDOM() LIMIT 1")
-    suspend fun getRandomDbImage(locations: List<String>): DbImage
+    suspend fun getRandomDbImage(locations: List<String>): List<DbImage>
 }

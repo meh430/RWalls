@@ -7,7 +7,9 @@ import androidx.work.Configuration
 import com.google.android.material.color.DynamicColors
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
-import mp.redditwalls.repositories.SettingsRepository
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import mp.redditwalls.preferences.PreferencesRepository
 import timber.log.Timber
 
 @HiltAndroidApp
@@ -17,7 +19,7 @@ class RWApplication : Application(), Configuration.Provider {
     lateinit var workerFactory: HiltWorkerFactory
 
     @Inject
-    lateinit var settingsRepository: SettingsRepository
+    lateinit var preferencesRepository: PreferencesRepository
 
     override fun onCreate() {
         super.onCreate()
@@ -25,7 +27,12 @@ class RWApplication : Application(), Configuration.Provider {
             Timber.plant(Timber.DebugTree())
         }
 
-        AppCompatDelegate.setDefaultNightMode(settingsRepository.getTheme().mode)
+        runBlocking {
+            AppCompatDelegate.setDefaultNightMode(
+                preferencesRepository.getTheme().first().toThemeMode()
+            )
+        }
+
         DynamicColors.applyToActivitiesIfAvailable(this)
     }
 

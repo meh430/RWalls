@@ -1,5 +1,6 @@
 package mp.redditwalls.ui.screens
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
@@ -71,7 +72,7 @@ fun SettingsScreen(vm: SettingsScreenViewModel = viewModel()) {
                     confirmButtonText = stringResource(R.string.ok),
                     cancelButtonText = stringResource(R.string.cancel),
                     onSelectionChanged = vm::changeDialogSelection,
-                    onConfirmButtonClick = {},
+                    onConfirmButtonClick = vm::onDialogConfirmClicked,
                     onDismiss = vm::dismissDialog
                 )
             }
@@ -107,7 +108,13 @@ fun SettingsScreen(vm: SettingsScreenViewModel = viewModel()) {
                 modifier = Modifier.padding(horizontal = horizontalPadding),
                 title = stringResource(R.string.default_home_screen_sort),
                 subtitle = stringResource(uiState.defaultHomeSort.value.stringId),
-                onClick = { vm.showDialog(SettingsRadioDialogModel.DefaultHomeScreenSortDialog(uiState.defaultHomeSort.value.ordinal)) }
+                onClick = {
+                    vm.showDialog(
+                        SettingsRadioDialogModel.DefaultHomeScreenSortDialog(
+                            uiState.defaultHomeSort.value.ordinal
+                        )
+                    )
+                }
             )
             Spacer(modifier = Modifier.height(spacerHeight))
             SubtitleSwitch(
@@ -129,20 +136,30 @@ fun SettingsScreen(vm: SettingsScreenViewModel = viewModel()) {
                 checked = uiState.refreshEnabled.value,
                 onCheckChanged = { vm.settingsScreenUiState.refreshEnabled.value = it }
             )
-            Spacer(modifier = Modifier.height(spacerHeight))
-            ClickableTextItem(
-                modifier = Modifier.padding(horizontal = horizontalPadding),
-                title = stringResource(R.string.refresh_interval),
-                subtitle = stringResource(uiState.refreshInterval.value.stringId),
-                onClick = { vm.showDialog(SettingsRadioDialogModel.RefreshIntervalDialog(uiState.refreshInterval.value.ordinal)) }
-            )
-            Spacer(modifier = Modifier.height(spacerHeight))
-            ClickableTextItem(
-                modifier = Modifier.padding(horizontal = horizontalPadding),
-                title = stringResource(R.string.allow_refresh_when_on),
-                subtitle = stringResource(uiState.dataSetting.value.stringId),
-                onClick = { vm.showDialog(SettingsRadioDialogModel.DataSettingDialog(uiState.dataSetting.value.ordinal)) }
-            )
+            AnimatedVisibility(uiState.refreshEnabled.value) {
+                Column {
+                    Spacer(modifier = Modifier.height(spacerHeight))
+                    ClickableTextItem(
+                        modifier = Modifier.padding(horizontal = horizontalPadding),
+                        title = stringResource(R.string.refresh_interval),
+                        subtitle = stringResource(uiState.refreshInterval.value.stringId),
+                        onClick = {
+                            vm.showDialog(
+                                SettingsRadioDialogModel.RefreshIntervalDialog(
+                                    uiState.refreshInterval.value.ordinal
+                                )
+                            )
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(spacerHeight))
+                    ClickableTextItem(
+                        modifier = Modifier.padding(horizontal = horizontalPadding),
+                        title = stringResource(R.string.allow_refresh_when_on),
+                        subtitle = stringResource(uiState.dataSetting.value.stringId),
+                        onClick = { vm.showDialog(SettingsRadioDialogModel.DataSettingDialog(uiState.dataSetting.value.ordinal)) }
+                    )
+                }
+            }
             Spacer(modifier = Modifier.height(spacerHeight))
         }
     }

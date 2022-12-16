@@ -9,68 +9,34 @@ import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import mp.redditwalls.domain.models.DomainRecentActivityItem
+import mp.redditwalls.domain.models.DomainResult
 import mp.redditwalls.domain.usecases.AddRecentActivityItemUseCase
+import mp.redditwalls.domain.usecases.GetRandomFavoriteImage
+import mp.redditwalls.repositories.SettingsItem
 import mp.redditwalls.utils.ImageLoader
-import mp.redditwalls.utils.Toaster
 import mp.redditwalls.utils.Utils
 import mp.redditwalls.utils.fromId
-import mp.redditwalls.models.Image
-import mp.redditwalls.repositories.FavoriteImagesRepository
-import mp.redditwalls.repositories.SettingsItem
-import mp.redditwalls.repositories.SettingsRepository
 
 class WallpaperHelper @Inject constructor(
     private val imageLoader: ImageLoader,
-    private val favoriteImagesRepository: FavoriteImagesRepository,
-    private val settingsRepository: SettingsRepository,
-    private val addRecentActivityItemUseCase: AddRecentActivityItemUseCase,
-    private val toaster: Toaster
+    private val getRandomFavoriteImage: GetRandomFavoriteImage,
+    private val addRecentActivityItemUseCase: AddRecentActivityItemUseCase
 ) {
 
     suspend fun refreshWallpaper(context: Context) {
-        val numFavs = favoriteImagesRepository.getFavoriteImagesCount()
-        val randomOrder = settingsRepository.randomOrder()
-        var image: Image? = null
-        if (numFavs == 0) {
-            toast("No favorites to choose from :(")
-            return
-        } else if (numFavs == 1 || randomOrder) {
-            image = favoriteImagesRepository.getRandomFavoriteImage()
-        } else if (!randomOrder) {
-            val index = settingsRepository.getRefreshIndex()
-            image = getNextWallpaper(index)
-        }
-
-        toast("Setting wallpaper...")
-        image?.let {
-            setImageAsWallpaper(
-                context,
-                it.imageLink,
-                settingsRepository.getRandomRefreshLocation()
-            )
-        }
-    }
-
-    private suspend fun getNextWallpaper(index: Int): Image {
-        val image = favoriteImagesRepository.getFavoriteImage(index)
-        return image?.also {
-            settingsRepository.setRefreshIndex(index + 1)
-        } ?: getNextWallpaper(0)
-    }
-
-    suspend fun setRandomFavoriteWallpaper(context: Context) {
-        toast("Setting wallpaper...")
-        val image = favoriteImagesRepository.getRandomFavoriteImage()
-
-        image?.let {
-            setImageAsWallpaper(
-                context,
-                it.imageLink,
-                settingsRepository.getRandomRefreshLocation()
-            )
-        }
-        if (image == null) {
-            toast("No favorites to choose from :(")
+        (getRandomFavoriteImage(Unit) as? DomainResult.Success)?.data?.let { (home, lock) ->
+            if (home != null && lock != null) {
+                setImageAsWallpaper(
+                    context,
+                    home.domainImageUrls[0].url,
+                    WallpaperLocation.HOME
+                )
+                setImageAsWallpaper(
+                    context,
+                    lock.domainImageUrls[0].url,
+                    WallpaperLocation.LOCK
+                )
+            }
         }
     }
 
@@ -81,7 +47,6 @@ class WallpaperHelper @Inject constructor(
         recentActivityItem: DomainRecentActivityItem? = null
     ) {
         try {
-            toast("Setting wallpaper...")
             val resolution = Utils.getResolution(context)
             val wallpaper = imageLoader.loadImage(
                 context,
@@ -121,7 +86,6 @@ class WallpaperHelper @Inject constructor(
                 wm.setBitmap(bitmap)
             }
 
-            toaster.t("Successfully set wallpaper")
             true
         } catch (e: Exception) {
             Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
@@ -136,12 +100,6 @@ class WallpaperHelper @Inject constructor(
             .setItems(items) { _, i ->
                 onChoose(WallpaperLocation.fromId(i))
             }.show()
-    }
-
-    private suspend fun toast(msg: String) {
-        withContext(Dispatchers.Main) {
-            toaster.t(msg)
-        }
     }
 }
 

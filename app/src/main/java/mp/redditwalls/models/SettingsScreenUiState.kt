@@ -1,5 +1,6 @@
 package mp.redditwalls.models
 
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import mp.redditwalls.R
@@ -20,7 +21,8 @@ data class SettingsScreenUiState(
     val dataSetting: MutableState<DataSetting> = mutableStateOf(DataSetting.BOTH),
     val verticalSwipeFeedEnabled: MutableState<Boolean> = mutableStateOf(false),
     val allowNsfw: MutableState<Boolean> = mutableStateOf(false),
-    val currentRadioDialog: MutableState<SettingsRadioDialogModel?> = mutableStateOf(null)
+    val currentRadioDialog: MutableState<SettingsRadioDialogModel?> = mutableStateOf(null),
+    val refreshSettingsChanged: MutableState<Boolean> = mutableStateOf(false)
 )
 
 sealed class SettingsRadioDialogModel(
@@ -63,7 +65,9 @@ sealed class SettingsRadioDialogModel(
         is DefaultHomeScreenSortDialog -> DefaultHomeScreenSortDialog(selection)
         is PreviewResolutionDialog -> PreviewResolutionDialog(selection)
         is RefreshIntervalDialog -> RefreshIntervalDialog(selection)
-        is ThemeDialog -> ThemeDialog(selection)
+        is ThemeDialog -> ThemeDialog(selection).also {
+            AppCompatDelegate.setDefaultNightMode(Theme.values()[selection].toThemeMode())
+        }
     }
 }
 
