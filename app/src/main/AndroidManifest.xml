@@ -31,19 +31,18 @@
         </receiver>
 
         <activity
-            android:screenOrientation="portrait"
             android:name=".activities.WallActivity"
             android:exported="true"
             android:label="Wall Preview"
             android:parentActivityName=".activities.MainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.RedditWalls.NoActionBar">
             <nav-graph android:value="@navigation/mobile_navigation" />
         </activity>
         <activity
-            android:screenOrientation="portrait"
             android:name=".activities.MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.RedditWalls.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,6 +50,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".activities.SearchSubredditsActivity"
+            android:exported="true"
+            android:label="Search Subreddits"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.RedditWalls.NoActionBar" />
 
         <provider
             android:name="androidx.startup.InitializationProvider"

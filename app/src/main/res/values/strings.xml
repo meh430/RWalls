@@ -36,4 +36,5 @@
     <string name="appwidget_text">Refresh Wallpaper</string>
     <string name="add_widget">Add widget</string>
     <string name="app_widget_description">This widget will refresh the wallpaper if clicked</string>
+    <string name="title_activity_search_subreddits">SearchSubredditsActivity</string>
 </resources>

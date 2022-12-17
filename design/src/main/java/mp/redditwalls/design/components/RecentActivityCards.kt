@@ -115,7 +115,6 @@ fun TextRecentActivityCard(
     date: String,
     onClick: () -> Unit
 ) {
-
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -154,14 +153,16 @@ fun TextRecentActivityCard(
                 )
             }
             Spacer(modifier = Modifier.height(2.dp))
-            Text(
-                text = date,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Start,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+            if (date.isNotEmpty()) {
+                Text(
+                    text = date,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Start,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
         }
     }
 }

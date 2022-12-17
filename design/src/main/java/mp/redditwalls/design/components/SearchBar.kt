@@ -27,6 +27,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -39,13 +41,14 @@ import mp.redditwalls.design.RwTheme
 @Composable
 fun SearchBar(
     modifier: Modifier = Modifier,
+    hint: String,
     value: String = "",
+    showBackButton: Boolean = false,
+    enabled: Boolean = true,
     onValueChanged: (String) -> Unit = {},
     onSearch: () -> Unit = {},
-    hint: String,
     onIconClick: () -> Unit = {},
-    showBackButton: Boolean = false,
-    enabled: Boolean = true
+    focusRequester: FocusRequester = remember { FocusRequester() }
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     Row(
@@ -61,11 +64,13 @@ fun SearchBar(
             .then(modifier),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val iconModifier = Modifier.padding(start = 16.dp).clickable(
-            interactionSource = remember { MutableInteractionSource() },
-            indication = null,
-            onClick = onIconClick
-        )
+        val iconModifier = Modifier
+            .padding(start = 16.dp)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onIconClick
+            )
         if (showBackButton) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
@@ -87,6 +92,7 @@ fun SearchBar(
                 .padding(16.dp)
         ) {
             BasicTextField(
+                modifier = Modifier.focusRequester(focusRequester),
                 enabled = enabled,
                 value = value,
                 onValueChange = onValueChanged,

@@ -11,9 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Explore
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -29,20 +26,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import mp.redditwalls.R
+import mp.redditwalls.activities.SearchSubredditsActivity
 import mp.redditwalls.design.components.DiscoverSubredditCard
 import mp.redditwalls.design.components.ErrorState
-import mp.redditwalls.design.components.ImageRecentActivityCard
 import mp.redditwalls.design.components.SearchBar
-import mp.redditwalls.design.components.TextRecentActivityCard
 import mp.redditwalls.design.components.ThreeDotsLoader
-import mp.redditwalls.local.enums.getString
 import mp.redditwalls.models.ImageItemUiState
 import mp.redditwalls.models.RecentActivityItem
 import mp.redditwalls.models.RecommendedSubredditUiState
 import mp.redditwalls.models.SubredditItemUiState
 import mp.redditwalls.models.UiResult
 import mp.redditwalls.models.toImageCardModel
-import mp.redditwalls.utils.Utils
+import mp.redditwalls.ui.components.RecentActivityCard
 import mp.redditwalls.utils.toFriendlyCount
 import mp.redditwalls.viewmodels.DiscoverScreenViewModel
 
@@ -51,6 +46,8 @@ import mp.redditwalls.viewmodels.DiscoverScreenViewModel
 fun DiscoverScreen(vm: DiscoverScreenViewModel = viewModel()) {
     val uiState = vm.discoverScreenUiState
     val uiResult = uiState.uiResult.value
+
+    val context = LocalContext.current
 
     Scaffold(
         content = { innerPadding ->
@@ -69,7 +66,11 @@ fun DiscoverScreen(vm: DiscoverScreenViewModel = viewModel()) {
                         DiscoverScreenContent(
                             recommendations = uiState.recommendedSubreddits,
                             recentActivity = uiState.recentActivityItems,
-                            onSearchClick = {},
+                            onSearchClick = {
+                                context.startActivity(
+                                    SearchSubredditsActivity.getIntent(context)
+                                )
+                            },
                             onSaveClick = vm.savedSubredditViewModel::onSaveClick,
                             onLikeClick = vm.favoriteImageViewModel::onLikeClick
                         )
@@ -162,50 +163,10 @@ private fun DiscoverScreenContent(
                 start = 16.dp,
                 end = 16.dp
             )
-            when (it) {
-                is RecentActivityItem.RefreshWallpaperActivityItem -> ImageRecentActivityCard(
-                    modifier = recentActivityItemModifier,
-                    imageUrl = it.imageUrl.url,
-                    title = "Refreshed on ${
-                        it.wallpaperLocation.getString(LocalContext.current).lowercase()
-                    }",
-                    subTitle = "r/${it.subredditName}",
-                    date = Utils.getFormattedDate(it.createdAt),
-                    onClick = {}
-                )
-                is RecentActivityItem.SearchAllActivityItem -> TextRecentActivityCard(
-                    modifier = recentActivityItemModifier,
-                    icon = Icons.Default.Search,
-                    title = "Searched for images with '${it.query}'",
-                    date = Utils.getFormattedDate(it.createdAt),
-                    onClick = {}
-                )
-                is RecentActivityItem.SearchSubredditActivityItem -> TextRecentActivityCard(
-                    modifier = recentActivityItemModifier,
-                    icon = Icons.Default.Search,
-                    title = "Searched for images with '${it.query}'",
-                    subTitle = "in r/${it.subredditName}",
-                    date = Utils.getFormattedDate(it.createdAt),
-                    onClick = {}
-                )
-                is RecentActivityItem.SetWallpaperActivityItem -> ImageRecentActivityCard(
-                    modifier = recentActivityItemModifier,
-                    imageUrl = it.imageUrl.url,
-                    title = "Set on ${
-                        it.wallpaperLocation.getString(LocalContext.current).lowercase()
-                    }",
-                    subTitle = "r/${it.subredditName}",
-                    date = Utils.getFormattedDate(it.createdAt),
-                    onClick = {}
-                )
-                is RecentActivityItem.VisitSubredditActivityItem -> TextRecentActivityCard(
-                    modifier = recentActivityItemModifier,
-                    icon = Icons.Default.Explore,
-                    title = "Browsed images in r/${it.subredditName}'",
-                    date = Utils.getFormattedDate(it.createdAt),
-                    onClick = {}
-                )
-            }
+            RecentActivityCard(
+                modifier = recentActivityItemModifier,
+                recentActivityItem = it
+            )
         }
     }
 }
