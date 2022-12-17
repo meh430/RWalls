@@ -36,6 +36,10 @@ class MainActivity : AppCompatActivity() {
                 selectedItem = id
                 onNavDestinationSelected(navController, id, index)
             }
+            navController.addOnDestinationChangedListener { _, destination, _ ->
+                mainViewModel.selectedItem = destination.id
+                selectedItem = destination.id
+            }
         }
     }
 
