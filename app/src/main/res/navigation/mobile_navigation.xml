@@ -61,7 +61,7 @@
 
     <activity
         android:id="@+id/navigation_wallpaper"
-        android:name="mp.redditwalls.WallActivity">
+        android:name="mp.redditwalls.activities.WallActivity">
         <argument
             android:name="image"
             app:argType="mp.redditwalls.models.Image"

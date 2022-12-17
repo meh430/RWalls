@@ -1,4 +1,4 @@
-package mp.redditwalls
+package mp.redditwalls.activities
 
 import android.os.Bundle
 import android.view.Menu
@@ -10,6 +10,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import mp.redditwalls.R
 import mp.redditwalls.databinding.ActivityMainBinding
 import mp.redditwalls.utils.matchDestination
 import mp.redditwalls.viewmodels.MainViewModel

@@ -1,4 +1,4 @@
-package mp.redditwalls
+package mp.redditwalls.activities
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.BitmapDrawable
@@ -22,15 +22,17 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.math.abs
 import kotlin.math.roundToInt
+import mp.redditwalls.R
+import mp.redditwalls.WallpaperHelper
 import mp.redditwalls.databinding.ActivityWallBinding
 import mp.redditwalls.databinding.WallSheetBinding
 import mp.redditwalls.datasources.RWApi
-import mp.redditwalls.utils.Utils
-import mp.redditwalls.utils.launchBrowser
-import mp.redditwalls.utils.toPx
 import mp.redditwalls.models.Image
 import mp.redditwalls.models.PostInfo
 import mp.redditwalls.models.Resource
+import mp.redditwalls.utils.Utils
+import mp.redditwalls.utils.launchBrowser
+import mp.redditwalls.utils.toPx
 import mp.redditwalls.viewmodels.SettingsViewModel
 import mp.redditwalls.viewmodels.WallViewModel
 
@@ -259,10 +261,6 @@ class WallActivity : AppCompatActivity(), GestureDetector.OnGestureListener,
     }
 
     override fun onFling(e1: MotionEvent, e2: MotionEvent, vX: Float, vY: Float): Boolean {
-        if (e1 == null || e2 == null) {
-            return false
-        }
-
         val distanceX: Float = e2.x - e1.x
         val distanceY: Float = e2.y - e1.y
         if (abs(distanceX) > abs(distanceY) && abs(distanceX) > SWIPE_DISTANCE_THRESHOLD && abs(vX) > SWIPE_VELOCITY_THRESHOLD) {

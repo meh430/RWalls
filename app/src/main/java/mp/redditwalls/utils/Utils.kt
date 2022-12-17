@@ -36,7 +36,7 @@ import java.util.Locale
 import java.util.UUID
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import mp.redditwalls.MainActivity
+import mp.redditwalls.activities.MainActivity
 import mp.redditwalls.models.Image
 import mp.redditwalls.models.Resolution
 
