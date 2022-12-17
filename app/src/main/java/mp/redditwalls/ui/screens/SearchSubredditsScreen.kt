@@ -12,28 +12,39 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.delay
 import mp.redditwalls.R
 import mp.redditwalls.design.components.SearchBar
 import mp.redditwalls.design.components.TextRecentActivityCard
+import mp.redditwalls.viewmodels.SearchSubredditsScreenViewModel
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(
+    ExperimentalMaterial3Api::class,
+    ExperimentalLayoutApi::class,
+    ExperimentalComposeUiApi::class
+)
 @Composable
-fun SearchSubredditsScreen() {
+fun SearchSubredditsScreen(vm: SearchSubredditsScreenViewModel = viewModel()) {
     val context = LocalContext.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    val uiState = vm.searchSubredditsScreenUiState
 
     val searchBarFocusRequester = remember { FocusRequester() }
     Scaffold(
         topBar = {
             SearchBar(
-                value = "",
-                onValueChanged = {},
-                onSearch = {},
+                value = uiState.query.value,
+                onValueChanged = { vm.onQueryChanged(it) },
+                onSearch = { keyboardController?.hide() },
                 hint = stringResource(R.string.search),
                 onIconClick = { (context as? Activity)?.finish() },
                 showBackButton = true,
@@ -66,6 +77,7 @@ fun SearchSubredditsScreen() {
     }
 
     LaunchedEffect(searchBarFocusRequester) {
+        vm.fetchSearchHistory()
         delay(200)
         searchBarFocusRequester.requestFocus()
     }
