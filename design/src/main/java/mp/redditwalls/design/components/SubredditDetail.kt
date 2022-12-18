@@ -4,15 +4,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,25 +50,28 @@ fun SubredditDetail(
     isSaved: Boolean,
     onSaveChanged: (Boolean) -> Unit
 ) {
-    Column(
-        modifier = modifier
+    OutlinedCard(
+        modifier = modifier,
+        shape = MaterialTheme.shapes.large,
     ) {
-        SubredditHeaderImage(
-            modifier = Modifier.padding(bottom = 12.dp),
-            headerImageUrl = headerImageUrl,
-            iconImageUrl = iconImageUrl,
-            subredditName = subredditName,
-            title = title,
-            subTitle = subTitle,
-            isSaved = isSaved,
-            onSaveChanged = onSaveChanged
-        )
-        Text(
-            modifier = Modifier.padding(4.dp),
-            text = description,
-            color = MaterialTheme.colorScheme.onSurface,
-            style = MaterialTheme.typography.bodyMedium
-        )
+        Column(modifier = Modifier.padding(12.dp)) {
+            SubredditHeaderImage(
+                modifier = Modifier.padding(bottom = 12.dp),
+                headerImageUrl = headerImageUrl,
+                iconImageUrl = iconImageUrl,
+                subredditName = subredditName,
+                title = title,
+                subTitle = subTitle,
+                isSaved = isSaved,
+                onSaveChanged = onSaveChanged
+            )
+            Text(
+                modifier = Modifier.padding(4.dp),
+                text = description,
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
     }
 }
 
@@ -111,21 +120,31 @@ fun SubredditHeaderImage(
                 verticalAlignment = Alignment.Bottom
             ) {
                 SubredditIcon(
+                    size = 54.dp,
                     subredditIconUrl = iconImageUrl,
                     subredditName = subredditName
                 )
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(12.dp),
-                    verticalArrangement = Arrangement.Center
+                        .padding(horizontal = 8.dp),
+                    verticalArrangement = Arrangement.Bottom
                 ) {
+                    Text(
+                        text = subredditName,
+                        style = style.copy(fontWeight = FontWeight.Bold),
+                        color = Color.White,
+                        textAlign = TextAlign.Start,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = title,
                         style = style,
                         color = Color.White,
                         textAlign = TextAlign.Start,
-                        maxLines = 2,
+                        maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
                     Spacer(modifier = Modifier.height(2.dp))
@@ -154,22 +173,56 @@ fun SubredditHeaderImage(
 @Composable
 fun SubredditDetailPreview() {
     var isSaved by remember { mutableStateOf(false) }
+    var isLiked by remember { mutableStateOf(false) }
+    var selectionState by remember { mutableStateOf(SelectionState.SELECTABLE) }
     RwTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            SubredditDetail(
-                modifier = Modifier.padding(12.dp),
-                subredditName = "",
-                description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer accumsan, ante eu ullamcorper porttitor, dui dolor malesuada purus, sed fringilla mauris lorem quis augue. Proin commodo bibendum condimentum.",
-                headerImageUrl = "https://styles.redditmedia.com/t5_2ss60/styles/bannerBackgroundImage_x2tx5ryggi711.png?width=4000&s=69f12cf2d5d63fde1adc9820764f9cd1182436db",
-                iconImageUrl = "https://styles.redditmedia.com/t5_2ss60/styles/communityIcon_bx5asf07hi711.png?width=256&s=aa64b672872834f8d49bf3ae560543a9d9bd7ee6",
-                title = "252k members",
-                subTitle = "437 online",
-                isSaved = isSaved,
-                onSaveChanged = { isSaved = it }
-            )
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(minSize = 150.dp),
+                contentPadding = PaddingValues(8.dp)
+            ) {
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    SubredditDetail(
+                        modifier = Modifier.padding(8.dp),
+                        subredditName = "r/animewallpaper",
+                        description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer accumsan, ante eu ullamcorper porttitor, dui dolor malesuada purus, sed fringilla mauris lorem quis augue. Proin commodo bibendum condimentum.",
+                        headerImageUrl = "https://styles.redditmedia.com/t5_2ss60/styles/bannerBackgroundImage_x2tx5ryggi711.png?width=4000&s=69f12cf2d5d63fde1adc9820764f9cd1182436db",
+                        iconImageUrl = "https://styles.redditmedia.com/t5_2ss60/styles/communityIcon_bx5asf07hi711.png?width=256&s=aa64b672872834f8d49bf3ae560543a9d9bd7ee6",
+                        title = "252k members",
+                        subTitle = "437 online",
+                        isSaved = isSaved,
+                        onSaveChanged = { isSaved = it }
+                    )
+                }
+                items(6) {
+                    ImageCard(
+                        imageCardModel = ImageCardModel(
+                            imageUrl = "https://c4.wallpaperflare.com/wallpaper/165/600/954/iphone-ios-ipad-ipod-wallpaper-preview.jpg",
+                            title = "Cool Wallpaper",
+                            subTitle = "r/wallpaper",
+                            isAlbum = false,
+                            selectionState = selectionState,
+                            isLiked = isLiked,
+                            onLikeClick = { newValue ->
+                                isLiked = newValue
+                            },
+                            onClick = {},
+                            onLongPress = {},
+                            onSelect = {
+                                selectionState = it
+                            }
+                        ),
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth()
+                            .height(275.dp)
+                    )
+                }
+            }
+
         }
     }
 }
