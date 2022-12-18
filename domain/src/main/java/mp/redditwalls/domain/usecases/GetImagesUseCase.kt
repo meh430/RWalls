@@ -23,29 +23,29 @@ class GetImagesUseCase @Inject constructor(
 ) : FlowUseCase<FeedResult, GetImagesUseCase.Params>(FeedResult()) {
     override fun execute() = combine(
         paramsFlow,
-        localImagesRepository.getDbImagesFlow(),
-        localSubredditsRepository.getDbSubreddits(),
         preferencesRepository.getPreviewResolution()
-    ) { params, dbImages, dbSubreddits, previewResolution ->
-        val dbSubredditNames = dbSubreddits.map { it.name }.toSet()
-        val dbImageIds = dbImages.map { it.networkId }.toSet()
+    ) { params, previewResolution ->
+        val dbSubredditNames =
+            localSubredditsRepository.getDbSubredditsList().map { it.name }.toSet()
+        val dbImageIds = localImagesRepository.getDbImages().map { it.networkId }.toSet()
 
+        val after = data.nextPageId?.takeIf { !params.reload }
         val networkImages: NetworkImages =
-            if (params.subreddit != null && params.query == null) {
+            if (params.subreddit != null && params.query.isNullOrBlank()) {
                 // view subreddit results
                 when (params.sortOrder) {
                     SortOrder.HOT -> networkImagesRepository.getHotImages(
                         subreddit = params.subreddit,
-                        after = data.nextPageId
+                        after = after
                     )
                     SortOrder.NEW -> networkImagesRepository.getNewImages(
                         subreddit = params.subreddit,
-                        after = data.nextPageId
+                        after = after
                     )
                     else -> networkImagesRepository.getTopImages(
                         subreddit = params.subreddit,
                         timeFilter = params.sortOrder.toTimeFilter(),
-                        after = data.nextPageId
+                        after = after
                     )
                 }
             } else if (params.subreddit == null && params.query != null) {
@@ -54,7 +54,7 @@ class GetImagesUseCase @Inject constructor(
                     query = params.query,
                     sort = getSort(params.sortOrder),
                     time = params.sortOrder.toTimeFilter(),
-                    after = data.nextPageId
+                    after = after
                 )
             } else if (params.subreddit != null && params.query != null) {
                 // search subreddit
@@ -63,7 +63,7 @@ class GetImagesUseCase @Inject constructor(
                     query = params.query,
                     sort = getSort(params.sortOrder),
                     time = params.sortOrder.toTimeFilter(),
-                    after = data.nextPageId
+                    after = after
                 )
             } else {
                 NetworkImages(nextPageId = "")
@@ -99,6 +99,7 @@ class GetImagesUseCase @Inject constructor(
     data class Params(
         val subreddit: String? = null,
         val query: String? = null,
-        val sortOrder: SortOrder = SortOrder.HOT
+        val sortOrder: SortOrder = SortOrder.HOT,
+        val reload: Boolean = false
     )
 }

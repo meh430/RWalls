@@ -10,7 +10,8 @@ data class SearchImagesScreenUiState(
     val uiResult: MutableState<UiResult> = mutableStateOf(UiResult.Loading()),
     val subredditItemUiState: MutableState<SubredditItemUiState?> = mutableStateOf(null),
     val images: SnapshotStateList<ImageItemUiState> = mutableStateListOf(),
+    val hasMoreImages: MutableState<Boolean> = mutableStateOf(false),
     val query: MutableState<String> = mutableStateOf(""),
     val sortOrder: MutableState<SortOrder> = mutableStateOf(SortOrder.HOT),
-    val subredditName: MutableState<String> = mutableStateOf("")
+    val subredditName: MutableState<String?> = mutableStateOf("")
 )
