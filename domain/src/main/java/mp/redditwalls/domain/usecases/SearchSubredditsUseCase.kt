@@ -15,10 +15,10 @@ class SearchSubredditsUseCase @Inject constructor(
 ) : FlowUseCase<List<DomainSubreddit>, String>(emptyList()) {
     override fun execute() = combine(
         paramsFlow,
-        localSubredditsRepository.getDbSubreddits(),
         preferencesRepository.getAllowNsfw()
-    ) { params, dbSubreddits, allowNsfw ->
-        val dbSubredditNames = dbSubreddits.map { it.name }.toSet()
+    ) { params, allowNsfw ->
+        val dbSubredditNames =
+            localSubredditsRepository.getDbSubredditsList().map { it.name }.toSet()
         networkSubredditsRepository.searchSubreddits(
             params,
             allowNsfw

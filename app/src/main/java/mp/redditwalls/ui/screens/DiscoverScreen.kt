@@ -165,7 +165,8 @@ private fun DiscoverScreenContent(
             )
             RecentActivityCard(
                 modifier = recentActivityItemModifier,
-                recentActivityItem = it
+                recentActivityItem = it,
+                onClick = {}
             )
         }
     }

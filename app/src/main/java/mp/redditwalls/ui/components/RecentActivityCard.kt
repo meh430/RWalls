@@ -15,7 +15,8 @@ import mp.redditwalls.utils.Utils
 @Composable
 fun RecentActivityCard(
     modifier: Modifier = Modifier,
-    recentActivityItem: RecentActivityItem
+    recentActivityItem: RecentActivityItem,
+    onClick: () -> Unit
 ) {
     recentActivityItem.let {
         when (it) {
@@ -27,14 +28,14 @@ fun RecentActivityCard(
                 }",
                 subTitle = "r/${it.subredditName}",
                 date = Utils.getFormattedDate(it.createdAt),
-                onClick = {}
+                onClick = onClick
             )
             is RecentActivityItem.SearchAllActivityItem -> TextRecentActivityCard(
                 modifier = modifier,
                 icon = Icons.Default.Search,
                 title = "Searched for images with '${it.query}'",
                 date = Utils.getFormattedDate(it.createdAt),
-                onClick = {}
+                onClick = onClick
             )
             is RecentActivityItem.SearchSubredditActivityItem -> TextRecentActivityCard(
                 modifier = modifier,
@@ -42,7 +43,7 @@ fun RecentActivityCard(
                 title = "Searched for images with '${it.query}'",
                 subTitle = "in r/${it.subredditName}",
                 date = Utils.getFormattedDate(it.createdAt),
-                onClick = {}
+                onClick = onClick
             )
             is RecentActivityItem.SetWallpaperActivityItem -> ImageRecentActivityCard(
                 modifier = modifier,
@@ -52,14 +53,14 @@ fun RecentActivityCard(
                 }",
                 subTitle = "r/${it.subredditName}",
                 date = Utils.getFormattedDate(it.createdAt),
-                onClick = {}
+                onClick = onClick
             )
             is RecentActivityItem.VisitSubredditActivityItem -> TextRecentActivityCard(
                 modifier = modifier,
                 icon = Icons.Default.Explore,
                 title = "Browsed images in r/${it.subredditName}'",
                 date = Utils.getFormattedDate(it.createdAt),
-                onClick = {}
+                onClick = onClick
             )
         }
     }
