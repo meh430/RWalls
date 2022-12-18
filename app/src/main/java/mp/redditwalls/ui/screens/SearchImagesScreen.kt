@@ -4,7 +4,9 @@ import android.app.Activity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumedWindowInsets
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Sort
@@ -12,7 +14,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -31,7 +32,6 @@ import mp.redditwalls.design.components.ThreeDotsLoader
 import mp.redditwalls.models.UiResult
 import mp.redditwalls.preferences.enums.SortOrder
 import mp.redditwalls.ui.components.ImagesList
-import mp.redditwalls.utils.keyboardAsState
 import mp.redditwalls.utils.rememberSortMenuOptions
 import mp.redditwalls.utils.toFriendlyCount
 import mp.redditwalls.viewmodels.SearchImagesScreenViewModel
@@ -48,7 +48,6 @@ fun SearchImagesScreen(
 ) {
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
-    val isKeyboardOpen by keyboardAsState()
 
     val uiState = vm.uiState
     val uiResult = vm.uiState.uiResult.value
@@ -69,7 +68,7 @@ fun SearchImagesScreen(
                     )
                 },
                 trailingIcon = {
-                    if (uiState.query.value.isNotEmpty() && isKeyboardOpen) {
+                    if (uiState.query.value.isNotEmpty() && WindowInsets.isImeVisible) {
                         BackButton(
                             modifier = Modifier.padding(end = 16.dp),
                             cross = true,
@@ -115,7 +114,7 @@ fun SearchImagesScreen(
                                 description = it.description,
                                 headerImageUrl = it.headerUrl,
                                 iconImageUrl = it.subredditIconUrl,
-                                subredditName = it.name,
+                                subredditName = "r/${it.name}",
                                 title = stringResource(
                                     R.string.subscriber_count,
                                     it.numSubscribers.toFriendlyCount()

@@ -50,7 +50,7 @@ fun LazyListScope.subredditListItems(
                 .fillMaxWidth()
                 .padding(8.dp),
             subredditIconUrl = subreddit.subredditIconUrl,
-            subredditName = subreddit.name,
+            subredditName = "r/${subreddit.name}",
             subscriberCount = stringResource(
                 R.string.subscriber_count,
                 subreddit.numSubscribers.toFriendlyCount()

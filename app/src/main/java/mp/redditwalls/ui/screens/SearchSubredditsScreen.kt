@@ -3,7 +3,9 @@ package mp.redditwalls.ui.screens
 import android.app.Activity
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumedWindowInsets
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -14,7 +16,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -35,7 +36,6 @@ import mp.redditwalls.design.components.ThreeDotsLoader
 import mp.redditwalls.models.UiResult
 import mp.redditwalls.ui.components.recentActivityListItems
 import mp.redditwalls.ui.components.subredditListItems
-import mp.redditwalls.utils.keyboardAsState
 import mp.redditwalls.viewmodels.SearchSubredditsScreenViewModel
 
 @OptIn(
@@ -47,7 +47,6 @@ import mp.redditwalls.viewmodels.SearchSubredditsScreenViewModel
 fun SearchSubredditsScreen(vm: SearchSubredditsScreenViewModel = viewModel()) {
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
-    val isKeyboardOpen by keyboardAsState()
 
     val uiState = vm.uiState
     val uiResult = uiState.uiResult.value
@@ -65,7 +64,7 @@ fun SearchSubredditsScreen(vm: SearchSubredditsScreenViewModel = viewModel()) {
                         onClick = { (context as? Activity)?.finish() }
                     )
                 },
-                trailingIcon = if (uiState.query.value.isEmpty() || !isKeyboardOpen) {
+                trailingIcon = if (uiState.query.value.isEmpty() || !WindowInsets.isImeVisible) {
                     null
                 } else {
                     {

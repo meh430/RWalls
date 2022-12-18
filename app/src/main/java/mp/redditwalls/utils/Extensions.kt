@@ -13,12 +13,8 @@ import android.util.TypedValue
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.annotation.IdRes
-import androidx.compose.foundation.layout.ime
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.ui.platform.LocalDensity
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -135,13 +131,6 @@ fun NavDestination.matchDestination(@IdRes destId: Int): Boolean =
 @Composable
 fun rememberSortMenuOptions(context: Context) = remember {
     SortOrder.values().map { IconText(text = context.getString(it.stringId)) }
-}
-
-@Composable
-fun keyboardAsState(): State<Boolean> {
-    val isImeVisible =
-        androidx.compose.foundation.layout.WindowInsets.ime.getBottom(LocalDensity.current) > 0
-    return rememberUpdatedState(isImeVisible)
 }
 
 inline fun <reified T : Parcelable> Intent.parcelable(key: String): T? = when {
