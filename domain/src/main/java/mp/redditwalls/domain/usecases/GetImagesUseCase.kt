@@ -23,8 +23,8 @@ class GetImagesUseCase @Inject constructor(
 ) : FlowUseCase<FeedResult, GetImagesUseCase.Params>(FeedResult()) {
     override fun execute() = combine(
         paramsFlow,
-        preferencesRepository.getPreviewResolution()
-    ) { params, previewResolution ->
+        preferencesRepository.getAllPreferences(),
+    ) { params, preferences ->
         val dbSubredditNames =
             localSubredditsRepository.getDbSubredditsList().map { it.name }.toSet()
         val dbImageIds = localImagesRepository.getDbImages().map { it.networkId }.toSet()
@@ -54,7 +54,8 @@ class GetImagesUseCase @Inject constructor(
                     query = params.query,
                     sort = getSort(params.sortOrder),
                     time = params.sortOrder.toTimeFilter(),
-                    after = after
+                    after = after,
+                    includeOver18 = preferences.allowNsfw
                 )
             } else if (params.subreddit != null && params.query != null) {
                 // search subreddit
@@ -63,7 +64,8 @@ class GetImagesUseCase @Inject constructor(
                     query = params.query,
                     sort = getSort(params.sortOrder),
                     time = params.sortOrder.toTimeFilter(),
-                    after = after
+                    after = after,
+                    includeOver18 = preferences.allowNsfw
                 )
             } else {
                 NetworkImages(nextPageId = "")
@@ -71,7 +73,7 @@ class GetImagesUseCase @Inject constructor(
 
         val domainImages = networkImages.images.map {
             it.toDomainImage(
-                previewResolution = previewResolution,
+                previewResolution = preferences.previewResolution,
                 isLiked = dbImageIds.contains(it.id),
             )
         }
@@ -85,7 +87,7 @@ class GetImagesUseCase @Inject constructor(
         } ?: data.subreddit
 
         FeedResult(
-            images = data.images + domainImages,
+            images = domainImages,
             subreddit = domainSubreddit,
             nextPageId = networkImages.nextPageId
         )

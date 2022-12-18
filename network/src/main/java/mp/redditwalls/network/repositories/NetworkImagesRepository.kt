@@ -37,13 +37,15 @@ class NetworkImagesRepository @Inject constructor(private val imagesService: Ima
         query: String,
         sort: String,
         time: TimeFilter,
-        after: String?
+        after: String?,
+        includeOver18: Boolean
     ) = withContext(Dispatchers.IO) {
         imagesService.searchAllImages(
             query = query,
             sort = sort,
             time = time.value,
-            after = after
+            after = after,
+            includeOver18 = includeOver18
         )
     }
 
@@ -52,14 +54,16 @@ class NetworkImagesRepository @Inject constructor(private val imagesService: Ima
         query: String,
         sort: String,
         time: TimeFilter,
-        after: String?
+        after: String?,
+        includeOver18: Boolean
     ) = withContext(Dispatchers.IO) {
         imagesService.searchImagesInSubreddit(
             subreddit = subreddit,
             query = query,
             sort = sort,
             time = time.value,
-            after = after
+            after = after,
+            includeOver18 = includeOver18
         )
     }
 

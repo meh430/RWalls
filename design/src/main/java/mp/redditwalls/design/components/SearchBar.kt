@@ -1,8 +1,6 @@
 package mp.redditwalls.design.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,7 +11,6 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -41,13 +38,20 @@ import mp.redditwalls.design.RwTheme
 @Composable
 fun SearchBar(
     modifier: Modifier = Modifier,
-    hint: String,
+    hint: String = stringResource(R.string.search),
     value: String = "",
-    showBackButton: Boolean = false,
     enabled: Boolean = true,
     onValueChanged: (String) -> Unit = {},
     onSearch: () -> Unit = {},
-    onIconClick: () -> Unit = {},
+    leadingIcon: @Composable () -> Unit = {
+        Icon(
+            imageVector = Icons.Default.Search,
+            contentDescription = null,
+            modifier = Modifier.padding(start = 16.dp),
+            tint = MaterialTheme.colorScheme.outline
+        )
+    },
+    trailingIcon: (@Composable () -> Unit)? = null,
     focusRequester: FocusRequester = remember { FocusRequester() }
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -64,28 +68,7 @@ fun SearchBar(
             .then(modifier),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val iconModifier = Modifier
-            .padding(start = 16.dp)
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                onClick = onIconClick
-            )
-        if (showBackButton) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = null,
-                modifier = iconModifier,
-                tint = MaterialTheme.colorScheme.outline
-            )
-        } else {
-            Icon(
-                imageVector = Icons.Default.Search,
-                contentDescription = null,
-                modifier = iconModifier,
-                tint = MaterialTheme.colorScheme.outline
-            )
-        }
+        leadingIcon()
         Box(
             modifier = Modifier
                 .weight(1f)
@@ -115,6 +98,9 @@ fun SearchBar(
                     color = MaterialTheme.colorScheme.outline
                 )
             }
+        }
+        if (trailingIcon != null) {
+            trailingIcon()
         }
     }
 }

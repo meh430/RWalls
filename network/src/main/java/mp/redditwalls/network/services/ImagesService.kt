@@ -31,7 +31,8 @@ interface ImagesService {
         @Query("q") query: String,
         @Query("sort") sort: String,
         @Query("t") time: String,
-        @Query("after") after: String? = null
+        @Query("after") after: String? = null,
+        @Query("include_over_18") includeOver18: Boolean
     ): NetworkImages
 
     @GET("/r/{subreddit}/search")
@@ -41,7 +42,8 @@ interface ImagesService {
         @Query("sort") sort: String,
         @Query("t") time: String,
         @Query("restrict_sr") restrictSubreddit: Boolean = true,
-        @Query("after") after: String? = null
+        @Query("after") after: String? = null,
+        @Query("include_over_18") includeOver18: Boolean
     ): NetworkImages
 
     @GET("/api/info")

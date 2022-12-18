@@ -8,6 +8,7 @@ data class DomainSubreddit(
     val numOnline: Int = 0,
     val description: String = "",
     val subredditIconUrl: String = "",
+    val headerUrl: String = "",
     val isSaved: Boolean = false
 )
 
@@ -17,5 +18,6 @@ fun NetworkSubreddit.toDomainSubreddit(isSaved: Boolean) = DomainSubreddit(
     numOnline = numOnline,
     description = description,
     subredditIconUrl = subredditIconUrl,
+    headerUrl = headerImageUrl,
     isSaved = isSaved
 )

@@ -73,6 +73,7 @@
     <string name="view_more">View More</string>
 
     <string name="subscriber_count">%1$s subscribers</string>
+    <string name="online_count">%1$s online</string>
 
     <string name="general">General</string>
     <string name="allow_nsfw_images">Allow NSFW images</string>

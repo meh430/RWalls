@@ -7,10 +7,18 @@ import android.content.res.Resources
 import android.graphics.Insets
 import android.graphics.Point
 import android.net.Uri
+import android.os.Build.VERSION.SDK_INT
+import android.os.Parcelable
 import android.util.TypedValue
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.annotation.IdRes
+import androidx.compose.foundation.layout.ime
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.platform.LocalDensity
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -18,6 +26,8 @@ import java.text.DecimalFormat
 import kotlin.math.floor
 import kotlin.math.log10
 import kotlin.math.pow
+import mp.redditwalls.design.components.IconText
+import mp.redditwalls.preferences.enums.SortOrder
 import mp.redditwalls.repositories.SettingsItem
 import org.json.JSONArray
 import org.json.JSONObject
@@ -120,3 +130,21 @@ fun Int.toFriendlyCount(): String {
 
 fun NavDestination.matchDestination(@IdRes destId: Int): Boolean =
     hierarchy.any { it.id == destId }
+
+// Move to separate file?
+@Composable
+fun rememberSortMenuOptions(context: Context) = remember {
+    SortOrder.values().map { IconText(text = context.getString(it.stringId)) }
+}
+
+@Composable
+fun keyboardAsState(): State<Boolean> {
+    val isImeVisible =
+        androidx.compose.foundation.layout.WindowInsets.ime.getBottom(LocalDensity.current) > 0
+    return rememberUpdatedState(isImeVisible)
+}
+
+inline fun <reified T : Parcelable> Intent.parcelable(key: String): T? = when {
+    SDK_INT >= 33 -> getParcelableExtra(key, T::class.java)
+    else -> @Suppress("DEPRECATION") getParcelableExtra(key) as? T
+}

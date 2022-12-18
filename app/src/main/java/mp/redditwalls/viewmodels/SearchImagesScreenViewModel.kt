@@ -3,6 +3,7 @@ package mp.redditwalls.viewmodels
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 import mp.redditwalls.domain.models.DomainResult
@@ -13,6 +14,7 @@ import mp.redditwalls.models.toImageItemItemUiState
 import mp.redditwalls.models.toSubredditItemUiState
 import mp.redditwalls.preferences.enums.SortOrder
 
+@HiltViewModel
 class SearchImagesScreenViewModel @Inject constructor(
     private val getImagesUseCase: GetImagesUseCase,
     val favoriteImageViewModel: FavoriteImageViewModel,
@@ -55,6 +57,7 @@ class SearchImagesScreenViewModel @Inject constructor(
             return
         }
 
+        uiState.uiResult.value = UiResult.Loading()
         if (reload) {
             uiState.images.clear()
             viewModelScope.launch {
@@ -81,6 +84,7 @@ class SearchImagesScreenViewModel @Inject constructor(
                     is DomainResult.Error ->
                         uiState.uiResult.value = UiResult.Error(result.message)
                     is DomainResult.Success -> uiState.apply {
+                        uiState.uiResult.value = UiResult.Success()
                         images.addAll(
                             result.data?.images?.map {
                                 it.toImageItemItemUiState()

@@ -3,25 +3,18 @@ package mp.redditwalls.ui.screens
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.consumedWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -33,8 +26,7 @@ import kotlinx.coroutines.launch
 import mp.redditwalls.R
 import mp.redditwalls.WallpaperHelper
 import mp.redditwalls.design.components.ErrorState
-import mp.redditwalls.design.components.IconText
-import mp.redditwalls.design.components.PopupMenu
+import mp.redditwalls.design.components.OptionsMenu
 import mp.redditwalls.design.components.ThreeDotsLoader
 import mp.redditwalls.design.components.WallpaperOptionsDialog
 import mp.redditwalls.local.enums.WallpaperLocation
@@ -44,6 +36,7 @@ import mp.redditwalls.preferences.enums.SortOrder
 import mp.redditwalls.ui.components.ImagePager
 import mp.redditwalls.ui.components.ImagesList
 import mp.redditwalls.utils.launchBrowser
+import mp.redditwalls.utils.rememberSortMenuOptions
 import mp.redditwalls.viewmodels.HomeScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -56,13 +49,6 @@ fun HomeScreen(
     val uiState = vm.uiState
     val uiResult = uiState.uiResult.value
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-
-    var sortMenuExpanded by remember { mutableStateOf(false) }
-    val sortMenuOptions = remember {
-        SortOrder.values().map {
-            IconText(text = context.getString(it.stringId))
-        }
-    }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -88,21 +74,11 @@ fun HomeScreen(
                     },
                     navigationIcon = {},
                     actions = {
-                        Box {
-                            IconButton(
-                                onClick = { sortMenuExpanded = true }
-                            ) {
-                                Icon(imageVector = Icons.Default.Sort, contentDescription = null)
-                            }
-                            PopupMenu(
-                                expanded = sortMenuExpanded,
-                                options = sortMenuOptions,
-                                onOptionSelected = {
-                                    vm.setSortOrder(SortOrder.values()[it])
-                                },
-                                onDismiss = { sortMenuExpanded = false }
-                            )
-                        }
+                        OptionsMenu(
+                            icon = Icons.Default.Sort,
+                            options = rememberSortMenuOptions(context = context),
+                            onOptionSelected = { vm.setSortOrder(SortOrder.values()[it]) }
+                        )
                     },
                 )
             }
@@ -132,9 +108,7 @@ fun HomeScreen(
                             }
                         }
                     },
-                    onDismiss = {
-                        vm.setLongPressImage(null)
-                    }
+                    onDismiss = { vm.setLongPressImage(null) }
                 )
                 when {
                     uiResult is UiResult.Error -> ErrorState(
@@ -158,7 +132,6 @@ fun HomeScreen(
                     }
                     !uiState.verticalSwipeFeedEnabled.value -> ImagesList(
                         listState = vm.listState,
-                        contentPadding = PaddingValues(8.dp),
                         images = uiState.images,
                         isLoading = uiResult is UiResult.Loading,
                         onClick = {},

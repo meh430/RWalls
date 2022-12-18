@@ -10,6 +10,7 @@ data class SubredditItemUiState(
     val numOnline: Int = 0,
     val description: String = "",
     val subredditIconUrl: String = "",
+    val headerUrl: String = "",
     val isSaved: MutableState<Boolean> = mutableStateOf(false)
 )
 
@@ -19,5 +20,6 @@ fun DomainSubreddit.toSubredditItemUiState() = SubredditItemUiState(
     numOnline = numOnline,
     description = description,
     subredditIconUrl = subredditIconUrl,
+    headerUrl = headerUrl,
     isSaved = mutableStateOf(isSaved)
 )

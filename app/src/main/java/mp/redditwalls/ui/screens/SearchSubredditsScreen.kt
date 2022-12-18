@@ -14,18 +14,20 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.delay
-import mp.redditwalls.R
+import mp.redditwalls.activities.SearchImagesActivity
+import mp.redditwalls.activities.SearchImagesActivityArguments
+import mp.redditwalls.design.components.BackButton
 import mp.redditwalls.design.components.ErrorState
 import mp.redditwalls.design.components.SearchBar
 import mp.redditwalls.design.components.TextRecentActivityCard
@@ -33,6 +35,7 @@ import mp.redditwalls.design.components.ThreeDotsLoader
 import mp.redditwalls.models.UiResult
 import mp.redditwalls.ui.components.recentActivityListItems
 import mp.redditwalls.ui.components.subredditListItems
+import mp.redditwalls.utils.keyboardAsState
 import mp.redditwalls.viewmodels.SearchSubredditsScreenViewModel
 
 @OptIn(
@@ -44,6 +47,7 @@ import mp.redditwalls.viewmodels.SearchSubredditsScreenViewModel
 fun SearchSubredditsScreen(vm: SearchSubredditsScreenViewModel = viewModel()) {
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
+    val isKeyboardOpen by keyboardAsState()
 
     val uiState = vm.uiState
     val uiResult = uiState.uiResult.value
@@ -55,9 +59,23 @@ fun SearchSubredditsScreen(vm: SearchSubredditsScreenViewModel = viewModel()) {
                 value = uiState.query.value,
                 onValueChanged = { vm.onQueryChanged(it) },
                 onSearch = { keyboardController?.hide() },
-                hint = stringResource(R.string.search),
-                onIconClick = { (context as? Activity)?.finish() },
-                showBackButton = true,
+                leadingIcon = {
+                    BackButton(
+                        modifier = Modifier.padding(start = 16.dp),
+                        onClick = { (context as? Activity)?.finish() }
+                    )
+                },
+                trailingIcon = if (uiState.query.value.isEmpty() || !isKeyboardOpen) {
+                    null
+                } else {
+                    {
+                        BackButton(
+                            modifier = Modifier.padding(end = 16.dp),
+                            cross = true,
+                            onClick = { vm.onQueryChanged("") }
+                        )
+                    }
+                },
                 focusRequester = searchBarFocusRequester
             )
         }
@@ -75,7 +93,16 @@ fun SearchSubredditsScreen(vm: SearchSubredditsScreenViewModel = viewModel()) {
                         icon = Icons.Default.Search,
                         title = getSearchAllString(uiState.query.value),
                         date = "",
-                        onClick = {}
+                        onClick = {
+                            context.startActivity(
+                                SearchImagesActivity.getIntent(
+                                    context,
+                                    SearchImagesActivityArguments(
+                                        query = uiState.query.value
+                                    )
+                                )
+                            )
+                        }
                     )
                 }
             }
@@ -101,7 +128,16 @@ fun SearchSubredditsScreen(vm: SearchSubredditsScreenViewModel = viewModel()) {
                 }
                 subredditListItems(
                     subreddits = uiState.searchResults,
-                    onClick = {},
+                    onClick = { subreddit ->
+                        context.startActivity(
+                            SearchImagesActivity.getIntent(
+                                context,
+                                SearchImagesActivityArguments(
+                                    subreddit = subreddit.name
+                                )
+                            )
+                        )
+                    },
                     onSaveChanged = vm.savedSubredditViewModel::onSaveClick
                 )
             } else if (uiState.searchHistory.isNotEmpty()) {

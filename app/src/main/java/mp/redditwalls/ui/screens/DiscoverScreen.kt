@@ -99,8 +99,7 @@ private fun DiscoverScreenContent(
                     indication = null,
                     onClick = onSearchClick
                 ),
-                enabled = false,
-                hint = stringResource(R.string.search)
+                enabled = false
             )
         }
         if (recommendations.isNotEmpty()) {
