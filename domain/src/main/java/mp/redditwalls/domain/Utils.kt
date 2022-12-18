@@ -19,9 +19,9 @@ internal object Utils {
         low: String, medium: String, high: String
     ) = DomainImageUrl(
         url = when (this) {
-            ImageQuality.LOW -> low
-            ImageQuality.MEDIUM -> medium
-            ImageQuality.HIGH -> high
+            ImageQuality.LOW -> low.ifEmpty { medium }.ifEmpty { high }
+            ImageQuality.MEDIUM -> medium.ifEmpty { low }.ifEmpty { high }
+            ImageQuality.HIGH -> high.ifEmpty { medium }.ifEmpty { low }
         },
         lowQualityUrl = low,
         mediumQualityUrl = medium,

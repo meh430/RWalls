@@ -171,6 +171,10 @@ class FavoriteImagesScreenViewModel @Inject constructor(
     private suspend fun getSelectedImageUrls() = withContext(Dispatchers.IO) {
         uiState.images.filter {
             it.selectionState.value == SelectionState.SELECTED
-        }.map { it.imageUrl.highQualityUrl }
+        }.map {
+            it.imageUrl.highQualityUrl.ifEmpty {
+                it.imageUrl.mediumQualityUrl
+            }.ifEmpty { it.imageUrl.lowQualityUrl }
+        }.filter { it.isNotBlank() }
     }
 }

@@ -1,6 +1,5 @@
 package mp.redditwalls.ui.screens
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.consumedWindowInsets
@@ -9,7 +8,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Smartphone
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,7 +36,7 @@ import mp.redditwalls.design.components.DeleteConfirmationDialog
 import mp.redditwalls.design.components.ErrorState
 import mp.redditwalls.design.components.FilterChipBar
 import mp.redditwalls.design.components.IconText
-import mp.redditwalls.design.components.PopupMenu
+import mp.redditwalls.design.components.OptionsMenu
 import mp.redditwalls.design.components.WallpaperLocationRadioDialog
 import mp.redditwalls.local.enums.WallpaperLocation
 import mp.redditwalls.models.UiResult
@@ -116,30 +114,18 @@ fun FavoriteImagesScreen(
                 },
                 actions = {
                     if (uiState.selecting.value) {
-                        Box {
-                            IconButton(
-                                onClick = { menuExpanded = true }
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.MoreVert,
-                                    contentDescription = null
-                                )
+                        OptionsMenu(
+                            options = menuOptions,
+                            onOptionSelected = {
+                                when (it) {
+                                    SELECT_ALL -> vm.selectAll()
+                                    MOVE_TO -> uiState.showMoveDialog.value = true
+                                    DELETE -> uiState.showDeleteDialog.value = true
+                                    DOWNLOAD -> vm.downloadSelection(downloadUtils)
+                                    else -> {}
+                                }
                             }
-                            PopupMenu(
-                                expanded = menuExpanded,
-                                options = menuOptions,
-                                onOptionSelected = {
-                                    when (it) {
-                                        SELECT_ALL -> vm.selectAll()
-                                        MOVE_TO -> uiState.showMoveDialog.value = true
-                                        DELETE -> uiState.showDeleteDialog.value = true
-                                        DOWNLOAD -> vm.downloadSelection(downloadUtils)
-                                        else -> {}
-                                    }
-                                },
-                                onDismiss = { menuExpanded = false }
-                            )
-                        }
+                        )
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
