@@ -44,7 +44,7 @@ import mp.redditwalls.viewmodels.DiscoverScreenViewModel
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun DiscoverScreen(vm: DiscoverScreenViewModel = viewModel()) {
-    val uiState = vm.discoverScreenUiState
+    val uiState = vm.uiState
     val uiResult = uiState.uiResult.value
 
     val context = LocalContext.current

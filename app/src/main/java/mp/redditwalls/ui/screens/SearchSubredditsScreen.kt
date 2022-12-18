@@ -45,7 +45,7 @@ fun SearchSubredditsScreen(vm: SearchSubredditsScreenViewModel = viewModel()) {
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    val uiState = vm.searchSubredditsScreenUiState
+    val uiState = vm.uiState
     val uiResult = uiState.uiResult.value
 
     val searchBarFocusRequester = remember { FocusRequester() }

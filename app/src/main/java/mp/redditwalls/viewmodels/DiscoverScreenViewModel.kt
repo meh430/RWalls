@@ -20,7 +20,7 @@ class DiscoverScreenViewModel @Inject constructor(
     val savedSubredditViewModel: SavedSubredditViewModel
 ) : ViewModel() {
 
-    val discoverScreenUiState = DiscoverScreenUiState()
+    val uiState = DiscoverScreenUiState()
 
     init {
         favoriteImageViewModel.init(viewModelScope)
@@ -41,10 +41,10 @@ class DiscoverScreenViewModel @Inject constructor(
             getDiscoverUseCase.sharedFlow.collect {
                 when (it) {
                     is DomainResult.Error -> {
-                        discoverScreenUiState.uiResult.value = UiResult.Error(it.message)
+                        uiState.uiResult.value = UiResult.Error(it.message)
                     }
                     is DomainResult.Success -> {
-                        discoverScreenUiState.apply {
+                        uiState.apply {
                             clear()
                             uiResult.value = UiResult.Success()
                             allowNsfw.value = it.data?.allowNsfw == true

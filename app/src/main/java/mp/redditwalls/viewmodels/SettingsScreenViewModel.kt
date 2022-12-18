@@ -24,7 +24,7 @@ class SettingsScreenViewModel @Inject constructor(
     private val getPreferencesUseCase: GetPreferencesUseCase,
     private val savePreferencesUseCase: SavePreferencesUseCase
 ) : ViewModel() {
-    val settingsScreenUiState = SettingsScreenUiState()
+    val uiState = SettingsScreenUiState()
 
     init {
         subscribeToPreferences()
@@ -33,23 +33,23 @@ class SettingsScreenViewModel @Inject constructor(
 
     fun savePreferences() {
         viewModelScope.launch {
-            savePreferencesUseCase(settingsScreenUiState.getPreferenceData())
+            savePreferencesUseCase(uiState.getPreferenceData())
         }
     }
 
     fun changeDialogSelection(selection: Int) {
-        settingsScreenUiState.currentRadioDialog.apply {
+        uiState.currentRadioDialog.apply {
             value = value?.changeSelection(selection)
         }
     }
 
     fun showDialog(dialog: SettingsRadioDialogModel) {
-        settingsScreenUiState.currentRadioDialog.value = dialog
+        uiState.currentRadioDialog.value = dialog
     }
 
     fun onDialogConfirmClicked() {
-        settingsScreenUiState.currentRadioDialog.value?.let {
-            settingsScreenUiState.apply {
+        uiState.currentRadioDialog.value?.let {
+            uiState.apply {
                 when (it) {
                     is SettingsRadioDialogModel.DataSettingDialog -> {
                         dataSetting.value = DataSetting.values()[it.selection]
@@ -75,19 +75,19 @@ class SettingsScreenViewModel @Inject constructor(
     }
 
     fun dismissDialog() {
-        settingsScreenUiState.currentRadioDialog.value?.let {
+        uiState.currentRadioDialog.value?.let {
             if (it is SettingsRadioDialogModel.ThemeDialog) {
-                AppCompatDelegate.setDefaultNightMode(settingsScreenUiState.theme.value.toThemeMode())
+                AppCompatDelegate.setDefaultNightMode(uiState.theme.value.toThemeMode())
             }
         }
-        settingsScreenUiState.currentRadioDialog.value = null
+        uiState.currentRadioDialog.value = null
     }
 
     private fun subscribeToPreferences() {
         viewModelScope.launch {
             getPreferencesUseCase.sharedFlow.collect { result ->
                 if (result is DomainResult.Success) {
-                    result.data?.let { settingsScreenUiState.updateState(it) }
+                    result.data?.let { uiState.updateState(it) }
                 }
             }
         }

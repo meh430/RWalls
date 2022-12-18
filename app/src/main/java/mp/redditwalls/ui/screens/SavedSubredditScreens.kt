@@ -25,8 +25,8 @@ import mp.redditwalls.viewmodels.SavedSubredditsScreenViewModel
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun SavedSubredditScreens(vm: SavedSubredditsScreenViewModel = viewModel()) {
-    val uiResult = vm.savedSubredditsScreenUiState.uiResult
-    val subreddits = vm.savedSubredditsScreenUiState.subreddits
+    val uiResult = vm.uiState.uiResult
+    val subreddits = vm.uiState.subreddits
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     Scaffold(

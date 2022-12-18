@@ -19,7 +19,7 @@ class SavedSubredditsScreenViewModel @Inject constructor(
     private val getSavedSubredditsUseCase: GetSavedSubredditsUseCase,
     val savedSubredditViewModel: SavedSubredditViewModel
 ) : ViewModel() {
-    var savedSubredditsScreenUiState by mutableStateOf( SavedSubredditsScreenUiState())
+    var uiState by mutableStateOf(SavedSubredditsScreenUiState())
         private set
 
     init {
@@ -32,11 +32,11 @@ class SavedSubredditsScreenViewModel @Inject constructor(
     private fun subscribeToSavedSubreddits() {
         viewModelScope.launch {
             getSavedSubredditsUseCase.sharedFlow.collect {
-                savedSubredditsScreenUiState = when (it) {
-                    is DomainResult.Error -> savedSubredditsScreenUiState.copy(
+                uiState = when (it) {
+                    is DomainResult.Error -> uiState.copy(
                         uiResult = UiResult.Error(it.message)
                     )
-                    is DomainResult.Success -> savedSubredditsScreenUiState.copy(
+                    is DomainResult.Success -> uiState.copy(
                         subreddits = it.data?.map { subreddit ->
                             subreddit.toSubredditItemUiState()
                         }.orEmpty(),

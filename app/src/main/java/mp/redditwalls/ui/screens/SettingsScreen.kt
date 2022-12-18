@@ -32,8 +32,8 @@ import mp.redditwalls.viewmodels.SettingsScreenViewModel
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun SettingsScreen(vm: SettingsScreenViewModel = viewModel()) {
-    val uiState = vm.settingsScreenUiState
-    val currentDialog = vm.settingsScreenUiState.currentRadioDialog.value
+    val uiState = vm.uiState
+    val currentDialog = vm.uiState.currentRadioDialog.value
 
     val scrollState = rememberScrollState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -83,7 +83,7 @@ fun SettingsScreen(vm: SettingsScreenViewModel = viewModel()) {
                 modifier = Modifier.padding(horizontal = horizontalPadding),
                 title = stringResource(R.string.allow_nsfw_images),
                 checked = uiState.allowNsfw.value,
-                onCheckChanged = { vm.settingsScreenUiState.allowNsfw.value = it }
+                onCheckChanged = { vm.uiState.allowNsfw.value = it }
             )
             Spacer(modifier = Modifier.height(spacerHeight))
             ClickableTextItem(
@@ -122,7 +122,7 @@ fun SettingsScreen(vm: SettingsScreenViewModel = viewModel()) {
                 title = stringResource(R.string.view_vertical_image_feed),
                 subtitle = stringResource(R.string.view_vertical_image_feed_subtitle),
                 checked = uiState.verticalSwipeFeedEnabled.value,
-                onCheckChanged = { vm.settingsScreenUiState.verticalSwipeFeedEnabled.value = it }
+                onCheckChanged = { vm.uiState.verticalSwipeFeedEnabled.value = it }
             )
             Spacer(modifier = Modifier.height(spacerHeight))
 
@@ -134,7 +134,7 @@ fun SettingsScreen(vm: SettingsScreenViewModel = viewModel()) {
                 title = stringResource(R.string.refresh_favorite_images),
                 subtitle = stringResource(R.string.refresh_favorite_images_subtitle),
                 checked = uiState.refreshEnabled.value,
-                onCheckChanged = { vm.settingsScreenUiState.refreshEnabled.value = it }
+                onCheckChanged = { vm.uiState.refreshEnabled.value = it }
             )
             AnimatedVisibility(uiState.refreshEnabled.value) {
                 Column {

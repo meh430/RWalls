@@ -20,7 +20,7 @@ class SearchSubredditsScreenViewModel @Inject constructor(
     private val searchSubredditsUseCase: SearchSubredditsUseCase,
     val savedSubredditViewModel: SavedSubredditViewModel
 ) : ViewModel() {
-    val searchSubredditsScreenUiState = SearchSubredditsScreenUiState()
+    val uiState = SearchSubredditsScreenUiState()
 
     init {
         subscribeToSearchHistory()
@@ -31,26 +31,26 @@ class SearchSubredditsScreenViewModel @Inject constructor(
     }
 
     fun fetchSearchHistory() {
-        searchSubredditsScreenUiState.uiResult.value = UiResult.Loading()
+        uiState.uiResult.value = UiResult.Loading()
         viewModelScope.launch {
             getRecentActivityUseCase(RecentActivityFilter.SEARCH)
         }
     }
 
     fun onQueryChanged(newQuery: String) {
-        searchSubredditsScreenUiState.query.value = newQuery
+        uiState.query.value = newQuery
         searchSubreddits()
     }
 
-    fun isSearching() = searchSubredditsScreenUiState.let {
+    fun isSearching() = uiState.let {
         it.query.value.length > 2 && it.searchResults.isNotEmpty()
     }
 
     private fun searchSubreddits() {
         viewModelScope.launch {
-            searchSubredditsScreenUiState.query.apply {
+            uiState.query.apply {
                 if (value.length > 2) {
-                    searchSubredditsScreenUiState.uiResult.value = UiResult.Loading()
+                    uiState.uiResult.value = UiResult.Loading()
                     searchSubredditsUseCase(value)
                 }
             }
@@ -62,7 +62,7 @@ class SearchSubredditsScreenViewModel @Inject constructor(
             searchSubredditsUseCase.sharedFlow.collect { result ->
                 when (result) {
                     is DomainResult.Error -> setErrorState(result.message)
-                    is DomainResult.Success -> searchSubredditsScreenUiState.apply {
+                    is DomainResult.Success -> uiState.apply {
                         uiResult.value = UiResult.Success()
                         searchResults.clear()
                         searchResults.addAll(
@@ -79,7 +79,7 @@ class SearchSubredditsScreenViewModel @Inject constructor(
             getRecentActivityUseCase.sharedFlow.collect { result ->
                 when (result) {
                     is DomainResult.Error -> setErrorState(result.message)
-                    is DomainResult.Success -> searchSubredditsScreenUiState.apply {
+                    is DomainResult.Success -> uiState.apply {
                         uiResult.value = UiResult.Success()
                         searchHistory.clear()
                         searchHistory.addAll(
@@ -92,7 +92,7 @@ class SearchSubredditsScreenViewModel @Inject constructor(
     }
 
     private fun setErrorState(message: String) {
-        searchSubredditsScreenUiState.apply {
+        uiState.apply {
             uiResult.value = UiResult.Error(message)
             searchHistory.clear()
             searchResults.clear()

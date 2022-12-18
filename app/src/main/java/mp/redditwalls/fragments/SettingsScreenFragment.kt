@@ -41,7 +41,7 @@ class SettingsScreenFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         vm.savePreferences()
-        vm.settingsScreenUiState.run {
+        vm.uiState.run {
             if (refreshEnabled.value && refreshSettingsChanged.value) {
                 startRandomRefreshWork(
                     interval = refreshInterval.value,
