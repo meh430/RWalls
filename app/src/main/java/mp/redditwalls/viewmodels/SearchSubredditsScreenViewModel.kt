@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import mp.redditwalls.domain.RecentActivityFilter
 import mp.redditwalls.domain.models.DomainResult
@@ -51,6 +52,7 @@ class SearchSubredditsScreenViewModel @Inject constructor(
             uiState.query.apply {
                 if (value.length > 2) {
                     uiState.uiResult.value = UiResult.Loading()
+                    delay(DEBOUNCE_PERIOD)
                     searchSubredditsUseCase(value)
                 }
             }
@@ -97,5 +99,9 @@ class SearchSubredditsScreenViewModel @Inject constructor(
             searchHistory.clear()
             searchResults.clear()
         }
+    }
+
+    companion object {
+        private const val DEBOUNCE_PERIOD = 350L
     }
 }

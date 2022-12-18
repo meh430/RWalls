@@ -68,14 +68,16 @@ fun SearchSubredditsScreen(vm: SearchSubredditsScreenViewModel = viewModel()) {
                 .padding(it),
             contentPadding = PaddingValues(8.dp)
         ) {
-            // search all images
-            item {
-                TextRecentActivityCard(
-                    icon = Icons.Default.Search,
-                    title = getSearchAllString(uiState.query.value),
-                    date = "",
-                    onClick = {}
-                )
+            if (uiState.query.value.isNotBlank() && uiState.query.value.length > 2) {
+                // search all images
+                item {
+                    TextRecentActivityCard(
+                        icon = Icons.Default.Search,
+                        title = getSearchAllString(uiState.query.value),
+                        date = "",
+                        onClick = {}
+                    )
+                }
             }
 
             // search history when launched or subreddits when not
