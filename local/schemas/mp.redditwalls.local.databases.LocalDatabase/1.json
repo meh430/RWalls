@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "5c05221227ab0e1a5dea73ad36a2afb6",
+    "identityHash": "51e5b7ab39266394ec80825c11fb3ca1",
     "entities": [
       {
         "tableName": "FavoriteImages",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`networkId` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, `postTitle` TEXT NOT NULL, `subredditName` TEXT NOT NULL, `postUrl` TEXT NOT NULL, `lowQualityUrl` TEXT NOT NULL, `mediumQualityUrl` TEXT NOT NULL, `sourceUrl` TEXT NOT NULL, `imageFolderName` TEXT NOT NULL, `refreshLocation` TEXT NOT NULL, PRIMARY KEY(`networkId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`networkId` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, `postTitle` TEXT NOT NULL, `subredditName` TEXT NOT NULL, `postUrl` TEXT NOT NULL, `lowQualityUrl` TEXT NOT NULL, `mediumQualityUrl` TEXT NOT NULL, `sourceUrl` TEXT NOT NULL, `imageFolderName` TEXT NOT NULL, PRIMARY KEY(`networkId`))",
         "fields": [
           {
             "fieldPath": "networkId",
@@ -59,12 +59,6 @@
           {
             "fieldPath": "imageFolderName",
             "columnName": "imageFolderName",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "refreshLocation",
-            "columnName": "refreshLocation",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -214,7 +208,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5c05221227ab0e1a5dea73ad36a2afb6')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '51e5b7ab39266394ec80825c11fb3ca1')"
     ]
   }
 }

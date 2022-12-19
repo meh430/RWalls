@@ -35,7 +35,9 @@ class LocalImageFoldersRepository @Inject constructor(
     fun getDbImageFolderNames() = dbImageFolderDao.getDbImageFolderNames()
 
 
-    fun getDbImageFolderWithImages(name: String) = dbImageFolderDao.getDbImageFolderWithImages(name)
+    suspend fun getDbImageFolderWithImages(name: String) = withContext(Dispatchers.IO) {
+        dbImageFolderDao.getDbImageFolderWithImages(name)
+    }
 
 
     suspend fun getRandomLockScreenDbImage() = withContext(Dispatchers.IO) {

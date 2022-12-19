@@ -5,7 +5,6 @@ import kotlinx.coroutines.launch
 import mp.redditwalls.domain.models.DomainImage
 import mp.redditwalls.domain.usecases.AddFavoriteImageUseCase
 import mp.redditwalls.domain.usecases.RemoveFavoriteImageUseCase
-import mp.redditwalls.local.enums.WallpaperLocation
 import mp.redditwalls.models.ImageItemUiState
 import mp.redditwalls.models.toDomainImage
 
@@ -16,14 +15,14 @@ class FavoriteImageViewModel @Inject constructor(
     private fun addFavoriteImage(
         domainImage: DomainImage,
         index: Int,
-        refreshLocation: WallpaperLocation
+        imageFolderName: String
     ) {
         coroutineScope.launch {
             addFavoriteImageUseCase(
                 AddFavoriteImageUseCase.Params(
                     image = domainImage,
                     index = index,
-                    refreshLocation = refreshLocation
+                    folderName = imageFolderName
                 )
             )
         }
@@ -41,7 +40,7 @@ class FavoriteImageViewModel @Inject constructor(
             addFavoriteImage(
                 domainImage = image.toDomainImage(),
                 index = index,
-                refreshLocation = WallpaperLocation.BOTH
+                imageFolderName = "default"
             )
         } else {
             removeFavoriteImage(image.networkId)

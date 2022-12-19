@@ -1,7 +1,6 @@
 package mp.redditwalls.domain.usecases
 
 import javax.inject.Inject
-import mp.redditwalls.local.enums.WallpaperLocation
 import mp.redditwalls.local.repositories.LocalImagesRepository
 
 class UpdateFavoriteImageUseCase @Inject constructor(
@@ -10,20 +9,20 @@ class UpdateFavoriteImageUseCase @Inject constructor(
 
     override suspend fun execute(params: Params) {
         if (params.ids.size == 1) {
-            localImagesRepository.updateDbImage(
+            localImagesRepository.updateDbImageFolder(
                 id = params.ids[0],
-                refreshLocation = params.refreshLocation
+                folderName = params.folderName
             )
         } else if (params.ids.isNotEmpty()) {
             localImagesRepository.updateDbImages(
                 ids = params.ids,
-                refreshLocation = params.refreshLocation
+                folderName = params.folderName
             )
         }
     }
 
     data class Params(
         val ids: List<String>,
-        val refreshLocation: WallpaperLocation
+        val folderName: String
     )
 }

@@ -5,7 +5,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
 import mp.redditwalls.local.daos.DbImageDao
-import mp.redditwalls.local.enums.WallpaperLocation
 import mp.redditwalls.local.models.DbImage
 
 class LocalImagesRepository @Inject constructor(private val dbImageDao: DbImageDao) {
@@ -18,15 +17,15 @@ class LocalImagesRepository @Inject constructor(private val dbImageDao: DbImageD
         }
     }
 
-    suspend fun updateDbImage(id: String, refreshLocation: WallpaperLocation) {
+    suspend fun updateDbImageFolder(id: String, folderName: String) {
         withContext(Dispatchers.IO) {
-            dbImageDao.updateDbImageRefreshLocation(id, refreshLocation.name)
+            dbImageDao.updateDbImageFolder(id, folderName)
         }
     }
 
-    suspend fun updateDbImages(ids: List<String>, refreshLocation: WallpaperLocation) {
+    suspend fun updateDbImages(ids: List<String>, folderName: String) {
         withContext(Dispatchers.IO) {
-            dbImageDao.updateDbImageRefreshLocations(ids, refreshLocation.name)
+            dbImageDao.updateDbImagesFolder(ids, folderName)
         }
     }
 
@@ -46,22 +45,4 @@ class LocalImagesRepository @Inject constructor(private val dbImageDao: DbImageD
     fun getDbImagesFlow() = dbImageDao.getDbImages()
 
     suspend fun getDbImages() = dbImageDao.getDbImages().firstOrNull().orEmpty()
-
-    suspend fun getRandomLockScreenDbImage() = withContext(Dispatchers.IO) {
-        dbImageDao.getRandomDbImage(
-            listOf(
-                WallpaperLocation.LOCK_SCREEN.name,
-                WallpaperLocation.BOTH.name
-            )
-        )
-    }
-
-    suspend fun getRandomHomeScreenDbImage() = withContext(Dispatchers.IO) {
-        dbImageDao.getRandomDbImage(
-            listOf(
-                WallpaperLocation.HOME.name,
-                WallpaperLocation.BOTH.name
-            )
-        )
-    }
 }

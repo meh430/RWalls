@@ -11,7 +11,7 @@ import mp.redditwalls.design.components.SelectionState
 import mp.redditwalls.domain.usecases.GetFavoriteImagesUseCase
 import mp.redditwalls.domain.usecases.RemoveFavoriteImagesUseCase
 import mp.redditwalls.domain.usecases.UpdateFavoriteImageUseCase
-import mp.redditwalls.local.enums.WallpaperLocation
+import mp.redditwalls.local.models.DbImageFolder.Companion.DEFAULT_FOLDER_NAME
 import mp.redditwalls.models.FavoriteImagesScreenUiState
 import mp.redditwalls.models.ImageItemUiState
 import mp.redditwalls.models.UiResult
@@ -109,13 +109,13 @@ class FavoriteImagesScreenViewModel @Inject constructor(
         }
     }
 
-    fun moveSelectionTo(wallpaperLocation: WallpaperLocation) {
+    fun moveSelectionTo(folderName: String) {
         viewModelScope.launch {
             getSelectedImageIds().let {
                 updateFavoriteImageUseCase(
                     UpdateFavoriteImageUseCase.Params(
                         ids = it,
-                        refreshLocation = wallpaperLocation
+                        folderName = folderName
                     )
                 )
                 uiState.selectedCount.value -= it.size
@@ -124,16 +124,16 @@ class FavoriteImagesScreenViewModel @Inject constructor(
             // update selecting state
             uiState.selecting.value =
                 uiState.selectedCount.value > 0
-            setFilter(wallpaperLocation)
+            setFilter(folderName)
         }
     }
 
-    fun setFilter(wallpaperLocation: WallpaperLocation, force: Boolean = false) {
-        if (wallpaperLocation == uiState.filter.value && !force) {
+    fun setFilter(folderName: String = DEFAULT_FOLDER_NAME, force: Boolean = false) {
+        if (folderName == uiState.filter.value && !force) {
             return
         }
         stopSelecting()
-        uiState.filter.value = wallpaperLocation
+        uiState.filter.value = folderName
         fetchFavoriteImages()
     }
 
@@ -153,10 +153,12 @@ class FavoriteImagesScreenViewModel @Inject constructor(
                     uiResult.value = UiResult.Success()
                     images.clear()
                     images.addAll(
-                        it.data?.images?.map { domainImage ->
+                        it.data?.imageFolder?.images?.map { domainImage ->
                             domainImage.toImageItemItemUiState()
                         }.orEmpty()
                     )
+                    folderNames.clear()
+                    folderNames.addAll(it.data?.folderNames.orEmpty())
                 }
             }
         }

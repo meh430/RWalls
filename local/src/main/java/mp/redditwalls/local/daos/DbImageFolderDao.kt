@@ -38,7 +38,7 @@ interface DbImageFolderDao {
 
     @Transaction
     @Query("SELECT * FROM ImageFolders WHERE name = :name")
-    fun getDbImageFolderWithImages(name: String): Flow<DbImageFolderWithImages>
+    fun getDbImageFolderWithImages(name: String): DbImageFolderWithImages
 
     @Query("SELECT name FROM ImageFolders WHERE refreshEnabled = 1 AND refreshLocation in (:refreshLocations)")
     suspend fun getRefreshEnabledDbImageFolderNames(refreshLocations: List<String>): List<String>

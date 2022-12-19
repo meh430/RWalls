@@ -2,36 +2,31 @@ package mp.redditwalls.domain.usecases
 
 import javax.inject.Inject
 import kotlinx.coroutines.flow.combine
-import mp.redditwalls.domain.models.FeedResult
-import mp.redditwalls.domain.models.toDomainImage
-import mp.redditwalls.local.enums.WallpaperLocation
+import mp.redditwalls.domain.models.FavoriteImagesResult
+import mp.redditwalls.domain.models.toDomainImageFolder
+import mp.redditwalls.local.repositories.LocalImageFoldersRepository
 import mp.redditwalls.local.repositories.LocalImagesRepository
 import mp.redditwalls.preferences.PreferencesRepository
 
 class GetFavoriteImagesUseCase @Inject constructor(
     private val localImagesRepository: LocalImagesRepository,
+    private val localImageFoldersRepository: LocalImageFoldersRepository,
     private val preferencesRepository: PreferencesRepository
-) : FlowUseCase<FeedResult, GetFavoriteImagesUseCase.Params>(FeedResult()) {
+) : FlowUseCase<FavoriteImagesResult, GetFavoriteImagesUseCase.Params>(FavoriteImagesResult()) {
     override fun execute() = combine(
         paramsFlow,
         localImagesRepository.getDbImagesFlow(),
+        localImageFoldersRepository.getDbImageFolderNames(),
         preferencesRepository.getPreviewResolution()
-    ) { params, dbImages, previewResolution ->
-        val domainImages = dbImages.filter { dbImage ->
-            params.wallpaperLocation.name == dbImage.refreshLocation
-        }.map {
-            it.toDomainImage(
-                previewResolution = previewResolution,
-                isLiked = true
-            )
-        }
-
+    ) { params, _, imageFolderNames, previewResolution ->
+        val folder = localImageFoldersRepository.getDbImageFolderWithImages(params.imageFolderName)
         data.copy(
-            images = domainImages
+            folderNames = imageFolderNames,
+            imageFolder = folder.toDomainImageFolder(previewResolution)
         )
     }
 
     data class Params(
-        val wallpaperLocation: WallpaperLocation
+        val imageFolderName: String = ""
     )
 }

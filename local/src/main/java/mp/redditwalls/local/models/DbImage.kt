@@ -2,7 +2,6 @@ package mp.redditwalls.local.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import mp.redditwalls.local.enums.WallpaperLocation
 import mp.redditwalls.local.models.DbImageFolder.Companion.DEFAULT_FOLDER_NAME
 import mp.redditwalls.utilities.toSeconds
 
@@ -18,6 +17,5 @@ data class DbImage(
     val lowQualityUrl: String = "",
     val mediumQualityUrl: String = "",
     val sourceUrl: String = "",
-    val imageFolderName: String = DEFAULT_FOLDER_NAME,
-    val refreshLocation: String = WallpaperLocation.BOTH.name
+    val imageFolderName: String = DEFAULT_FOLDER_NAME
 )

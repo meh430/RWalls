@@ -34,8 +34,8 @@ fun RadioDialog(
     title: String,
     selection: Int,
     options: List<String>,
-    confirmButtonText: String,
-    cancelButtonText: String,
+    confirmButtonText: String = stringResource(R.string.ok),
+    cancelButtonText: String = stringResource(R.string.cancel),
     onSelectionChanged: (Int) -> Unit,
     onConfirmButtonClick: () -> Unit,
     onDismiss: () -> Unit
@@ -88,6 +88,28 @@ fun RadioDialog(
 }
 
 @Composable
+fun ImageFolderRadioDialog(
+    show: Boolean,
+    options: List<String>,
+    onSubmit: (String) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var selection by remember { mutableStateOf(0) }
+    RadioDialog(
+        show = show,
+        title = "Choose folder",
+        selection = selection,
+        options = options,
+        onSelectionChanged = { selection = it },
+        onConfirmButtonClick = {
+            onSubmit(options[selection])
+            onDismiss()
+        },
+        onDismiss = onDismiss
+    )
+}
+
+@Composable
 fun WallpaperLocationRadioDialog(
     show: Boolean,
     onSubmit: (Int) -> Unit,
@@ -103,8 +125,6 @@ fun WallpaperLocationRadioDialog(
             stringResource(R.string.lock_screen),
             stringResource(R.string.both_screens)
         ),
-        confirmButtonText = stringResource(R.string.ok),
-        cancelButtonText = stringResource(R.string.cancel),
         onSelectionChanged = { selection = it },
         onConfirmButtonClick = {
             onSubmit(selection)

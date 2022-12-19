@@ -12,11 +12,11 @@ interface DbImageDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDbImage(dbImage: DbImage)
 
-    @Query("UPDATE FavoriteImages SET refreshLocation = :refreshLocation WHERE networkId = :id")
-    suspend fun updateDbImageRefreshLocation(id: String, refreshLocation: String)
+    @Query("UPDATE FavoriteImages SET imageFolderName = :imageFolderName WHERE networkId = :id")
+    suspend fun updateDbImageFolder(id: String, imageFolderName: String)
 
-    @Query("UPDATE FavoriteImages SET refreshLocation = :refreshLocation WHERE networkId IN (:ids)")
-    suspend fun updateDbImageRefreshLocations(ids: List<String>, refreshLocation: String)
+    @Query("UPDATE FavoriteImages SET imageFolderName = :imageFolderName WHERE networkId IN (:ids)")
+    suspend fun updateDbImagesFolder(ids: List<String>, imageFolderName: String)
 
     @Query("SELECT EXISTS(SELECT * FROM FavoriteImages WHERE networkId = :networkId)")
     fun dbImageExists(networkId : String) : Boolean
@@ -29,7 +29,4 @@ interface DbImageDao {
 
     @Query("SELECT * FROM FavoriteImages")
     fun getDbImages(): Flow<List<DbImage>>
-
-    @Query("SELECT * FROM FavoriteImages WHERE refreshLocation IN (:locations) ORDER BY RANDOM() LIMIT 1")
-    suspend fun getRandomDbImage(locations: List<String>): List<DbImage>
 }
