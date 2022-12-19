@@ -20,6 +20,9 @@ internal object LocalModule {
     fun provideDbImageDao(localDatabase: LocalDatabase) = localDatabase.getDbImageDao()
 
     @Provides
+    fun provideDbImageFolderDao(localDatabase: LocalDatabase) = localDatabase.getDbImageFolderDao()
+
+    @Provides
     fun provideDbRecentActivityItemDao(localDatabase: LocalDatabase) =
         localDatabase.getDbRecentActivityItemDao()
 

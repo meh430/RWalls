@@ -10,23 +10,28 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import mp.redditwalls.local.Constants.DEFAULT_SUBREDDIT
 import mp.redditwalls.local.daos.DbImageDao
+import mp.redditwalls.local.daos.DbImageFolderDao
 import mp.redditwalls.local.daos.DbRecentActivityItemDao
 import mp.redditwalls.local.daos.DbSubredditDao
 import mp.redditwalls.local.models.DbImage
+import mp.redditwalls.local.models.DbImageFolder
+import mp.redditwalls.local.models.DbImageFolder.Companion.DEFAULT_FOLDER_NAME
 import mp.redditwalls.local.models.DbRecentActivityItem
 import mp.redditwalls.local.models.DbSubreddit
 
 @Database(
     entities = [
         DbImage::class,
+        DbImageFolder::class,
         DbSubreddit::class,
         DbRecentActivityItem::class
     ],
-    version = 2,
+    version = 1,
     exportSchema = true
 )
 abstract class LocalDatabase : RoomDatabase() {
     abstract fun getDbImageDao(): DbImageDao
+    abstract fun getDbImageFolderDao(): DbImageFolderDao
     abstract fun getDbSubredditDao(): DbSubredditDao
     abstract fun getDbRecentActivityItemDao(): DbRecentActivityItemDao
 
@@ -52,6 +57,7 @@ abstract class LocalDatabase : RoomDatabase() {
                 CoroutineScope(Dispatchers.IO).launch {
                     getDatabase(context).run {
                         prePopulateSubredditDb(getDbSubredditDao())
+                        prePopulateImageFolderDb(getDbImageFolderDao())
                     }
                 }
             }
@@ -61,6 +67,15 @@ abstract class LocalDatabase : RoomDatabase() {
             dbSubredditDao.insertDbSubreddit(
                 DbSubreddit(
                     name = DEFAULT_SUBREDDIT
+                )
+            )
+        }
+
+        private suspend fun prePopulateImageFolderDb(dbImageFolderDao: DbImageFolderDao) {
+            dbImageFolderDao.insertDbImageFolder(
+                DbImageFolder(
+                    name = DEFAULT_FOLDER_NAME,
+                    refreshEnabled = true
                 )
             )
         }
