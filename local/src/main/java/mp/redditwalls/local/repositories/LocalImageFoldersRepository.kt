@@ -14,22 +14,17 @@ class LocalImageFoldersRepository @Inject constructor(
         dbImageFolderDao.insertDbImageFolder(dbImageFolder)
     }
 
-    suspend fun deleteDbImageFolder(name: String) = withContext(Dispatchers.IO) {
-        dbImageFolderDao.deleteDbImageFolder(name)
+    suspend fun deleteDbImageFolderAndDbImages(name: String) = withContext(Dispatchers.IO) {
+        dbImageFolderDao.deleteDbImageFolderAndDbImages(name)
     }
 
-    suspend fun deleteDbImageFolderAndDmImages(name: String) = withContext(Dispatchers.IO) {
-        dbImageFolderDao.deleteDbImageFolderAndDmImages(name)
-    }
-
-    suspend fun updateDbImageRefreshEnabled(name: String, refreshEnabled: Boolean) =
+    suspend fun updateDbImageFolderSettings(
+        name: String,
+        refreshEnabled: Boolean,
+        refreshLocation: WallpaperLocation
+    ) =
         withContext(Dispatchers.IO) {
-            dbImageFolderDao.updateDbImageRefreshEnabled(name, refreshEnabled)
-        }
-
-    suspend fun updateDbImageRefreshLocation(name: String, refreshLocation: WallpaperLocation) =
-        withContext(Dispatchers.IO) {
-            dbImageFolderDao.updateDbImageRefreshLocation(name, refreshLocation.name)
+            dbImageFolderDao.updateDbImageFolderSettings(name, refreshEnabled, refreshLocation.name)
         }
 
     fun getDbImageFolderNames() = dbImageFolderDao.getDbImageFolderNames()
@@ -56,5 +51,9 @@ class LocalImageFoldersRepository @Inject constructor(
                 WallpaperLocation.BOTH.name
             )
         )
+    }
+
+    suspend fun dbImageFolderExists(name: String) = withContext(Dispatchers.IO) {
+        dbImageFolderDao.dbImageFolderExists(name)
     }
 }

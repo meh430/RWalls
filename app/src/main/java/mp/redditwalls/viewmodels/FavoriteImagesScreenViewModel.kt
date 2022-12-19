@@ -8,6 +8,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import mp.redditwalls.design.components.SelectionState
+import mp.redditwalls.domain.usecases.AddFolderUseCase
+import mp.redditwalls.domain.usecases.DeleteFolderUseCase
 import mp.redditwalls.domain.usecases.GetFavoriteImagesUseCase
 import mp.redditwalls.domain.usecases.RemoveFavoriteImagesUseCase
 import mp.redditwalls.domain.usecases.UpdateFavoriteImageUseCase
@@ -23,6 +25,8 @@ class FavoriteImagesScreenViewModel @Inject constructor(
     private val getFavoriteImagesUseCase: GetFavoriteImagesUseCase,
     private val removeFavoriteImagesUseCase: RemoveFavoriteImagesUseCase,
     private val updateFavoriteImageUseCase: UpdateFavoriteImageUseCase,
+    private val addFolderUseCase: AddFolderUseCase,
+    private val deleteFolderUseCase: DeleteFolderUseCase,
     val favoriteImageViewModel: FavoriteImageViewModel
 ) : ViewModel() {
     val uiState = FavoriteImagesScreenUiState()

@@ -12,7 +12,7 @@ import mp.redditwalls.local.models.DbImageFolderWithImages
 
 @Dao
 interface DbImageFolderDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertDbImageFolder(dbImageFolder: DbImageFolder)
 
     @Query("DELETE FROM ImageFolders WHERE name = :name")
@@ -22,16 +22,17 @@ interface DbImageFolderDao {
     suspend fun deleteDbImagesInFolder(name: String)
 
     @Transaction
-    suspend fun deleteDbImageFolderAndDmImages(name: String) {
+    suspend fun deleteDbImageFolderAndDbImages(name: String) {
         deleteDbImageFolder(name)
         deleteDbImagesInFolder(name)
     }
 
-    @Query("UPDATE ImageFolders SET refreshEnabled = :refreshEnabled WHERE name = :name")
-    suspend fun updateDbImageRefreshEnabled(name: String, refreshEnabled: Boolean)
-
-    @Query("UPDATE ImageFolders SET refreshLocation = :refreshLocation WHERE name = :name")
-    suspend fun updateDbImageRefreshLocation(name: String, refreshLocation: String)
+    @Query("UPDATE ImageFolders SET refreshEnabled = :refreshEnabled, refreshLocation = :refreshLocation WHERE name = :name")
+    suspend fun updateDbImageFolderSettings(
+        name: String,
+        refreshEnabled: Boolean,
+        refreshLocation: String
+    )
 
     @Query("SELECT name FROM ImageFolders")
     fun getDbImageFolderNames(): Flow<List<String>>
@@ -50,4 +51,7 @@ interface DbImageFolderDao {
     suspend fun getRandomDbImage(refreshLocations: List<String>): DbImage? {
         return getRandomDbImageFromFolders(getRefreshEnabledDbImageFolderNames(refreshLocations))
     }
+
+    @Query("SELECT EXISTS(SELECT * FROM ImageFolders WHERE name = :name)")
+    suspend fun dbImageFolderExists(name: String): Boolean
 }
