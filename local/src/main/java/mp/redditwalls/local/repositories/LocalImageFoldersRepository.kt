@@ -18,6 +18,10 @@ class LocalImageFoldersRepository @Inject constructor(
         dbImageFolderDao.deleteDbImageFolder(name)
     }
 
+    suspend fun deleteDbImageFolderAndDmImages(name: String) = withContext(Dispatchers.IO) {
+        dbImageFolderDao.deleteDbImageFolderAndDmImages(name)
+    }
+
     suspend fun updateDbImageRefreshEnabled(name: String, refreshEnabled: Boolean) =
         withContext(Dispatchers.IO) {
             dbImageFolderDao.updateDbImageRefreshEnabled(name, refreshEnabled)

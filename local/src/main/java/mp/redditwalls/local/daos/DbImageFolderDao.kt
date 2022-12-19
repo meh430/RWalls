@@ -18,6 +18,15 @@ interface DbImageFolderDao {
     @Query("DELETE FROM ImageFolders WHERE name = :name")
     suspend fun deleteDbImageFolder(name: String)
 
+    @Query("DELETE FROM FavoriteImages WHERE imageFolderName = :name")
+    suspend fun deleteDbImagesInFolder(name: String)
+
+    @Transaction
+    suspend fun deleteDbImageFolderAndDmImages(name: String) {
+        deleteDbImageFolder(name)
+        deleteDbImagesInFolder(name)
+    }
+
     @Query("UPDATE ImageFolders SET refreshEnabled = :refreshEnabled WHERE name = :name")
     suspend fun updateDbImageRefreshEnabled(name: String, refreshEnabled: Boolean)
 
