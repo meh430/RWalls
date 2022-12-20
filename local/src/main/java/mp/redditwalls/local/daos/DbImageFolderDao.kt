@@ -34,7 +34,7 @@ interface DbImageFolderDao {
         refreshLocation: String
     )
 
-    @Query("SELECT name FROM ImageFolders")
+    @Query("SELECT name FROM ImageFolders ORDER BY createdAt ASC")
     fun getDbImageFolderNames(): Flow<List<String>>
 
     @Transaction

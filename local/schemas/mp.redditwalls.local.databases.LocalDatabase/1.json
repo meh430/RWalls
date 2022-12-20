@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "51e5b7ab39266394ec80825c11fb3ca1",
+    "identityHash": "28e1aa895504a99401d9d918d653da38",
     "entities": [
       {
         "tableName": "FavoriteImages",
@@ -74,12 +74,18 @@
       },
       {
         "tableName": "ImageFolders",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `refreshEnabled` INTEGER NOT NULL, `refreshLocation` TEXT NOT NULL, PRIMARY KEY(`name`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, `refreshEnabled` INTEGER NOT NULL, `refreshLocation` TEXT NOT NULL, PRIMARY KEY(`name`))",
         "fields": [
           {
             "fieldPath": "name",
             "columnName": "name",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -208,7 +214,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '51e5b7ab39266394ec80825c11fb3ca1')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '28e1aa895504a99401d9d918d653da38')"
     ]
   }
 }

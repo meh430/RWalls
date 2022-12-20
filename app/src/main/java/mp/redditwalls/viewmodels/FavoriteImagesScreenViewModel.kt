@@ -134,6 +134,12 @@ class FavoriteImagesScreenViewModel @Inject constructor(
         }
     }
 
+    fun createFolder(name: String) {
+        viewModelScope.launch {
+            addFolderUseCase(name)
+        }
+    }
+
     fun setFilter(folderName: String = DEFAULT_FOLDER_NAME, force: Boolean = false) {
         if (folderName == uiState.filter.value && !force) {
             return

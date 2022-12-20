@@ -4,10 +4,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.consumedWindowInsets
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -16,6 +19,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import mp.redditwalls.R
+import mp.redditwalls.design.components.AddFolderDialog
 import mp.redditwalls.design.components.DeleteConfirmationDialog
 import mp.redditwalls.design.components.ErrorState
 import mp.redditwalls.design.components.FilterChipBar
@@ -51,6 +57,7 @@ fun FavoriteImagesScreen(
 ) {
     val context = LocalContext.current
     val systemUiController = rememberSystemUiController()
+    val listState = rememberLazyGridState()
 
     val uiState = vm.uiState
     val uiResult = uiState.uiResult.value
@@ -65,6 +72,7 @@ fun FavoriteImagesScreen(
             )
         }
     }
+    val expandedFab by remember { derivedStateOf { listState.firstVisibleItemIndex == 0 } }
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val topBarColor = if (uiState.selecting.value) {
@@ -75,6 +83,14 @@ fun FavoriteImagesScreen(
     systemUiController.setSystemBarsColor(topBarColor)
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                onClick = { uiState.showAddFolderDialog.value = true },
+                expanded = expandedFab,
+                icon = { Icon(Icons.Filled.Add, "add") },
+                text = { Text("Add Folder") },
+            )
+        },
         topBar = {
             CenterAlignedTopAppBar(
                 modifier = Modifier,
@@ -131,6 +147,11 @@ fun FavoriteImagesScreen(
                 .padding(innerPadding)
                 .consumedWindowInsets(innerPadding)
         ) {
+            AddFolderDialog(
+                show = uiState.showAddFolderDialog.value,
+                onConfirmButtonClick = { vm.createFolder(it) },
+                onDismiss = { uiState.showAddFolderDialog.value = false }
+            )
             ImageFolderRadioDialog(
                 show = uiState.showMoveDialog.value,
                 options = uiState.folderNames,
@@ -155,6 +176,7 @@ fun FavoriteImagesScreen(
                 else -> {
                     ImagesList(
                         modifier = Modifier,
+                        listState = listState,
                         images = uiState.images,
                         isLoading = uiResult is UiResult.Loading,
                         onClick = {
@@ -170,14 +192,16 @@ fun FavoriteImagesScreen(
                         onLikeClick = vm.favoriteImageViewModel::onLikeClick,
                         onLoadMore = {},
                         header = {
-                            FilterChipBar(
-                                modifier = Modifier.padding(horizontal = 4.dp),
-                                filters = uiState.folderNames.map { IconText(text = it) },
-                                initialSelection = 0,
-                                onSelectionChanged = {
-                                    vm.setFilter(uiState.folderNames[it])
-                                }
-                            )
+                            if (uiState.folderNames.isNotEmpty()) {
+                                FilterChipBar(
+                                    modifier = Modifier.padding(horizontal = 4.dp),
+                                    filters = uiState.folderNames.map { IconText(text = it) },
+                                    selection = uiState.folderNames.indexOf(uiState.filter.value),
+                                    onSelectionChanged = {
+                                        vm.setFilter(uiState.folderNames[it])
+                                    }
+                                )
+                            }
                         }
                     )
                 }

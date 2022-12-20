@@ -14,10 +14,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,21 +31,19 @@ data class IconText(
 fun FilterChipBar(
     modifier: Modifier = Modifier,
     filters: List<IconText>,
-    initialSelection: Int = 0,
+    selection: Int = 0,
     onSelectionChanged: (Int) -> Unit
 ) {
-    var selectedChipIndex by remember { mutableStateOf(initialSelection) }
     FlowRow(
         modifier = modifier.fillMaxWidth()
     ) {
         filters.forEachIndexed { index, it ->
-            val selected = selectedChipIndex == index
+            val selected = selection == index
             FilterChip(
                 modifier = Modifier.padding(horizontal = 4.dp),
                 selected = selected,
                 onClick = {
-                    selectedChipIndex = index
-                    onSelectionChanged(selectedChipIndex)
+                    onSelectionChanged(index)
                 },
                 label = { Text(text = it.text) },
                 leadingIcon = {

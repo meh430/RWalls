@@ -15,5 +15,6 @@ data class FavoriteImagesScreenUiState(
     val longPressedIndex: MutableState<Int?> = mutableStateOf(null),
     val showMoveDialog: MutableState<Boolean> = mutableStateOf(false),
     val showDeleteDialog: MutableState<Boolean> = mutableStateOf(false),
+    val showAddFolderDialog: MutableState<Boolean> = mutableStateOf(false),
     val uiResult: MutableState<UiResult> = mutableStateOf(UiResult.Loading())
 )

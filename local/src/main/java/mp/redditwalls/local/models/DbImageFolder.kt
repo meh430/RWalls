@@ -10,6 +10,7 @@ import mp.redditwalls.local.enums.WallpaperLocation
 data class DbImageFolder(
     @PrimaryKey
     val name: String,
+    val createdAt: Long = System.currentTimeMillis(),
     val refreshEnabled: Boolean,
     val refreshLocation: String = WallpaperLocation.BOTH.name
 ) {
