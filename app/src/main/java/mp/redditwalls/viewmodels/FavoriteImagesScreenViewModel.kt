@@ -13,6 +13,7 @@ import mp.redditwalls.domain.usecases.DeleteFolderUseCase
 import mp.redditwalls.domain.usecases.GetFavoriteImagesUseCase
 import mp.redditwalls.domain.usecases.RemoveFavoriteImagesUseCase
 import mp.redditwalls.domain.usecases.UpdateFavoriteImageUseCase
+import mp.redditwalls.domain.usecases.UpdateFolderSettingsUseCase
 import mp.redditwalls.local.models.DbImageFolder.Companion.DEFAULT_FOLDER_NAME
 import mp.redditwalls.models.FavoriteImagesScreenUiState
 import mp.redditwalls.models.ImageItemUiState
@@ -27,6 +28,7 @@ class FavoriteImagesScreenViewModel @Inject constructor(
     private val updateFavoriteImageUseCase: UpdateFavoriteImageUseCase,
     private val addFolderUseCase: AddFolderUseCase,
     private val deleteFolderUseCase: DeleteFolderUseCase,
+    private val updateFolderSettingsUseCase: UpdateFolderSettingsUseCase,
     val favoriteImageViewModel: FavoriteImageViewModel
 ) : ViewModel() {
     val uiState = FavoriteImagesScreenUiState()
