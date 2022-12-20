@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumedWindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
@@ -209,7 +210,7 @@ fun FavoriteImagesScreen(
                         onLoadMore = {},
                         header = {
                             Column {
-                                if (uiState.uiResult.value is UiResult.Success && uiState.folderNames.isNotEmpty()) {
+                                if (uiState.folderNames.isNotEmpty()) {
                                     FilterChipBar(
                                         modifier = Modifier.padding(horizontal = 4.dp),
                                         filters = uiState.folderNames.map { IconText(text = it) },
@@ -218,14 +219,25 @@ fun FavoriteImagesScreen(
                                             vm.setFilter(uiState.folderNames[it])
                                         }
                                     )
-                                    ImageFolderSettingsCard(
-                                        folderName = uiState.filter.value,
-                                        refreshEnabled = uiState.refreshEnabled.value,
-                                        refreshLocation = uiState.refreshLocation.value,
-                                        onRefreshChanged = { vm.updateFolderSettings(refreshEnabled = it) },
-                                        onLocationChange = { vm.updateFolderSettings(refreshLocation = it) },
-                                        onDeleteClick = vm::deleteFolder
-                                    )
+                                    if (uiState.masterRefreshEnabled.value || uiState.filter.value != DEFAULT_FOLDER_NAME) {
+                                        ImageFolderSettingsCard(
+                                            folderName = uiState.filter.value,
+                                            refreshEnabled = uiState.folderRefreshEnabled.value,
+                                            masterRefreshEnabled = uiState.masterRefreshEnabled.value,
+                                            refreshLocation = uiState.refreshLocation.value,
+                                            onRefreshChanged = {
+                                                vm.updateFolderSettings(
+                                                    refreshEnabled = it
+                                                )
+                                            },
+                                            onLocationChange = {
+                                                vm.updateFolderSettings(
+                                                    refreshLocation = it
+                                                )
+                                            },
+                                            onDeleteClick = vm::deleteFolder
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -244,6 +256,7 @@ fun FavoriteImagesScreen(
 private fun ImageFolderSettingsCard(
     folderName: String,
     refreshEnabled: Boolean,
+    masterRefreshEnabled: Boolean,
     refreshLocation: WallpaperLocation,
     onRefreshChanged: (Boolean) -> Unit,
     onLocationChange: (WallpaperLocation) -> Unit,
@@ -251,11 +264,15 @@ private fun ImageFolderSettingsCard(
 ) {
     var showDialog by remember { mutableStateOf(false) }
     OutlinedCard(
-        modifier = Modifier.padding(8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
         shape = MaterialTheme.shapes.large
     ) {
         Column(
-            modifier = Modifier.padding(12.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
@@ -264,18 +281,20 @@ private fun ImageFolderSettingsCard(
                 onSubmit = { onLocationChange(WallpaperLocation.values()[it]) },
                 onDismiss = { showDialog = false }
             )
-            SubtitleSwitch(
-                title = "Enable random periodic refresh for this folder",
-                subtitle = "Periodically refresh the system wallpaper with a random favorite image from this folder",
-                checked = refreshEnabled,
-                onCheckChanged = onRefreshChanged
-            )
-            AnimatedVisibility(refreshEnabled) {
-                ClickableTextItem(
-                    title = "Refresh images on...",
-                    subtitle = refreshLocation.getString(LocalContext.current),
-                    onClick = { showDialog = true }
+            if (masterRefreshEnabled) {
+                SubtitleSwitch(
+                    title = "Enable random periodic refresh for this folder",
+                    subtitle = "Periodically refresh the system wallpaper with a random favorite image from this folder",
+                    checked = refreshEnabled,
+                    onCheckChanged = onRefreshChanged
                 )
+                AnimatedVisibility(refreshEnabled) {
+                    ClickableTextItem(
+                        title = "Refresh images on...",
+                        subtitle = refreshLocation.getString(LocalContext.current),
+                        onClick = { showDialog = true }
+                    )
+                }
             }
             AnimatedVisibility(folderName != DEFAULT_FOLDER_NAME) {
                 Button(onClick = { onDeleteClick(folderName) }) {

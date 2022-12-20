@@ -17,12 +17,13 @@ class GetFavoriteImagesUseCase @Inject constructor(
         paramsFlow,
         localImagesRepository.getDbImagesFlow(),
         localImageFoldersRepository.getDbImageFolderNames(),
-        preferencesRepository.getPreviewResolution()
-    ) { params, _, imageFolderNames, previewResolution ->
+        preferencesRepository.getAllPreferences()
+    ) { params, _, imageFolderNames, preferences ->
         val folder = localImageFoldersRepository.getDbImageFolderWithImages(params.imageFolderName)
         data.copy(
             folderNames = imageFolderNames,
-            imageFolder = folder.toDomainImageFolder(previewResolution)
+            imageFolder = folder.toDomainImageFolder(preferences.previewResolution),
+            masterRefreshEnabled = preferences.refreshEnabled
         )
     }
 

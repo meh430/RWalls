@@ -143,7 +143,7 @@ class FavoriteImagesScreenViewModel @Inject constructor(
     }
 
     fun updateFolderSettings(
-        refreshEnabled: Boolean = uiState.refreshEnabled.value,
+        refreshEnabled: Boolean = uiState.folderRefreshEnabled.value,
         refreshLocation: WallpaperLocation = uiState.refreshLocation.value
     ) {
         viewModelScope.launch {
@@ -154,7 +154,7 @@ class FavoriteImagesScreenViewModel @Inject constructor(
                     refreshLocation = refreshLocation
                 )
             )
-            uiState.refreshEnabled.value = refreshEnabled
+            uiState.folderRefreshEnabled.value = refreshEnabled
             uiState.refreshLocation.value = refreshLocation
         }
     }
@@ -189,6 +189,7 @@ class FavoriteImagesScreenViewModel @Inject constructor(
             getFavoriteImagesUseCase.sharedFlow.collect {
                 uiState.apply {
                     uiResult.value = UiResult.Success()
+                    masterRefreshEnabled.value = it.data?.masterRefreshEnabled == true
                     images.clear()
                     images.addAll(
                         it.data?.imageFolder?.images?.map { domainImage ->
@@ -198,7 +199,7 @@ class FavoriteImagesScreenViewModel @Inject constructor(
                     folderNames.clear()
                     folderNames.addAll(it.data?.folderNames.orEmpty())
                     it.data?.imageFolder?.let { folder ->
-                        refreshEnabled.value = folder.refreshEnabled == true
+                        folderRefreshEnabled.value = folder.refreshEnabled == true
                         refreshLocation.value = folder.refreshLocation
                     }
 

@@ -10,7 +10,8 @@ import mp.redditwalls.local.models.DbImageFolder.Companion.DEFAULT_FOLDER_NAME
 data class FavoriteImagesScreenUiState(
     val images: SnapshotStateList<ImageItemUiState> = mutableStateListOf(),
     val folderNames: SnapshotStateList<String> = mutableStateListOf(),
-    val refreshEnabled: MutableState<Boolean> = mutableStateOf(false),
+    val masterRefreshEnabled: MutableState<Boolean> = mutableStateOf(false),
+    val folderRefreshEnabled: MutableState<Boolean> = mutableStateOf(false),
     val refreshLocation: MutableState<WallpaperLocation> = mutableStateOf(WallpaperLocation.BOTH),
     val selecting: MutableState<Boolean> = mutableStateOf(false),
     val selectedCount: MutableState<Int> = mutableStateOf(0),
