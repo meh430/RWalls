@@ -27,7 +27,7 @@ class WallpaperHelper @Inject constructor(
 
     suspend fun refreshWallpaper(context: Context) {
         (getRandomFavoriteImage(Unit) as? DomainResult.Success)?.data?.let { (home, lock) ->
-            if (home != null && lock != null) {
+            if (home != null) {
                 setImageAsWallpaper(
                     context,
                     home.domainImageUrls[0].url,
@@ -37,6 +37,8 @@ class WallpaperHelper @Inject constructor(
                         refresh = true
                     )
                 )
+            }
+            if (lock != null) {
                 setImageAsWallpaper(
                     context,
                     lock.domainImageUrls[0].url,
