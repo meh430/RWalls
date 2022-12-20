@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import mp.redditwalls.R
 import mp.redditwalls.design.components.ClickableTextItem
+import mp.redditwalls.design.components.ImageFolderRadioDialog
 import mp.redditwalls.design.components.RadioDialog
 import mp.redditwalls.design.components.SubtitleSwitch
 import mp.redditwalls.models.SettingsRadioDialogModel
@@ -76,6 +77,13 @@ fun SettingsScreen(vm: SettingsScreenViewModel = viewModel()) {
                     onDismiss = vm::dismissDialog
                 )
             }
+            ImageFolderRadioDialog(
+                show = uiState.showImageFolderDialog.value,
+                options = uiState.folderNames,
+                onSubmit = { uiState.presetFolderName.value = it },
+                onDismiss = { uiState.showImageFolderDialog.value = false }
+            )
+
             // general
             SettingsSectionTitle(stringResource(R.string.general))
             Spacer(modifier = Modifier.height(spacerHeight))
@@ -99,6 +107,27 @@ fun SettingsScreen(vm: SettingsScreenViewModel = viewModel()) {
                 subtitle = stringResource(uiState.theme.value.stringId),
                 onClick = { vm.showDialog(SettingsRadioDialogModel.ThemeDialog(uiState.theme.value.ordinal)) }
             )
+            Spacer(modifier = Modifier.height(spacerHeight))
+            SubtitleSwitch(
+                modifier = Modifier.padding(horizontal = horizontalPadding),
+                title = "Use a preset folder when liking images",
+                subtitle = "If disabled, everytime an image is liked, the folder will need to be manually selected",
+                checked = uiState.usePresetFolderWhenLiking.value,
+                onCheckChanged = { vm.uiState.usePresetFolderWhenLiking.value = it }
+            )
+            AnimatedVisibility(uiState.usePresetFolderWhenLiking.value) {
+                Column {
+                    Spacer(modifier = Modifier.height(spacerHeight))
+                    ClickableTextItem(
+                        modifier = Modifier.padding(horizontal = horizontalPadding),
+                        title = "Preset folder for liked images",
+                        subtitle = uiState.presetFolderName.value,
+                        onClick = { uiState.showImageFolderDialog.value = true }
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(spacerHeight))
             Spacer(modifier = Modifier.height(spacerHeight))
 
             // home
@@ -124,6 +153,7 @@ fun SettingsScreen(vm: SettingsScreenViewModel = viewModel()) {
                 checked = uiState.verticalSwipeFeedEnabled.value,
                 onCheckChanged = { vm.uiState.verticalSwipeFeedEnabled.value = it }
             )
+            Spacer(modifier = Modifier.height(spacerHeight))
             Spacer(modifier = Modifier.height(spacerHeight))
 
             // refresh

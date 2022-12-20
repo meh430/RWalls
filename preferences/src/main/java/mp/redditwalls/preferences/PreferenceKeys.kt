@@ -13,4 +13,6 @@ internal object PreferenceKeys {
     val VERTICAL_SWIPE_FEED_ENABLED = booleanPreferencesKey("vertical_swipe_feed_enabled")
     val ALLOW_NSFW = booleanPreferencesKey("allow_nsfw")
     val ACCESS_TOKEN = stringPreferencesKey("access_token")
+    val USE_PRESET_FOLDER_FOR_LIKE = booleanPreferencesKey("use_preset_folder_for_like")
+    val PRESET_FOLDER_NAME = stringPreferencesKey("preset_folder_name")
 }

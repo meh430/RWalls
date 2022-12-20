@@ -2,7 +2,9 @@ package mp.redditwalls.models
 
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import mp.redditwalls.R
 import mp.redditwalls.preferences.PreferencesData
 import mp.redditwalls.preferences.enums.DataSetting
@@ -22,7 +24,11 @@ data class SettingsScreenUiState(
     val verticalSwipeFeedEnabled: MutableState<Boolean> = mutableStateOf(false),
     val allowNsfw: MutableState<Boolean> = mutableStateOf(false),
     val currentRadioDialog: MutableState<SettingsRadioDialogModel?> = mutableStateOf(null),
-    val refreshSettingsChanged: MutableState<Boolean> = mutableStateOf(false)
+    val refreshSettingsChanged: MutableState<Boolean> = mutableStateOf(false),
+    val usePresetFolderWhenLiking: MutableState<Boolean> = mutableStateOf(false),
+    val presetFolderName: MutableState<String> = mutableStateOf(""),
+    val showImageFolderDialog: MutableState<Boolean> = mutableStateOf(false),
+    val folderNames: SnapshotStateList<String> = mutableStateListOf()
 )
 
 sealed class SettingsRadioDialogModel(
@@ -80,6 +86,8 @@ fun SettingsScreenUiState.updateState(data: PreferencesData) {
     dataSetting.value = data.dataSetting
     verticalSwipeFeedEnabled.value = data.verticalSwipeFeedEnabled
     allowNsfw.value = data.allowNsfw
+    usePresetFolderWhenLiking.value = data.usePresetFolderWhenLiking
+    presetFolderName.value = data.presetFolderName
 }
 
 fun SettingsScreenUiState.getPreferenceData() = PreferencesData(
@@ -90,5 +98,7 @@ fun SettingsScreenUiState.getPreferenceData() = PreferencesData(
     refreshInterval = refreshInterval.value,
     dataSetting = dataSetting.value,
     verticalSwipeFeedEnabled = verticalSwipeFeedEnabled.value,
-    allowNsfw = allowNsfw.value
+    allowNsfw = allowNsfw.value,
+    usePresetFolderWhenLiking = usePresetFolderWhenLiking.value,
+    presetFolderName = presetFolderName.value
 )

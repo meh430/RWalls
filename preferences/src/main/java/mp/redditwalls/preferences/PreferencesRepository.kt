@@ -66,7 +66,9 @@ class PreferencesRepository @Inject constructor(
                 DataSetting.valueOf(it)
             } ?: DataSetting.BOTH,
             verticalSwipeFeedEnabled = prefs[PreferenceKeys.VERTICAL_SWIPE_FEED_ENABLED] ?: false,
-            allowNsfw = prefs[PreferenceKeys.ALLOW_NSFW] ?: false
+            allowNsfw = prefs[PreferenceKeys.ALLOW_NSFW] ?: false,
+            usePresetFolderWhenLiking = prefs[PreferenceKeys.USE_PRESET_FOLDER_FOR_LIKE] ?: true,
+            presetFolderName = prefs[PreferenceKeys.PRESET_FOLDER_NAME] ?: "default"
         )
     }
 
@@ -120,6 +122,8 @@ class PreferencesRepository @Inject constructor(
                 prefs[PreferenceKeys.DATA_SETTING] = dataSetting.name
                 prefs[PreferenceKeys.VERTICAL_SWIPE_FEED_ENABLED] = verticalSwipeFeedEnabled
                 prefs[PreferenceKeys.ALLOW_NSFW] = allowNsfw
+                prefs[PreferenceKeys.USE_PRESET_FOLDER_FOR_LIKE] = usePresetFolderWhenLiking
+                prefs[PreferenceKeys.PRESET_FOLDER_NAME] = presetFolderName
             }
         }
     }

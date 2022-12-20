@@ -14,5 +14,7 @@ data class PreferencesData(
     val refreshInterval: RefreshInterval = RefreshInterval.TWENTY_FOUR_H,
     val dataSetting: DataSetting = DataSetting.BOTH,
     val verticalSwipeFeedEnabled: Boolean = false,
-    val allowNsfw: Boolean = false
+    val allowNsfw: Boolean = false,
+    val usePresetFolderWhenLiking: Boolean = true,
+    val presetFolderName: String = ""
 )

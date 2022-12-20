@@ -298,7 +298,10 @@ private fun ImageFolderSettingsCard(
                 }
             }
             AnimatedVisibility(folderName != DEFAULT_FOLDER_NAME) {
-                Button(onClick = { onDeleteClick(folderName) }) {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { onDeleteClick(folderName) }
+                ) {
                     Row(
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
