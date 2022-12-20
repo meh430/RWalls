@@ -113,9 +113,10 @@ fun ImageFolderRadioDialog(
 fun WallpaperLocationRadioDialog(
     show: Boolean,
     onSubmit: (Int) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    initialSelection: Int = 0
 ) {
-    var selection by remember { mutableStateOf(0) }
+    var selection by remember(initialSelection) { mutableStateOf(initialSelection) }
     RadioDialog(
         show = show,
         title = "Choose Location",

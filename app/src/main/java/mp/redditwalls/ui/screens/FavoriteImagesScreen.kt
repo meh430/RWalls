@@ -279,7 +279,8 @@ private fun ImageFolderSettingsCard(
             WallpaperLocationRadioDialog(
                 show = showDialog,
                 onSubmit = { onLocationChange(WallpaperLocation.values()[it]) },
-                onDismiss = { showDialog = false }
+                onDismiss = { showDialog = false },
+                initialSelection = refreshLocation.ordinal
             )
             if (masterRefreshEnabled) {
                 SubtitleSwitch(
