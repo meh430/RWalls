@@ -61,7 +61,7 @@ class GetDiscoverUseCase @Inject constructor(
                         previewResolution = preferences.previewResolution,
                         isLiked = dbImageIds.contains(networkImage.id)
                     )
-                }
+                }.filter { !it.postTitle.contains("Net Neutrality", true) }
                 RecommendedSubreddit(
                     subreddit = domainSubreddit,
                     images = images

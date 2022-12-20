@@ -1,19 +1,27 @@
 package mp.redditwalls.ui.screens
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumedWindowInsets
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -21,7 +29,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -32,12 +42,18 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import mp.redditwalls.R
 import mp.redditwalls.design.components.AddFolderDialog
+import mp.redditwalls.design.components.ClickableTextItem
 import mp.redditwalls.design.components.DeleteConfirmationDialog
 import mp.redditwalls.design.components.ErrorState
 import mp.redditwalls.design.components.FilterChipBar
 import mp.redditwalls.design.components.IconText
 import mp.redditwalls.design.components.ImageFolderRadioDialog
 import mp.redditwalls.design.components.OptionsMenu
+import mp.redditwalls.design.components.SubtitleSwitch
+import mp.redditwalls.design.components.WallpaperLocationRadioDialog
+import mp.redditwalls.local.enums.WallpaperLocation
+import mp.redditwalls.local.enums.getString
+import mp.redditwalls.local.models.DbImageFolder.Companion.DEFAULT_FOLDER_NAME
 import mp.redditwalls.models.UiResult
 import mp.redditwalls.ui.components.ImagesList
 import mp.redditwalls.utils.DownloadUtils
@@ -106,7 +122,7 @@ fun FavoriteImagesScreen(
                                     uiState.selectedCount.value
                                 )
                             } else {
-                                stringResource(R.string.favorites)
+                                uiState.filter.value
                             },
                         )
                     }
@@ -192,15 +208,25 @@ fun FavoriteImagesScreen(
                         onLikeClick = vm.favoriteImageViewModel::onLikeClick,
                         onLoadMore = {},
                         header = {
-                            if (uiState.folderNames.isNotEmpty()) {
-                                FilterChipBar(
-                                    modifier = Modifier.padding(horizontal = 4.dp),
-                                    filters = uiState.folderNames.map { IconText(text = it) },
-                                    selection = uiState.folderNames.indexOf(uiState.filter.value),
-                                    onSelectionChanged = {
-                                        vm.setFilter(uiState.folderNames[it])
-                                    }
-                                )
+                            Column {
+                                if (uiState.uiResult.value is UiResult.Success && uiState.folderNames.isNotEmpty()) {
+                                    FilterChipBar(
+                                        modifier = Modifier.padding(horizontal = 4.dp),
+                                        filters = uiState.folderNames.map { IconText(text = it) },
+                                        selection = uiState.folderNames.indexOf(uiState.filter.value),
+                                        onSelectionChanged = {
+                                            vm.setFilter(uiState.folderNames[it])
+                                        }
+                                    )
+                                    ImageFolderSettingsCard(
+                                        folderName = uiState.filter.value,
+                                        refreshEnabled = uiState.refreshEnabled.value,
+                                        refreshLocation = uiState.refreshLocation.value,
+                                        onRefreshChanged = { vm.updateFolderSettings(refreshEnabled = it) },
+                                        onLocationChange = { vm.updateFolderSettings(refreshLocation = it) },
+                                        onDeleteClick = vm::deleteFolder
+                                    )
+                                }
                             }
                         }
                     )
@@ -211,5 +237,58 @@ fun FavoriteImagesScreen(
 
     LaunchedEffect(Unit) {
         vm.setFilter(force = true)
+    }
+}
+
+@Composable
+private fun ImageFolderSettingsCard(
+    folderName: String,
+    refreshEnabled: Boolean,
+    refreshLocation: WallpaperLocation,
+    onRefreshChanged: (Boolean) -> Unit,
+    onLocationChange: (WallpaperLocation) -> Unit,
+    onDeleteClick: (String) -> Unit
+) {
+    var showDialog by remember { mutableStateOf(false) }
+    OutlinedCard(
+        modifier = Modifier.padding(8.dp),
+        shape = MaterialTheme.shapes.large
+    ) {
+        Column(
+            modifier = Modifier.padding(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            WallpaperLocationRadioDialog(
+                show = showDialog,
+                onSubmit = { onLocationChange(WallpaperLocation.values()[it]) },
+                onDismiss = { showDialog = false }
+            )
+            SubtitleSwitch(
+                title = "Enable random periodic refresh for this folder",
+                subtitle = "Periodically refresh the system wallpaper with a random favorite image from this folder",
+                checked = refreshEnabled,
+                onCheckChanged = onRefreshChanged
+            )
+            AnimatedVisibility(refreshEnabled) {
+                ClickableTextItem(
+                    title = "Refresh images on...",
+                    subtitle = refreshLocation.getString(LocalContext.current),
+                    onClick = { showDialog = true }
+                )
+            }
+            AnimatedVisibility(folderName != DEFAULT_FOLDER_NAME) {
+                Button(onClick = { onDeleteClick(folderName) }) {
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(imageVector = Icons.Default.Delete, contentDescription = null)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("Delete this folder")
+                    }
+                }
+            }
+        }
     }
 }

@@ -14,6 +14,7 @@ import mp.redditwalls.domain.usecases.GetFavoriteImagesUseCase
 import mp.redditwalls.domain.usecases.RemoveFavoriteImagesUseCase
 import mp.redditwalls.domain.usecases.UpdateFavoriteImageUseCase
 import mp.redditwalls.domain.usecases.UpdateFolderSettingsUseCase
+import mp.redditwalls.local.enums.WallpaperLocation
 import mp.redditwalls.local.models.DbImageFolder.Companion.DEFAULT_FOLDER_NAME
 import mp.redditwalls.models.FavoriteImagesScreenUiState
 import mp.redditwalls.models.ImageItemUiState
@@ -137,6 +138,31 @@ class FavoriteImagesScreenViewModel @Inject constructor(
     fun createFolder(name: String) {
         viewModelScope.launch {
             addFolderUseCase(name)
+            setFilter(name)
+        }
+    }
+
+    fun updateFolderSettings(
+        refreshEnabled: Boolean = uiState.refreshEnabled.value,
+        refreshLocation: WallpaperLocation = uiState.refreshLocation.value
+    ) {
+        viewModelScope.launch {
+            updateFolderSettingsUseCase(
+                UpdateFolderSettingsUseCase.Params(
+                    folderName = uiState.filter.value,
+                    refreshEnabled = refreshEnabled,
+                    refreshLocation = refreshLocation
+                )
+            )
+            uiState.refreshEnabled.value = refreshEnabled
+            uiState.refreshLocation.value = refreshLocation
+        }
+    }
+
+    fun deleteFolder(name: String) {
+        viewModelScope.launch {
+            setFilter(DEFAULT_FOLDER_NAME)
+            deleteFolderUseCase(name)
         }
     }
 
@@ -171,6 +197,11 @@ class FavoriteImagesScreenViewModel @Inject constructor(
                     )
                     folderNames.clear()
                     folderNames.addAll(it.data?.folderNames.orEmpty())
+                    it.data?.imageFolder?.let { folder ->
+                        refreshEnabled.value = folder.refreshEnabled == true
+                        refreshLocation.value = folder.refreshLocation
+                    }
+
                 }
             }
         }
