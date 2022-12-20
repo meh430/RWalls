@@ -29,6 +29,8 @@ fun TextInputDialog(
     show: Boolean,
     title: String,
     label: String,
+    validPattern: Regex? = null,
+    errorText: String = "",
     confirmButtonText: String = stringResource(R.string.ok),
     cancelButtonText: String = stringResource(R.string.cancel),
     onConfirmButtonClick: (String) -> Unit,
@@ -36,6 +38,7 @@ fun TextInputDialog(
 ) {
     if (show) {
         var text by remember { mutableStateOf("") }
+        var isError by remember { mutableStateOf(false) }
 
         AlertDialog(
             modifier = modifier,
@@ -43,9 +46,11 @@ fun TextInputDialog(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        if (text.isNotBlank()) {
+                        if (validPattern == null || validPattern.matches(text)) {
                             onConfirmButtonClick(text)
                             onDismiss()
+                        } else {
+                            isError = true
                         }
                     }
                 ) {
@@ -67,8 +72,20 @@ fun TextInputDialog(
                 ) {
                     OutlinedTextField(
                         value = text,
-                        label = { Text(label) },
-                        onValueChange = { text = it },
+                        isError = isError,
+                        label = {
+                            Text(
+                                if (isError) {
+                                    errorText
+                                } else {
+                                    label
+                                }
+                            )
+                        },
+                        onValueChange = {
+                            text = it
+                            isError = false
+                        },
                         singleLine = true,
                         maxLines = 1
                     )
@@ -76,6 +93,10 @@ fun TextInputDialog(
             }
         )
     }
+}
+
+private val folderNamePattern by lazy {
+    Regex("""^[a-zA-z0-9]{1,20}${'$'}""")
 }
 
 @Composable
@@ -86,7 +107,10 @@ fun AddFolderDialog(
 ) {
     TextInputDialog(
         show = show,
-        title = "Create a folder", label = "Folder name",
+        title = "Create a folder",
+        label = "Folder name",
+        validPattern = folderNamePattern,
+        errorText = "Must be <20 char. and alphanumeric",
         onConfirmButtonClick = onConfirmButtonClick,
         onDismiss = onDismiss
     )
