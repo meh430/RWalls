@@ -16,7 +16,10 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.filter
 import mp.redditwalls.design.components.EmptyState
 import mp.redditwalls.design.components.ImageCard
+import mp.redditwalls.design.components.ImageFolderRadioDialog
 import mp.redditwalls.design.components.ThreeDotsLoader
 import mp.redditwalls.models.ImageItemUiState
 import mp.redditwalls.models.toImageCardModel
@@ -35,12 +39,27 @@ fun ImagesList(
     contentPadding: PaddingValues = PaddingValues(8.dp),
     images: List<ImageItemUiState>,
     isLoading: Boolean,
+    usePresetFolderWhenLiking: Boolean,
+    folderNames: List<String>,
     onClick: (ImageItemUiState) -> Unit,
     onImageLongPress: (ImageItemUiState) -> Unit,
-    onLikeClick: (ImageItemUiState, Boolean) -> Unit,
+    onLikeClick: (image: ImageItemUiState, isLiked: Boolean, folder: String?) -> Unit,
     onLoadMore: () -> Unit,
     header: (@Composable () -> Unit)? = null
 ) {
+    var showFolderSelectDialog: ImageItemUiState? by remember { mutableStateOf(null) }
+
+    ImageFolderRadioDialog(
+        show = showFolderSelectDialog != null,
+        options = folderNames,
+        onSubmit = { name ->
+            showFolderSelectDialog?.let {
+                onLikeClick(it, !it.isLiked.value, name)
+            }
+        },
+        onDismiss = { showFolderSelectDialog = null }
+    )
+
     LazyVerticalGrid(
         modifier = modifier.fillMaxWidth(),
         state = listState,
@@ -64,7 +83,13 @@ fun ImagesList(
                     .fillMaxWidth()
                     .height(275.dp),
                 imageCardModel = it.toImageCardModel(
-                    onLikeClick = { isLiked -> onLikeClick(it, isLiked) },
+                    onLikeClick = { isLiked ->
+                        if (usePresetFolderWhenLiking || !isLiked) {
+                            onLikeClick(it, isLiked, null)
+                        } else {
+                            showFolderSelectDialog = it
+                        }
+                    },
                     onClick = { onClick(it) },
                     onLongPress = { onImageLongPress(it) }
                 )

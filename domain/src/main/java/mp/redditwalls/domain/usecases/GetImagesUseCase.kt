@@ -6,6 +6,7 @@ import mp.redditwalls.domain.Utils.toTimeFilter
 import mp.redditwalls.domain.models.FeedResult
 import mp.redditwalls.domain.models.toDomainImage
 import mp.redditwalls.domain.models.toDomainSubreddit
+import mp.redditwalls.local.repositories.LocalImageFoldersRepository
 import mp.redditwalls.local.repositories.LocalImagesRepository
 import mp.redditwalls.local.repositories.LocalSubredditsRepository
 import mp.redditwalls.network.models.NetworkImages
@@ -16,15 +17,17 @@ import mp.redditwalls.preferences.enums.SortOrder
 
 class GetImagesUseCase @Inject constructor(
     private val networkImagesRepository: NetworkImagesRepository,
-    private val localImagesRepository: LocalImagesRepository,
     private val networkSubredditsRepository: NetworkSubredditsRepository,
+    private val localImagesRepository: LocalImagesRepository,
+    private val localImageFoldersRepository: LocalImageFoldersRepository,
     private val localSubredditsRepository: LocalSubredditsRepository,
     private val preferencesRepository: PreferencesRepository
 ) : FlowUseCase<FeedResult, GetImagesUseCase.Params>(FeedResult()) {
     override fun execute() = combine(
         paramsFlow,
         preferencesRepository.getAllPreferences(),
-    ) { params, preferences ->
+        localImageFoldersRepository.getDbImageFolderNames()
+    ) { params, preferences, folderNames ->
         val dbSubredditNames =
             localSubredditsRepository.getDbSubredditsList().map { it.name }.toSet()
         val dbImageIds = localImagesRepository.getDbImages().map { it.networkId }.toSet()
@@ -89,7 +92,9 @@ class GetImagesUseCase @Inject constructor(
         FeedResult(
             images = domainImages,
             subreddit = domainSubreddit,
-            nextPageId = networkImages.nextPageId
+            nextPageId = networkImages.nextPageId,
+            folderNames = folderNames,
+            usePresetFolderWhenLiking = preferences.usePresetFolderWhenLiking
         )
     }
 

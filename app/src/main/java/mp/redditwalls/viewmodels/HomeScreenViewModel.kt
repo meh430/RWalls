@@ -77,6 +77,10 @@ class HomeScreenViewModel @Inject constructor(
                                     domainImage.toImageItemItemUiState()
                                 }.orEmpty()
                             )
+                            folderNames.clear()
+                            folderNames.addAll(it.data?.folderNames.orEmpty())
+                            usePresetFolderWhenLiking.value =
+                                it.data?.usePresetFolderWhenLiking == true
                         }
                     }
                 }

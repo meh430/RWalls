@@ -17,7 +17,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -29,6 +32,7 @@ import mp.redditwalls.R
 import mp.redditwalls.activities.SearchSubredditsActivity
 import mp.redditwalls.design.components.DiscoverSubredditCard
 import mp.redditwalls.design.components.ErrorState
+import mp.redditwalls.design.components.ImageFolderRadioDialog
 import mp.redditwalls.design.components.SearchBar
 import mp.redditwalls.design.components.ThreeDotsLoader
 import mp.redditwalls.models.ImageItemUiState
@@ -66,6 +70,8 @@ fun DiscoverScreen(vm: DiscoverScreenViewModel = viewModel()) {
                         DiscoverScreenContent(
                             recommendations = uiState.recommendedSubreddits,
                             recentActivity = uiState.recentActivityItems,
+                            usePresetFolderWhenLiking = uiState.usePresetFolderWhenLiking.value,
+                            folderNames = uiState.folderNames,
                             onSearchClick = {
                                 context.startActivity(
                                     SearchSubredditsActivity.getIntent(context)
@@ -85,12 +91,28 @@ fun DiscoverScreen(vm: DiscoverScreenViewModel = viewModel()) {
 private fun DiscoverScreenContent(
     recommendations: List<RecommendedSubredditUiState>,
     recentActivity: List<RecentActivityItem>,
+    folderNames: List<String>,
+    usePresetFolderWhenLiking: Boolean,
     onSearchClick: () -> Unit,
-    onSaveClick: (SubredditItemUiState, Boolean) -> Unit,
-    onLikeClick: (ImageItemUiState, Boolean) -> Unit
+    onSaveClick: (sub: SubredditItemUiState, isSaved: Boolean) -> Unit,
+    onLikeClick: (image: ImageItemUiState, isLiked: Boolean, folder: String?) -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-
+    var showFolderSelectDialog: ImageItemUiState? by remember { mutableStateOf(null) }
+    ImageFolderRadioDialog(
+        show = showFolderSelectDialog != null,
+        options = folderNames,
+        onSubmit = { name ->
+            showFolderSelectDialog?.let {
+                onLikeClick(
+                    it,
+                    !it.isLiked.value,
+                    name
+                )
+            }
+        },
+        onDismiss = { showFolderSelectDialog = null }
+    )
     LazyColumn {
         item {
             SearchBar(
@@ -122,7 +144,13 @@ private fun DiscoverScreenContent(
                 imageCardModels = it.images.map { image ->
                     image.toImageCardModel(
                         onClick = {},
-                        onLikeClick = { isLiked -> onLikeClick(image, isLiked) },
+                        onLikeClick = { isLiked ->
+                            if (usePresetFolderWhenLiking || !isLiked) {
+                                onLikeClick(image, isLiked, null)
+                            } else {
+                                showFolderSelectDialog = image
+                            }
+                        },
                         onLongPress = {}
                     )
                 },

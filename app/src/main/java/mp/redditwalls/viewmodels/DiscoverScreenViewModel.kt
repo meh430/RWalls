@@ -48,6 +48,8 @@ class DiscoverScreenViewModel @Inject constructor(
                             clear()
                             uiResult.value = UiResult.Success()
                             allowNsfw.value = it.data?.allowNsfw == true
+                            usePresetFolderWhenLiking.value =
+                                it.data?.usePresetFolderWhenLiking == true
                             recommendedSubreddits.addAll(
                                 it.data?.recommendations?.map { recommendation ->
                                     recommendation.toRecommendedSubredditUiState()
@@ -58,6 +60,7 @@ class DiscoverScreenViewModel @Inject constructor(
                                     activity.toRecentActivityItem()
                                 }.orEmpty()
                             )
+                            folderNames.addAll(it.data?.folderNames.orEmpty())
                         }
                     }
                 }

@@ -13,5 +13,7 @@ data class SearchImagesScreenUiState(
     val hasMoreImages: MutableState<Boolean> = mutableStateOf(false),
     val query: MutableState<String> = mutableStateOf(""),
     val sortOrder: MutableState<SortOrder> = mutableStateOf(SortOrder.HOT),
-    val subredditName: MutableState<String?> = mutableStateOf("")
+    val subredditName: MutableState<String?> = mutableStateOf(""),
+    val usePresetFolderWhenLiking: MutableState<Boolean> = mutableStateOf(false),
+    val folderNames: SnapshotStateList<String> = mutableStateListOf()
 )

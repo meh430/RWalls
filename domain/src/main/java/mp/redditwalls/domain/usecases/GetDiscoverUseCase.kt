@@ -7,6 +7,7 @@ import mp.redditwalls.domain.models.RecommendedSubreddit
 import mp.redditwalls.domain.models.toDomainImage
 import mp.redditwalls.domain.models.toDomainRecentActivityItem
 import mp.redditwalls.domain.models.toDomainSubreddit
+import mp.redditwalls.local.repositories.LocalImageFoldersRepository
 import mp.redditwalls.local.repositories.LocalImagesRepository
 import mp.redditwalls.local.repositories.LocalSubredditsRepository
 import mp.redditwalls.local.repositories.RecentActivityRepository
@@ -19,9 +20,10 @@ import mp.redditwalls.preferences.PreferencesRepository
 class GetDiscoverUseCase @Inject constructor(
     private val recommendedSubredditsRepository: RecommendedSubredditsRepository,
     private val networkSubredditsRepository: NetworkSubredditsRepository,
-    private val localSubredditsRepository: LocalSubredditsRepository,
     private val networkImagesRepository: NetworkImagesRepository,
+    private val localSubredditsRepository: LocalSubredditsRepository,
     private val localImagesRepository: LocalImagesRepository,
+    private val localImageFoldersRepository: LocalImageFoldersRepository,
     private val recentActivityRepository: RecentActivityRepository,
     private val preferencesRepository: PreferencesRepository,
 ) : FlowUseCase<DiscoverResult, Unit>(DiscoverResult()) {
@@ -33,8 +35,9 @@ class GetDiscoverUseCase @Inject constructor(
      */
     override fun execute() = combine(
         recentActivityRepository.getLimitedDbRecentActivityItems(RECENT_ACTIVITY_LIMIT),
-        preferencesRepository.getAllPreferences()
-    ) { recentActivities, preferences ->
+        preferencesRepository.getAllPreferences(),
+        localImageFoldersRepository.getDbImageFolderNames()
+    ) { recentActivities, preferences, folderNames ->
         val dbSubredditNames = localSubredditsRepository.getDbSubredditsList().map {
             it.name.uppercase()
         }.toSet()
@@ -74,7 +77,9 @@ class GetDiscoverUseCase @Inject constructor(
         DiscoverResult(
             allowNsfw = preferences.allowNsfw,
             recommendations = recommendations,
-            mostRecentActivities = mostRecentActivities
+            mostRecentActivities = mostRecentActivities,
+            folderNames = folderNames,
+            usePresetFolderWhenLiking = preferences.usePresetFolderWhenLiking
         )
     }
 

@@ -124,6 +124,8 @@ fun HomeScreen(
                     uiState.verticalSwipeFeedEnabled.value -> {
                         ImagePager(
                             images = uiState.images,
+                            folderNames = uiState.folderNames,
+                            usePresetFolderWhenLiking = uiState.usePresetFolderWhenLiking.value,
                             navigateToPost = { uiState.images[it].postUrl.launchBrowser(context) },
                             onImageSetWallpaperClick = vm::setLongPressImage,
                             onLoadMore = { vm.fetchHomeFeed() },
@@ -134,6 +136,8 @@ fun HomeScreen(
                         listState = vm.listState,
                         images = uiState.images,
                         isLoading = uiResult is UiResult.Loading,
+                        folderNames = uiState.folderNames,
+                        usePresetFolderWhenLiking = uiState.usePresetFolderWhenLiking.value,
                         onClick = {},
                         onImageLongPress = vm::setLongPressImage,
                         onLikeClick = vm.favoriteImageViewModel::onLikeClick,

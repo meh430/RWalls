@@ -202,7 +202,7 @@ class FavoriteImagesScreenViewModel @Inject constructor(
                         folderRefreshEnabled.value = folder.refreshEnabled == true
                         refreshLocation.value = folder.refreshLocation
                     }
-
+                    usePresetFolderWhenLiking.value = it.data?.usePresetFolderWhenLiking == true
                 }
             }
         }

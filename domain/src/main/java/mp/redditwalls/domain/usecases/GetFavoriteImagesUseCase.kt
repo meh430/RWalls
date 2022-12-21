@@ -23,7 +23,8 @@ class GetFavoriteImagesUseCase @Inject constructor(
         data.copy(
             folderNames = imageFolderNames,
             imageFolder = folder.toDomainImageFolder(preferences.previewResolution),
-            masterRefreshEnabled = preferences.refreshEnabled
+            masterRefreshEnabled = preferences.refreshEnabled,
+            usePresetFolderWhenLiking = preferences.usePresetFolderWhenLiking
         )
     }
 

@@ -129,7 +129,9 @@ fun SearchImagesScreen(
                                 }
                             )
                         }
-                    }
+                    },
+                    folderNames = uiState.folderNames,
+                    usePresetFolderWhenLiking = uiState.usePresetFolderWhenLiking.value
                 )
             }
         }
