@@ -59,9 +59,11 @@ class SearchImagesScreenViewModel @Inject constructor(
 
         uiState.uiResult.value = UiResult.Loading()
         if (reload) {
-            uiState.images.clear()
             viewModelScope.launch {
-                listState.scrollToItem(0)
+                if (uiState.images.isNotEmpty()) {
+                    listState.scrollToItem(0)
+                }
+                uiState.images.clear()
             }
         }
 
@@ -96,7 +98,8 @@ class SearchImagesScreenViewModel @Inject constructor(
                         }
                         uiState.folderNames.clear()
                         uiState.folderNames.addAll(result.data?.folderNames.orEmpty())
-                        uiState.hasMoreImages.value = result.data?.nextPageId != null
+                        uiState.hasMoreImages.value =
+                            result.data?.nextPageId != null && uiState.images.isNotEmpty()
                     }
                 }
             }

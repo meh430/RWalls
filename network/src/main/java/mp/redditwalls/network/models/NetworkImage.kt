@@ -40,6 +40,10 @@ data class NetworkImage(
                 listOf(
                     GalleryItem.fromPreviewJson(json.getAsJsonObject("preview"))
                 )
+            } else if (json.has("url")) {
+                GalleryItem.fromUrl(json.getString("url"))?.let {
+                    listOf(it)
+                }
             } else {
                 null
             }
@@ -58,7 +62,7 @@ data class NetworkImage(
                 }
             }
 
-            galleryItems?.let {
+            galleryItems.takeIf { it?.isNotEmpty() == true }?.let {
                 NetworkImage(
                     id = "t3_" + json.getString("id"),
                     postTitle = json.getString("title"),

@@ -19,6 +19,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import mp.redditwalls.R
 import mp.redditwalls.activities.SearchImagesActivity
 import mp.redditwalls.activities.SearchImagesActivityArguments
+import mp.redditwalls.design.components.EmptyState
 import mp.redditwalls.design.components.ErrorState
 import mp.redditwalls.design.components.ThreeDotsLoader
 import mp.redditwalls.models.UiResult
@@ -57,10 +58,11 @@ fun SavedSubredditScreen(vm: SavedSubredditsScreenViewModel = viewModel()) {
                 .padding(innerPadding)
                 .consumedWindowInsets(innerPadding)
         ) {
-            when (uiResult) {
-                is UiResult.Error -> ErrorState(errorMessage = uiResult.errorMessage.orEmpty())
-                is UiResult.Loading -> ThreeDotsLoader()
-                is UiResult.Success -> SubredditsList(
+            when {
+                uiResult is UiResult.Error -> ErrorState(errorMessage = uiResult.errorMessage.orEmpty())
+                uiResult is UiResult.Loading -> ThreeDotsLoader()
+                uiResult is UiResult.Success && subreddits.isEmpty() -> EmptyState()
+                else -> SubredditsList(
                     subreddits = subreddits,
                     onClick = {
                         SearchImagesActivity.launch(

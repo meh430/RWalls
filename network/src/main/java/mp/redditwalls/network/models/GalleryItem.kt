@@ -10,6 +10,10 @@ data class GalleryItem(
     val sourceUrl: String = "",
 ) {
     companion object {
+        private val imageUrlPattern by lazy {
+            Regex("""^.*\.(jpg|png|jpeg)${'$'}""")
+        }
+
         fun fromGalleryJson(json: JsonObject): GalleryItem {
             val sourceJson = json.getAsJsonObject("s")
             val resolutions = json.getAsJsonArray("p")
@@ -46,5 +50,11 @@ data class GalleryItem(
                 sourceUrl = sourceJson.getString("url").cleanImageUrl()
             )
         }
+
+        fun fromUrl(url: String) = GalleryItem(
+            lowQualityUrl = url,
+            mediumQualityUrl = url,
+            sourceUrl = url
+        ).takeIf { imageUrlPattern.matches(url) }
     }
 }

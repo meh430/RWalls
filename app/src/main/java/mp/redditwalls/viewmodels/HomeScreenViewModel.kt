@@ -42,9 +42,11 @@ class HomeScreenViewModel @Inject constructor(
         }
         uiState.uiResult.value = UiResult.Loading()
         if (reload) {
-            uiState.images.clear()
             viewModelScope.launch {
-                listState.scrollToItem(0)
+                if (uiState.images.isNotEmpty()) {
+                    listState.scrollToItem(0)
+                }
+                uiState.images.clear()
             }
         }
         viewModelScope.launch {
@@ -64,7 +66,8 @@ class HomeScreenViewModel @Inject constructor(
     private fun subscribeToHomeFeed() {
         viewModelScope.launch {
             getHomeFeedUseCase.sharedFlow.collect {
-                uiState.hasMoreImages.value = it.data?.nextPageId != null
+                uiState.hasMoreImages.value =
+                    it.data?.nextPageId != null && uiState.images.isNotEmpty()
                 uiState.apply {
                     when (it) {
                         is DomainResult.Error -> {
