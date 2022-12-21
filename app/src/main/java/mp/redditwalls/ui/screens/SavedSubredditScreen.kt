@@ -13,9 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import mp.redditwalls.R
+import mp.redditwalls.activities.SearchImagesActivity
+import mp.redditwalls.activities.SearchImagesActivityArguments
 import mp.redditwalls.design.components.ErrorState
 import mp.redditwalls.design.components.ThreeDotsLoader
 import mp.redditwalls.models.UiResult
@@ -24,7 +27,9 @@ import mp.redditwalls.viewmodels.SavedSubredditsScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun SavedSubredditScreens(vm: SavedSubredditsScreenViewModel = viewModel()) {
+fun SavedSubredditScreen(vm: SavedSubredditsScreenViewModel = viewModel()) {
+    val context = LocalContext.current
+
     val uiResult = vm.uiState.uiResult
     val subreddits = vm.uiState.subreddits
 
@@ -57,7 +62,14 @@ fun SavedSubredditScreens(vm: SavedSubredditsScreenViewModel = viewModel()) {
                 is UiResult.Loading -> ThreeDotsLoader()
                 is UiResult.Success -> SubredditsList(
                     subreddits = subreddits,
-                    onClick = {},
+                    onClick = {
+                        SearchImagesActivity.launch(
+                            context,
+                            SearchImagesActivityArguments(
+                                subreddit = it.name
+                            )
+                        )
+                    },
                     onSaveChanged = vm.savedSubredditViewModel::onSaveClick
                 )
             }

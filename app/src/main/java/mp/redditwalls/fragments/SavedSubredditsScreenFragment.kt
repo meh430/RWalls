@@ -8,7 +8,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import dagger.hilt.android.AndroidEntryPoint
 import mp.redditwalls.design.RwTheme
-import mp.redditwalls.ui.screens.SavedSubredditScreens
+import mp.redditwalls.ui.screens.SavedSubredditScreen
 
 @AndroidEntryPoint
 class SavedSubredditsScreenFragment : Fragment() {
@@ -20,7 +20,7 @@ class SavedSubredditsScreenFragment : Fragment() {
         setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         setContent {
             RwTheme {
-                SavedSubredditScreens()
+                SavedSubredditScreen()
             }
         }
     }

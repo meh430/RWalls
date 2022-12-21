@@ -1,5 +1,6 @@
 package mp.redditwalls.design.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -35,6 +36,7 @@ fun DiscoverSubredditCard(
     isSaved: Boolean,
     imageCardModels: List<ImageCardModel>,
     onSaveChanged: (Boolean) -> Unit,
+    onClick: () -> Unit
 ) {
     val outerPadding = 16.dp
     Column(modifier = modifier) {
@@ -47,7 +49,7 @@ fun DiscoverSubredditCard(
                 modifier = Modifier.padding(
                     top = outerPadding,
                     start = outerPadding
-                ),
+                ).clickable(onClick = onClick),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 SubredditIcon(
@@ -117,7 +119,8 @@ fun DiscoverSubredditCardPreview() {
                                 onLongPress = {}
                             )
                         },
-                        onSaveChanged = { isSaved = it }
+                        onSaveChanged = { isSaved = it },
+                        onClick = {}
                     )
                 }
             }

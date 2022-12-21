@@ -29,6 +29,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import mp.redditwalls.R
+import mp.redditwalls.activities.SearchImagesActivity
+import mp.redditwalls.activities.SearchImagesActivityArguments
 import mp.redditwalls.activities.SearchSubredditsActivity
 import mp.redditwalls.design.components.DiscoverSubredditCard
 import mp.redditwalls.design.components.ErrorState
@@ -73,9 +75,7 @@ fun DiscoverScreen(vm: DiscoverScreenViewModel = viewModel()) {
                             usePresetFolderWhenLiking = uiState.usePresetFolderWhenLiking.value,
                             folderNames = uiState.folderNames,
                             onSearchClick = {
-                                context.startActivity(
-                                    SearchSubredditsActivity.getIntent(context)
-                                )
+                                SearchSubredditsActivity.launch(context)
                             },
                             onSaveClick = vm.savedSubredditViewModel::onSaveClick,
                             onLikeClick = vm.favoriteImageViewModel::onLikeClick
@@ -97,6 +97,7 @@ private fun DiscoverScreenContent(
     onSaveClick: (sub: SubredditItemUiState, isSaved: Boolean) -> Unit,
     onLikeClick: (image: ImageItemUiState, isLiked: Boolean, folder: String?) -> Unit
 ) {
+    val context = LocalContext.current
     val interactionSource = remember { MutableInteractionSource() }
     var showFolderSelectDialog: ImageItemUiState? by remember { mutableStateOf(null) }
     ImageFolderRadioDialog(
@@ -154,7 +155,15 @@ private fun DiscoverScreenContent(
                         onLongPress = {}
                     )
                 },
-                onSaveChanged = { isSaved -> onSaveClick(it.subredditItemUiState, isSaved) }
+                onSaveChanged = { isSaved -> onSaveClick(it.subredditItemUiState, isSaved) },
+                onClick = {
+                    SearchImagesActivity.launch(
+                        context,
+                        SearchImagesActivityArguments(
+                            subreddit = it.subredditItemUiState.name
+                        )
+                    )
+                }
             )
         }
 

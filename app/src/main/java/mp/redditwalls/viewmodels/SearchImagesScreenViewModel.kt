@@ -94,6 +94,8 @@ class SearchImagesScreenViewModel @Inject constructor(
                             uiState.subredditItemUiState.value =
                                 result.data?.subreddit?.toSubredditItemUiState()
                         }
+                        uiState.folderNames.clear()
+                        uiState.folderNames.addAll(result.data?.folderNames.orEmpty())
                         uiState.hasMoreImages.value = result.data?.nextPageId != null
                     }
                 }

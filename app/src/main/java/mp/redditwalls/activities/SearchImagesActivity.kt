@@ -34,11 +34,15 @@ class SearchImagesActivity : AppCompatActivity() {
     companion object {
         private const val SEARCH_IMAGES_ACTIVITY_ARGUMENTS = "SEARCH_IMAGES_ACTIVITY_ARGUMENTS"
 
-        fun getIntent(
+        fun launch(
             context: Context,
             arguments: SearchImagesActivityArguments
-        ) = Intent(context, SearchImagesActivity::class.java).apply {
-            putExtra(SEARCH_IMAGES_ACTIVITY_ARGUMENTS, arguments)
+        ) {
+            context.startActivity(
+                Intent(context, SearchImagesActivity::class.java).apply {
+                    putExtra(SEARCH_IMAGES_ACTIVITY_ARGUMENTS, arguments)
+                }
+            )
         }
     }
 }

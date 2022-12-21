@@ -93,13 +93,9 @@ fun SearchSubredditsScreen(vm: SearchSubredditsScreenViewModel = viewModel()) {
                         title = getSearchAllString(uiState.query.value),
                         date = "",
                         onClick = {
-                            context.startActivity(
-                                SearchImagesActivity.getIntent(
-                                    context,
-                                    SearchImagesActivityArguments(
-                                        query = uiState.query.value
-                                    )
-                                )
+                            SearchImagesActivity.launch(
+                                context,
+                                SearchImagesActivityArguments(query = uiState.query.value)
                             )
                         }
                     )
@@ -128,13 +124,9 @@ fun SearchSubredditsScreen(vm: SearchSubredditsScreenViewModel = viewModel()) {
                 subredditListItems(
                     subreddits = uiState.searchResults,
                     onClick = { subreddit ->
-                        context.startActivity(
-                            SearchImagesActivity.getIntent(
-                                context,
-                                SearchImagesActivityArguments(
-                                    subreddit = subreddit.name
-                                )
-                            )
+                        SearchImagesActivity.launch(
+                            context,
+                            SearchImagesActivityArguments(subreddit = subreddit.name)
                         )
                     },
                     onSaveChanged = vm.savedSubredditViewModel::onSaveClick

@@ -21,6 +21,10 @@ class SearchSubredditsActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun getIntent(context: Context) = Intent(context, SearchSubredditsActivity::class.java)
+        fun launch(context: Context) {
+            context.startActivity(
+                Intent(context, SearchSubredditsActivity::class.java)
+            )
+        }
     }
 }
