@@ -28,15 +28,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import mp.redditwalls.R
 import mp.redditwalls.activities.SearchImagesActivity
 import mp.redditwalls.activities.SearchImagesActivityArguments
-import mp.redditwalls.activities.SearchSubredditsActivity
 import mp.redditwalls.design.components.DiscoverSubredditCard
 import mp.redditwalls.design.components.ErrorState
 import mp.redditwalls.design.components.ImageFolderRadioDialog
 import mp.redditwalls.design.components.SearchBar
 import mp.redditwalls.design.components.ThreeDotsLoader
+import mp.redditwalls.fragments.DiscoverScreenFragmentDirections
 import mp.redditwalls.models.ImageItemUiState
 import mp.redditwalls.models.RecentActivityItem
 import mp.redditwalls.models.RecommendedSubredditUiState
@@ -49,11 +50,12 @@ import mp.redditwalls.viewmodels.DiscoverScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun DiscoverScreen(vm: DiscoverScreenViewModel = viewModel()) {
+fun DiscoverScreen(
+    vm: DiscoverScreenViewModel = viewModel(),
+    navController: NavController
+) {
     val uiState = vm.uiState
     val uiResult = uiState.uiResult.value
-
-    val context = LocalContext.current
 
     Scaffold(
         content = { innerPadding ->
@@ -75,7 +77,9 @@ fun DiscoverScreen(vm: DiscoverScreenViewModel = viewModel()) {
                             usePresetFolderWhenLiking = uiState.usePresetFolderWhenLiking.value,
                             folderNames = uiState.folderNames,
                             onSearchClick = {
-                                SearchSubredditsActivity.launch(context)
+                                navController.navigate(
+                                    DiscoverScreenFragmentDirections.actionNavigationDiscoverScreenToNavigationSearchSubredditsScreen()
+                                )
                             },
                             onSaveClick = vm.savedSubredditViewModel::onSaveClick,
                             onLikeClick = vm.favoriteImageViewModel::onLikeClick

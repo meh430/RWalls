@@ -1,6 +1,5 @@
 package mp.redditwalls.ui.screens
 
-import android.app.Activity
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
@@ -25,6 +24,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 import mp.redditwalls.activities.SearchImagesActivity
 import mp.redditwalls.activities.SearchImagesActivityArguments
@@ -44,7 +44,10 @@ import mp.redditwalls.viewmodels.SearchSubredditsScreenViewModel
     ExperimentalComposeUiApi::class
 )
 @Composable
-fun SearchSubredditsScreen(vm: SearchSubredditsScreenViewModel = viewModel()) {
+fun SearchSubredditsScreen(
+    vm: SearchSubredditsScreenViewModel = viewModel(),
+    navController: NavController
+) {
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -61,7 +64,7 @@ fun SearchSubredditsScreen(vm: SearchSubredditsScreenViewModel = viewModel()) {
                 leadingIcon = {
                     BackButton(
                         modifier = Modifier.padding(start = 16.dp),
-                        onClick = { (context as? Activity)?.finish() }
+                        onClick = navController::popBackStack
                     )
                 },
                 trailingIcon = if (uiState.query.value.isEmpty() || !WindowInsets.isImeVisible) {

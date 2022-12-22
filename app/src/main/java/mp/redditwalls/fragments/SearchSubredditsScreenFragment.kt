@@ -9,10 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import mp.redditwalls.design.RwTheme
-import mp.redditwalls.ui.screens.DiscoverScreen
+import mp.redditwalls.ui.screens.SearchSubredditsScreen
 
 @AndroidEntryPoint
-class DiscoverScreenFragment : Fragment() {
+class SearchSubredditsScreenFragment : Fragment() {
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -21,7 +22,9 @@ class DiscoverScreenFragment : Fragment() {
         setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         setContent {
             RwTheme {
-                DiscoverScreen(navController = findNavController())
+                SearchSubredditsScreen(
+                    navController = findNavController()
+                )
             }
         }
     }

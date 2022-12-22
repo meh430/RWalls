@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.navigation.ActivityNavigator
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -37,8 +38,14 @@ class MainActivity : AppCompatActivity() {
                 onNavDestinationSelected(navController, id, index)
             }
             navController.addOnDestinationChangedListener { _, destination, _ ->
-                mainViewModel.selectedItem = destination.id
-                selectedItem = destination.id
+                if (destination.id == R.id.navigation_search_subreddits_screen) {
+                    binding.bottomNavBar.isVisible = false
+                } else {
+                    binding.bottomNavBar.isVisible = true
+                    mainViewModel.selectedItem = destination.id
+                    selectedItem = destination.id
+                }
+
             }
         }
     }

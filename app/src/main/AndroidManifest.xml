@@ -52,13 +52,6 @@
         </activity>
 
         <activity
-            android:name=".activities.SearchSubredditsActivity"
-            android:exported="true"
-            android:label="Search Subreddits"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.RedditWalls.NoActionBar" />
-
-        <activity
             android:name=".activities.SearchImagesActivity"
             android:exported="true"
             android:label="Search Images"
