@@ -143,8 +143,8 @@ fun SearchSubredditsScreen(vm: SearchSubredditsScreenViewModel = viewModel()) {
                 }
                 recentActivityListItems(
                     modifier = Modifier.padding(0.dp),
-                    recentActivityItems = uiState.searchHistory,
-                    onClick = {}
+                    context = context,
+                    recentActivityItems = uiState.searchHistory
                 )
             }
         }

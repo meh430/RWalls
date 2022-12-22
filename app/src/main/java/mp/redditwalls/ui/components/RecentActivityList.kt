@@ -1,5 +1,6 @@
 package mp.redditwalls.ui.components
 
+import android.content.Context
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,7 +10,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import mp.redditwalls.activities.SearchImagesActivity
+import mp.redditwalls.activities.SearchImagesActivityArguments
 import mp.redditwalls.models.RecentActivityItem
 
 @Composable
@@ -20,6 +24,7 @@ fun RecentActivityList(
     recentActivityItems: List<RecentActivityItem>,
     onClick: (RecentActivityItem) -> Unit
 ) {
+    val context = LocalContext.current
     LazyColumn(
         modifier = modifier,
         state = listState,
@@ -27,7 +32,8 @@ fun RecentActivityList(
     ) {
         recentActivityListItems(
             recentActivityItems = recentActivityItems,
-            onClick = onClick
+            onClick = onClick,
+            context = context
         )
     }
 }
@@ -38,14 +44,39 @@ fun LazyListScope.recentActivityListItems(
         start = 16.dp,
         end = 16.dp
     ),
+    context: Context,
     recentActivityItems: List<RecentActivityItem>,
-    onClick: (RecentActivityItem) -> Unit
+    onClick: (RecentActivityItem) -> Unit = { recentActivity ->
+        when (recentActivity) {
+            is RecentActivityItem.RefreshWallpaperActivityItem -> TODO()
+            is RecentActivityItem.SearchAllActivityItem -> SearchImagesActivity.launch(
+                context,
+                SearchImagesActivityArguments(
+                    query = recentActivity.query
+                )
+            )
+            is RecentActivityItem.SearchSubredditActivityItem -> SearchImagesActivity.launch(
+                context,
+                SearchImagesActivityArguments(
+                    query = recentActivity.query,
+                    subreddit = recentActivity.subredditName
+                )
+            )
+            is RecentActivityItem.SetWallpaperActivityItem -> TODO()
+            is RecentActivityItem.VisitSubredditActivityItem -> SearchImagesActivity.launch(
+                context,
+                SearchImagesActivityArguments(
+                    subreddit = recentActivity.subredditName
+                )
+            )
+        }
+    }
 ) {
-    items(recentActivityItems) {
+    items(recentActivityItems) { recentActivityItem ->
         RecentActivityCard(
             modifier = modifier,
-            recentActivityItem = it,
-            onClick = { onClick(it) }
+            recentActivityItem = recentActivityItem,
+            onClick = { onClick(recentActivityItem) }
         )
     }
 }

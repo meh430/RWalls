@@ -43,7 +43,7 @@ import mp.redditwalls.models.RecommendedSubredditUiState
 import mp.redditwalls.models.SubredditItemUiState
 import mp.redditwalls.models.UiResult
 import mp.redditwalls.models.toImageCardModel
-import mp.redditwalls.ui.components.RecentActivityCard
+import mp.redditwalls.ui.components.recentActivityListItems
 import mp.redditwalls.utils.toFriendlyCount
 import mp.redditwalls.viewmodels.DiscoverScreenViewModel
 
@@ -193,17 +193,9 @@ private fun DiscoverScreenContent(
                 }
             }
         }
-        items(recentActivity) {
-            val recentActivityItemModifier = Modifier.padding(
-                bottom = 16.dp,
-                start = 16.dp,
-                end = 16.dp
-            )
-            RecentActivityCard(
-                modifier = recentActivityItemModifier,
-                recentActivityItem = it,
-                onClick = {}
-            )
-        }
+        recentActivityListItems(
+            context = context,
+            recentActivityItems = recentActivity
+        )
     }
 }
