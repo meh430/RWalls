@@ -33,16 +33,17 @@ fun RecentActivityList(
 }
 
 fun LazyListScope.recentActivityListItems(
+    modifier: Modifier = Modifier.padding(
+        bottom = 16.dp,
+        start = 16.dp,
+        end = 16.dp
+    ),
     recentActivityItems: List<RecentActivityItem>,
     onClick: (RecentActivityItem) -> Unit
 ) {
     items(recentActivityItems) {
         RecentActivityCard(
-            modifier = Modifier.padding(
-                bottom = 16.dp,
-                start = 16.dp,
-                end = 16.dp
-            ),
+            modifier = modifier,
             recentActivityItem = it,
             onClick = { onClick(it) }
         )

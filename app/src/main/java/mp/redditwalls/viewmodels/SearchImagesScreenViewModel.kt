@@ -4,9 +4,12 @@ import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.Date
 import javax.inject.Inject
 import kotlinx.coroutines.launch
+import mp.redditwalls.domain.models.DomainRecentActivityItem
 import mp.redditwalls.domain.models.DomainResult
+import mp.redditwalls.domain.usecases.AddRecentActivityItemUseCase
 import mp.redditwalls.domain.usecases.GetImagesUseCase
 import mp.redditwalls.models.SearchImagesScreenUiState
 import mp.redditwalls.models.UiResult
@@ -17,6 +20,7 @@ import mp.redditwalls.preferences.enums.SortOrder
 @HiltViewModel
 class SearchImagesScreenViewModel @Inject constructor(
     private val getImagesUseCase: GetImagesUseCase,
+    private val addRecentActivityItemUseCase: AddRecentActivityItemUseCase,
     val favoriteImageViewModel: FavoriteImageViewModel,
     val savedSubredditViewModel: SavedSubredditViewModel
 ) : ViewModel() {
@@ -41,6 +45,7 @@ class SearchImagesScreenViewModel @Inject constructor(
             query.value = q.orEmpty()
         }
         fetchImages(true)
+        addToSearchHistory(visit = true)
     }
 
     fun onQueryChanged(query: String) {
@@ -77,6 +82,7 @@ class SearchImagesScreenViewModel @Inject constructor(
                 )
             )
         }
+        addToSearchHistory()
     }
 
     private fun subscribeToImages() {
@@ -101,6 +107,43 @@ class SearchImagesScreenViewModel @Inject constructor(
                         uiState.hasMoreImages.value =
                             result.data?.nextPageId != null && uiState.images.isNotEmpty()
                     }
+                }
+            }
+        }
+    }
+
+    private fun addToSearchHistory(visit: Boolean = false) {
+        viewModelScope.launch {
+            val query = uiState.query.value.takeIf { it.isNotBlank() }
+            val subreddit = uiState.subredditName.value
+            when {
+                !subreddit.isNullOrBlank() && visit -> {
+                    addRecentActivityItemUseCase(
+                        DomainRecentActivityItem.DomainVisitSubredditActivityItem(
+                            dbId = 0,
+                            createdAt = Date(),
+                            subredditName = subreddit,
+                        )
+                    )
+                }
+                !query.isNullOrBlank() && !subreddit.isNullOrBlank() -> {
+                    addRecentActivityItemUseCase(
+                        DomainRecentActivityItem.DomainSearchSubredditActivityItem(
+                            dbId = 0,
+                            createdAt = Date(),
+                            subredditName = subreddit,
+                            query = query
+                        )
+                    )
+                }
+                !query.isNullOrBlank() && !visit -> {
+                    addRecentActivityItemUseCase(
+                        DomainRecentActivityItem.DomainSearchAllActivityItem(
+                            dbId = 0,
+                            createdAt = Date(),
+                            query = query
+                        )
+                    )
                 }
             }
         }

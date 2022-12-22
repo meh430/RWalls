@@ -2,7 +2,7 @@ package mp.redditwalls.ui.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Explore
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.History
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -32,14 +32,14 @@ fun RecentActivityCard(
             )
             is RecentActivityItem.SearchAllActivityItem -> TextRecentActivityCard(
                 modifier = modifier,
-                icon = Icons.Default.Search,
+                icon = Icons.Default.History,
                 title = "Searched for images with '${it.query}'",
                 date = Utils.getFormattedDate(it.createdAt),
                 onClick = onClick
             )
             is RecentActivityItem.SearchSubredditActivityItem -> TextRecentActivityCard(
                 modifier = modifier,
-                icon = Icons.Default.Search,
+                icon = Icons.Default.History,
                 title = "Searched for images with '${it.query}'",
                 subTitle = "in r/${it.subredditName}",
                 date = Utils.getFormattedDate(it.createdAt),

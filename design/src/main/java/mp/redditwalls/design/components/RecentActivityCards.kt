@@ -152,6 +152,7 @@ fun TextRecentActivityCard(
                     overflow = TextOverflow.Ellipsis
                 )
             }
+            /**
             Spacer(modifier = Modifier.height(2.dp))
             if (date.isNotEmpty()) {
                 Text(
@@ -163,6 +164,7 @@ fun TextRecentActivityCard(
                     overflow = TextOverflow.Ellipsis
                 )
             }
+             */
         }
     }
 }
