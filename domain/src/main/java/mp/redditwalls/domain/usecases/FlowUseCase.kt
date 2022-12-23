@@ -25,6 +25,7 @@ abstract class FlowUseCase<D : Any, P : Any>(private val initialData: D) {
         data = initialData
     }
 
+    // Make sure to subscribe before calling this!
     fun init(coroutineScope: CoroutineScope) {
         coroutineScope.launch {
             initialized = true

@@ -14,23 +14,20 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.flow.filter
 import mp.redditwalls.design.components.EmptyState
 import mp.redditwalls.design.components.ImageCard
 import mp.redditwalls.design.components.ImageFolderRadioDialog
 import mp.redditwalls.design.components.ThreeDotsLoader
 import mp.redditwalls.models.ImageItemUiState
 import mp.redditwalls.models.toImageCardModel
+import mp.redditwalls.utils.OnBottomReached
 
 @Composable
 fun ImagesList(
@@ -130,25 +127,5 @@ fun ImagesList(
     }
     listState.OnBottomReached {
         onLoadMore()
-    }
-}
-
-@Composable
-fun LazyGridState.OnBottomReached(
-    buffer: Int = 6,
-    onLoadMore: () -> Unit
-) {
-    val shouldLoadMore = remember {
-        derivedStateOf {
-            val lastVisibleItem = layoutInfo.visibleItemsInfo.lastOrNull()
-                ?: return@derivedStateOf true
-            lastVisibleItem.index >= layoutInfo.totalItemsCount - 1 - buffer
-        }
-    }
-
-    LaunchedEffect(shouldLoadMore) {
-        snapshotFlow { shouldLoadMore.value }.filter { it }.collect {
-            onLoadMore()
-        }
     }
 }

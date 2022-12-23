@@ -85,7 +85,7 @@ class SearchSubredditsScreenViewModel @Inject constructor(
                         uiResult.value = UiResult.Success()
                         searchHistory.clear()
                         searchHistory.addAll(
-                            result.data?.map { it.toRecentActivityItem() }.orEmpty()
+                            result.data?.recentActivity?.map { it.toRecentActivityItem() }.orEmpty()
                         )
                     }
                 }

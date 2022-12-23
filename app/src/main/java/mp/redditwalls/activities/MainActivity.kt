@@ -29,6 +29,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val secondaryDestinations = setOf(
+            R.id.navigation_search_subreddits_screen,
+            R.id.navigation_recent_activity_screen
+        )
+
         binding.bottomNavBar.selectedItem = mainViewModel.selectedItem
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         binding.bottomNavBar.apply {
@@ -38,7 +43,7 @@ class MainActivity : AppCompatActivity() {
                 onNavDestinationSelected(navController, id, index)
             }
             navController.addOnDestinationChangedListener { _, destination, _ ->
-                if (destination.id == R.id.navigation_search_subreddits_screen) {
+                if (destination.id in secondaryDestinations) {
                     binding.bottomNavBar.isVisible = false
                 } else {
                     binding.bottomNavBar.isVisible = true

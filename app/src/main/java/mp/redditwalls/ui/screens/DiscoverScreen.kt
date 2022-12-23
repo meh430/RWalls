@@ -72,6 +72,7 @@ fun DiscoverScreen(
                     is UiResult.Loading -> ThreeDotsLoader()
                     is UiResult.Success -> {
                         DiscoverScreenContent(
+                            navController = navController,
                             recommendations = uiState.recommendedSubreddits,
                             recentActivity = uiState.recentActivityItems,
                             usePresetFolderWhenLiking = uiState.usePresetFolderWhenLiking.value,
@@ -93,6 +94,7 @@ fun DiscoverScreen(
 
 @Composable
 private fun DiscoverScreenContent(
+    navController: NavController,
     recommendations: List<RecommendedSubredditUiState>,
     recentActivity: List<RecentActivityItem>,
     folderNames: List<String>,
@@ -186,7 +188,13 @@ private fun DiscoverScreenContent(
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    TextButton(onClick = { /*TODO*/ }) {
+                    TextButton(
+                        onClick = {
+                            navController.navigate(
+                                DiscoverScreenFragmentDirections.actionNavigationDiscoverScreenToNavigationRecentActivityScreen()
+                            )
+                        }
+                    ) {
                         Text(
                             text = stringResource(id = R.string.view_more),
                             textAlign = TextAlign.End,

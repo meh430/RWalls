@@ -13,8 +13,16 @@ import android.util.TypedValue
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.annotation.IdRes
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -22,6 +30,7 @@ import java.text.DecimalFormat
 import kotlin.math.floor
 import kotlin.math.log10
 import kotlin.math.pow
+import kotlinx.coroutines.flow.filter
 import mp.redditwalls.design.components.IconText
 import mp.redditwalls.preferences.enums.SortOrder
 import mp.redditwalls.repositories.SettingsItem
@@ -136,4 +145,42 @@ fun rememberSortMenuOptions(context: Context) = remember {
 inline fun <reified T : Parcelable> Intent.parcelable(key: String): T? = when {
     SDK_INT >= 33 -> getParcelableExtra(key, T::class.java)
     else -> @Suppress("DEPRECATION") getParcelableExtra(key) as? T
+}
+
+@Composable
+fun LazyListState.isScrollingUp(): Boolean {
+    var previousIndex by remember(this) { mutableStateOf(firstVisibleItemIndex) }
+    var previousScrollOffset by remember(this) { mutableStateOf(firstVisibleItemScrollOffset) }
+    return remember(this) {
+        derivedStateOf {
+            if (previousIndex != firstVisibleItemIndex) {
+                previousIndex > firstVisibleItemIndex
+            } else {
+                previousScrollOffset >= firstVisibleItemScrollOffset
+            }.also {
+                previousIndex = firstVisibleItemIndex
+                previousScrollOffset = firstVisibleItemScrollOffset
+            }
+        }
+    }.value
+}
+
+@Composable
+fun LazyGridState.OnBottomReached(
+    buffer: Int = 6,
+    onLoadMore: () -> Unit
+) {
+    val shouldLoadMore = remember {
+        derivedStateOf {
+            val lastVisibleItem = layoutInfo.visibleItemsInfo.lastOrNull()
+                ?: return@derivedStateOf true
+            lastVisibleItem.index >= layoutInfo.totalItemsCount - 1 - buffer
+        }
+    }
+
+    LaunchedEffect(shouldLoadMore) {
+        snapshotFlow { shouldLoadMore.value }.filter { it }.collect {
+            onLoadMore()
+        }
+    }
 }

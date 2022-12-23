@@ -37,17 +37,9 @@
         <action
             android:id="@+id/action_navigation_discover_screen_to_navigation_search_subreddits_screen"
             app:destination="@id/navigation_search_subreddits_screen" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/navigation_favorites"
-        android:name="mp.redditwalls.fragments.FavoritesFragment"
-        android:label="Favorites"
-        tools:layout="@layout/fragment_favorites">
-
         <action
-            android:id="@+id/action_navigation_favorites_to_navigation_wallpaper"
-            app:destination="@id/navigation_wallpaper" />
+            android:id="@+id/action_navigation_discover_screen_to_navigation_recent_activity_screen"
+            app:destination="@id/navigation_recent_activity_screen" />
     </fragment>
 
     <fragment
@@ -66,6 +58,24 @@
         android:id="@+id/navigation_search_subreddits_screen"
         android:name="mp.redditwalls.fragments.SearchSubredditsScreenFragment"
         android:label="@string/search">
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_recent_activity_screen"
+        android:name="mp.redditwalls.fragments.RecentActivityScreenFragment"
+        android:label="Recent Activity">
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/navigation_favorites"
+        android:name="mp.redditwalls.fragments.FavoritesFragment"
+        android:label="Favorites"
+        tools:layout="@layout/fragment_favorites">
+
+        <action
+            android:id="@+id/action_navigation_favorites_to_navigation_wallpaper"
+            app:destination="@id/navigation_wallpaper" />
     </fragment>
 
     <activity
