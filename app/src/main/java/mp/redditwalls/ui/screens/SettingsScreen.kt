@@ -9,7 +9,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -22,17 +26,22 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import mp.redditwalls.R
 import mp.redditwalls.design.components.ClickableTextItem
 import mp.redditwalls.design.components.ImageFolderRadioDialog
 import mp.redditwalls.design.components.RadioDialog
 import mp.redditwalls.design.components.SubtitleSwitch
+import mp.redditwalls.fragments.SettingsScreenFragmentDirections
 import mp.redditwalls.models.SettingsRadioDialogModel
 import mp.redditwalls.viewmodels.SettingsScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun SettingsScreen(vm: SettingsScreenViewModel = viewModel()) {
+fun SettingsScreen(
+    vm: SettingsScreenViewModel = viewModel(),
+    navController: NavController
+) {
     val uiState = vm.uiState
     val currentDialog = vm.uiState.currentRadioDialog.value
 
@@ -52,7 +61,21 @@ fun SettingsScreen(vm: SettingsScreenViewModel = viewModel()) {
                     }
                 },
                 navigationIcon = {},
-                actions = {}
+                actions = {
+                    IconButton(
+                        onClick = {
+                            navController.navigate(
+                                SettingsScreenFragmentDirections.navigationSettingsScreenToNavigationRecentActivityScreen()
+                            )
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.History,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
             )
         }
     ) { innerPadding ->

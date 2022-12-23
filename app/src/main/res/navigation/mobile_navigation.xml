@@ -52,6 +52,9 @@
         android:id="@+id/navigation_settings_screen"
         android:name="mp.redditwalls.fragments.SettingsScreenFragment"
         android:label="@string/settings">
+        <action
+            android:id="@+id/navigation_settings_screen_to_navigation_recent_activity_screen"
+            app:destination="@id/navigation_recent_activity_screen" />
     </fragment>
 
     <fragment
