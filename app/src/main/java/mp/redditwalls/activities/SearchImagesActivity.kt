@@ -7,13 +7,18 @@ import android.os.Parcelable
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlinx.parcelize.Parcelize
+import mp.redditwalls.WallpaperHelper
 import mp.redditwalls.design.RwTheme
 import mp.redditwalls.ui.screens.SearchImagesScreen
 import mp.redditwalls.utils.parcelable
 
 @AndroidEntryPoint
 class SearchImagesActivity : AppCompatActivity() {
+    @Inject
+    lateinit var wallpaperHelper: WallpaperHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -25,7 +30,8 @@ class SearchImagesActivity : AppCompatActivity() {
             RwTheme {
                 SearchImagesScreen(
                     subreddit = arguments.subreddit,
-                    query = arguments.query
+                    query = arguments.query,
+                    wallpaperHelper = wallpaperHelper
                 )
             }
         }

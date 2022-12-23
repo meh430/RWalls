@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import mp.redditwalls.R
+import mp.redditwalls.WallpaperHelper
 import mp.redditwalls.design.components.BackButton
 import mp.redditwalls.design.components.ErrorState
 import mp.redditwalls.design.components.OptionsMenu
@@ -32,6 +33,7 @@ import mp.redditwalls.design.components.ThreeDotsLoader
 import mp.redditwalls.models.UiResult
 import mp.redditwalls.preferences.enums.SortOrder
 import mp.redditwalls.ui.components.ImagesList
+import mp.redditwalls.ui.components.SetWallpaperDialog
 import mp.redditwalls.utils.rememberSortMenuOptions
 import mp.redditwalls.utils.toFriendlyCount
 import mp.redditwalls.viewmodels.SearchImagesScreenViewModel
@@ -43,6 +45,7 @@ import mp.redditwalls.viewmodels.SearchImagesScreenViewModel
 @Composable
 fun SearchImagesScreen(
     vm: SearchImagesScreenViewModel = viewModel(),
+    wallpaperHelper: WallpaperHelper,
     subreddit: String?,
     query: String?
 ) {
@@ -57,6 +60,7 @@ fun SearchImagesScreen(
             SearchBar(
                 value = uiState.query.value,
                 onValueChanged = { vm.onQueryChanged(it) },
+                hint = "Search ${stringResource(uiState.sortOrder.value.stringId)}...",
                 onSearch = {
                     keyboardController?.hide()
                     vm.fetchImages(true)
@@ -80,12 +84,18 @@ fun SearchImagesScreen(
                 }
             )
         }
-    ) {
+    ) { innerPadding ->
         Column(
             modifier = Modifier
-                .padding(it)
-                .consumedWindowInsets(it)
+                .padding(innerPadding)
+                .consumedWindowInsets(innerPadding)
         ) {
+            SetWallpaperDialog(
+                wallpaperHelper = wallpaperHelper,
+                context = context,
+                image = uiState.longPressedImage.value,
+                onDismiss = { uiState.longPressedImage.value = null }
+            )
             when {
                 uiResult is UiResult.Error -> ErrorState(
                     errorMessage = uiResult.errorMessage.orEmpty(),
@@ -99,7 +109,7 @@ fun SearchImagesScreen(
                     images = uiState.images,
                     isLoading = uiResult is UiResult.Loading,
                     onClick = {},
-                    onImageLongPress = {},
+                    onImageLongPress = { uiState.longPressedImage.value = it },
                     onLikeClick = vm.favoriteImageViewModel::onLikeClick,
                     onLoadMore = { vm.fetchImages() },
                     header = uiState.subredditItemUiState.value?.let {
