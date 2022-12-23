@@ -62,18 +62,13 @@ fun SearchImagesScreen(
                     vm.fetchImages(true)
                 },
                 leadingIcon = {
-                    BackButton(
-                        modifier = Modifier.padding(start = 16.dp),
-                        onClick = { (context as? Activity)?.finish() }
-                    )
+                    BackButton { (context as? Activity)?.finish() }
+
                 },
                 trailingIcon = {
                     if (uiState.query.value.isNotEmpty() && WindowInsets.isImeVisible) {
-                        BackButton(
-                            modifier = Modifier.padding(end = 16.dp),
-                            cross = true,
-                            onClick = { vm.onQueryChanged("") }
-                        )
+                        BackButton(cross = true) { vm.onQueryChanged("") }
+
                     } else {
                         OptionsMenu(
                             modifier = Modifier.padding(end = 16.dp),

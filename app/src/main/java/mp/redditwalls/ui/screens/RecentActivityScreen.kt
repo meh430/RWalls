@@ -58,7 +58,7 @@ fun RecentActivityScreen(
                     }
                 },
                 navigationIcon = {
-                    BackButton(modifier = Modifier.padding(start = 12.dp)) {
+                    BackButton {
                         navController.popBackStack()
                     }
                 },

@@ -62,21 +62,12 @@ fun SearchSubredditsScreen(
                 onValueChanged = { vm.onQueryChanged(it) },
                 onSearch = { keyboardController?.hide() },
                 leadingIcon = {
-                    BackButton(
-                        modifier = Modifier.padding(start = 16.dp),
-                        onClick = navController::popBackStack
-                    )
+                    BackButton(onClick = navController::popBackStack)
                 },
                 trailingIcon = if (uiState.query.value.isEmpty() || !WindowInsets.isImeVisible) {
                     null
                 } else {
-                    {
-                        BackButton(
-                            modifier = Modifier.padding(end = 16.dp),
-                            cross = true,
-                            onClick = { vm.onQueryChanged("") }
-                        )
-                    }
+                    { BackButton(cross = true) { vm.onQueryChanged("") } }
                 },
                 focusRequester = searchBarFocusRequester
             )

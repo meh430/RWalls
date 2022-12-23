@@ -1,8 +1,8 @@
 package mp.redditwalls.ui.components
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -57,7 +57,7 @@ fun RecentActivityCard(
             )
             is RecentActivityItem.VisitSubredditActivityItem -> TextRecentActivityCard(
                 modifier = modifier,
-                icon = Icons.Default.Explore,
+                icon = Icons.Outlined.Explore,
                 title = "Browsed images in r/${it.subredditName}'",
                 date = Utils.getFormattedDate(it.createdAt),
                 onClick = onClick
