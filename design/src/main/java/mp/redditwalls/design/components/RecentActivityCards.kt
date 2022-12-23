@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Explore
@@ -124,12 +125,12 @@ fun TextRecentActivityCard(
     ) {
         Icon(
             modifier = Modifier
-                .padding(12.dp)
                 .size(32.dp),
             imageVector = icon,
             tint = MaterialTheme.colorScheme.onSurface,
             contentDescription = null
         )
+        Spacer(Modifier.width(12.dp))
         Column(
             horizontalAlignment = Alignment.Start
         ) {

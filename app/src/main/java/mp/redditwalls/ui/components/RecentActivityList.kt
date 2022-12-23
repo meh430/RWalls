@@ -31,6 +31,7 @@ fun RecentActivityList(
         contentPadding = contentPadding
     ) {
         recentActivityListItems(
+            modifier = Modifier.padding(16.dp),
             recentActivityItems = recentActivityItems,
             onClick = onClick,
             context = context
@@ -39,11 +40,7 @@ fun RecentActivityList(
 }
 
 fun LazyListScope.recentActivityListItems(
-    modifier: Modifier = Modifier.padding(
-        bottom = 16.dp,
-        start = 16.dp,
-        end = 16.dp
-    ),
+    modifier: Modifier = Modifier,
     context: Context,
     recentActivityItems: List<RecentActivityItem>,
     onClick: (RecentActivityItem) -> Unit = { recentActivity ->

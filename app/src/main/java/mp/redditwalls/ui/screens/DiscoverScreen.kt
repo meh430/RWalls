@@ -206,6 +206,7 @@ private fun DiscoverScreenContent(
             }
         }
         recentActivityListItems(
+            modifier = Modifier.padding(16.dp),
             context = context,
             recentActivityItems = recentActivity
         )

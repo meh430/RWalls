@@ -145,7 +145,7 @@ fun SearchSubredditsScreen(
                     )
                 }
                 recentActivityListItems(
-                    modifier = Modifier.padding(0.dp),
+                    modifier = Modifier.padding(8.dp),
                     context = context,
                     recentActivityItems = uiState.searchHistory
                 )
