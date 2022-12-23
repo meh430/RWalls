@@ -10,7 +10,6 @@ import mp.redditwalls.domain.models.DomainResult
 import mp.redditwalls.domain.models.RecentActivityResult
 import mp.redditwalls.domain.usecases.GetRecentActivityUseCase
 import mp.redditwalls.domain.usecases.RemoveRecentActivityItemUseCase
-import mp.redditwalls.models.RecentActivityItem
 import mp.redditwalls.models.RecentActivityScreenUiState
 import mp.redditwalls.models.UiResult
 import mp.redditwalls.models.toRecentActivityItem
@@ -18,11 +17,14 @@ import mp.redditwalls.models.toRecentActivityItem
 @HiltViewModel
 class RecentActivityScreenViewModel @Inject constructor(
     private val getRecentActivityUseCase: GetRecentActivityUseCase,
-    private val removeRecentActivityItemUseCase: RemoveRecentActivityItemUseCase
+    private val removeRecentActivityItemUseCase: RemoveRecentActivityItemUseCase,
+    val recentActivityViewModel: RecentActivityViewModel
 ) : ViewModel() {
     val uiState = RecentActivityScreenUiState()
 
     init {
+        recentActivityViewModel.init(viewModelScope)
+
         subscribeToRecentActivity()
         getRecentActivityUseCase.init(viewModelScope)
     }
@@ -40,12 +42,6 @@ class RecentActivityScreenViewModel @Inject constructor(
     fun deleteAllHistory() {
         viewModelScope.launch {
             removeRecentActivityItemUseCase(emptyList())
-        }
-    }
-
-    fun deleteHistory(recentActivityItem: RecentActivityItem) {
-        viewModelScope.launch {
-            removeRecentActivityItemUseCase(listOf(recentActivityItem.dbId))
         }
     }
 

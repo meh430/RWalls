@@ -22,7 +22,8 @@ fun RecentActivityList(
     listState: LazyListState = rememberLazyListState(),
     contentPadding: PaddingValues = PaddingValues(8.dp),
     recentActivityItems: List<RecentActivityItem>,
-    onClick: (RecentActivityItem) -> Unit
+    onClick: (RecentActivityItem) -> Unit,
+    onLongClick: (RecentActivityItem) -> Unit
 ) {
     val context = LocalContext.current
     LazyColumn(
@@ -34,6 +35,7 @@ fun RecentActivityList(
             modifier = Modifier.padding(16.dp),
             recentActivityItems = recentActivityItems,
             onClick = onClick,
+            onLongClick = onLongClick,
             context = context
         )
     }
@@ -67,13 +69,15 @@ fun LazyListScope.recentActivityListItems(
                 )
             )
         }
-    }
+    },
+    onLongClick: (RecentActivityItem) -> Unit
 ) {
     items(recentActivityItems) { recentActivityItem ->
         RecentActivityCard(
             modifier = modifier,
             recentActivityItem = recentActivityItem,
-            onClick = { onClick(recentActivityItem) }
+            onClick = { onClick(recentActivityItem) },
+            onLongClick = { onLongClick(recentActivityItem) }
         )
     }
 }

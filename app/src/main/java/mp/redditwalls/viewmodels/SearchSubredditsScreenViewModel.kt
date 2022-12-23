@@ -19,7 +19,8 @@ import mp.redditwalls.models.toSubredditItemUiState
 class SearchSubredditsScreenViewModel @Inject constructor(
     private val getRecentActivityUseCase: GetRecentActivityUseCase,
     private val searchSubredditsUseCase: SearchSubredditsUseCase,
-    val savedSubredditViewModel: SavedSubredditViewModel
+    val savedSubredditViewModel: SavedSubredditViewModel,
+    val recentActivityViewModel: RecentActivityViewModel
 ) : ViewModel() {
     val uiState = SearchSubredditsScreenUiState()
 
@@ -28,7 +29,9 @@ class SearchSubredditsScreenViewModel @Inject constructor(
         subscribeToSearchResults()
         getRecentActivityUseCase.init(viewModelScope)
         searchSubredditsUseCase.init(viewModelScope)
+
         savedSubredditViewModel.init(viewModelScope)
+        recentActivityViewModel.init(viewModelScope)
     }
 
     fun fetchSearchHistory() {

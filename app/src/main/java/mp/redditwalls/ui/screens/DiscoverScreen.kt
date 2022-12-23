@@ -32,6 +32,7 @@ import androidx.navigation.NavController
 import mp.redditwalls.R
 import mp.redditwalls.activities.SearchImagesActivity
 import mp.redditwalls.activities.SearchImagesActivityArguments
+import mp.redditwalls.design.components.DeleteConfirmationDialog
 import mp.redditwalls.design.components.DiscoverSubredditCard
 import mp.redditwalls.design.components.ErrorState
 import mp.redditwalls.design.components.ImageFolderRadioDialog
@@ -71,6 +72,11 @@ fun DiscoverScreen(
                     )
                     is UiResult.Loading -> ThreeDotsLoader()
                     is UiResult.Success -> {
+                        DeleteConfirmationDialog(
+                            show = vm.recentActivityViewModel.showDeleteConfirmationDialog,
+                            onConfirm = vm.recentActivityViewModel::deleteHistory,
+                            onDismiss = vm.recentActivityViewModel::dismissDeleteConfirmationDialog
+                        )
                         DiscoverScreenContent(
                             navController = navController,
                             recommendations = uiState.recommendedSubreddits,
@@ -83,7 +89,8 @@ fun DiscoverScreen(
                                 )
                             },
                             onSaveClick = vm.savedSubredditViewModel::onSaveClick,
-                            onLikeClick = vm.favoriteImageViewModel::onLikeClick
+                            onLikeClick = vm.favoriteImageViewModel::onLikeClick,
+                            onRecentActivityLongClick = vm.recentActivityViewModel::askForDeleteConfirmation
                         )
                     }
                 }
@@ -101,7 +108,8 @@ private fun DiscoverScreenContent(
     usePresetFolderWhenLiking: Boolean,
     onSearchClick: () -> Unit,
     onSaveClick: (sub: SubredditItemUiState, isSaved: Boolean) -> Unit,
-    onLikeClick: (image: ImageItemUiState, isLiked: Boolean, folder: String?) -> Unit
+    onLikeClick: (image: ImageItemUiState, isLiked: Boolean, folder: String?) -> Unit,
+    onRecentActivityLongClick: (RecentActivityItem) -> Unit
 ) {
     val context = LocalContext.current
     val interactionSource = remember { MutableInteractionSource() }
@@ -208,7 +216,8 @@ private fun DiscoverScreenContent(
         recentActivityListItems(
             modifier = Modifier.padding(16.dp),
             context = context,
-            recentActivityItems = recentActivity
+            recentActivityItems = recentActivity,
+            onLongClick = onRecentActivityLongClick
         )
     }
 }

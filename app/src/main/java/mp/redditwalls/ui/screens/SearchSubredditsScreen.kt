@@ -29,6 +29,7 @@ import kotlinx.coroutines.delay
 import mp.redditwalls.activities.SearchImagesActivity
 import mp.redditwalls.activities.SearchImagesActivityArguments
 import mp.redditwalls.design.components.BackButton
+import mp.redditwalls.design.components.DeleteConfirmationDialog
 import mp.redditwalls.design.components.ErrorState
 import mp.redditwalls.design.components.SearchBar
 import mp.redditwalls.design.components.TextRecentActivityCard
@@ -73,6 +74,11 @@ fun SearchSubredditsScreen(
             )
         }
     ) {
+        DeleteConfirmationDialog(
+            show = vm.recentActivityViewModel.showDeleteConfirmationDialog,
+            onConfirm = vm.recentActivityViewModel::deleteHistory,
+            onDismiss = vm.recentActivityViewModel::dismissDeleteConfirmationDialog
+        )
         LazyColumn(
             modifier = Modifier
                 .consumedWindowInsets(it)
@@ -85,13 +91,13 @@ fun SearchSubredditsScreen(
                     TextRecentActivityCard(
                         icon = Icons.Default.Search,
                         title = getSearchAllString(uiState.query.value),
-                        date = "",
                         onClick = {
                             SearchImagesActivity.launch(
                                 context,
                                 SearchImagesActivityArguments(query = uiState.query.value)
                             )
-                        }
+                        },
+                        onLongClick = {}
                     )
                 }
             }
@@ -138,7 +144,8 @@ fun SearchSubredditsScreen(
                 recentActivityListItems(
                     modifier = Modifier.padding(8.dp),
                     context = context,
-                    recentActivityItems = uiState.searchHistory
+                    recentActivityItems = uiState.searchHistory,
+                    onLongClick = vm.recentActivityViewModel::askForDeleteConfirmation
                 )
             }
         }

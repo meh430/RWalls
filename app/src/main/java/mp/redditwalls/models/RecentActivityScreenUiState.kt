@@ -13,5 +13,5 @@ data class RecentActivityScreenUiState(
     val filter: MutableState<RecentActivityFilter> = mutableStateOf(RecentActivityFilter.ALL),
     val recentActivity: SnapshotStateList<DailyRecentActivity> = mutableStateListOf(),
     val recentActivityMap: MutableMap<String, List<RecentActivityItem>> = mutableMapOf(),
-    val showDeleteConfirmation: MutableState<Boolean> = mutableStateOf(false)
+    val showDeleteAllConfirmation: MutableState<Boolean> = mutableStateOf(false)
 )

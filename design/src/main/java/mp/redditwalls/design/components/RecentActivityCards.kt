@@ -1,7 +1,7 @@
 package mp.redditwalls.design.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,7 +47,8 @@ fun ImageRecentActivityCard(
     title: String,
     subTitle: String,
     date: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onLongClick: () -> Unit
 ) {
     ElevatedCard(
         modifier = modifier
@@ -61,7 +63,8 @@ fun ImageRecentActivityCard(
         Box(modifier = Modifier.fillMaxSize()) {
             Image(
                 modifier = Modifier.fillMaxSize(),
-                imageUrl = imageUrl
+                imageUrl = imageUrl,
+                onLongPress = onLongClick
             )
             Box(
                 modifier = Modifier
@@ -113,13 +116,18 @@ fun TextRecentActivityCard(
     icon: ImageVector,
     title: String,
     subTitle: String = "",
-    date: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onLongClick: () -> Unit
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick),
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onTap = { onClick() },
+                    onLongPress = { onLongClick() }
+                )
+            },
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -188,7 +196,8 @@ fun RecentActivityPreview() {
                         subTitle = "r/wallpaper",
                         date = "4:06 PM · 10 Oct 22",
                         onClick = {},
-                        modifier = Modifier.padding(8.dp)
+                        modifier = Modifier.padding(8.dp),
+                        onLongClick = {}
                     )
                 }
                 item {
@@ -196,9 +205,9 @@ fun RecentActivityPreview() {
                         icon = Icons.Default.Search,
                         title = "Searched images with 'query'",
                         subTitle = "in r/wallpaper",
-                        date = "4:06 PM · 10 Oct 22",
                         onClick = { /*TODO*/ },
-                        modifier = Modifier.padding(8.dp)
+                        modifier = Modifier.padding(8.dp),
+                        onLongClick = {}
                     )
                 }
                 item {
@@ -206,9 +215,9 @@ fun RecentActivityPreview() {
                         icon = Icons.Default.Search,
                         title = "Searched images with 'query'",
                         subTitle = "",
-                        date = "4:06 PM · 10 Oct 22",
                         onClick = {},
-                        modifier = Modifier.padding(8.dp)
+                        modifier = Modifier.padding(8.dp),
+                        onLongClick = {}
                     )
                 }
                 item {
@@ -216,9 +225,10 @@ fun RecentActivityPreview() {
                         imageUrl = "https://static.wikia.nocookie.net/starwars/images/d/dd/Attack-Clones-Poster.jpg/revision/latest?cb=20180318125654",
                         title = "Refreshed on home screen",
                         subTitle = "r/wallpaper",
-                        date = "4:06 PM · 10 Oct 22",
+                        date = "date",
                         onClick = {},
-                        modifier = Modifier.padding(8.dp)
+                        modifier = Modifier.padding(8.dp),
+                        onLongClick = {}
                     )
                 }
                 item {
@@ -226,9 +236,9 @@ fun RecentActivityPreview() {
                         icon = Icons.Default.Explore,
                         title = "Browsed images in r/wallpaper'",
                         subTitle = "",
-                        date = "4:06 PM · 10 Oct 22",
                         onClick = { /*TODO*/ },
-                        modifier = Modifier.padding(8.dp)
+                        modifier = Modifier.padding(8.dp),
+                        onLongClick = {}
                     )
                 }
             }

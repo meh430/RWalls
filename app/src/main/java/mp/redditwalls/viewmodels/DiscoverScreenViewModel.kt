@@ -17,7 +17,8 @@ import mp.redditwalls.models.toRecommendedSubredditUiState
 class DiscoverScreenViewModel @Inject constructor(
     private val getDiscoverUseCase: GetDiscoverUseCase,
     val favoriteImageViewModel: FavoriteImageViewModel,
-    val savedSubredditViewModel: SavedSubredditViewModel
+    val savedSubredditViewModel: SavedSubredditViewModel,
+    val recentActivityViewModel: RecentActivityViewModel
 ) : ViewModel() {
 
     val uiState = DiscoverScreenUiState()
@@ -25,6 +26,8 @@ class DiscoverScreenViewModel @Inject constructor(
     init {
         favoriteImageViewModel.init(viewModelScope)
         savedSubredditViewModel.init(viewModelScope)
+        recentActivityViewModel.init(viewModelScope)
+
         subscribeToDiscoverFeed()
         getDiscoverUseCase.init(viewModelScope)
         getDiscoverFeed()

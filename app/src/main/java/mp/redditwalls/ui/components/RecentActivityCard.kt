@@ -16,7 +16,8 @@ import mp.redditwalls.utils.Utils
 fun RecentActivityCard(
     modifier: Modifier = Modifier,
     recentActivityItem: RecentActivityItem,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onLongClick: () -> Unit = {}
 ) {
     recentActivityItem.let {
         when (it) {
@@ -28,22 +29,23 @@ fun RecentActivityCard(
                 }",
                 subTitle = "r/${it.subredditName}",
                 date = Utils.getFormattedDate(it.createdAt),
-                onClick = onClick
+                onClick = onClick,
+                onLongClick = onLongClick
             )
             is RecentActivityItem.SearchAllActivityItem -> TextRecentActivityCard(
                 modifier = modifier,
                 icon = Icons.Default.History,
                 title = "Searched for images with '${it.query}'",
-                date = Utils.getFormattedDate(it.createdAt),
-                onClick = onClick
+                onClick = onClick,
+                onLongClick = onLongClick
             )
             is RecentActivityItem.SearchSubredditActivityItem -> TextRecentActivityCard(
                 modifier = modifier,
                 icon = Icons.Default.History,
                 title = "Searched for images with '${it.query}'",
                 subTitle = "in r/${it.subredditName}",
-                date = Utils.getFormattedDate(it.createdAt),
-                onClick = onClick
+                onClick = onClick,
+                onLongClick = onLongClick
             )
             is RecentActivityItem.SetWallpaperActivityItem -> ImageRecentActivityCard(
                 modifier = modifier,
@@ -53,14 +55,15 @@ fun RecentActivityCard(
                 }",
                 subTitle = "r/${it.subredditName}",
                 date = Utils.getFormattedDate(it.createdAt),
-                onClick = onClick
+                onClick = onClick,
+                onLongClick = onLongClick
             )
             is RecentActivityItem.VisitSubredditActivityItem -> TextRecentActivityCard(
                 modifier = modifier,
                 icon = Icons.Outlined.Explore,
-                title = "Browsed images in r/${it.subredditName}'",
-                date = Utils.getFormattedDate(it.createdAt),
-                onClick = onClick
+                title = "Browsed images in r/${it.subredditName}",
+                onClick = onClick,
+                onLongClick = onLongClick
             )
         }
     }

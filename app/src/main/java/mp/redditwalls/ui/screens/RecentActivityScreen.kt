@@ -85,7 +85,7 @@ fun RecentActivityScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { uiState.showDeleteConfirmation.value = true }) {
+                    IconButton(onClick = { uiState.showDeleteAllConfirmation.value = true }) {
                         Icon(
                             imageVector = Icons.Default.Delete,
                             contentDescription = null,
@@ -103,9 +103,14 @@ fun RecentActivityScreen(
                 .consumedWindowInsets(it)
         ) {
             DeleteConfirmationDialog(
-                show = uiState.showDeleteConfirmation.value,
-                onConfirm = { vm.deleteAllHistory() },
-                onDismiss = { uiState.showDeleteConfirmation.value = false }
+                show = uiState.showDeleteAllConfirmation.value,
+                onConfirm = vm::deleteAllHistory,
+                onDismiss = { uiState.showDeleteAllConfirmation.value = false }
+            )
+            DeleteConfirmationDialog(
+                show = vm.recentActivityViewModel.showDeleteConfirmationDialog,
+                onConfirm = vm.recentActivityViewModel::deleteHistory,
+                onDismiss = vm.recentActivityViewModel::dismissDeleteConfirmationDialog
             )
             when (uiResult) {
                 is UiResult.Error -> ErrorState(errorMessage = uiResult.errorMessage.orEmpty())
@@ -156,7 +161,8 @@ fun RecentActivityScreen(
                         recentActivityListItems(
                             modifier = Modifier.padding(8.dp),
                             context = context,
-                            recentActivityItems = recentActivity
+                            recentActivityItems = recentActivity,
+                            onLongClick = vm.recentActivityViewModel::askForDeleteConfirmation
                         )
                         item(key = "$date spacer") {
                             Spacer(modifier = Modifier.width(8.dp))
