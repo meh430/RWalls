@@ -11,7 +11,8 @@ data class DiscoverScreenUiState(
     val recentActivityItems: SnapshotStateList<RecentActivityItem> = mutableStateListOf(),
     val usePresetFolderWhenLiking: MutableState<Boolean> = mutableStateOf(false),
     val folderNames: SnapshotStateList<String> = mutableStateListOf(),
-    val uiResult: MutableState<UiResult> = mutableStateOf(UiResult.Loading())
+    val uiResult: MutableState<UiResult> = mutableStateOf(UiResult.Loading()),
+    val longPressedImage: MutableState<ImageItemUiState?> = mutableStateOf(null)
 )
 
 fun DiscoverScreenUiState.clear() {

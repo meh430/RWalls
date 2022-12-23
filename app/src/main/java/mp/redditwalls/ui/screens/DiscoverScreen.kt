@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import mp.redditwalls.R
+import mp.redditwalls.WallpaperHelper
 import mp.redditwalls.activities.SearchImagesActivity
 import mp.redditwalls.activities.SearchImagesActivityArguments
 import mp.redditwalls.design.components.DeleteConfirmationDialog
@@ -45,6 +46,7 @@ import mp.redditwalls.models.RecommendedSubredditUiState
 import mp.redditwalls.models.SubredditItemUiState
 import mp.redditwalls.models.UiResult
 import mp.redditwalls.models.toImageCardModel
+import mp.redditwalls.ui.components.SetWallpaperDialog
 import mp.redditwalls.ui.components.recentActivityListItems
 import mp.redditwalls.utils.toFriendlyCount
 import mp.redditwalls.viewmodels.DiscoverScreenViewModel
@@ -53,8 +55,11 @@ import mp.redditwalls.viewmodels.DiscoverScreenViewModel
 @Composable
 fun DiscoverScreen(
     vm: DiscoverScreenViewModel = viewModel(),
-    navController: NavController
+    navController: NavController,
+    wallpaperHelper: WallpaperHelper
 ) {
+    val context = LocalContext.current
+
     val uiState = vm.uiState
     val uiResult = uiState.uiResult.value
 
@@ -77,6 +82,12 @@ fun DiscoverScreen(
                             onConfirm = vm.recentActivityViewModel::deleteHistory,
                             onDismiss = vm.recentActivityViewModel::dismissDeleteConfirmationDialog
                         )
+                        SetWallpaperDialog(
+                            wallpaperHelper = wallpaperHelper,
+                            context = context,
+                            image = uiState.longPressedImage.value,
+                            onDismiss = { uiState.longPressedImage.value = null }
+                        )
                         DiscoverScreenContent(
                             navController = navController,
                             recommendations = uiState.recommendedSubreddits,
@@ -90,7 +101,8 @@ fun DiscoverScreen(
                             },
                             onSaveClick = vm.savedSubredditViewModel::onSaveClick,
                             onLikeClick = vm.favoriteImageViewModel::onLikeClick,
-                            onRecentActivityLongClick = vm.recentActivityViewModel::askForDeleteConfirmation
+                            onRecentActivityLongClick = vm.recentActivityViewModel::askForDeleteConfirmation,
+                            onImageLongClick = { uiState.longPressedImage.value = it }
                         )
                     }
                 }
@@ -109,7 +121,8 @@ private fun DiscoverScreenContent(
     onSearchClick: () -> Unit,
     onSaveClick: (sub: SubredditItemUiState, isSaved: Boolean) -> Unit,
     onLikeClick: (image: ImageItemUiState, isLiked: Boolean, folder: String?) -> Unit,
-    onRecentActivityLongClick: (RecentActivityItem) -> Unit
+    onRecentActivityLongClick: (RecentActivityItem) -> Unit,
+    onImageLongClick: (ImageItemUiState) -> Unit
 ) {
     val context = LocalContext.current
     val interactionSource = remember { MutableInteractionSource() }
@@ -166,7 +179,7 @@ private fun DiscoverScreenContent(
                                 showFolderSelectDialog = image
                             }
                         },
-                        onLongPress = {}
+                        onLongPress = { onImageLongClick(image) }
                     )
                 },
                 onSaveChanged = { isSaved -> onSaveClick(it.subredditItemUiState, isSaved) },
@@ -177,7 +190,7 @@ private fun DiscoverScreenContent(
                             subreddit = it.subredditItemUiState.name
                         )
                     )
-                }
+                },
             )
         }
 
