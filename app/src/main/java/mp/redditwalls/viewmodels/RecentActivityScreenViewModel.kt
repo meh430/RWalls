@@ -9,13 +9,16 @@ import mp.redditwalls.domain.RecentActivityFilter
 import mp.redditwalls.domain.models.DomainResult
 import mp.redditwalls.domain.models.RecentActivityResult
 import mp.redditwalls.domain.usecases.GetRecentActivityUseCase
+import mp.redditwalls.domain.usecases.RemoveRecentActivityItemUseCase
+import mp.redditwalls.models.RecentActivityItem
 import mp.redditwalls.models.RecentActivityScreenUiState
 import mp.redditwalls.models.UiResult
 import mp.redditwalls.models.toRecentActivityItem
 
 @HiltViewModel
 class RecentActivityScreenViewModel @Inject constructor(
-    private val getRecentActivityUseCase: GetRecentActivityUseCase
+    private val getRecentActivityUseCase: GetRecentActivityUseCase,
+    private val removeRecentActivityItemUseCase: RemoveRecentActivityItemUseCase
 ) : ViewModel() {
     val uiState = RecentActivityScreenUiState()
 
@@ -34,6 +37,29 @@ class RecentActivityScreenViewModel @Inject constructor(
         }
     }
 
+    fun deleteAllHistory() {
+        viewModelScope.launch {
+            removeRecentActivityItemUseCase(emptyList())
+        }
+    }
+
+    fun deleteHistory(recentActivityItem: RecentActivityItem) {
+        viewModelScope.launch {
+            removeRecentActivityItemUseCase(listOf(recentActivityItem.dbId))
+        }
+    }
+
+    fun deleteHistoryForDate(date: String) {
+        viewModelScope.launch {
+            uiState.recentActivityMap[date]?.map {
+                it.dbId
+            }?.takeIf {
+                it.isNotEmpty()
+            }?.let {
+                removeRecentActivityItemUseCase(it)
+            }
+        }
+    }
 
     private fun subscribeToRecentActivity() {
         viewModelScope.launch {
@@ -54,6 +80,12 @@ class RecentActivityScreenViewModel @Inject constructor(
     private fun updateState(recentActivityResult: RecentActivityResult) = uiState.apply {
         recentActivity.clear()
         recentActivity.addAll(
+            recentActivityResult.recentActivityGroupedByDay.map { (date, domainRecentActivity) ->
+                date to domainRecentActivity.map { it.toRecentActivityItem() }
+            }
+        )
+        recentActivityMap.clear()
+        recentActivityMap.putAll(
             recentActivityResult.recentActivityGroupedByDay.map { (date, domainRecentActivity) ->
                 date to domainRecentActivity.map { it.toRecentActivityItem() }
             }

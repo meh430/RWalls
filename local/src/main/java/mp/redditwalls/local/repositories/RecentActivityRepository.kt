@@ -15,10 +15,12 @@ class RecentActivityRepository @Inject constructor(
         }
     }
 
-    suspend fun deleteDbRecentActivityItem(id: Int) {
-        withContext(Dispatchers.IO) {
-            dbRecentActivityItemDao.deleteDbRecentActivityItem(id)
-        }
+    suspend fun deleteDbRecentActivityItem(ids: List<Int>) = withContext(Dispatchers.IO) {
+        dbRecentActivityItemDao.deleteDbRecentActivityItem(ids)
+    }
+
+    suspend fun deleteAllDbRecentActivityItem() = withContext(Dispatchers.IO) {
+        dbRecentActivityItemDao.deleteAllDbRecentActivityItem()
     }
 
     fun getDbRecentActivityItems() = dbRecentActivityItemDao.getDbRecentActivityItems()

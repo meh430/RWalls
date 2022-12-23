@@ -1,8 +1,8 @@
 package mp.redditwalls.domain
 
 enum class RecentActivityFilter {
-    SEARCH,
+    ALL,
     IMAGE,
-    VISIT,
-    ALL
+    SEARCH,
+    VISIT
 }

@@ -12,8 +12,11 @@ interface DbRecentActivityItemDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDbRecentActivityItem(dbRecentActivityItem: DbRecentActivityItem)
 
-    @Query("DELETE FROM RecentActivity WHERE id = :id")
-    suspend fun deleteDbRecentActivityItem(id: Int)
+    @Query("DELETE FROM RecentActivity WHERE id IN (:ids)")
+    suspend fun deleteDbRecentActivityItem(ids: List<Int>)
+
+    @Query("DELETE FROM RecentActivity")
+    suspend fun deleteAllDbRecentActivityItem()
 
     @Query("SELECT * FROM RecentActivity ORDER BY createdAt DESC")
     fun getDbRecentActivityItems(): Flow<List<DbRecentActivityItem>>
