@@ -57,6 +57,7 @@ import mp.redditwalls.local.enums.getString
 import mp.redditwalls.local.models.DbImageFolder.Companion.DEFAULT_FOLDER_NAME
 import mp.redditwalls.models.UiResult
 import mp.redditwalls.ui.components.ImagesList
+import mp.redditwalls.ui.components.onImageCardClick
 import mp.redditwalls.utils.DownloadUtils
 import mp.redditwalls.viewmodels.FavoriteImagesScreenViewModel
 
@@ -199,6 +200,8 @@ fun FavoriteImagesScreen(
                         onClick = {
                             if (uiState.selecting.value) {
                                 vm.selectImage(it)
+                            } else {
+                                onImageCardClick(context, it)
                             }
                         },
                         onImageLongPress = {

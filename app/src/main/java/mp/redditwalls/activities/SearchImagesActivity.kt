@@ -29,8 +29,7 @@ class SearchImagesActivity : AppCompatActivity() {
         setContent {
             RwTheme {
                 SearchImagesScreen(
-                    subreddit = arguments.subreddit,
-                    query = arguments.query,
+                    arguments = arguments,
                     wallpaperHelper = wallpaperHelper
                 )
             }

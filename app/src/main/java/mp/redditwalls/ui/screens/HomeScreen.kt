@@ -119,7 +119,6 @@ fun HomeScreen(
                         isLoading = uiResult is UiResult.Loading,
                         folderNames = uiState.folderNames,
                         usePresetFolderWhenLiking = uiState.usePresetFolderWhenLiking.value,
-                        onClick = {},
                         onImageLongPress = vm::setLongPressImage,
                         onLikeClick = vm.favoriteImageViewModel::onLikeClick,
                         onLoadMore = { vm.fetchHomeFeed() }

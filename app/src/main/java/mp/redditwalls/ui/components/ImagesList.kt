@@ -1,5 +1,6 @@
 package mp.redditwalls.ui.components
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,7 +21,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import mp.redditwalls.activities.WallpaperActivity
+import mp.redditwalls.activities.WallpaperActivityArguments
 import mp.redditwalls.design.components.EmptyState
 import mp.redditwalls.design.components.ImageCard
 import mp.redditwalls.design.components.ImageFolderRadioDialog
@@ -32,13 +36,14 @@ import mp.redditwalls.utils.OnBottomReached
 @Composable
 fun ImagesList(
     modifier: Modifier = Modifier,
+    context: Context = LocalContext.current,
     listState: LazyGridState = rememberLazyGridState(),
     contentPadding: PaddingValues = PaddingValues(8.dp),
     images: List<ImageItemUiState>,
     isLoading: Boolean,
     usePresetFolderWhenLiking: Boolean,
     folderNames: List<String>,
-    onClick: (ImageItemUiState) -> Unit,
+    onClick: (ImageItemUiState) -> Unit = { onImageCardClick(context, it) },
     onImageLongPress: (ImageItemUiState) -> Unit,
     onLikeClick: (image: ImageItemUiState, isLiked: Boolean, folder: String?) -> Unit,
     onLoadMore: () -> Unit,
@@ -128,4 +133,13 @@ fun ImagesList(
     listState.OnBottomReached {
         onLoadMore()
     }
+}
+
+fun onImageCardClick(context: Context, image: ImageItemUiState) {
+    WallpaperActivity.launch(
+        context = context,
+        arguments = WallpaperActivityArguments(
+            imageUrl = image.imageUrl.highQualityUrl
+        )
+    )
 }

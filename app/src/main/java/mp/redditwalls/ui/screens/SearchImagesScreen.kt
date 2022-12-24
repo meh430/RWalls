@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import mp.redditwalls.R
 import mp.redditwalls.WallpaperHelper
+import mp.redditwalls.activities.SearchImagesActivityArguments
 import mp.redditwalls.design.components.BackButton
 import mp.redditwalls.design.components.ErrorState
 import mp.redditwalls.design.components.OptionsMenu
@@ -46,8 +47,7 @@ import mp.redditwalls.viewmodels.SearchImagesScreenViewModel
 fun SearchImagesScreen(
     vm: SearchImagesScreenViewModel = viewModel(),
     wallpaperHelper: WallpaperHelper,
-    subreddit: String?,
-    query: String?
+    arguments: SearchImagesActivityArguments
 ) {
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -108,7 +108,6 @@ fun SearchImagesScreen(
                     listState = vm.listState,
                     images = uiState.images,
                     isLoading = uiResult is UiResult.Loading,
-                    onClick = {},
                     onImageLongPress = { uiState.longPressedImage.value = it },
                     onLikeClick = vm.favoriteImageViewModel::onLikeClick,
                     onLoadMore = { vm.fetchImages() },
@@ -142,10 +141,10 @@ fun SearchImagesScreen(
         }
     }
 
-    LaunchedEffect(subreddit, query) {
+    LaunchedEffect(arguments) {
         vm.onScreenLaunched(
-            subreddit = subreddit,
-            q = query
+            subreddit = arguments.subreddit,
+            q = arguments.query
         )
     }
 }

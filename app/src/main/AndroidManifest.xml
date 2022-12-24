@@ -58,6 +58,13 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.RedditWalls.NoActionBar" />
 
+        <activity
+            android:name=".activities.WallpaperActivity"
+            android:exported="true"
+            android:label="Wallpaper Preview"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.RedditWalls.NoActionBar" />
+
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
