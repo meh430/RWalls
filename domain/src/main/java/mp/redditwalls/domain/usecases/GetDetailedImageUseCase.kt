@@ -23,11 +23,10 @@ class GetDetailedImageUseCase @Inject constructor(
     // takes network image id
     override fun execute() = combine(
         paramsFlow,
-        localImagesRepository.getDbImagesFlow(),
         localSubredditsRepository.getDbSubreddits()
-    ) { params, dbImages, dbSubreddits ->
+    ) { params, dbSubreddits ->
         val dbSubredditNames = dbSubreddits.map { it.name }.toSet()
-        val dbImageIds = dbImages.map { it.networkId }.toSet()
+        val dbImageIds = localImagesRepository.getDbImages().map { it.networkId }.toSet()
 
         val networkImage = networkImagesRepository.getImage(params)
 

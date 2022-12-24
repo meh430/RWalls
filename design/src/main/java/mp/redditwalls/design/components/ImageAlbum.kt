@@ -35,12 +35,11 @@ fun ImageAlbum(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class)
 @Composable
 fun PageIndicator(
     modifier: Modifier = Modifier,
-    currentPage: Int = 0,
-    pageCount: Int = 0
+    state: PagerState
 ) {
     FilterChip(
         modifier = modifier,
@@ -49,6 +48,6 @@ fun PageIndicator(
         colors = FilterChipDefaults.filterChipColors(
             selectedContainerColor = MaterialTheme.colorScheme.primaryContainer.copy(0.6f)
         ),
-        label = { Text("${currentPage + 1} / $pageCount") }
+        label = { Text("${state.currentPage + 1} / ${state.pageCount}") }
     )
 }

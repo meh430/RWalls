@@ -91,7 +91,9 @@ fun ImageCard(
                 imageUrl = imageCardModel.imageUrl,
                 onTap = imageCardModel.onClick,
                 onDoubleTap = {
-                    imageCardModel.onLikeClick(true)
+                    if (!imageCardModel.isLiked) {
+                        imageCardModel.onLikeClick(true)
+                    }
                     playAnimation = true
                 },
                 onLongPress = imageCardModel.onLongPress

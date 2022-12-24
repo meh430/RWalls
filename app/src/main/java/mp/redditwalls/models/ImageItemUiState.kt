@@ -18,13 +18,16 @@ data class ImageItemUiState(
     val numComments: Int = 0,
     val postUrl: String = "",
     val networkId: String = "",
-    val imageUrl: ImageUrl,
+    val imageUrls: List<ImageUrl>,
     val selectionState: MutableState<SelectionState> = mutableStateOf(SelectionState.NOT_SELECTABLE),
     val isLiked: MutableState<Boolean> = mutableStateOf(false),
     val isAlbum: Boolean = false
-)
+) {
+    val imageUrl: ImageUrl
+        get() = imageUrls.first()
+}
 
-fun DomainImage.toImageItemUiState(url: DomainImageUrl? = null) = ImageItemUiState(
+fun DomainImage.toImageItemUiState() = ImageItemUiState(
     postTitle = postTitle,
     subredditName = subredditName,
     author = author,
@@ -32,14 +35,10 @@ fun DomainImage.toImageItemUiState(url: DomainImageUrl? = null) = ImageItemUiSta
     numComments = numComments,
     postUrl = postUrl,
     networkId = networkId,
-    imageUrl = url?.toImageUrl() ?: domainImageUrls.first().toImageUrl(),
+    imageUrls = domainImageUrls.map { it.toImageUrl() },
     isLiked = mutableStateOf(isLiked),
     isAlbum = isAlbum
 )
-
-fun DomainImage.toImageItemUiStates() = domainImageUrls.map { url ->
-    toImageItemUiState(url)
-}
 
 fun ImageItemUiState.toDomainImage() = DomainImage(
     postTitle = postTitle,
@@ -49,14 +48,14 @@ fun ImageItemUiState.toDomainImage() = DomainImage(
     numComments = numComments,
     postUrl = postUrl,
     networkId = networkId,
-    domainImageUrls = listOf(
+    domainImageUrls = imageUrls.map { imageUrl ->
         DomainImageUrl(
             url = imageUrl.url,
             lowQualityUrl = imageUrl.lowQualityUrl,
             mediumQualityUrl = imageUrl.mediumQualityUrl,
             highQualityUrl = imageUrl.highQualityUrl
         )
-    ),
+    },
     isLiked = isLiked.value,
     isAlbum = isAlbum
 )
@@ -67,7 +66,7 @@ fun ImageItemUiState.toImageCardModel(
     onLongPress: () -> Unit
 ) = ImageCardModel(
     key = networkId,
-    imageUrl = imageUrl.url,
+    imageUrl = imageUrls.first().url,
     title = postTitle,
     subTitle = subredditName,
     isAlbum = isAlbum,
@@ -87,12 +86,14 @@ fun ImageItemUiState.toDomainWallpaperRecentActivityItem(
         dbId = 0,
         createdAt = Date(),
         subredditName = subredditName,
-        domainImageUrl = DomainImageUrl(
-            url = imageUrl.url,
-            lowQualityUrl = imageUrl.lowQualityUrl,
-            mediumQualityUrl = imageUrl.mediumQualityUrl,
-            highQualityUrl = imageUrl.highQualityUrl
-        ),
+        domainImageUrl = imageUrls.first().let { imageUrl ->
+            DomainImageUrl(
+                url = imageUrl.url,
+                lowQualityUrl = imageUrl.lowQualityUrl,
+                mediumQualityUrl = imageUrl.mediumQualityUrl,
+                highQualityUrl = imageUrl.highQualityUrl
+            )
+        },
         imageNetworkId = networkId,
         wallpaperLocation = location
     )
@@ -101,12 +102,14 @@ fun ImageItemUiState.toDomainWallpaperRecentActivityItem(
         dbId = 0,
         createdAt = Date(),
         subredditName = subredditName,
-        domainImageUrl = DomainImageUrl(
-            url = imageUrl.url,
-            lowQualityUrl = imageUrl.lowQualityUrl,
-            mediumQualityUrl = imageUrl.mediumQualityUrl,
-            highQualityUrl = imageUrl.highQualityUrl
-        ),
+        domainImageUrl = imageUrls.first().let { imageUrl ->
+            DomainImageUrl(
+                url = imageUrl.url,
+                lowQualityUrl = imageUrl.lowQualityUrl,
+                mediumQualityUrl = imageUrl.mediumQualityUrl,
+                highQualityUrl = imageUrl.highQualityUrl
+            )
+        },
         imageNetworkId = networkId,
         wallpaperLocation = location
     )
