@@ -24,7 +24,7 @@ data class ImageItemUiState(
     val isAlbum: Boolean = false
 )
 
-fun DomainImage.toImageItemItemUiState() = ImageItemUiState(
+fun DomainImage.toImageItemUiState(url: DomainImageUrl? = null) = ImageItemUiState(
     postTitle = postTitle,
     subredditName = subredditName,
     author = author,
@@ -32,10 +32,14 @@ fun DomainImage.toImageItemItemUiState() = ImageItemUiState(
     numComments = numComments,
     postUrl = postUrl,
     networkId = networkId,
-    imageUrl = domainImageUrls.first().toImageUrl(),
+    imageUrl = url?.toImageUrl() ?: domainImageUrls.first().toImageUrl(),
     isLiked = mutableStateOf(isLiked),
     isAlbum = isAlbum
 )
+
+fun DomainImage.toImageItemUiStates() = domainImageUrls.map { url ->
+    toImageItemUiState(url)
+}
 
 fun ImageItemUiState.toDomainImage() = DomainImage(
     postTitle = postTitle,

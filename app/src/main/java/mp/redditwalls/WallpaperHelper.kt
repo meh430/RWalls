@@ -13,7 +13,7 @@ import mp.redditwalls.domain.models.DomainResult
 import mp.redditwalls.domain.usecases.AddRecentActivityItemUseCase
 import mp.redditwalls.domain.usecases.GetRandomFavoriteImage
 import mp.redditwalls.models.toDomainWallpaperRecentActivityItem
-import mp.redditwalls.models.toImageItemItemUiState
+import mp.redditwalls.models.toImageItemUiState
 import mp.redditwalls.repositories.SettingsItem
 import mp.redditwalls.utils.ImageLoader
 import mp.redditwalls.utils.Utils
@@ -32,7 +32,7 @@ class WallpaperHelper @Inject constructor(
                     context,
                     home.domainImageUrls[0].url,
                     WallpaperLocation.HOME,
-                    home.toImageItemItemUiState().toDomainWallpaperRecentActivityItem(
+                    home.toImageItemUiState().toDomainWallpaperRecentActivityItem(
                         location = mp.redditwalls.local.enums.WallpaperLocation.HOME,
                         refresh = true
                     )
@@ -43,7 +43,7 @@ class WallpaperHelper @Inject constructor(
                     context,
                     lock.domainImageUrls[0].url,
                     WallpaperLocation.LOCK,
-                    lock.toImageItemItemUiState().toDomainWallpaperRecentActivityItem(
+                    lock.toImageItemUiState().toDomainWallpaperRecentActivityItem(
                         location = mp.redditwalls.local.enums.WallpaperLocation.LOCK_SCREEN,
                         refresh = true
                     )

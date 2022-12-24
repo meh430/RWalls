@@ -3,14 +3,15 @@ package mp.redditwalls.ui.screens
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.google.accompanist.pager.ExperimentalPagerApi
 import mp.redditwalls.activities.WallpaperActivityArguments
-import mp.redditwalls.design.components.Image
+import mp.redditwalls.design.components.ImageAlbum
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun WallpaperScreen(arguments: WallpaperActivityArguments) {
-    Image(
+    ImageAlbum(
         modifier = Modifier.fillMaxSize(),
-        imageUrl = arguments.imageUrl,
-        showRipple = false
+        imageUrls = List (5) { arguments.imageUrl }
     )
 }

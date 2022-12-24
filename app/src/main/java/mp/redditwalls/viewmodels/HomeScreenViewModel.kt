@@ -11,7 +11,7 @@ import mp.redditwalls.domain.usecases.GetHomeFeedUseCase
 import mp.redditwalls.models.HomeScreenUiState
 import mp.redditwalls.models.ImageItemUiState
 import mp.redditwalls.models.UiResult
-import mp.redditwalls.models.toImageItemItemUiState
+import mp.redditwalls.models.toImageItemUiState
 import mp.redditwalls.preferences.enums.SortOrder
 
 @HiltViewModel
@@ -77,7 +77,7 @@ class HomeScreenViewModel @Inject constructor(
                             uiResult.value = UiResult.Success()
                             images.addAll(
                                 it.data?.images?.map { domainImage ->
-                                    domainImage.toImageItemItemUiState()
+                                    domainImage.toImageItemUiState()
                                 }.orEmpty()
                             )
                             folderNames.clear()

@@ -27,7 +27,7 @@ fun ImagePager(
     images: List<ImageItemUiState>,
     usePresetFolderWhenLiking: Boolean,
     folderNames: List<String>,
-    navigateToPost: (Int) -> Unit,
+    navigateToPost: (ImageItemUiState) -> Unit,
     onImageSetWallpaperClick: (ImageItemUiState) -> Unit,
     onLoadMore: () -> Unit,
     onLikeClick: (ImageItemUiState, Boolean, String?) -> Unit
@@ -72,7 +72,7 @@ fun ImagePager(
                 isLiked = image.isLiked.value,
                 numUpvotes = image.numUpvotes.toFriendlyCount(),
                 numComments = image.numComments.toFriendlyCount(),
-                openPost = { navigateToPost(index) },
+                openPost = { navigateToPost(image) },
                 onLikeChanged = { isLiked ->
                     if (usePresetFolderWhenLiking || !isLiked) {
                         onLikeClick(image, isLiked, null)

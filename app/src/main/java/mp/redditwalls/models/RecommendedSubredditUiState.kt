@@ -12,6 +12,6 @@ data class RecommendedSubredditUiState(
 fun RecommendedSubreddit.toRecommendedSubredditUiState() = RecommendedSubredditUiState(
     subredditItemUiState = subreddit.toSubredditItemUiState(),
     images = mutableStateListOf<ImageItemUiState>().apply {
-        addAll(images.map { it.toImageItemItemUiState() })
+        addAll(images.map { it.toImageItemUiState() })
     }
 )

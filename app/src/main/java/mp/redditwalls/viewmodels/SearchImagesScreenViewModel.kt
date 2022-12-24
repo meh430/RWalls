@@ -13,7 +13,7 @@ import mp.redditwalls.domain.usecases.AddRecentActivityItemUseCase
 import mp.redditwalls.domain.usecases.GetImagesUseCase
 import mp.redditwalls.models.SearchImagesScreenUiState
 import mp.redditwalls.models.UiResult
-import mp.redditwalls.models.toImageItemItemUiState
+import mp.redditwalls.models.toImageItemUiState
 import mp.redditwalls.models.toSubredditItemUiState
 import mp.redditwalls.preferences.enums.SortOrder
 
@@ -95,7 +95,7 @@ class SearchImagesScreenViewModel @Inject constructor(
                         uiState.uiResult.value = UiResult.Success()
                         images.addAll(
                             result.data?.images?.map {
-                                it.toImageItemItemUiState()
+                                it.toImageItemUiState()
                             }.orEmpty()
                         )
                         if (uiState.subredditItemUiState.value == null) {

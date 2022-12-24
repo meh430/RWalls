@@ -19,7 +19,7 @@ import mp.redditwalls.local.models.DbImageFolder.Companion.DEFAULT_FOLDER_NAME
 import mp.redditwalls.models.FavoriteImagesScreenUiState
 import mp.redditwalls.models.ImageItemUiState
 import mp.redditwalls.models.UiResult
-import mp.redditwalls.models.toImageItemItemUiState
+import mp.redditwalls.models.toImageItemUiState
 import mp.redditwalls.utils.DownloadUtils
 
 @HiltViewModel
@@ -193,7 +193,7 @@ class FavoriteImagesScreenViewModel @Inject constructor(
                     images.clear()
                     images.addAll(
                         it.data?.imageFolder?.images?.map { domainImage ->
-                            domainImage.toImageItemItemUiState()
+                            domainImage.toImageItemUiState()
                         }.orEmpty()
                     )
                     folderNames.clear()

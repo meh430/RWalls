@@ -47,6 +47,7 @@ import mp.redditwalls.models.SubredditItemUiState
 import mp.redditwalls.models.UiResult
 import mp.redditwalls.models.toImageCardModel
 import mp.redditwalls.ui.components.SetWallpaperDialog
+import mp.redditwalls.ui.components.onImageCardClick
 import mp.redditwalls.ui.components.recentActivityListItems
 import mp.redditwalls.utils.toFriendlyCount
 import mp.redditwalls.viewmodels.DiscoverScreenViewModel
@@ -171,7 +172,7 @@ private fun DiscoverScreenContent(
                 isSaved = it.subredditItemUiState.isSaved.value,
                 imageCardModels = it.images.map { image ->
                     image.toImageCardModel(
-                        onClick = {},
+                        onClick = { onImageCardClick(context, image) },
                         onLikeClick = { isLiked ->
                             if (usePresetFolderWhenLiking || !isLiked) {
                                 onLikeClick(image, isLiked, null)

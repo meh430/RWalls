@@ -107,7 +107,7 @@ fun HomeScreen(
                             images = uiState.images,
                             folderNames = uiState.folderNames,
                             usePresetFolderWhenLiking = uiState.usePresetFolderWhenLiking.value,
-                            navigateToPost = { uiState.images[it].postUrl.launchBrowser(context) },
+                            navigateToPost = { it.postUrl.launchBrowser(context) },
                             onImageSetWallpaperClick = vm::setLongPressImage,
                             onLoadMore = { vm.fetchHomeFeed() },
                             onLikeClick = vm.favoriteImageViewModel::onLikeClick

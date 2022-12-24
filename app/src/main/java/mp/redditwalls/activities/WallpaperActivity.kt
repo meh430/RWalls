@@ -23,7 +23,9 @@ class WallpaperActivity : ComponentActivity() {
 
         setContent {
             RwTheme {
-                WallpaperScreen(arguments)
+                WallpaperScreen(
+                    arguments = arguments
+                )
             }
         }
         findViewById<View>(android.R.id.content)?.let {
