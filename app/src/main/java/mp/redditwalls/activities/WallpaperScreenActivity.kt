@@ -23,15 +23,16 @@ class WallpaperScreenActivity : ComponentActivity() {
             WALLPAPER_ACTIVITY_ARGUMENTS
         ) ?: return
 
+        findViewById<View>(android.R.id.content)?.let {
+            Utils.setFullScreen(window, it)
+        }
+
         setContent {
             RwTheme {
                 WallpaperScreen(
                     arguments = arguments
                 )
             }
-        }
-        findViewById<View>(android.R.id.content)?.let {
-            Utils.setFullScreen(window, it)
         }
     }
 
