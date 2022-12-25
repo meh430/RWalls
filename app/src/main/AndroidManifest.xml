@@ -59,7 +59,7 @@
             android:theme="@style/Theme.RedditWalls.NoActionBar" />
 
         <activity
-            android:name=".activities.WallpaperActivity"
+            android:name=".activities.WallpaperScreenActivity"
             android:exported="true"
             android:label="Wallpaper Preview"
             android:screenOrientation="portrait"

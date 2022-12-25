@@ -23,8 +23,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import mp.redditwalls.activities.WallpaperActivity
 import mp.redditwalls.activities.WallpaperActivityArguments
+import mp.redditwalls.activities.WallpaperScreenActivity
 import mp.redditwalls.design.components.EmptyState
 import mp.redditwalls.design.components.ImageCard
 import mp.redditwalls.design.components.ImageFolderRadioDialog
@@ -136,10 +136,10 @@ fun ImagesList(
 }
 
 fun onImageCardClick(context: Context, image: ImageItemUiState) {
-    WallpaperActivity.launch(
+    WallpaperScreenActivity.launch(
         context = context,
         arguments = WallpaperActivityArguments(
-            imageUrl = image.imageUrl.highQualityUrl
+            imageNetworkId = image.networkId
         )
     )
 }

@@ -22,12 +22,14 @@ import mp.redditwalls.network.models.NetworkSubreddit
 import mp.redditwalls.network.models.NetworkSubreddits
 import mp.redditwalls.network.services.AuthService
 import mp.redditwalls.network.services.ImagesService
+import mp.redditwalls.network.services.ImgurService
 import mp.redditwalls.network.services.SubredditsService
 import mp.redditwalls.preferences.PreferencesRepository
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.create
 import timber.log.Timber
 
 @Module
@@ -36,17 +38,22 @@ internal object NetworkModule {
     @Provides
     fun provideRedditAuthService(
         @Named("RedditAuthRetrofit") retrofit: Retrofit
-    ) = retrofit.create(AuthService::class.java)
+    ) = retrofit.create<AuthService>()
 
     @Provides
     fun provideImagesService(
         @Named("RedditRetrofit") retrofit: Retrofit
-    ) = retrofit.create(ImagesService::class.java)
+    ) = retrofit.create<ImagesService>()
 
     @Provides
     fun provideSubredditsService(
         @Named("RedditRetrofit") retrofit: Retrofit
-    ) = retrofit.create(SubredditsService::class.java)
+    ) = retrofit.create<SubredditsService>()
+
+    @Provides
+    fun provideImgurService(
+        @Named("ImgurRetrofit") retrofit: Retrofit
+    ) = retrofit.create<ImgurService>()
 
     @Named("RedditRetrofit")
     @Provides
@@ -54,7 +61,7 @@ internal object NetworkModule {
         @Named("RedditOkhttpClient")
         client: OkHttpClient,
         gson: Gson
-    ) = Retrofit.Builder()
+    ): Retrofit = Retrofit.Builder()
         .baseUrl(Constants.BASE_REDDIT_OAUTH_URL)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .client(client)
@@ -66,7 +73,7 @@ internal object NetworkModule {
         @Named("RedditAuthOkhttpClient")
         client: OkHttpClient,
         gson: Gson
-    ) = Retrofit.Builder()
+    ): Retrofit = Retrofit.Builder()
         .baseUrl(Constants.BASE_REDDIT_URL)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .client(client)
@@ -77,7 +84,7 @@ internal object NetworkModule {
     fun provideImgurRetrofit(
         @Named("ImgurOkhttpClient")
         client: OkHttpClient,
-    ) = Retrofit.Builder()
+    ): Retrofit = Retrofit.Builder()
         .baseUrl(Constants.BASE_IMGUR_URL)
         .addConverterFactory(MoshiConverterFactory.create())
         .client(client)
@@ -146,7 +153,7 @@ internal object NetworkModule {
         networkImagesDeserializer: NetworkImagesDeserializer,
         networkSubredditDeserializer: NetworkSubredditDeserializer,
         networkSubredditsDeserializer: NetworkSubredditsDeserializer
-    ) = GsonBuilder()
+    ): Gson = GsonBuilder()
         .setLenient()
         .registerTypeAdapter(NetworkImage::class.java, networkImageDeserializer)
         .registerTypeAdapter(NetworkImages::class.java, networkImagesDeserializer)

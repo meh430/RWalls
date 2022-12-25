@@ -26,7 +26,8 @@ class GetDetailedImageUseCase @Inject constructor(
         localSubredditsRepository.getDbSubreddits()
     ) { params, dbSubreddits ->
         val dbSubredditNames = dbSubreddits.map { it.name }.toSet()
-        val dbImageIds = localImagesRepository.getDbImages().map { it.networkId }.toSet()
+        val dbImageIds =
+            localImagesRepository.getDbImages().associate { it.networkId to it.imageFolderName }
 
         val networkImage = networkImagesRepository.getImage(params)
 
@@ -40,7 +41,7 @@ class GetDetailedImageUseCase @Inject constructor(
             // fetch all images from imgur
             networkImage.toDomainImage(
                 previewResolution = ImageQuality.HIGH,
-                isLiked = dbImageIds.contains(networkImage.id),
+                isLiked = dbImageIds.contains(networkImage.id)
             ).copy(
                 domainImageUrls = imgurRepository.getAlbum(networkImage.imgurAlbumId).images.map {
                     DomainImageUrl(
@@ -60,7 +61,8 @@ class GetDetailedImageUseCase @Inject constructor(
 
         DetailedImageResult(
             domainImage = domainImage,
-            domainSubreddit = domainSubreddit
+            domainSubreddit = domainSubreddit,
+            folderName = dbImageIds[networkImage.id].orEmpty()
         )
     }
 }

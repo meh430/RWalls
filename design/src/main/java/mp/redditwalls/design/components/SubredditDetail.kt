@@ -41,7 +41,7 @@ import mp.redditwalls.design.imageBackgroundGradient
 @Composable
 fun SubredditDetail(
     modifier: Modifier = Modifier,
-    description: String,
+    description: String = "",
     headerImageUrl: String,
     iconImageUrl: String,
     subredditName: String,
@@ -65,12 +65,14 @@ fun SubredditDetail(
                 isSaved = isSaved,
                 onSaveChanged = onSaveChanged
             )
-            Text(
-                modifier = Modifier.padding(4.dp),
-                text = description,
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodyMedium
-            )
+            if (description.isNotEmpty()) {
+                Text(
+                    modifier = Modifier.padding(4.dp),
+                    text = description,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         }
     }
 }

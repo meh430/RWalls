@@ -18,7 +18,7 @@ data class ImageItemUiState(
     val numComments: Int = 0,
     val postUrl: String = "",
     val networkId: String = "",
-    val imageUrls: List<ImageUrl>,
+    val imageUrls: List<ImageUrl> = emptyList(),
     val selectionState: MutableState<SelectionState> = mutableStateOf(SelectionState.NOT_SELECTABLE),
     val isLiked: MutableState<Boolean> = mutableStateOf(false),
     val isAlbum: Boolean = false

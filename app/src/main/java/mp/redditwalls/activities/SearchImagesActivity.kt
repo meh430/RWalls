@@ -27,7 +27,7 @@ class SearchImagesActivity : AppCompatActivity() {
         ) ?: return
 
         setContent {
-            RwTheme {
+            RwTheme(isTopLevel = false) {
                 SearchImagesScreen(
                     arguments = arguments,
                     wallpaperHelper = wallpaperHelper

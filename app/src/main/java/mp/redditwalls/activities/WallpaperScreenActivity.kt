@@ -7,13 +7,15 @@ import android.os.Parcelable
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.parcelize.Parcelize
 import mp.redditwalls.design.RwTheme
 import mp.redditwalls.ui.screens.WallpaperScreen
 import mp.redditwalls.utils.Utils
 import mp.redditwalls.utils.parcelable
 
-class WallpaperActivity : ComponentActivity() {
+@AndroidEntryPoint
+class WallpaperScreenActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -41,7 +43,7 @@ class WallpaperActivity : ComponentActivity() {
             arguments: WallpaperActivityArguments
         ) {
             context.startActivity(
-                Intent(context, WallpaperActivity::class.java).apply {
+                Intent(context, WallpaperScreenActivity::class.java).apply {
                     putExtra(WALLPAPER_ACTIVITY_ARGUMENTS, arguments)
                 }
             )
@@ -51,5 +53,5 @@ class WallpaperActivity : ComponentActivity() {
 
 @Parcelize
 data class WallpaperActivityArguments(
-    val imageUrl: String
+    val imageNetworkId: String
 ) : Parcelable
