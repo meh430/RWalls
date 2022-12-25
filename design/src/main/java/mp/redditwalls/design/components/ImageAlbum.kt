@@ -46,8 +46,14 @@ fun PageIndicator(
         selected = true,
         onClick = {},
         colors = FilterChipDefaults.filterChipColors(
-            selectedContainerColor = MaterialTheme.colorScheme.primaryContainer.copy(0.7f)
+            selectedContainerColor = MaterialTheme.colorScheme.surface.copy(0.7f),
+            selectedLabelColor = MaterialTheme.colorScheme.onSurface
         ),
-        label = { Text("${state.currentPage + 1} / ${state.pageCount}") }
+        label = {
+            Text(
+                color = MaterialTheme.colorScheme.onSurface,
+                text = "${state.currentPage + 1} / ${state.pageCount}"
+            )
+        }
     )
 }

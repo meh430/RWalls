@@ -1,16 +1,19 @@
 package mp.redditwalls.ui.screens
 
 import android.app.Activity
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumedWindowInsets
-import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBarsIgnoringVisibility
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -37,6 +40,8 @@ fun WallpaperScreen(
     arguments: WallpaperActivityArguments
 ) {
     val context = LocalContext.current
+    val statusBarHeight =
+        WindowInsets.systemBarsIgnoringVisibility.asPaddingValues().calculateTopPadding()
 
     val pagerState = rememberPagerState()
     val uiState = vm.uiState
@@ -60,20 +65,23 @@ fun WallpaperScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .statusBarsPadding()
-                    .displayCutoutPadding(),
+                    .padding(
+                        vertical = statusBarHeight,
+                        horizontal = 12.dp
+                    ),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 BackButton(
-                    tint = MaterialTheme.colorScheme.surface,
+                    modifier = Modifier.background(
+                        MaterialTheme.colorScheme.surface.copy(0.7f),
+                        CircleShape
+                    ),
+                    tint = MaterialTheme.colorScheme.onSurface,
                     onClick = { (context as? Activity)?.finish() }
                 )
                 if (pagerState.pageCount > 1) {
-                    PageIndicator(
-                        modifier = Modifier.padding(horizontal = 12.dp),
-                        state = pagerState
-                    )
+                    PageIndicator(state = pagerState)
                 }
             }
         }
