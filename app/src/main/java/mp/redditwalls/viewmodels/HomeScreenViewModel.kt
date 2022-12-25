@@ -66,8 +66,6 @@ class HomeScreenViewModel @Inject constructor(
     private fun subscribeToHomeFeed() {
         viewModelScope.launch {
             getHomeFeedUseCase.sharedFlow.collect {
-                uiState.hasMoreImages.value =
-                    it.data?.nextPageId != null && uiState.images.isNotEmpty()
                 uiState.apply {
                     when (it) {
                         is DomainResult.Error -> {
@@ -84,6 +82,8 @@ class HomeScreenViewModel @Inject constructor(
                             folderNames.addAll(it.data?.folderNames.orEmpty())
                             usePresetFolderWhenLiking.value =
                                 it.data?.usePresetFolderWhenLiking == true
+                            uiState.hasMoreImages.value =
+                                it.data?.nextPageId != null && uiState.images.isNotEmpty()
                         }
                     }
                 }
