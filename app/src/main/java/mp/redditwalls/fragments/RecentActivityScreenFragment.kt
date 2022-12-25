@@ -20,7 +20,7 @@ class RecentActivityScreenFragment : Fragment() {
     ) = ComposeView(requireContext()).apply {
         setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         setContent {
-            RwTheme {
+            RwTheme(isTopLevel = false) {
                 RecentActivityScreen(
                     navController = findNavController()
                 )

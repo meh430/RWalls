@@ -21,7 +21,7 @@ class SearchSubredditsScreenFragment : Fragment() {
     ) = ComposeView(requireContext()).apply {
         setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         setContent {
-            RwTheme {
+            RwTheme(isTopLevel = false) {
                 SearchSubredditsScreen(
                     navController = findNavController()
                 )

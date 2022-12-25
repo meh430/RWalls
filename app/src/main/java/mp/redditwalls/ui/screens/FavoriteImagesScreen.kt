@@ -98,7 +98,7 @@ fun FavoriteImagesScreen(
     } else {
         MaterialTheme.colorScheme.surface
     }
-    systemUiController.setSystemBarsColor(topBarColor)
+    systemUiController.setStatusBarColor(topBarColor)
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         floatingActionButton = {

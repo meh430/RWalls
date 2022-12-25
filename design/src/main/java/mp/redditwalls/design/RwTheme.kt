@@ -1,5 +1,6 @@
 package mp.redditwalls.design
 
+import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -8,7 +9,9 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -78,17 +81,28 @@ private val DarkColors = darkColorScheme(
 @Composable
 fun RwTheme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),
+    isTopLevel: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val dynamicColor = true//Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+    val dynamicColor = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
     val colors = when {
         dynamicColor && useDarkTheme -> dynamicDarkColorScheme(LocalContext.current)
         dynamicColor && !useDarkTheme -> dynamicLightColorScheme(LocalContext.current)
         useDarkTheme -> DarkColors
         else -> LightColors
     }
-    val systemUiController = rememberSystemUiController()
-    systemUiController.setSystemBarsColor(colors.surface)
+
+    val systemUIController = rememberSystemUiController()
+    SideEffect {
+        systemUIController.setNavigationBarColor(
+            if (isTopLevel) {
+                colors.surfaceColorAtElevation(3.dp)
+            } else {
+                colors.surface
+            }
+        )
+        systemUIController.setStatusBarColor(colors.surface)
+    }
 
     MaterialTheme(
         colorScheme = colors,
