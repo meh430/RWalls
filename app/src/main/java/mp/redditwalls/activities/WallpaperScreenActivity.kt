@@ -8,14 +8,23 @@ import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlinx.parcelize.Parcelize
+import mp.redditwalls.WallpaperHelper
 import mp.redditwalls.design.RwTheme
 import mp.redditwalls.ui.screens.WallpaperScreen
+import mp.redditwalls.utils.DownloadUtils
 import mp.redditwalls.utils.Utils
 import mp.redditwalls.utils.parcelable
 
 @AndroidEntryPoint
 class WallpaperScreenActivity : ComponentActivity() {
+    @Inject
+    lateinit var wallpaperHelper: WallpaperHelper
+
+    @Inject
+    lateinit var downloadUtils: DownloadUtils
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -30,6 +39,8 @@ class WallpaperScreenActivity : ComponentActivity() {
         setContent {
             RwTheme {
                 WallpaperScreen(
+                    wallpaperHelper = wallpaperHelper,
+                    downloadUtils = downloadUtils,
                     arguments = arguments
                 )
             }

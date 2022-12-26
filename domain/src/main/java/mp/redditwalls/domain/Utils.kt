@@ -23,8 +23,8 @@ internal object Utils {
             ImageQuality.MEDIUM -> medium.ifEmpty { low }.ifEmpty { high }
             ImageQuality.HIGH -> high.ifEmpty { medium }.ifEmpty { low }
         },
-        lowQualityUrl = low,
-        mediumQualityUrl = medium,
-        highQualityUrl = high
+        lowQualityUrl = low.ifEmpty { medium }.ifEmpty { high },
+        mediumQualityUrl = medium.ifEmpty { low }.ifEmpty { high },
+        highQualityUrl = high.ifEmpty { medium }.ifEmpty { low }
     )
 }

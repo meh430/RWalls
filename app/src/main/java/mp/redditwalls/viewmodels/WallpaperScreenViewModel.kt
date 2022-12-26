@@ -21,6 +21,10 @@ class WallpaperScreenViewModel @Inject constructor(
     val savedSubredditViewModel: SavedSubredditViewModel
 ) : ViewModel() {
     var uiState: WallpaperScreenUiState by mutableStateOf(WallpaperScreenUiState())
+    var showSetWallpaperDialog by mutableStateOf(false)
+        private set
+    var showFolderSelectDialog by mutableStateOf(false)
+        private set
 
     init {
         subscribeToImage()
@@ -35,6 +39,22 @@ class WallpaperScreenViewModel @Inject constructor(
         viewModelScope.launch {
             getDetailedImageUseCase(id)
         }
+    }
+
+    fun showSetWallpaperDialog() {
+        showSetWallpaperDialog = true
+    }
+
+    fun dismissSetWallpaperDialog() {
+        showSetWallpaperDialog = false
+    }
+
+    fun showFolderSelectDialog() {
+        showFolderSelectDialog = true
+    }
+
+    fun dismissFolderSelectDialog() {
+        showFolderSelectDialog = false
     }
 
     private fun subscribeToImage() {

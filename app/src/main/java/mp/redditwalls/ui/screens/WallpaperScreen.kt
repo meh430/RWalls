@@ -31,20 +31,27 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
+import mp.redditwalls.WallpaperHelper
 import mp.redditwalls.activities.WallpaperActivityArguments
 import mp.redditwalls.design.components.BackButton
 import mp.redditwalls.design.components.ErrorState
 import mp.redditwalls.design.components.ImageAlbum
+import mp.redditwalls.design.components.ImageFolderRadioDialog
 import mp.redditwalls.design.components.PageIndicator
 import mp.redditwalls.design.components.ThreeDotsLoader
 import mp.redditwalls.models.UiResult
+import mp.redditwalls.ui.components.SetWallpaperDialog
 import mp.redditwalls.ui.components.WallpaperInfoCard
+import mp.redditwalls.utils.DownloadUtils
+import mp.redditwalls.utils.launchBrowser
 import mp.redditwalls.viewmodels.WallpaperScreenViewModel
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun WallpaperScreen(
     vm: WallpaperScreenViewModel = viewModel(),
+    wallpaperHelper: WallpaperHelper,
+    downloadUtils: DownloadUtils,
     arguments: WallpaperActivityArguments
 ) {
     val context = LocalContext.current
@@ -73,6 +80,27 @@ fun WallpaperScreen(
                 }
                 is UiResult.Loading -> ThreeDotsLoader()
                 is UiResult.Success -> {
+                    SetWallpaperDialog(
+                        wallpaperHelper = wallpaperHelper,
+                        context = context,
+                        image = uiState.image.takeIf { vm.showSetWallpaperDialog },
+                        index = pagerState.currentPage,
+                        onDismiss = vm::dismissSetWallpaperDialog
+                    )
+                    ImageFolderRadioDialog(
+                        show = vm.showFolderSelectDialog,
+                        options = vm.uiState.folderNames,
+                        initialSelection = vm.uiState.folderName,
+                        onSubmit = { name ->
+                            vm.favoriteImageViewModel.onLikeClick(
+                                image = vm.uiState.image,
+                                isLiked = true,
+                                folderName = name,
+                                index = pagerState.currentPage
+                            )
+                        },
+                        onDismiss = vm::dismissFolderSelectDialog
+                    )
                     ImageAlbum(
                         modifier = Modifier.fillMaxSize(),
                         state = pagerState,
@@ -112,8 +140,32 @@ fun WallpaperScreen(
                             subreddit = uiState.subreddit,
                             expanded = expanded,
                             onExpand = { expanded = !expanded },
-                            navigateToPost = {},
-                            navigateToUser = {}
+                            navigateToPost = { uiState.image.postUrl.launchBrowser(context) },
+                            navigateToUser = {
+                                uiState.image.authorUrl.launchBrowser(context)
+                            },
+                            onLikeClick = {
+                                if (uiState.usePresetFolderWhenLiking || !it) {
+                                    vm.favoriteImageViewModel.onLikeClick(
+                                        image = uiState.image,
+                                        isLiked = it,
+                                        folderName = null,
+                                        index = pagerState.currentPage
+                                    )
+                                } else {
+                                    vm.showFolderSelectDialog()
+                                }
+                            },
+                            onFolderNameClick = vm::showFolderSelectDialog,
+                            onSaveClick = {
+                                vm.savedSubredditViewModel.onSaveClick(uiState.subreddit, it)
+                            },
+                            onSetWallpaperClick = vm::showSetWallpaperDialog,
+                            onDownloadClick = {
+                                downloadUtils.downloadImage(
+                                    uiState.image.imageUrls[pagerState.currentPage].url
+                                )
+                            },
                         )
                     }
                 }

@@ -6,28 +6,34 @@ import mp.redditwalls.domain.models.DetailedImageResult
 import mp.redditwalls.domain.models.DomainImageUrl
 import mp.redditwalls.domain.models.toDomainImage
 import mp.redditwalls.domain.models.toDomainSubreddit
+import mp.redditwalls.local.repositories.LocalImageFoldersRepository
 import mp.redditwalls.local.repositories.LocalImagesRepository
 import mp.redditwalls.local.repositories.LocalSubredditsRepository
 import mp.redditwalls.network.repositories.ImgurRepository
 import mp.redditwalls.network.repositories.NetworkImagesRepository
 import mp.redditwalls.network.repositories.NetworkSubredditsRepository
+import mp.redditwalls.preferences.PreferencesRepository
 import mp.redditwalls.preferences.enums.ImageQuality
 
 class GetDetailedImageUseCase @Inject constructor(
     private val networkImagesRepository: NetworkImagesRepository,
-    private val localImagesRepository: LocalImagesRepository,
     private val networkSubredditsRepository: NetworkSubredditsRepository,
+    private val localImagesRepository: LocalImagesRepository,
+    private val localImageFoldersRepository: LocalImageFoldersRepository,
     private val localSubredditsRepository: LocalSubredditsRepository,
-    private val imgurRepository: ImgurRepository
+    private val imgurRepository: ImgurRepository,
+    private val preferencesRepository: PreferencesRepository
 ) : FlowUseCase<DetailedImageResult, String>(DetailedImageResult()) {
     // takes network image id
     override fun execute() = combine(
         paramsFlow,
-        localSubredditsRepository.getDbSubreddits()
-    ) { params, dbSubreddits ->
+        preferencesRepository.getAllPreferences(),
+        localSubredditsRepository.getDbSubreddits(),
+        localImagesRepository.getDbImagesFlow(),
+        localImageFoldersRepository.getDbImageFolderNames()
+    ) { params, preferences, dbSubreddits, dbImages, folderNames ->
         val dbSubredditNames = dbSubreddits.map { it.name }.toSet()
-        val dbImageIds =
-            localImagesRepository.getDbImages().associate { it.networkId to it.imageFolderName }
+        val dbImageIds = dbImages.associate { it.networkId to it.imageFolderName }
 
         val networkImage = networkImagesRepository.getImage(params)
 
@@ -62,7 +68,9 @@ class GetDetailedImageUseCase @Inject constructor(
         DetailedImageResult(
             domainImage = domainImage,
             domainSubreddit = domainSubreddit,
-            folderName = dbImageIds[networkImage.id].orEmpty()
+            folderName = dbImageIds[networkImage.id].orEmpty(),
+            folderNames = folderNames,
+            usePresetFolderWhenLiking = preferences.usePresetFolderWhenLiking
         )
     }
 }

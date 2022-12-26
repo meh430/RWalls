@@ -2,7 +2,7 @@ package mp.redditwalls.network
 
 import okhttp3.Credentials
 
-internal object Constants {
+object Constants {
     const val BASE_REDDIT_URL = "https://www.reddit.com"
     const val BASE_REDDIT_MOBILE_URL = "https://m.reddit.com"
     const val BASE_REDDIT_OAUTH_URL = "https://oauth.reddit.com"

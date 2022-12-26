@@ -65,7 +65,12 @@ fun WallpaperInfoCard(
     expanded: Boolean,
     onExpand: () -> Unit,
     navigateToPost: () -> Unit,
-    navigateToUser: () -> Unit
+    navigateToUser: () -> Unit,
+    onLikeClick: (Boolean) -> Unit,
+    onFolderNameClick: () -> Unit,
+    onSaveClick: (Boolean) -> Unit,
+    onSetWallpaperClick: () -> Unit,
+    onDownloadClick: () -> Unit
 ) {
     val df = remember { SimpleDateFormat("MMM. dd, yyyy", Locale.getDefault()) }
     val date = remember(image.createdAt) { df.format(image.createdAt) }
@@ -128,8 +133,8 @@ fun WallpaperInfoCard(
                             ImageFolderButton(
                                 modifier = Modifier.padding(end = 8.dp),
                                 folderName = folderName,
-                                onLikeClick = {},
-                                onFolderNameClick = {}
+                                onLikeClick = onLikeClick,
+                                onFolderNameClick = onFolderNameClick
                             )
                         }
                         items(chips) { (chip, onChipClick) ->
@@ -151,13 +156,13 @@ fun WallpaperInfoCard(
                             subreddit.numSubscribers.toFriendlyCount()
                         ),
                         isSaved = subreddit.isSaved.value,
-                        onSaveChanged = {}
+                        onSaveChanged = onSaveClick
                     )
                     Spacer(Modifier.height(6.dp))
                     Row {
                         FilledTonalButton(
                             modifier = Modifier.weight(1f),
-                            onClick = {},
+                            onClick = onSetWallpaperClick,
                             content = {
                                 Icon(
                                     imageVector = Icons.Default.Image,
@@ -170,7 +175,7 @@ fun WallpaperInfoCard(
                         Spacer(Modifier.width(8.dp))
                         OutlinedButton(
                             modifier = Modifier.weight(1f),
-                            onClick = {},
+                            onClick = onDownloadClick,
                             content = {
                                 Icon(
                                     imageVector = Icons.Default.Download,
@@ -191,7 +196,7 @@ fun WallpaperInfoCard(
 fun ImageFolderButton(
     modifier: Modifier = Modifier,
     folderName: String,
-    onLikeClick: () -> Unit,
+    onLikeClick: (Boolean) -> Unit,
     onFolderNameClick: () -> Unit
 ) {
     val isLiked = folderName.isNotEmpty()
@@ -218,7 +223,7 @@ fun ImageFolderButton(
                 modifier = Modifier.size(18.dp),
                 unlikedTint = MaterialTheme.colorScheme.onPrimary,
                 isLiked = isLiked,
-                onLikeClick = { onLikeClick() }
+                onLikeClick = { onLikeClick(it) }
             )
         }
     }
@@ -250,7 +255,12 @@ fun WallpaperInfoCardPreview() {
                 expanded = expanded,
                 onExpand = { expanded = !expanded },
                 navigateToPost = {},
-                navigateToUser = {}
+                navigateToUser = {},
+                onLikeClick = {},
+                onFolderNameClick = {},
+                onSaveClick = {},
+                onSetWallpaperClick = {},
+                onDownloadClick = {}
             )
         }
     }

@@ -11,6 +11,10 @@ class AddFavoriteImageUseCase @Inject constructor(
     override suspend fun execute(params: Params) {
         params.image.run {
             if (localImagesRepository.dbImageExists(networkId)) {
+                localImagesRepository.updateDbImageFolder(
+                    id = networkId,
+                    folderName = params.folderName
+                )
                 return@run
             }
 

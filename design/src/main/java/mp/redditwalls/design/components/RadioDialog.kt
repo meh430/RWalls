@@ -91,10 +91,15 @@ fun RadioDialog(
 fun ImageFolderRadioDialog(
     show: Boolean,
     options: List<String>,
+    initialSelection: String = "",
     onSubmit: (String) -> Unit,
     onDismiss: () -> Unit
 ) {
-    var selection by remember { mutableStateOf(0) }
+    var selection by remember {
+        mutableStateOf(
+            options.indexOfFirst { it == initialSelection }.takeIf { it >= 0 } ?: 0
+        )
+    }
     RadioDialog(
         show = show,
         title = "Choose folder",

@@ -12,7 +12,7 @@ import javax.inject.Inject
 class DownloadUtils @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
-    private fun downloadImage(imageUrl: String) {
+    fun downloadImage(imageUrl: String) {
         val request = DownloadManager.Request(Uri.parse(imageUrl))
             .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)

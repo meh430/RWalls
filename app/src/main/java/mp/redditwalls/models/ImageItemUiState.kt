@@ -9,6 +9,7 @@ import mp.redditwalls.domain.models.DomainImage
 import mp.redditwalls.domain.models.DomainImageUrl
 import mp.redditwalls.domain.models.DomainRecentActivityItem
 import mp.redditwalls.local.enums.WallpaperLocation
+import mp.redditwalls.network.Constants
 
 data class ImageItemUiState(
     val postTitle: String = "",
@@ -26,6 +27,9 @@ data class ImageItemUiState(
 ) {
     val imageUrl: ImageUrl
         get() = imageUrls.first()
+
+    val authorUrl: String
+        get() = "${Constants.BASE_REDDIT_URL}/u/$author"
 }
 
 fun DomainImage.toImageItemUiState() = ImageItemUiState(
