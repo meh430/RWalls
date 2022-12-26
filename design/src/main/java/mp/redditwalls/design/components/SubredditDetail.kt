@@ -65,14 +65,12 @@ fun SubredditDetail(
                 isSaved = isSaved,
                 onSaveChanged = onSaveChanged
             )
-            if (description.isNotEmpty()) {
-                Text(
-                    modifier = Modifier.padding(4.dp),
-                    text = description,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
+            Text(
+                modifier = Modifier.padding(4.dp),
+                text = description,
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
     }
 }
@@ -84,7 +82,7 @@ fun SubredditHeaderImage(
     iconImageUrl: String,
     subredditName: String,
     title: String,
-    subTitle: String,
+    subTitle: String = "",
     isSaved: Boolean,
     onSaveChanged: (Boolean) -> Unit
 ) {
@@ -149,15 +147,17 @@ fun SubredditHeaderImage(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
-                    Spacer(modifier = Modifier.height(2.dp))
-                    Text(
-                        text = subTitle,
-                        style = style,
-                        color = Color.White,
-                        textAlign = TextAlign.Start,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                    if (subTitle.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(2.dp))
+                        Text(
+                            text = subTitle,
+                            style = style,
+                            color = Color.White,
+                            textAlign = TextAlign.Start,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
                 }
             }
             Row(

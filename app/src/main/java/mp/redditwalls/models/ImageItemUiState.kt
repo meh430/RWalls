@@ -21,7 +21,8 @@ data class ImageItemUiState(
     val imageUrls: List<ImageUrl> = emptyList(),
     val selectionState: MutableState<SelectionState> = mutableStateOf(SelectionState.NOT_SELECTABLE),
     val isLiked: MutableState<Boolean> = mutableStateOf(false),
-    val isAlbum: Boolean = false
+    val isAlbum: Boolean = false,
+    val createdAt: Date = Date()
 ) {
     val imageUrl: ImageUrl
         get() = imageUrls.first()
@@ -37,7 +38,8 @@ fun DomainImage.toImageItemUiState() = ImageItemUiState(
     networkId = networkId,
     imageUrls = domainImageUrls.map { it.toImageUrl() },
     isLiked = mutableStateOf(isLiked),
-    isAlbum = isAlbum
+    isAlbum = isAlbum,
+    createdAt = createdAt
 )
 
 fun ImageItemUiState.toDomainImage() = DomainImage(

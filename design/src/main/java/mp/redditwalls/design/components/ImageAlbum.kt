@@ -2,10 +2,7 @@ package mp.redditwalls.design.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -41,19 +38,10 @@ fun PageIndicator(
     modifier: Modifier = Modifier,
     state: PagerState
 ) {
-    FilterChip(
+    Chip(
         modifier = modifier,
-        selected = true,
-        onClick = {},
-        colors = FilterChipDefaults.filterChipColors(
-            selectedContainerColor = MaterialTheme.colorScheme.surface.copy(0.7f),
-            selectedLabelColor = MaterialTheme.colorScheme.onSurface
-        ),
-        label = {
-            Text(
-                color = MaterialTheme.colorScheme.onSurface,
-                text = "${state.currentPage + 1} / ${state.pageCount}"
-            )
-        }
+        text = "${state.currentPage + 1} / ${state.pageCount}",
+        color = MaterialTheme.colorScheme.surface.copy(0.7f),
+        textColor = MaterialTheme.colorScheme.onSurface
     )
 }

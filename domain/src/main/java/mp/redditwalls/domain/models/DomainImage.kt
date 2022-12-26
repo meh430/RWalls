@@ -1,5 +1,6 @@
 package mp.redditwalls.domain.models
 
+import java.util.Date
 import mp.redditwalls.domain.Utils.getImageUrl
 import mp.redditwalls.local.models.DbImage
 import mp.redditwalls.network.models.NetworkImage
@@ -15,7 +16,8 @@ data class DomainImage(
     val networkId: String = "",
     val domainImageUrls: List<DomainImageUrl> = emptyList(),
     val isLiked: Boolean = false,
-    val isAlbum: Boolean = false
+    val isAlbum: Boolean = false,
+    val createdAt: Date = Date()
 )
 
 data class DomainImageUrl(
@@ -44,7 +46,8 @@ fun NetworkImage.toDomainImage(
         )
     },
     isLiked = isLiked,
-    isAlbum = galleryItems.size > 1
+    isAlbum = galleryItems.size > 1,
+    createdAt = Date(createdUtc * 1000)
 )
 
 fun DbImage.toDomainImage(

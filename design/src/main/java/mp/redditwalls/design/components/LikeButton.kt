@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun LikeButton(
     modifier: Modifier = Modifier,
+    unlikedTint: Color = Color.White,
     isLiked: Boolean,
     onLikeClick: (Boolean) -> Unit
 ) {
@@ -26,7 +27,7 @@ fun LikeButton(
     val iconTint = if (isLiked) {
         Color.Red
     } else {
-        Color.White
+        unlikedTint
     }
 
     Icon(

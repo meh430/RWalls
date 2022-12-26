@@ -34,14 +34,14 @@ class GetDetailedImageUseCase @Inject constructor(
         val domainSubreddit = networkSubredditsRepository.getSubredditDetail(
             networkImage.subredditName
         ).toDomainSubreddit(
-            isSaved = dbSubredditNames.contains(networkImage.subredditName)
+            isSaved = networkImage.subredditName in dbSubredditNames
         )
 
         val domainImage = if (networkImage.imgurAlbumId.isNotEmpty()) {
             // fetch all images from imgur
             networkImage.toDomainImage(
                 previewResolution = ImageQuality.HIGH,
-                isLiked = dbImageIds.contains(networkImage.id)
+                isLiked = networkImage.id in dbImageIds
             ).copy(
                 domainImageUrls = imgurRepository.getAlbum(networkImage.imgurAlbumId).images.map {
                     DomainImageUrl(
@@ -55,7 +55,7 @@ class GetDetailedImageUseCase @Inject constructor(
         } else {
             networkImage.toDomainImage(
                 previewResolution = ImageQuality.HIGH,
-                isLiked = dbImageIds.contains(networkImage.id),
+                isLiked = networkImage.id in dbImageIds,
             )
         }
 
