@@ -1,6 +1,9 @@
 package mp.redditwalls.ui.screens
 
 import android.app.Activity
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -104,69 +107,90 @@ fun WallpaperScreen(
                     ImageAlbum(
                         modifier = Modifier.fillMaxSize(),
                         state = pagerState,
-                        imageUrls = imageUrls
+                        imageUrls = imageUrls,
+                        onClick = vm::toggleUiVisibility,
+                        onLongClick = vm::showSetWallpaperDialog
                     )
-                    Row(
+
+                    AnimatedVisibility(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(
-                                vertical = statusBarHeight,
-                                horizontal = 12.dp
-                            ),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
+                            .align(Alignment.TopCenter),
+                        enter = fadeIn(),
+                        exit = fadeOut(),
+                        visible = !uiState.shouldHideUi
                     ) {
-                        BackButton(
-                            modifier = Modifier.background(
-                                MaterialTheme.colorScheme.surface.copy(0.7f),
-                                CircleShape
-                            ),
-                            tint = MaterialTheme.colorScheme.onSurface,
-                            onClick = { (context as? Activity)?.finish() }
-                        )
-                        if (pagerState.pageCount > 1) {
-                            PageIndicator(state = pagerState)
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    vertical = statusBarHeight,
+                                    horizontal = 12.dp
+                                ),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            BackButton(
+                                modifier = Modifier.background(
+                                    MaterialTheme.colorScheme.surface.copy(0.7f),
+                                    CircleShape
+                                ),
+                                tint = MaterialTheme.colorScheme.onSurface,
+                                onClick = { (context as? Activity)?.finish() }
+                            )
+                            if (pagerState.pageCount > 1) {
+                                PageIndicator(state = pagerState)
+                            }
                         }
                     }
-                    Column(
+                    AnimatedVisibility(
                         modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .padding(12.dp),
-                        horizontalAlignment = Alignment.End
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter),
+                        enter = fadeIn(),
+                        exit = fadeOut(),
+                        visible = !uiState.shouldHideUi
                     ) {
-                        WallpaperInfoCard(
-                            folderName = uiState.folderName,
-                            image = uiState.image,
-                            subreddit = uiState.subreddit,
-                            expanded = expanded,
-                            onExpand = { expanded = !expanded },
-                            navigateToPost = { uiState.image.postUrl.launchBrowser(context) },
-                            navigateToUser = {
-                                uiState.image.authorUrl.launchBrowser(context)
-                            },
-                            onLikeClick = {
-                                if (uiState.usePresetFolderWhenLiking || !it) {
-                                    vm.favoriteImageViewModel.onLikeClick(
-                                        image = uiState.image,
-                                        isLiked = it,
-                                        folderName = null,
-                                        index = pagerState.currentPage
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(12.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            WallpaperInfoCard(
+                                folderName = uiState.folderName,
+                                image = uiState.image,
+                                subreddit = uiState.subreddit,
+                                expanded = expanded,
+                                onExpand = { expanded = !expanded },
+                                navigateToPost = { uiState.image.postUrl.launchBrowser(context) },
+                                navigateToUser = {
+                                    uiState.image.authorUrl.launchBrowser(context)
+                                },
+                                onLikeClick = {
+                                    if (uiState.usePresetFolderWhenLiking || !it) {
+                                        vm.favoriteImageViewModel.onLikeClick(
+                                            image = uiState.image,
+                                            isLiked = it,
+                                            folderName = null,
+                                            index = pagerState.currentPage
+                                        )
+                                    } else {
+                                        vm.showFolderSelectDialog()
+                                    }
+                                },
+                                onFolderNameClick = vm::showFolderSelectDialog,
+                                onSaveClick = {
+                                    vm.savedSubredditViewModel.onSaveClick(uiState.subreddit, it)
+                                },
+                                onSetWallpaperClick = vm::showSetWallpaperDialog,
+                                onDownloadClick = {
+                                    downloadUtils.downloadImage(
+                                        uiState.image.imageUrls[pagerState.currentPage].url
                                     )
-                                } else {
-                                    vm.showFolderSelectDialog()
-                                }
-                            },
-                            onFolderNameClick = vm::showFolderSelectDialog,
-                            onSaveClick = {
-                                vm.savedSubredditViewModel.onSaveClick(uiState.subreddit, it)
-                            },
-                            onSetWallpaperClick = vm::showSetWallpaperDialog,
-                            onDownloadClick = {
-                                downloadUtils.downloadImage(
-                                    uiState.image.imageUrls[pagerState.currentPage].url
-                                )
-                            },
-                        )
+                                },
+                            )
+                        }
                     }
                 }
             }

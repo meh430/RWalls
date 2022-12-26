@@ -12,6 +12,8 @@ import mp.redditwalls.domain.models.DomainResult
 import mp.redditwalls.domain.usecases.GetDetailedImageUseCase
 import mp.redditwalls.models.UiResult
 import mp.redditwalls.models.WallpaperScreenUiState
+import mp.redditwalls.models.hideUi
+import mp.redditwalls.models.showUi
 import mp.redditwalls.models.updateState
 
 @HiltViewModel
@@ -55,6 +57,14 @@ class WallpaperScreenViewModel @Inject constructor(
 
     fun dismissFolderSelectDialog() {
         showFolderSelectDialog = false
+    }
+
+    fun toggleUiVisibility() {
+        uiState = if (uiState.shouldHideUi) {
+            uiState.showUi()
+        } else {
+            uiState.hideUi()
+        }
     }
 
     private fun subscribeToImage() {

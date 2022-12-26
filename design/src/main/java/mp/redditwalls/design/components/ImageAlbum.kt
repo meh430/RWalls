@@ -15,7 +15,9 @@ import com.google.accompanist.pager.rememberPagerState
 fun ImageAlbum(
     modifier: Modifier = Modifier,
     state: PagerState = rememberPagerState(),
-    imageUrls: List<String>
+    imageUrls: List<String>,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit
 ) {
     HorizontalPager(
         modifier = modifier,
@@ -26,7 +28,9 @@ fun ImageAlbum(
             Image(
                 modifier = Modifier.fillMaxWidth(),
                 imageUrl = url,
-                showRipple = false
+                showRipple = false,
+                onTap = onClick,
+                onLongPress = onLongClick
             )
         }
     }

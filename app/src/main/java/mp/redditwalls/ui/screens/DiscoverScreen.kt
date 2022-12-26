@@ -228,7 +228,7 @@ private fun DiscoverScreenContent(
             }
         }
         recentActivityListItems(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
             context = context,
             recentActivityItems = recentActivity,
             onLongClick = onRecentActivityLongClick

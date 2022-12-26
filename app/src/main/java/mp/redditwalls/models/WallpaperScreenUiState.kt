@@ -8,8 +8,13 @@ data class WallpaperScreenUiState(
     val folderName: String = "",
     val folderNames: List<String> = emptyList(),
     val usePresetFolderWhenLiking: Boolean = false,
+    val shouldHideUi: Boolean = false,
     val uiResult: UiResult = UiResult.Loading()
 )
+
+fun WallpaperScreenUiState.hideUi() = copy(shouldHideUi = true)
+
+fun WallpaperScreenUiState.showUi() = copy(shouldHideUi = false)
 
 fun WallpaperScreenUiState.updateState(result: DetailedImageResult) = with(result) {
     copy(
