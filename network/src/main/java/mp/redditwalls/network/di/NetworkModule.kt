@@ -83,7 +83,7 @@ internal object NetworkModule {
     @Provides
     fun provideImgurRetrofit(
         @Named("ImgurOkhttpClient")
-        client: OkHttpClient,
+        client: OkHttpClient
     ): Retrofit = Retrofit.Builder()
         .baseUrl(Constants.BASE_IMGUR_URL)
         .addConverterFactory(MoshiConverterFactory.create())
@@ -141,7 +141,7 @@ internal object NetworkModule {
         .addInterceptor {
             val request = it.request()
                 .newBuilder()
-                .header("Authorization", "Bearer ${Constants.IMGUR_CLIENT_ID}")
+                .header("Authorization", "Client-ID ${Constants.IMGUR_CLIENT_ID}")
                 .header("Content-Type", "application/json")
                 .build()
             it.proceed(request)

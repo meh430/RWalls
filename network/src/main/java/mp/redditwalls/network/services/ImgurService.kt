@@ -6,5 +6,5 @@ import retrofit2.http.Path
 
 interface ImgurService {
     @GET("/3/album/{id}")
-    fun getAlbumImages(@Path("id") id: String): ImgurAlbumResponse
+    suspend fun getAlbumImages(@Path("id") id: String): ImgurAlbumResponse
 }

@@ -46,7 +46,7 @@ fun NetworkImage.toDomainImage(
         )
     },
     isLiked = isLiked,
-    isAlbum = galleryItems.size > 1,
+    isAlbum = galleryItems.size > 1 || imgurAlbumId.isNotEmpty(),
     createdAt = Date(createdUtc * 1000)
 )
 
