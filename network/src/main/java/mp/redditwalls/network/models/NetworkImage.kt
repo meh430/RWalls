@@ -48,6 +48,7 @@ data class NetworkImage(
                 null
             }
 
+            // TODO refactor and use regex
             var imgurAlbumId = ""
             if (json.has("media") && !json.get("media").isJsonNull) {
                 val media = json.getAsJsonObject("media")
@@ -56,11 +57,16 @@ data class NetworkImage(
                     val oembed = media.getAsJsonObject("oembed")
                     oembed.getString("url").takeIf {
                         it.contains("/a/")
-                    }?.split("/")?.last().orEmpty()
+                    }?.split("/")?.lastOrNull().orEmpty()
                 } else {
                     ""
                 }
+            } else if (json.has("url")) {
+                imgurAlbumId = json.getString("url").takeIf {
+                    it.contains("imgur.com/a/")
+                }?.split("/")?.lastOrNull().orEmpty()
             }
+
 
             galleryItems.takeIf { it?.isNotEmpty() == true }?.let {
                 NetworkImage(
