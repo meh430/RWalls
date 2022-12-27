@@ -5,8 +5,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.retryWhen
 import kotlinx.coroutines.launch
 import mp.redditwalls.domain.models.DomainResult
 
@@ -29,8 +29,9 @@ abstract class FlowUseCase<D : Any, P : Any>(private val initialData: D) {
     fun init(coroutineScope: CoroutineScope) {
         coroutineScope.launch {
             initialized = true
-            execute().catch { e ->
+            execute().retryWhen { e, _ ->
                 updateData(DomainResult.Error(message = e.localizedMessage.orEmpty()))
+                true
             }.flowOn(Dispatchers.IO).collect { result ->
                 updateData(DomainResult.Success(result))
             }
