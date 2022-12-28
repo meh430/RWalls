@@ -12,7 +12,6 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import mp.redditwalls.preferences.PreferencesRepository
-import mp.redditwalls.utils.RwToLocalMigration
 import timber.log.Timber
 
 @HiltAndroidApp
@@ -25,9 +24,6 @@ class RWApplication : Application(), Configuration.Provider {
     @Inject
     lateinit var preferencesRepository: PreferencesRepository
 
-    @Inject
-    lateinit var rwToLocalMigration: RwToLocalMigration
-
     override fun onCreate() {
         super.onCreate()
         if (BuildConfig.DEBUG) {
@@ -38,7 +34,6 @@ class RWApplication : Application(), Configuration.Provider {
             AppCompatDelegate.setDefaultNightMode(
                 preferencesRepository.getTheme().first().toThemeMode()
             )
-            rwToLocalMigration.migrate()
         }
 
         DynamicColors.applyToActivitiesIfAvailable(this)
