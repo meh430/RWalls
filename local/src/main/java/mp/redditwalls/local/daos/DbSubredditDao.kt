@@ -13,6 +13,9 @@ interface DbSubredditDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDbSubreddit(dbSubreddit: DbSubreddit)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertDbSubreddits(dbSubreddits: List<DbSubreddit>)
+
     @Update
     suspend fun updateDbSubreddits(dbSubreddits: List<DbSubreddit>)
 

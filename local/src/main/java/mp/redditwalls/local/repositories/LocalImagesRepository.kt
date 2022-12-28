@@ -11,6 +11,13 @@ class LocalImagesRepository @Inject constructor(private val dbImageDao: DbImageD
     suspend fun dbImageExists(id: String) = withContext(Dispatchers.IO) {
         dbImageDao.dbImageExists(id)
     }
+
+    suspend fun insertDbImages(dbImages: List<DbImage>) {
+        withContext(Dispatchers.IO) {
+            dbImageDao.insertDbImages(dbImages)
+        }
+    }
+
     suspend fun insertDbImage(dbImage: DbImage) {
         withContext(Dispatchers.IO) {
             dbImageDao.insertDbImage(dbImage)

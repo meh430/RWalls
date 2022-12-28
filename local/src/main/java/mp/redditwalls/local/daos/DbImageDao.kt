@@ -12,6 +12,9 @@ interface DbImageDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDbImage(dbImage: DbImage)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertDbImages(dbImages: List<DbImage>)
+
     @Query("UPDATE FavoriteImages SET imageFolderName = :imageFolderName WHERE networkId = :id")
     suspend fun updateDbImageFolder(id: String, imageFolderName: String)
 

@@ -14,6 +14,12 @@ class LocalSubredditsRepository @Inject constructor(private val dbSubredditDao: 
         }
     }
 
+    suspend fun insertDbSubreddits(dbSubreddits: List<DbSubreddit>) {
+        withContext(Dispatchers.IO) {
+            dbSubredditDao.insertDbSubreddits(dbSubreddits)
+        }
+    }
+
     suspend fun updateDbSubreddits(dbSubreddits: List<DbSubreddit>) {
         withContext(Dispatchers.IO) {
             dbSubredditDao.updateDbSubreddits(dbSubreddits)
