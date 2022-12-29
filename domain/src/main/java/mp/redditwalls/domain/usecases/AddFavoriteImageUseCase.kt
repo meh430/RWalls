@@ -24,9 +24,9 @@ class AddFavoriteImageUseCase @Inject constructor(
                     postTitle = postTitle,
                     subredditName = subredditName,
                     postUrl = postUrl,
-                    lowQualityUrl = domainImageUrls[params.index].lowQualityUrl,
-                    mediumQualityUrl = domainImageUrls[params.index].mediumQualityUrl,
-                    sourceUrl = domainImageUrls[params.index].highQualityUrl,
+                    lowQualityUrl = imageUrls[params.index].lowQualityUrl,
+                    mediumQualityUrl = imageUrls[params.index].mediumQualityUrl,
+                    sourceUrl = imageUrls[params.index].highQualityUrl,
                     imageFolderName = params.folderName
                 )
             )

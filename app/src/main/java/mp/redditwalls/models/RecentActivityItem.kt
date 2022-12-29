@@ -2,6 +2,7 @@ package mp.redditwalls.models
 
 import java.util.Date
 import mp.redditwalls.domain.models.DomainRecentActivityItem
+import mp.redditwalls.domain.models.ImageUrl
 import mp.redditwalls.local.enums.WallpaperLocation
 
 sealed class RecentActivityItem(
@@ -52,7 +53,7 @@ fun DomainRecentActivityItem.toRecentActivityItem() = when (this) {
             dbId = dbId,
             createdAt = createdAt,
             subredditName = subredditName,
-            imageUrl = domainImageUrl.toImageUrl(),
+            imageUrl = imageUrl,
             imageNetworkId = imageNetworkId,
             wallpaperLocation = wallpaperLocation
         )
@@ -77,7 +78,7 @@ fun DomainRecentActivityItem.toRecentActivityItem() = when (this) {
             dbId = dbId,
             createdAt = createdAt,
             subredditName = subredditName,
-            imageUrl = domainImageUrl.toImageUrl(),
+            imageUrl = imageUrl,
             imageNetworkId = imageNetworkId,
             wallpaperLocation = wallpaperLocation
         )

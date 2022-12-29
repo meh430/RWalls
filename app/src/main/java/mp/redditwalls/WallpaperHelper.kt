@@ -30,7 +30,7 @@ class WallpaperHelper @Inject constructor(
             if (home != null) {
                 setImageAsWallpaper(
                     context,
-                    home.domainImageUrls[0].url,
+                    home.imageUrls[0].url,
                     WallpaperLocation.HOME,
                     home.toImageItemUiState().toDomainWallpaperRecentActivityItem(
                         location = mp.redditwalls.local.enums.WallpaperLocation.HOME,
@@ -41,7 +41,7 @@ class WallpaperHelper @Inject constructor(
             if (lock != null) {
                 setImageAsWallpaper(
                     context,
-                    lock.domainImageUrls[0].url,
+                    lock.imageUrls[0].url,
                     WallpaperLocation.LOCK,
                     lock.toImageItemUiState().toDomainWallpaperRecentActivityItem(
                         location = mp.redditwalls.local.enums.WallpaperLocation.LOCK_SCREEN,

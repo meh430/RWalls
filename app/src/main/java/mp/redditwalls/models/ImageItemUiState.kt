@@ -6,8 +6,8 @@ import java.util.Date
 import mp.redditwalls.design.components.ImageCardModel
 import mp.redditwalls.design.components.SelectionState
 import mp.redditwalls.domain.models.DomainImage
-import mp.redditwalls.domain.models.DomainImageUrl
 import mp.redditwalls.domain.models.DomainRecentActivityItem
+import mp.redditwalls.domain.models.ImageUrl
 import mp.redditwalls.local.enums.WallpaperLocation
 import mp.redditwalls.network.Constants
 
@@ -40,7 +40,7 @@ fun DomainImage.toImageItemUiState() = ImageItemUiState(
     numComments = numComments,
     postUrl = postUrl,
     networkId = networkId,
-    imageUrls = domainImageUrls.map { it.toImageUrl() },
+    imageUrls = imageUrls,
     isLiked = mutableStateOf(isLiked),
     isAlbum = isAlbum,
     createdAt = createdAt
@@ -54,8 +54,8 @@ fun ImageItemUiState.toDomainImage() = DomainImage(
     numComments = numComments,
     postUrl = postUrl,
     networkId = networkId,
-    domainImageUrls = imageUrls.map { imageUrl ->
-        DomainImageUrl(
+    imageUrls = imageUrls.map { imageUrl ->
+        ImageUrl(
             url = imageUrl.url,
             lowQualityUrl = imageUrl.lowQualityUrl,
             mediumQualityUrl = imageUrl.mediumQualityUrl,
@@ -92,8 +92,8 @@ fun ImageItemUiState.toDomainWallpaperRecentActivityItem(
         dbId = 0,
         createdAt = Date(),
         subredditName = subredditName,
-        domainImageUrl = imageUrls.first().let { imageUrl ->
-            DomainImageUrl(
+        imageUrl = imageUrls.first().let { imageUrl ->
+            ImageUrl(
                 url = imageUrl.url,
                 lowQualityUrl = imageUrl.lowQualityUrl,
                 mediumQualityUrl = imageUrl.mediumQualityUrl,
@@ -108,8 +108,8 @@ fun ImageItemUiState.toDomainWallpaperRecentActivityItem(
         dbId = 0,
         createdAt = Date(),
         subredditName = subredditName,
-        domainImageUrl = imageUrls.first().let { imageUrl ->
-            DomainImageUrl(
+        imageUrl = imageUrls.first().let { imageUrl ->
+            ImageUrl(
                 url = imageUrl.url,
                 lowQualityUrl = imageUrl.lowQualityUrl,
                 mediumQualityUrl = imageUrl.mediumQualityUrl,
@@ -120,17 +120,3 @@ fun ImageItemUiState.toDomainWallpaperRecentActivityItem(
         wallpaperLocation = location
     )
 }
-
-data class ImageUrl(
-    val url: String = "",
-    val lowQualityUrl: String = "",
-    val mediumQualityUrl: String = "",
-    val highQualityUrl: String = "",
-)
-
-fun DomainImageUrl.toImageUrl() = ImageUrl(
-    url = url,
-    highQualityUrl = highQualityUrl,
-    mediumQualityUrl = mediumQualityUrl,
-    lowQualityUrl = lowQualityUrl
-)

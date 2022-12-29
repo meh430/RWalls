@@ -34,7 +34,7 @@ sealed class DomainRecentActivityItem(
         dbId: Int,
         createdAt: Date,
         val subredditName: String,
-        val domainImageUrl: DomainImageUrl,
+        val imageUrl: ImageUrl,
         val imageNetworkId: String,
         val wallpaperLocation: WallpaperLocation
     ) : DomainRecentActivityItem(dbId, createdAt)
@@ -43,7 +43,7 @@ sealed class DomainRecentActivityItem(
         dbId: Int,
         createdAt: Date,
         val subredditName: String,
-        val domainImageUrl: DomainImageUrl,
+        val imageUrl: ImageUrl,
         val imageNetworkId: String,
         val wallpaperLocation: WallpaperLocation
     ) : DomainRecentActivityItem(dbId, createdAt)
@@ -71,7 +71,7 @@ fun DbRecentActivityItem.toDomainRecentActivityItem(previewResolution: ImageQual
             dbId = id,
             createdAt = Date(createdAt),
             subredditName = subredditName,
-            domainImageUrl = previewResolution.getImageUrl(
+            imageUrl = previewResolution.getImageUrl(
                 lowQualityUrl,
                 mediumQualityUrl,
                 sourceUrl
@@ -83,7 +83,7 @@ fun DbRecentActivityItem.toDomainRecentActivityItem(previewResolution: ImageQual
             dbId = id,
             createdAt = Date(createdAt),
             subredditName = subredditName,
-            domainImageUrl = previewResolution.getImageUrl(
+            imageUrl = previewResolution.getImageUrl(
                 lowQualityUrl,
                 mediumQualityUrl,
                 sourceUrl

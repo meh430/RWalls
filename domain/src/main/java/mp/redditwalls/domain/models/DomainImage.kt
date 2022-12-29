@@ -2,6 +2,8 @@ package mp.redditwalls.domain.models
 
 import java.util.Date
 import mp.redditwalls.domain.Utils.getImageUrl
+import mp.redditwalls.local.buildDbImageId
+import mp.redditwalls.local.getNetworkImageIdAndIndex
 import mp.redditwalls.local.models.DbImage
 import mp.redditwalls.network.models.NetworkImage
 import mp.redditwalls.preferences.enums.ImageQuality
@@ -14,18 +16,31 @@ data class DomainImage(
     val numComments: Int = 0,
     val postUrl: String = "",
     val networkId: String = "",
-    val domainImageUrls: List<DomainImageUrl> = emptyList(),
+    val imageUrls: List<ImageUrl> = emptyList(),
     val isLiked: Boolean = false,
     val isAlbum: Boolean = false,
     val createdAt: Date = Date()
 )
 
-data class DomainImageUrl(
+data class ImageUrl(
     val url: String = "", // url to use based on prefs
     val lowQualityUrl: String = "",
     val mediumQualityUrl: String = "",
     val highQualityUrl: String = "",
 )
+
+data class ImageId(
+    val networkId: String,
+    val index: Int // image index in gallery
+) {
+    val dbImageId: String
+        get() = networkId.buildDbImageId(index)
+
+    constructor(dbImageId: String) : this(
+        dbImageId.getNetworkImageIdAndIndex().first,
+        dbImageId.getNetworkImageIdAndIndex().second
+    )
+}
 
 fun NetworkImage.toDomainImage(
     previewResolution: ImageQuality,
@@ -38,7 +53,7 @@ fun NetworkImage.toDomainImage(
     numUpvotes = numUpvotes,
     numComments = numComments,
     postUrl = postUrl,
-    domainImageUrls = galleryItems.map {
+    imageUrls = galleryItems.map {
         previewResolution.getImageUrl(
             it.lowQualityUrl,
             it.mediumQualityUrl,
@@ -58,7 +73,7 @@ fun DbImage.toDomainImage(
     subredditName = subredditName,
     postUrl = postUrl,
     networkId = networkId,
-    domainImageUrls = listOf(
+    imageUrls = listOf(
         previewResolution.getImageUrl(
             lowQualityUrl,
             mediumQualityUrl,

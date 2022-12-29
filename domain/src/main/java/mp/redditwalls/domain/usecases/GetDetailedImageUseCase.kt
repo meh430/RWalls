@@ -3,7 +3,7 @@ package mp.redditwalls.domain.usecases
 import javax.inject.Inject
 import kotlinx.coroutines.flow.combine
 import mp.redditwalls.domain.models.DetailedImageResult
-import mp.redditwalls.domain.models.DomainImageUrl
+import mp.redditwalls.domain.models.ImageUrl
 import mp.redditwalls.domain.models.toDomainImage
 import mp.redditwalls.domain.models.toDomainSubreddit
 import mp.redditwalls.local.repositories.LocalImageFoldersRepository
@@ -49,8 +49,8 @@ class GetDetailedImageUseCase @Inject constructor(
                 previewResolution = ImageQuality.HIGH,
                 isLiked = networkImage.id in dbImageIds
             ).copy(
-                domainImageUrls = imgurRepository.getAlbum(networkImage.imgurAlbumId).images.map {
-                    DomainImageUrl(
+                imageUrls = imgurRepository.getAlbum(networkImage.imgurAlbumId).images.map {
+                    ImageUrl(
                         url = it.link,
                         lowQualityUrl = it.link,
                         mediumQualityUrl = it.link,

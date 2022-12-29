@@ -1,6 +1,6 @@
 package mp.redditwalls.domain
 
-import mp.redditwalls.domain.models.DomainImageUrl
+import mp.redditwalls.domain.models.ImageUrl
 import mp.redditwalls.network.models.TimeFilter
 import mp.redditwalls.preferences.enums.ImageQuality
 import mp.redditwalls.preferences.enums.SortOrder
@@ -17,7 +17,7 @@ internal object Utils {
 
     fun ImageQuality.getImageUrl(
         low: String, medium: String, high: String
-    ) = DomainImageUrl(
+    ) = ImageUrl(
         url = when (this) {
             ImageQuality.LOW -> low.ifEmpty { medium }.ifEmpty { high }
             ImageQuality.MEDIUM -> medium.ifEmpty { low }.ifEmpty { high }
