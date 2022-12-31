@@ -7,6 +7,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.launch
 import mp.redditwalls.domain.models.DomainResult
 import mp.redditwalls.domain.usecases.GetDiscoverUseCase
+import mp.redditwalls.domain.usecases.GetFavoriteImageIdsSetUseCase
 import mp.redditwalls.models.DiscoverScreenUiState
 import mp.redditwalls.models.UiResult
 import mp.redditwalls.models.clear
@@ -16,6 +17,7 @@ import mp.redditwalls.models.toRecommendedSubredditUiState
 @HiltViewModel
 class DiscoverScreenViewModel @Inject constructor(
     private val getDiscoverUseCase: GetDiscoverUseCase,
+    private val getFavoriteImageIdsSetUseCase: GetFavoriteImageIdsSetUseCase,
     val favoriteImageViewModel: FavoriteImageViewModel,
     val savedSubredditViewModel: SavedSubredditViewModel,
     val recentActivityViewModel: RecentActivityViewModel
@@ -65,6 +67,18 @@ class DiscoverScreenViewModel @Inject constructor(
                             )
                             folderNames.addAll(it.data?.folderNames.orEmpty())
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    fun updateLikeState() {
+        viewModelScope.launch {
+            (getFavoriteImageIdsSetUseCase(Unit) as? DomainResult.Success)?.data?.let {
+                uiState.recommendedSubreddits.forEach { recommendation ->
+                    recommendation.images.forEach { image ->
+                        image.isLiked.value = image.imageId.dbImageId in it
                     }
                 }
             }

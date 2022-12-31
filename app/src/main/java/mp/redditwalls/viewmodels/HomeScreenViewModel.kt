@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 import mp.redditwalls.domain.models.DomainResult
+import mp.redditwalls.domain.usecases.GetFavoriteImageIdsSetUseCase
 import mp.redditwalls.domain.usecases.GetHomeFeedUseCase
 import mp.redditwalls.models.HomeScreenUiState
 import mp.redditwalls.models.ImageItemUiState
@@ -17,6 +18,7 @@ import mp.redditwalls.preferences.enums.SortOrder
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
     private val getHomeFeedUseCase: GetHomeFeedUseCase,
+    private val getFavoriteImageIdsSetUseCase: GetFavoriteImageIdsSetUseCase,
     val favoriteImageViewModel: FavoriteImageViewModel
 ) : ViewModel() {
     val uiState = HomeScreenUiState()
@@ -96,6 +98,16 @@ class HomeScreenViewModel @Inject constructor(
                     verticalSwipeFeedEnabled.value = swipeFeedEnabled
                 }
                 fetchHomeFeed(reload = true)
+            }
+        }
+    }
+
+    fun updateLikeState() {
+        viewModelScope.launch {
+            (getFavoriteImageIdsSetUseCase(Unit) as? DomainResult.Success)?.data?.let {
+                uiState.images.forEach { image ->
+                    image.isLiked.value = image.imageId.dbImageId in it
+                }
             }
         }
     }
