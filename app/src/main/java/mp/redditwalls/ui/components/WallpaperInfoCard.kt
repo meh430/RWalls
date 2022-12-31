@@ -131,7 +131,7 @@ fun WallpaperInfoCard(
                         item {
                             ImageFolderButton(
                                 modifier = Modifier.padding(end = 8.dp),
-                                folderName = image.folderName.value,
+                                folderName = image.folderName,
                                 onLikeClick = onLikeClick,
                                 onFolderNameClick = onFolderNameClick
                             )

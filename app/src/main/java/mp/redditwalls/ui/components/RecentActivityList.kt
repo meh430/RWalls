@@ -2,6 +2,8 @@ package mp.redditwalls.ui.components
 
 import android.content.Context
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
@@ -16,38 +18,16 @@ import mp.redditwalls.activities.SearchImagesActivity
 import mp.redditwalls.activities.SearchImagesActivityArguments
 import mp.redditwalls.models.RecentActivityItem
 
-@Composable
-fun RecentActivityList(
-    modifier: Modifier = Modifier,
-    listState: LazyListState = rememberLazyListState(),
-    contentPadding: PaddingValues = PaddingValues(8.dp),
-    recentActivityItems: List<RecentActivityItem>,
-    onClick: (RecentActivityItem) -> Unit,
-    onLongClick: (RecentActivityItem) -> Unit
-) {
-    val context = LocalContext.current
-    LazyColumn(
-        modifier = modifier,
-        state = listState,
-        contentPadding = contentPadding
-    ) {
-        recentActivityListItems(
-            modifier = Modifier.padding(16.dp),
-            recentActivityItems = recentActivityItems,
-            onClick = onClick,
-            onLongClick = onLongClick,
-            context = context
-        )
-    }
-}
-
 fun LazyListScope.recentActivityListItems(
     modifier: Modifier = Modifier,
     context: Context,
     recentActivityItems: List<RecentActivityItem>,
     onClick: (RecentActivityItem) -> Unit = { recentActivity ->
         when (recentActivity) {
-            is RecentActivityItem.RefreshWallpaperActivityItem -> TODO()
+            is RecentActivityItem.RefreshWallpaperActivityItem -> onImageCardClick(
+                context,
+                recentActivity.imageId
+            )
             is RecentActivityItem.SearchAllActivityItem -> SearchImagesActivity.launch(
                 context,
                 SearchImagesActivityArguments(
@@ -61,7 +41,10 @@ fun LazyListScope.recentActivityListItems(
                     subreddit = recentActivity.subredditName
                 )
             )
-            is RecentActivityItem.SetWallpaperActivityItem -> TODO()
+            is RecentActivityItem.SetWallpaperActivityItem -> onImageCardClick(
+                context,
+                recentActivity.imageId
+            )
             is RecentActivityItem.VisitSubredditActivityItem -> SearchImagesActivity.launch(
                 context,
                 SearchImagesActivityArguments(
@@ -79,5 +62,8 @@ fun LazyListScope.recentActivityListItems(
             onClick = { onClick(recentActivityItem) },
             onLongClick = { onLongClick(recentActivityItem) }
         )
+    }
+    item {
+        Spacer(modifier = Modifier.height(8.dp))
     }
 }

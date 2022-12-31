@@ -29,6 +29,7 @@ import mp.redditwalls.design.components.EmptyState
 import mp.redditwalls.design.components.ImageCard
 import mp.redditwalls.design.components.ImageFolderRadioDialog
 import mp.redditwalls.design.components.ThreeDotsLoader
+import mp.redditwalls.domain.models.ImageId
 import mp.redditwalls.models.ImageItemUiState
 import mp.redditwalls.models.toImageCardModel
 import mp.redditwalls.utils.OnBottomReached
@@ -43,7 +44,7 @@ fun ImagesList(
     isLoading: Boolean,
     usePresetFolderWhenLiking: Boolean,
     folderNames: List<String>,
-    onClick: (ImageItemUiState) -> Unit = { onImageCardClick(context, it) },
+    onClick: (ImageItemUiState) -> Unit = { onImageCardClick(context, it.imageId) },
     onImageLongPress: (ImageItemUiState) -> Unit,
     onLikeClick: (image: ImageItemUiState, isLiked: Boolean, folder: String?) -> Unit,
     onLoadMore: () -> Unit,
@@ -135,11 +136,11 @@ fun ImagesList(
     }
 }
 
-fun onImageCardClick(context: Context, image: ImageItemUiState) {
+fun onImageCardClick(context: Context, imageId: ImageId) {
     WallpaperScreenActivity.launch(
         context = context,
         arguments = WallpaperActivityArguments(
-            imageId = image.imageId
+            imageId = imageId
         )
     )
 }

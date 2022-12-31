@@ -21,7 +21,7 @@ data class ImageItemUiState(
     val postUrl: String = "",
     val imageId: ImageId = ImageId(),
     val imageUrl: ImageUrl = ImageUrl(),
-    val folderName: MutableState<String> = mutableStateOf(""),
+    val folderName: String = "",
     val selectionState: MutableState<SelectionState> = mutableStateOf(SelectionState.NOT_SELECTABLE),
     val isLiked: MutableState<Boolean> = mutableStateOf(false),
     val isAlbum: Boolean = false,
@@ -41,7 +41,7 @@ fun DomainImage.toImageItemUiState() = ImageItemUiState(
     imageId = imageId,
     imageUrl = imageUrls.first(),
     isLiked = mutableStateOf(isLiked),
-    folderName = mutableStateOf(folderName),
+    folderName = folderName,
     isAlbum = isAlbum,
     createdAt = createdAt
 )
@@ -55,7 +55,7 @@ fun ImageItemUiState.toDomainImage() = DomainImage(
     postUrl = postUrl,
     imageId = imageId,
     imageUrls = listOf(imageUrl),
-    folderName = folderName.value,
+    folderName = folderName,
     isLiked = isLiked.value,
     isAlbum = isAlbum
 )

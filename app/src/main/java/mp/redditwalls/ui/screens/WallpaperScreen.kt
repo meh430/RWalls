@@ -83,10 +83,13 @@ fun WallpaperScreen(
                 }
                 is UiResult.Loading -> ThreeDotsLoader()
                 is UiResult.Success -> {
+                    val currentImage = remember(uiState.images, pagerState.currentPage) {
+                        uiState.images[pagerState.currentPage]
+                    }
                     SetWallpaperDialog(
                         wallpaperHelper = wallpaperHelper,
                         context = context,
-                        image = uiState.images[pagerState.currentPage].takeIf {
+                        image = currentImage.takeIf {
                             vm.showSetWallpaperDialog
                         },
                         onDismiss = vm::dismissSetWallpaperDialog
@@ -94,10 +97,10 @@ fun WallpaperScreen(
                     ImageFolderRadioDialog(
                         show = vm.showFolderSelectDialog,
                         options = uiState.folderNames,
-                        initialSelection = uiState.images[pagerState.currentPage].folderName.value,
+                        initialSelection = currentImage.folderName,
                         onSubmit = { name ->
                             vm.favoriteImageViewModel.onLikeClick(
-                                image = vm.uiState.images[pagerState.currentPage],
+                                image = currentImage,
                                 isLiked = true,
                                 folderName = name
                             )
@@ -158,24 +161,24 @@ fun WallpaperScreen(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             WallpaperInfoCard(
-                                image = uiState.images[pagerState.currentPage],
+                                image = currentImage,
                                 subreddit = uiState.subreddit,
                                 expanded = expanded,
                                 onExpand = { expanded = !expanded },
                                 navigateToPost = {
-                                    uiState.images[pagerState.currentPage].postUrl.launchBrowser(
+                                    currentImage.postUrl.launchBrowser(
                                         context
                                     )
                                 },
                                 navigateToUser = {
-                                    uiState.images[pagerState.currentPage].authorUrl.launchBrowser(
+                                    currentImage.authorUrl.launchBrowser(
                                         context
                                     )
                                 },
                                 onLikeClick = {
                                     if (uiState.usePresetFolderWhenLiking || !it) {
                                         vm.favoriteImageViewModel.onLikeClick(
-                                            image = uiState.images[pagerState.currentPage],
+                                            image = currentImage,
                                             isLiked = it,
                                             folderName = null
                                         )
@@ -189,9 +192,7 @@ fun WallpaperScreen(
                                 },
                                 onSetWallpaperClick = vm::showSetWallpaperDialog,
                                 onDownloadClick = {
-                                    downloadUtils.downloadImage(
-                                        uiState.images[pagerState.currentPage].imageUrl.url
-                                    )
+                                    downloadUtils.downloadImage(currentImage.imageUrl.url)
                                 },
                             )
                         }

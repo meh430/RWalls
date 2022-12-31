@@ -172,7 +172,7 @@ private fun DiscoverScreenContent(
                 isSaved = it.subredditItemUiState.isSaved.value,
                 imageCardModels = it.images.map { image ->
                     image.toImageCardModel(
-                        onClick = { onImageCardClick(context, image) },
+                        onClick = { onImageCardClick(context, image.imageId) },
                         onLikeClick = { isLiked ->
                             if (usePresetFolderWhenLiking || !isLiked) {
                                 onLikeClick(image, isLiked, null)

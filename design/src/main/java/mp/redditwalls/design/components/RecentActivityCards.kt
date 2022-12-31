@@ -64,6 +64,7 @@ fun ImageRecentActivityCard(
             Image(
                 modifier = Modifier.fillMaxSize(),
                 imageUrl = imageUrl,
+                onTap = onClick,
                 onLongPress = onLongClick
             )
             Box(

@@ -201,7 +201,7 @@ fun FavoriteImagesScreen(
                             if (uiState.selecting.value) {
                                 vm.selectImage(it)
                             } else {
-                                onImageCardClick(context, it)
+                                onImageCardClick(context, it.imageId)
                             }
                         },
                         onImageLongPress = {
