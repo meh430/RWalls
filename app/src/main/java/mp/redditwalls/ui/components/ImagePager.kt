@@ -60,7 +60,7 @@ fun ImagePager(
         modifier = modifier.fillMaxSize(),
         count = images.size,
         state = pagerState,
-        key = { images.getOrNull(it)?.networkId.orEmpty() }
+        key = { images.getOrNull(it)?.imageId?.dbImageId.orEmpty() }
     ) { index ->
         images.getOrNull(index)?.let { image ->
             ImagePage(

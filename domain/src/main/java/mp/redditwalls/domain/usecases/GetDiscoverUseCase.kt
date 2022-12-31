@@ -7,11 +7,13 @@ import mp.redditwalls.domain.models.RecommendedSubreddit
 import mp.redditwalls.domain.models.toDomainImage
 import mp.redditwalls.domain.models.toDomainRecentActivityItem
 import mp.redditwalls.domain.models.toDomainSubreddit
+import mp.redditwalls.local.getFirstDbImageInAlbum
 import mp.redditwalls.local.repositories.LocalImageFoldersRepository
 import mp.redditwalls.local.repositories.LocalImagesRepository
 import mp.redditwalls.local.repositories.LocalSubredditsRepository
 import mp.redditwalls.local.repositories.RecentActivityRepository
 import mp.redditwalls.local.repositories.RecommendedSubredditsRepository
+import mp.redditwalls.local.toNetworkIdToDbImageMap
 import mp.redditwalls.network.models.TimeFilter
 import mp.redditwalls.network.repositories.NetworkImagesRepository
 import mp.redditwalls.network.repositories.NetworkSubredditsRepository
@@ -41,7 +43,7 @@ class GetDiscoverUseCase @Inject constructor(
         val dbSubredditNames = localSubredditsRepository.getDbSubredditsList().map {
             it.name.uppercase()
         }.toSet()
-        val dbImageIds = localImagesRepository.getDbImages().map { it.networkId }.toSet()
+        val dbImageIds = localImagesRepository.getDbImages().toNetworkIdToDbImageMap()
         val recommendations = recommendedSubredditsRepository.getRecommendedSubreddits()
             .shuffled()
             .take(RECOMMENDATION_LIMIT).let { subredditNames ->
@@ -62,7 +64,7 @@ class GetDiscoverUseCase @Inject constructor(
                 ).images.map { networkImage ->
                     networkImage.toDomainImage(
                         previewResolution = preferences.previewResolution,
-                        isLiked = dbImageIds.contains(networkImage.id)
+                        dbImage = dbImageIds.getFirstDbImageInAlbum(networkImage.id)
                     )
                 }.filter { !it.postTitle.contains("Net Neutrality", true) }
                 RecommendedSubreddit(

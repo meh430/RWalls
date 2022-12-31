@@ -77,7 +77,7 @@ fun ImagesList(
 
         items(
             items = images,
-            key = { it.networkId }
+            key = { it.imageId.dbImageId }
         ) {
             ImageCard(
                 modifier = Modifier
@@ -139,7 +139,7 @@ fun onImageCardClick(context: Context, image: ImageItemUiState) {
     WallpaperScreenActivity.launch(
         context = context,
         arguments = WallpaperActivityArguments(
-            imageNetworkId = image.networkId
+            imageId = image.imageId
         )
     )
 }

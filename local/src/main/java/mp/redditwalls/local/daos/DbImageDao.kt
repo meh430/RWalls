@@ -15,19 +15,19 @@ interface DbImageDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDbImages(dbImages: List<DbImage>)
 
-    @Query("UPDATE FavoriteImages SET imageFolderName = :imageFolderName WHERE networkId = :id")
+    @Query("UPDATE FavoriteImages SET imageFolderName = :imageFolderName WHERE id = :id")
     suspend fun updateDbImageFolder(id: String, imageFolderName: String)
 
-    @Query("UPDATE FavoriteImages SET imageFolderName = :imageFolderName WHERE networkId IN (:ids)")
+    @Query("UPDATE FavoriteImages SET imageFolderName = :imageFolderName WHERE id IN (:ids)")
     suspend fun updateDbImagesFolder(ids: List<String>, imageFolderName: String)
 
-    @Query("SELECT EXISTS(SELECT * FROM FavoriteImages WHERE networkId = :networkId)")
+    @Query("SELECT EXISTS(SELECT * FROM FavoriteImages WHERE id = :networkId)")
     fun dbImageExists(networkId : String) : Boolean
 
-    @Query("DELETE FROM FavoriteImages WHERE networkId = :id")
+    @Query("DELETE FROM FavoriteImages WHERE id = :id")
     suspend fun deleteDbImage(id: String)
 
-    @Query("DELETE FROM FavoriteImages WHERE networkId IN (:ids)")
+    @Query("DELETE FROM FavoriteImages WHERE id IN (:ids)")
     suspend fun deleteDbImages(ids: List<String>)
 
     @Query("SELECT * FROM FavoriteImages")

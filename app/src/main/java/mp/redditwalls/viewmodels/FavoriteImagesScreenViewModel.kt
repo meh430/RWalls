@@ -48,7 +48,7 @@ class FavoriteImagesScreenViewModel @Inject constructor(
             selectedCount.value = 1
             selecting.value = true
             images.forEach {
-                it.selectionState.value = if (image.networkId == it.networkId) {
+                it.selectionState.value = if (image.imageId == it.imageId) {
                     SelectionState.SELECTED
                 } else {
                     SelectionState.SELECTABLE
@@ -211,7 +211,7 @@ class FavoriteImagesScreenViewModel @Inject constructor(
     private suspend fun getSelectedImageIds() = withContext(Dispatchers.IO) {
         uiState.images.filter {
             it.selectionState.value == SelectionState.SELECTED
-        }.map { it.networkId }
+        }.map { it.imageId }
     }
 
     private suspend fun getSelectedImageUrls() = withContext(Dispatchers.IO) {

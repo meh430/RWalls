@@ -59,7 +59,6 @@ import mp.redditwalls.utils.toFriendlyCount
 @Composable
 fun WallpaperInfoCard(
     modifier: Modifier = Modifier,
-    folderName: String,
     image: ImageItemUiState,
     subreddit: SubredditItemUiState,
     expanded: Boolean,
@@ -132,7 +131,7 @@ fun WallpaperInfoCard(
                         item {
                             ImageFolderButton(
                                 modifier = Modifier.padding(end = 8.dp),
-                                folderName = folderName,
+                                folderName = image.folderName.value,
                                 onLikeClick = onLikeClick,
                                 onFolderNameClick = onFolderNameClick
                             )
@@ -239,7 +238,6 @@ fun WallpaperInfoCardPreview() {
         ) {
             WallpaperInfoCard(
                 modifier = Modifier.padding(12.dp),
-                folderName = "default",
                 image = ImageItemUiState(
                     postTitle = "This is an image that is really cool wallpaper that I would totally want to set",
                     numUpvotes = 1230984,

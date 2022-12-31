@@ -17,9 +17,6 @@ fun DbImageFolderWithImages.toDomainImageFolder(previewResolution: ImageQuality)
         refreshEnabled = dbImageFolder.refreshEnabled,
         refreshLocation = WallpaperLocation.valueOf(dbImageFolder.refreshLocation),
         images = dbImages.map {
-            it.toDomainImage(
-                previewResolution = previewResolution,
-                isLiked = true
-            )
+            it.toDomainImage(previewResolution = previewResolution)
         }
     )

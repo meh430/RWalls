@@ -3,9 +3,8 @@ package mp.redditwalls.models
 import mp.redditwalls.domain.models.DetailedImageResult
 
 data class WallpaperScreenUiState(
-    val image: ImageItemUiState = ImageItemUiState(),
+    val images: List<ImageItemUiState> = emptyList(),
     val subreddit: SubredditItemUiState = SubredditItemUiState(),
-    val folderName: String = "",
     val folderNames: List<String> = emptyList(),
     val usePresetFolderWhenLiking: Boolean = false,
     val shouldHideUi: Boolean = false,
@@ -17,12 +16,11 @@ fun WallpaperScreenUiState.hideUi() = copy(shouldHideUi = true)
 fun WallpaperScreenUiState.showUi() = copy(shouldHideUi = false)
 
 fun WallpaperScreenUiState.updateState(result: DetailedImageResult) = with(result) {
-    copy(
-        image = domainImage.toImageItemUiState(),
+    this@updateState.copy(
+        uiResult = UiResult.Success(),
+        images = images.map { it.toImageItemUiState() },
         subreddit = domainSubreddit.toSubredditItemUiState(),
-        folderName = folderName,
         folderNames = folderNames,
-        usePresetFolderWhenLiking = usePresetFolderWhenLiking,
-        uiResult = UiResult.Success()
+        usePresetFolderWhenLiking = usePresetFolderWhenLiking
     )
 }

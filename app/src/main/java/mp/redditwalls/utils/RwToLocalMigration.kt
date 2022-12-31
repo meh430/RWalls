@@ -19,7 +19,7 @@ class RwToLocalMigration @Inject constructor(
             val arr = it.postLink.split("/")
             val index = arr.indexOf("comments")
             DbImage(
-                networkId = "t3_${arr.getOrNull(index + 1)}",
+                id = "t3_${arr.getOrNull(index + 1)}",
                 postTitle = "Image",
                 subredditName = it.subreddit,
                 postUrl = it.postLink,

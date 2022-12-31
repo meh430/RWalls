@@ -9,7 +9,7 @@ import mp.redditwalls.utilities.toSeconds
 @Entity(tableName = "FavoriteImages")
 data class DbImage(
     @PrimaryKey
-    val networkId: String,
+    val id: String, // <network_id>@<index>
     val createdAt: Long = System.currentTimeMillis().toSeconds(),
     val postTitle: String = "",
     val subredditName: String = "",

@@ -17,7 +17,7 @@ class AddRecentActivityItemUseCase @Inject constructor(
                 lowQualityUrl = params.imageUrl.lowQualityUrl,
                 mediumQualityUrl = params.imageUrl.mediumQualityUrl,
                 sourceUrl = params.imageUrl.highQualityUrl,
-                imageNetworkId = params.imageNetworkId,
+                imageId = params.imageId.dbImageId,
                 wallpaperLocation = params.wallpaperLocation.name
             )
             is DomainRecentActivityItem.DomainSearchAllActivityItem -> DbRecentActivityItem(
@@ -35,7 +35,7 @@ class AddRecentActivityItemUseCase @Inject constructor(
                 lowQualityUrl = params.imageUrl.lowQualityUrl,
                 mediumQualityUrl = params.imageUrl.mediumQualityUrl,
                 sourceUrl = params.imageUrl.highQualityUrl,
-                imageNetworkId = params.imageNetworkId,
+                imageId = params.imageId.dbImageId,
                 wallpaperLocation = params.wallpaperLocation.name
             )
             is DomainRecentActivityItem.DomainVisitSubredditActivityItem -> DbRecentActivityItem(

@@ -15,6 +15,6 @@ data class DbRecentActivityItem(
     val lowQualityUrl: String = "",
     val mediumQualityUrl: String = "",
     val sourceUrl: String = "",
-    val imageNetworkId: String = "",
+    val imageId: String = "",
     val wallpaperLocation: String = "", // WallpaperLocation
 )

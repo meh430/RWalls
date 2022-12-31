@@ -7,6 +7,7 @@ import mp.redditwalls.design.components.ImageCardModel
 import mp.redditwalls.design.components.SelectionState
 import mp.redditwalls.domain.models.DomainImage
 import mp.redditwalls.domain.models.DomainRecentActivityItem
+import mp.redditwalls.domain.models.ImageId
 import mp.redditwalls.domain.models.ImageUrl
 import mp.redditwalls.local.enums.WallpaperLocation
 import mp.redditwalls.network.Constants
@@ -18,16 +19,14 @@ data class ImageItemUiState(
     val numUpvotes: Int = 0,
     val numComments: Int = 0,
     val postUrl: String = "",
-    val networkId: String = "",
-    val imageUrls: List<ImageUrl> = emptyList(),
+    val imageId: ImageId = ImageId(),
+    val imageUrl: ImageUrl = ImageUrl(),
+    val folderName: MutableState<String> = mutableStateOf(""),
     val selectionState: MutableState<SelectionState> = mutableStateOf(SelectionState.NOT_SELECTABLE),
     val isLiked: MutableState<Boolean> = mutableStateOf(false),
     val isAlbum: Boolean = false,
     val createdAt: Date = Date()
 ) {
-    val imageUrl: ImageUrl
-        get() = imageUrls.first()
-
     val authorUrl: String
         get() = "${Constants.BASE_REDDIT_URL}/u/$author"
 }
@@ -39,9 +38,10 @@ fun DomainImage.toImageItemUiState() = ImageItemUiState(
     numUpvotes = numUpvotes,
     numComments = numComments,
     postUrl = postUrl,
-    networkId = networkId,
-    imageUrls = imageUrls,
+    imageId = imageId,
+    imageUrl = imageUrls.first(),
     isLiked = mutableStateOf(isLiked),
+    folderName = mutableStateOf(folderName),
     isAlbum = isAlbum,
     createdAt = createdAt
 )
@@ -53,15 +53,9 @@ fun ImageItemUiState.toDomainImage() = DomainImage(
     numUpvotes = numUpvotes,
     numComments = numComments,
     postUrl = postUrl,
-    networkId = networkId,
-    imageUrls = imageUrls.map { imageUrl ->
-        ImageUrl(
-            url = imageUrl.url,
-            lowQualityUrl = imageUrl.lowQualityUrl,
-            mediumQualityUrl = imageUrl.mediumQualityUrl,
-            highQualityUrl = imageUrl.highQualityUrl
-        )
-    },
+    imageId = imageId,
+    imageUrls = listOf(imageUrl),
+    folderName = folderName.value,
     isLiked = isLiked.value,
     isAlbum = isAlbum
 )
@@ -71,8 +65,8 @@ fun ImageItemUiState.toImageCardModel(
     onClick: () -> Unit,
     onLongPress: () -> Unit
 ) = ImageCardModel(
-    key = networkId,
-    imageUrl = imageUrls.first().url,
+    key = imageId.dbImageId,
+    imageUrl = imageUrl.url,
     title = postTitle,
     subTitle = subredditName,
     isAlbum = isAlbum,
@@ -92,15 +86,8 @@ fun ImageItemUiState.toDomainWallpaperRecentActivityItem(
         dbId = 0,
         createdAt = Date(),
         subredditName = subredditName,
-        imageUrl = imageUrls.first().let { imageUrl ->
-            ImageUrl(
-                url = imageUrl.url,
-                lowQualityUrl = imageUrl.lowQualityUrl,
-                mediumQualityUrl = imageUrl.mediumQualityUrl,
-                highQualityUrl = imageUrl.highQualityUrl
-            )
-        },
-        imageNetworkId = networkId,
+        imageUrl = imageUrl,
+        imageId = imageId,
         wallpaperLocation = location
     )
 } else {
@@ -108,15 +95,8 @@ fun ImageItemUiState.toDomainWallpaperRecentActivityItem(
         dbId = 0,
         createdAt = Date(),
         subredditName = subredditName,
-        imageUrl = imageUrls.first().let { imageUrl ->
-            ImageUrl(
-                url = imageUrl.url,
-                lowQualityUrl = imageUrl.lowQualityUrl,
-                mediumQualityUrl = imageUrl.mediumQualityUrl,
-                highQualityUrl = imageUrl.highQualityUrl
-            )
-        },
-        imageNetworkId = networkId,
+        imageUrl = imageUrl,
+        imageId = imageId,
         wallpaperLocation = location
     )
 }

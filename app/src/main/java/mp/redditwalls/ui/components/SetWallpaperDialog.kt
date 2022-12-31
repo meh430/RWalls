@@ -15,7 +15,6 @@ fun SetWallpaperDialog(
     wallpaperHelper: WallpaperHelper,
     context: Context,
     image: ImageItemUiState?,
-    index: Int = 0,
     onDismiss: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
@@ -27,7 +26,7 @@ fun SetWallpaperDialog(
                     val location = mp.redditwalls.WallpaperLocation.values()[selection]
                     wallpaperHelper.setImageAsWallpaper(
                         context = context,
-                        imageUrl = it.imageUrls[index].highQualityUrl,
+                        imageUrl = it.imageUrl.highQualityUrl,
                         location = location,
                         recentActivityItem = it.toDomainWallpaperRecentActivityItem(
                             location = WallpaperLocation.values()[selection]

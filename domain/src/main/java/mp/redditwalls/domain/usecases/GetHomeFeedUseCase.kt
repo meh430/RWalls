@@ -8,10 +8,12 @@ import mp.redditwalls.domain.Utils.toTimeFilter
 import mp.redditwalls.domain.models.FeedResult
 import mp.redditwalls.domain.models.toDomainImage
 import mp.redditwalls.local.Constants.DEFAULT_SUBREDDIT
+import mp.redditwalls.local.getFirstDbImageInAlbum
 import mp.redditwalls.local.models.DbSubreddit
 import mp.redditwalls.local.repositories.LocalImageFoldersRepository
 import mp.redditwalls.local.repositories.LocalImagesRepository
 import mp.redditwalls.local.repositories.LocalSubredditsRepository
+import mp.redditwalls.local.toNetworkIdToDbImageMap
 import mp.redditwalls.network.repositories.NetworkImagesRepository
 import mp.redditwalls.preferences.PreferencesRepository
 import mp.redditwalls.preferences.enums.ImageQuality
@@ -34,7 +36,7 @@ class GetHomeFeedUseCase @Inject constructor(
             DEFAULT_SUBREDDIT
         }
         val dbImageIds =
-            localImagesRepository.getDbImages().map { it.networkId }.toSet()
+            localImagesRepository.getDbImages().toNetworkIdToDbImageMap()
         val after = data.nextPageId?.takeIf { !params.reload }
         val networkImages = when (val sortOrder = params.sortOrder) {
             SortOrder.HOT -> networkImagesRepository.getHotImages(subreddit, after)
@@ -49,7 +51,7 @@ class GetHomeFeedUseCase @Inject constructor(
         }.map {
             it.toDomainImage(
                 previewResolution = extras.previewResolution,
-                isLiked = dbImageIds.contains(it.id),
+                dbImage = dbImageIds.getFirstDbImageInAlbum(it.id)
             )
         }
 

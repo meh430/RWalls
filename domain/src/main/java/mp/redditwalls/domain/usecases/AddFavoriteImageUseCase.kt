@@ -10,23 +10,24 @@ class AddFavoriteImageUseCase @Inject constructor(
 ) : UseCase<AddFavoriteImageUseCase.Params, Unit>() {
     override suspend fun execute(params: Params) {
         params.image.run {
-            if (localImagesRepository.dbImageExists(networkId)) {
+            if (localImagesRepository.dbImageExists(imageId.dbImageId)) {
                 localImagesRepository.updateDbImageFolder(
-                    id = networkId,
+                    id = imageId.dbImageId,
                     folderName = params.folderName
                 )
                 return@run
             }
 
+            val imageUrl = imageUrls.first()
             localImagesRepository.insertDbImage(
                 DbImage(
-                    networkId = networkId,
+                    id = imageId.dbImageId,
                     postTitle = postTitle,
                     subredditName = subredditName,
                     postUrl = postUrl,
-                    lowQualityUrl = imageUrls[params.index].lowQualityUrl,
-                    mediumQualityUrl = imageUrls[params.index].mediumQualityUrl,
-                    sourceUrl = imageUrls[params.index].highQualityUrl,
+                    lowQualityUrl = imageUrl.lowQualityUrl,
+                    mediumQualityUrl = imageUrl.mediumQualityUrl,
+                    sourceUrl = imageUrl.highQualityUrl,
                     imageFolderName = params.folderName
                 )
             )
@@ -35,7 +36,6 @@ class AddFavoriteImageUseCase @Inject constructor(
 
     data class Params(
         val image: DomainImage,
-        val index: Int = 0,
         val folderName: String
     )
 }

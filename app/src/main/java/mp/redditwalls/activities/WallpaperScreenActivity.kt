@@ -12,6 +12,7 @@ import javax.inject.Inject
 import kotlinx.parcelize.Parcelize
 import mp.redditwalls.WallpaperHelper
 import mp.redditwalls.design.RwTheme
+import mp.redditwalls.domain.models.ImageId
 import mp.redditwalls.ui.screens.WallpaperScreen
 import mp.redditwalls.utils.DownloadUtils
 import mp.redditwalls.utils.Utils
@@ -65,5 +66,5 @@ class WallpaperScreenActivity : ComponentActivity() {
 
 @Parcelize
 data class WallpaperActivityArguments(
-    val imageNetworkId: String
+    val imageId: ImageId
 ) : Parcelable

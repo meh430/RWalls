@@ -3,17 +3,17 @@ package mp.redditwalls.domain.usecases
 import javax.inject.Inject
 import kotlinx.coroutines.flow.combine
 import mp.redditwalls.domain.models.DetailedImageResult
-import mp.redditwalls.domain.models.ImageUrl
-import mp.redditwalls.domain.models.toDomainImage
+import mp.redditwalls.domain.models.toDomainImages
 import mp.redditwalls.domain.models.toDomainSubreddit
 import mp.redditwalls.local.repositories.LocalImageFoldersRepository
 import mp.redditwalls.local.repositories.LocalImagesRepository
 import mp.redditwalls.local.repositories.LocalSubredditsRepository
+import mp.redditwalls.local.toNetworkIdToDbImageMap
+import mp.redditwalls.network.models.GalleryItem
 import mp.redditwalls.network.repositories.ImgurRepository
 import mp.redditwalls.network.repositories.NetworkImagesRepository
 import mp.redditwalls.network.repositories.NetworkSubredditsRepository
 import mp.redditwalls.preferences.PreferencesRepository
-import mp.redditwalls.preferences.enums.ImageQuality
 
 class GetDetailedImageUseCase @Inject constructor(
     private val networkImagesRepository: NetworkImagesRepository,
@@ -33,9 +33,25 @@ class GetDetailedImageUseCase @Inject constructor(
         localImageFoldersRepository.getDbImageFolderNames()
     ) { params, preferences, dbSubreddits, dbImages, folderNames ->
         val dbSubredditNames = dbSubreddits.map { it.name }.toSet()
-        val dbImageIds = dbImages.associate { it.networkId to it.imageFolderName }
+        val dbImageIds = dbImages.toNetworkIdToDbImageMap()
 
-        val networkImage = networkImagesRepository.getImage(params)
+        val networkImage = networkImagesRepository.getImage(params).let {
+            if (it.imgurAlbumId.isNotEmpty()) {
+                it.copy(
+                    galleryItems = imgurRepository.getAlbum(
+                        it.imgurAlbumId
+                    ).images.map { imgurImage ->
+                        GalleryItem(
+                            lowQualityUrl = imgurImage.link,
+                            mediumQualityUrl = imgurImage.link,
+                            sourceUrl = imgurImage.link
+                        )
+                    }
+                )
+            } else {
+                it
+            }
+        }
 
         val domainSubreddit = networkSubredditsRepository.getSubredditDetail(
             networkImage.subredditName
@@ -43,32 +59,13 @@ class GetDetailedImageUseCase @Inject constructor(
             isSaved = networkImage.subredditName in dbSubredditNames
         )
 
-        val domainImage = if (networkImage.imgurAlbumId.isNotEmpty()) {
-            // fetch all images from imgur
-            networkImage.toDomainImage(
-                previewResolution = ImageQuality.HIGH,
-                isLiked = networkImage.id in dbImageIds
-            ).copy(
-                imageUrls = imgurRepository.getAlbum(networkImage.imgurAlbumId).images.map {
-                    ImageUrl(
-                        url = it.link,
-                        lowQualityUrl = it.link,
-                        mediumQualityUrl = it.link,
-                        highQualityUrl = it.link
-                    )
-                }
-            )
-        } else {
-            networkImage.toDomainImage(
-                previewResolution = ImageQuality.HIGH,
-                isLiked = networkImage.id in dbImageIds,
-            )
+        val images = networkImage.toDomainImages(preferences.previewResolution) { imageId ->
+            dbImageIds[imageId.networkId]?.find { it.id == imageId.dbImageId }
         }
 
         DetailedImageResult(
-            domainImage = domainImage,
+            images = images,
             domainSubreddit = domainSubreddit,
-            folderName = dbImageIds[networkImage.id].orEmpty(),
             folderNames = folderNames,
             usePresetFolderWhenLiking = preferences.usePresetFolderWhenLiking
         )

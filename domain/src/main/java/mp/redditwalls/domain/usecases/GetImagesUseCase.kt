@@ -6,9 +6,11 @@ import mp.redditwalls.domain.Utils.toTimeFilter
 import mp.redditwalls.domain.models.FeedResult
 import mp.redditwalls.domain.models.toDomainImage
 import mp.redditwalls.domain.models.toDomainSubreddit
+import mp.redditwalls.local.getFirstDbImageInAlbum
 import mp.redditwalls.local.repositories.LocalImageFoldersRepository
 import mp.redditwalls.local.repositories.LocalImagesRepository
 import mp.redditwalls.local.repositories.LocalSubredditsRepository
+import mp.redditwalls.local.toNetworkIdToDbImageMap
 import mp.redditwalls.network.models.NetworkImages
 import mp.redditwalls.network.repositories.NetworkImagesRepository
 import mp.redditwalls.network.repositories.NetworkSubredditsRepository
@@ -30,7 +32,7 @@ class GetImagesUseCase @Inject constructor(
     ) { params, preferences, folderNames ->
         val dbSubredditNames =
             localSubredditsRepository.getDbSubredditsList().map { it.name }.toSet()
-        val dbImageIds = localImagesRepository.getDbImages().map { it.networkId }.toSet()
+        val dbImages = localImagesRepository.getDbImages().toNetworkIdToDbImageMap()
 
         val after = data.nextPageId?.takeIf { !params.reload }
         val networkImages: NetworkImages =
@@ -77,7 +79,7 @@ class GetImagesUseCase @Inject constructor(
         val domainImages = networkImages.images.map {
             it.toDomainImage(
                 previewResolution = preferences.previewResolution,
-                isLiked = dbImageIds.contains(it.id),
+                dbImage = dbImages.getFirstDbImageInAlbum(it.id)
             )
         }
 

@@ -2,6 +2,7 @@ package mp.redditwalls.models
 
 import java.util.Date
 import mp.redditwalls.domain.models.DomainRecentActivityItem
+import mp.redditwalls.domain.models.ImageId
 import mp.redditwalls.domain.models.ImageUrl
 import mp.redditwalls.local.enums.WallpaperLocation
 
@@ -33,7 +34,7 @@ sealed class RecentActivityItem(
         createdAt: Date,
         val subredditName: String,
         val imageUrl: ImageUrl,
-        val imageNetworkId: String,
+        val imageId: ImageId,
         val wallpaperLocation: WallpaperLocation
     ) : RecentActivityItem(dbId, createdAt)
 
@@ -42,7 +43,7 @@ sealed class RecentActivityItem(
         createdAt: Date,
         val subredditName: String,
         val imageUrl: ImageUrl,
-        val imageNetworkId: String,
+        val imageId: ImageId,
         val wallpaperLocation: WallpaperLocation
     ) : RecentActivityItem(dbId, createdAt)
 }
@@ -54,7 +55,7 @@ fun DomainRecentActivityItem.toRecentActivityItem() = when (this) {
             createdAt = createdAt,
             subredditName = subredditName,
             imageUrl = imageUrl,
-            imageNetworkId = imageNetworkId,
+            imageId = imageId,
             wallpaperLocation = wallpaperLocation
         )
     }
@@ -79,7 +80,7 @@ fun DomainRecentActivityItem.toRecentActivityItem() = when (this) {
             createdAt = createdAt,
             subredditName = subredditName,
             imageUrl = imageUrl,
-            imageNetworkId = imageNetworkId,
+            imageId = imageId,
             wallpaperLocation = wallpaperLocation
         )
     }

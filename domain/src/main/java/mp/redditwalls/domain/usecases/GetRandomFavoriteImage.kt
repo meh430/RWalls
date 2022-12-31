@@ -12,9 +12,9 @@ class GetRandomFavoriteImage @Inject constructor(
     override suspend fun execute(params: Unit): GetRandomFavoriteImageResult {
         return GetRandomFavoriteImageResult(
             homeScreenImage = localImageFoldersRepository.getRandomHomeScreenDbImage()
-                ?.toDomainImage(ImageQuality.HIGH, true),
+                ?.toDomainImage(ImageQuality.HIGH),
             lockScreenImage = localImageFoldersRepository.getRandomLockScreenDbImage()
-                ?.toDomainImage(ImageQuality.HIGH, true)
+                ?.toDomainImage(ImageQuality.HIGH)
         )
     }
 

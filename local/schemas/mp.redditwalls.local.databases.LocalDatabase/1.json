@@ -2,15 +2,15 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "28e1aa895504a99401d9d918d653da38",
+    "identityHash": "60020adc367a17a72f3fb5377082a6f5",
     "entities": [
       {
         "tableName": "FavoriteImages",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`networkId` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, `postTitle` TEXT NOT NULL, `subredditName` TEXT NOT NULL, `postUrl` TEXT NOT NULL, `lowQualityUrl` TEXT NOT NULL, `mediumQualityUrl` TEXT NOT NULL, `sourceUrl` TEXT NOT NULL, `imageFolderName` TEXT NOT NULL, PRIMARY KEY(`networkId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, `postTitle` TEXT NOT NULL, `subredditName` TEXT NOT NULL, `postUrl` TEXT NOT NULL, `lowQualityUrl` TEXT NOT NULL, `mediumQualityUrl` TEXT NOT NULL, `sourceUrl` TEXT NOT NULL, `imageFolderName` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
-            "fieldPath": "networkId",
-            "columnName": "networkId",
+            "fieldPath": "id",
+            "columnName": "id",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -65,7 +65,7 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "networkId"
+            "id"
           ],
           "autoGenerate": false
         },
@@ -138,7 +138,7 @@
       },
       {
         "tableName": "RecentActivity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `createdAt` INTEGER NOT NULL, `activityType` TEXT NOT NULL, `query` TEXT NOT NULL, `subredditName` TEXT NOT NULL, `lowQualityUrl` TEXT NOT NULL, `mediumQualityUrl` TEXT NOT NULL, `sourceUrl` TEXT NOT NULL, `imageNetworkId` TEXT NOT NULL, `wallpaperLocation` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `createdAt` INTEGER NOT NULL, `activityType` TEXT NOT NULL, `query` TEXT NOT NULL, `subredditName` TEXT NOT NULL, `lowQualityUrl` TEXT NOT NULL, `mediumQualityUrl` TEXT NOT NULL, `sourceUrl` TEXT NOT NULL, `imageId` TEXT NOT NULL, `wallpaperLocation` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -189,8 +189,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "imageNetworkId",
-            "columnName": "imageNetworkId",
+            "fieldPath": "imageId",
+            "columnName": "imageId",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -214,7 +214,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '28e1aa895504a99401d9d918d653da38')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '60020adc367a17a72f3fb5377082a6f5')"
     ]
   }
 }
