@@ -45,6 +45,7 @@ class GetDiscoverUseCase @Inject constructor(
         }.toSet()
         val dbImageIds = localImagesRepository.getDbImages().toNetworkIdToDbImageMap()
         val recommendations = recommendedSubredditsRepository.getRecommendedSubreddits()
+            .filterOutSaved(dbSubredditNames)
             .shuffled()
             .take(RECOMMENDATION_LIMIT).let { subredditNames ->
                 networkSubredditsRepository.getSubredditsInfo(subredditNames).subreddits
@@ -83,6 +84,14 @@ class GetDiscoverUseCase @Inject constructor(
             folderNames = folderNames,
             usePresetFolderWhenLiking = preferences.usePresetFolderWhenLiking
         )
+    }
+
+    private fun List<String>.filterOutSaved(saved: Set<String>): List<String> {
+        val filtered = filter { rec -> rec !in saved }
+        return filtered.ifEmpty {
+            // No unsaved recommendations
+            this
+        }
     }
 
     companion object {

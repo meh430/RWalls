@@ -68,7 +68,7 @@ fun ImageItemUiState.toImageCardModel(
     key = imageId.dbImageId,
     imageUrl = imageUrl.url,
     title = postTitle,
-    subTitle = subredditName,
+    subTitle = "r/${subredditName}",
     isAlbum = isAlbum,
     isLiked = isLiked.value,
     selectionState = selectionState.value,

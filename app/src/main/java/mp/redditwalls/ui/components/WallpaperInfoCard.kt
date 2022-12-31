@@ -21,10 +21,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Comment
-import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
-import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.FilledTonalButton
@@ -163,12 +161,11 @@ fun WallpaperInfoCard(
                             modifier = Modifier.weight(1f),
                             onClick = onSetWallpaperClick,
                             content = {
-                                Icon(
-                                    imageVector = Icons.Default.Image,
-                                    contentDescription = null
+                                Text(
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    text = "Set Wallpaper"
                                 )
-                                Spacer(Modifier.width(8.dp))
-                                Text("Set Wallpaper")
                             }
                         )
                         Spacer(Modifier.width(8.dp))
@@ -176,12 +173,11 @@ fun WallpaperInfoCard(
                             modifier = Modifier.weight(1f),
                             onClick = onDownloadClick,
                             content = {
-                                Icon(
-                                    imageVector = Icons.Default.Download,
-                                    contentDescription = null
+                                Text(
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    text = "Download"
                                 )
-                                Spacer(Modifier.width(12.dp))
-                                Text("Download")
                             }
                         )
                     }
