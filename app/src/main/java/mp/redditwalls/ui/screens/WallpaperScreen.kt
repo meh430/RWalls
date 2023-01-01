@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -91,6 +93,22 @@ fun WallpaperScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .consumedWindowInsets(innerPadding)
+                .pointerInput(Unit) {
+                    detectDragGestures { change, dragAmount ->
+                        change.consume()
+                        val (_, y) = dragAmount
+                        when {
+                            y > 0 -> {
+                                // swipe down
+                                expanded = false
+                            }
+                            y < 0 -> {
+                                // swipe up
+                                expanded = true
+                            }
+                        }
+                    }
+                }
         ) {
             when (uiResult) {
                 is UiResult.Error -> ErrorState(errorMessage = uiResult.errorMessage.orEmpty()) {
