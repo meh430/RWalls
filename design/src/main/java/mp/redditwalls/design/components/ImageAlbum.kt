@@ -17,7 +17,8 @@ fun ImageAlbum(
     state: PagerState = rememberPagerState(),
     imageUrls: List<String>,
     onClick: () -> Unit,
-    onLongClick: () -> Unit
+    onLongClick: () -> Unit,
+    onDoubleClick: () -> Unit
 ) {
     HorizontalPager(
         modifier = modifier,
@@ -30,7 +31,8 @@ fun ImageAlbum(
                 imageUrl = url,
                 showRipple = false,
                 onTap = onClick,
-                onLongPress = onLongClick
+                onLongPress = onLongClick,
+                onDoubleTap = onDoubleClick
             )
         }
     }

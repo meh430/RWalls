@@ -53,10 +53,11 @@ class SearchSubredditsScreenViewModel @Inject constructor(
     private fun searchSubreddits() {
         viewModelScope.launch {
             uiState.query.apply {
-                if (value.length > 2) {
+                val q = value.replace(" ", "")
+                if (q.length > 2) {
                     uiState.uiResult.value = UiResult.Loading()
                     delay(DEBOUNCE_PERIOD)
-                    searchSubredditsUseCase(value)
+                    searchSubredditsUseCase(q)
                 }
             }
         }

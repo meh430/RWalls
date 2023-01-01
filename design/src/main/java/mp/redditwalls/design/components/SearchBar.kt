@@ -75,7 +75,7 @@ fun SearchBar(
                 .padding(16.dp)
         ) {
             BasicTextField(
-                modifier = Modifier.focusRequester(focusRequester),
+                modifier = Modifier.focusRequester(focusRequester).fillMaxWidth(),
                 enabled = enabled,
                 value = value,
                 onValueChange = onValueChanged,

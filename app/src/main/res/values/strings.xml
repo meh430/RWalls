@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RedditWalls</string>
+    <string name="app_name">RWalls</string>
 
     <string name="title_home">Home</string>
     <string name="title_search">Search</string>

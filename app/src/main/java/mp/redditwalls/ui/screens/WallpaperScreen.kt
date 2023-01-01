@@ -40,8 +40,10 @@ import mp.redditwalls.design.components.BackButton
 import mp.redditwalls.design.components.ErrorState
 import mp.redditwalls.design.components.ImageAlbum
 import mp.redditwalls.design.components.ImageFolderRadioDialog
+import mp.redditwalls.design.components.LikeAnimation
 import mp.redditwalls.design.components.PageIndicator
 import mp.redditwalls.design.components.ThreeDotsLoader
+import mp.redditwalls.models.ImageItemUiState
 import mp.redditwalls.models.UiResult
 import mp.redditwalls.ui.components.SetWallpaperDialog
 import mp.redditwalls.ui.components.WallpaperInfoCard
@@ -70,6 +72,19 @@ fun WallpaperScreen(
     }
 
     var expanded by remember { mutableStateOf(false) }
+    var playAnimation by remember { mutableStateOf(false) }
+
+    val onLikeClick = { currentImage: ImageItemUiState, isLiked: Boolean ->
+        if (uiState.usePresetFolderWhenLiking || !isLiked) {
+            vm.favoriteImageViewModel.onLikeClick(
+                image = currentImage,
+                isLiked = isLiked,
+                folderName = null
+            )
+        } else {
+            vm.showFolderSelectDialog()
+        }
+    }
 
     Scaffold { innerPadding ->
         Box(
@@ -112,9 +127,19 @@ fun WallpaperScreen(
                         state = pagerState,
                         imageUrls = imageUrls,
                         onClick = vm::toggleUiVisibility,
-                        onLongClick = vm::showSetWallpaperDialog
+                        onLongClick = vm::showSetWallpaperDialog,
+                        onDoubleClick = {
+                            if (!currentImage.isLiked.value) {
+                                onLikeClick(currentImage, true)
+                            }
+                            playAnimation = true
+                        }
                     )
-
+                    LikeAnimation(
+                        modifier = Modifier.fillMaxSize().align(Alignment.Center),
+                        show = playAnimation,
+                        onAnimationComplete = { playAnimation = false }
+                    )
                     AnimatedVisibility(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -175,17 +200,7 @@ fun WallpaperScreen(
                                         context
                                     )
                                 },
-                                onLikeClick = {
-                                    if (uiState.usePresetFolderWhenLiking || !it) {
-                                        vm.favoriteImageViewModel.onLikeClick(
-                                            image = currentImage,
-                                            isLiked = it,
-                                            folderName = null
-                                        )
-                                    } else {
-                                        vm.showFolderSelectDialog()
-                                    }
-                                },
+                                onLikeClick = { isLiked -> onLikeClick(currentImage, isLiked) },
                                 onFolderNameClick = vm::showFolderSelectDialog,
                                 onSaveClick = {
                                     vm.savedSubredditViewModel.onSaveClick(uiState.subreddit, it)
