@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Autorenew
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
@@ -32,6 +33,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,7 +43,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.launch
 import mp.redditwalls.R
+import mp.redditwalls.WallpaperHelper
 import mp.redditwalls.design.components.AddFolderDialog
 import mp.redditwalls.design.components.ClickableTextItem
 import mp.redditwalls.design.components.DeleteConfirmationDialog
@@ -71,9 +75,11 @@ const val DELETE = 3
 fun FavoriteImagesScreen(
     modifier: Modifier = Modifier,
     vm: FavoriteImagesScreenViewModel = viewModel(),
+    wallpaperHelper: WallpaperHelper,
     downloadUtils: DownloadUtils
 ) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val systemUiController = rememberSystemUiController()
     val listState = rememberLazyGridState()
 
@@ -131,9 +137,7 @@ fun FavoriteImagesScreen(
                 },
                 navigationIcon = {
                     if (uiState.selecting.value) {
-                        IconButton(
-                            onClick = { vm.stopSelecting() }
-                        ) {
+                        IconButton(onClick = vm::stopSelecting) {
                             Icon(imageVector = Icons.Default.Close, contentDescription = null)
                         }
                     }
@@ -152,6 +156,12 @@ fun FavoriteImagesScreen(
                                 }
                             }
                         )
+                    } else {
+                        IconButton(
+                            onClick = { scope.launch { wallpaperHelper.refreshWallpaper(context) } }
+                        ) {
+                            Icon(imageVector = Icons.Default.Autorenew, contentDescription = null)
+                        }
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(

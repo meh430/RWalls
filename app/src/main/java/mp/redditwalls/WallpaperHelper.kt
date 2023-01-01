@@ -26,6 +26,13 @@ class WallpaperHelper @Inject constructor(
 ) {
 
     suspend fun refreshWallpaper(context: Context) {
+        withContext(Dispatchers.Main) {
+            Toast.makeText(
+                context,
+                "Refreshing wallpaper",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
         (getRandomFavoriteImage(Unit) as? DomainResult.Success)?.data?.let { (home, lock) ->
             if (home != null) {
                 setImageAsWallpaper(
@@ -35,7 +42,8 @@ class WallpaperHelper @Inject constructor(
                     home.toImageItemUiState().toDomainWallpaperRecentActivityItem(
                         location = mp.redditwalls.local.enums.WallpaperLocation.HOME,
                         refresh = true
-                    )
+                    ),
+                    true
                 )
             }
             if (lock != null) {
@@ -46,7 +54,8 @@ class WallpaperHelper @Inject constructor(
                     lock.toImageItemUiState().toDomainWallpaperRecentActivityItem(
                         location = mp.redditwalls.local.enums.WallpaperLocation.LOCK_SCREEN,
                         refresh = true
-                    )
+                    ),
+                    true
                 )
             }
         }
@@ -56,8 +65,18 @@ class WallpaperHelper @Inject constructor(
         context: Context,
         imageUrl: String,
         location: WallpaperLocation,
-        recentActivityItem: DomainRecentActivityItem? = null
+        recentActivityItem: DomainRecentActivityItem? = null,
+        refresh: Boolean = false
     ) {
+        if (!refresh) {
+            withContext(Dispatchers.Main) {
+                Toast.makeText(
+                    context,
+                    "Setting wallpaper on ${location.displayText}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
         try {
             val resolution = Utils.getResolution(context)
             val wallpaper = imageLoader.loadImage(
@@ -117,7 +136,7 @@ class WallpaperHelper @Inject constructor(
 
 enum class WallpaperLocation(override val id: Int, override val displayText: String) :
     SettingsItem {
-    HOME(0, "Home"),
+    HOME(0, "Home Screen"),
     LOCK(1, "Lock Screen"),
     BOTH(2, "Home and Lock Screen");
 

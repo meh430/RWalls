@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import mp.redditwalls.WallpaperHelper
 import mp.redditwalls.design.RwTheme
 import mp.redditwalls.ui.screens.FavoriteImagesScreen
 import mp.redditwalls.utils.DownloadUtils
@@ -16,6 +17,9 @@ import mp.redditwalls.utils.DownloadUtils
 class FavoriteImagesScreenFragment : Fragment() {
     @Inject
     lateinit var downloadUtils: DownloadUtils
+
+    @Inject
+    lateinit var wallpaperHelper: WallpaperHelper
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,6 +30,7 @@ class FavoriteImagesScreenFragment : Fragment() {
         setContent {
             RwTheme {
                 FavoriteImagesScreen(
+                    wallpaperHelper = wallpaperHelper,
                     downloadUtils = downloadUtils
                 )
             }
