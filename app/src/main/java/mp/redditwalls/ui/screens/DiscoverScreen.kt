@@ -143,7 +143,7 @@ private fun DiscoverScreenContent(
         onDismiss = { showFolderSelectDialog = null }
     )
     LazyColumn {
-        item {
+        item("search") {
             SearchBar(
                 modifier = Modifier.clickable(
                     interactionSource = interactionSource,
@@ -154,7 +154,7 @@ private fun DiscoverScreenContent(
             )
         }
         if (recommendations.isNotEmpty()) {
-            item {
+            item("recommendation_header") {
                 Text(
                     modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 20.dp),
                     text = stringResource(id = R.string.recommendations),
@@ -164,7 +164,7 @@ private fun DiscoverScreenContent(
                 )
             }
         }
-        items(recommendations) {
+        items(recommendations, { it.subredditItemUiState.name }) {
             DiscoverSubredditCard(
                 subredditIconUrl = it.subredditItemUiState.subredditIconUrl,
                 subredditName = "r/${it.subredditItemUiState.name}",
@@ -196,7 +196,7 @@ private fun DiscoverScreenContent(
         }
 
         if (recentActivity.isNotEmpty()) {
-            item {
+            item("recent_activity_header") {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()

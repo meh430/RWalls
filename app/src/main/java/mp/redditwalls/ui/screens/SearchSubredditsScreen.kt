@@ -87,7 +87,7 @@ fun SearchSubredditsScreen(
         ) {
             if (uiState.query.value.isNotBlank() && uiState.query.value.length > 2) {
                 // search all images
-                item {
+                item("search_all_images") {
                     TextRecentActivityCard(
                         icon = Icons.Default.Search,
                         title = getSearchAllString(uiState.query.value),
@@ -104,15 +104,15 @@ fun SearchSubredditsScreen(
 
             // search history when launched or subreddits when not
             if (uiResult is UiResult.Error) {
-                item {
+                item("error_state") {
                     ErrorState(errorMessage = uiResult.errorMessage.orEmpty())
                 }
             } else if (uiResult is UiResult.Loading) {
-                item {
+                item("loader") {
                     ThreeDotsLoader()
                 }
             } else if (vm.isSearching()) {
-                item {
+                item("subreddit_header") {
                     Text(
                         modifier = Modifier.padding(8.dp),
                         text = "Subreddits",
@@ -132,7 +132,7 @@ fun SearchSubredditsScreen(
                     onSaveChanged = vm.savedSubredditViewModel::onSaveClick
                 )
             } else if (uiState.searchHistory.isNotEmpty()) {
-                item {
+                item("search_history_header") {
                     Text(
                         modifier = Modifier.padding(8.dp),
                         text = "Search history",

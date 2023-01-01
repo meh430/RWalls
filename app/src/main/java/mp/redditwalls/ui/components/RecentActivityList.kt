@@ -1,18 +1,11 @@
 package mp.redditwalls.ui.components
 
 import android.content.Context
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import mp.redditwalls.activities.SearchImagesActivity
 import mp.redditwalls.activities.SearchImagesActivityArguments
@@ -55,7 +48,7 @@ fun LazyListScope.recentActivityListItems(
     },
     onLongClick: (RecentActivityItem) -> Unit
 ) {
-    items(recentActivityItems) { recentActivityItem ->
+    items(recentActivityItems, { it.dbId }) { recentActivityItem ->
         RecentActivityCard(
             modifier = modifier,
             recentActivityItem = recentActivityItem,
@@ -63,7 +56,7 @@ fun LazyListScope.recentActivityListItems(
             onLongClick = { onLongClick(recentActivityItem) }
         )
     }
-    item {
+    item("footer_spacer") {
         Spacer(modifier = Modifier.height(8.dp))
     }
 }

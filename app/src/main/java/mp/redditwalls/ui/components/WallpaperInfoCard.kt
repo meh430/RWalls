@@ -126,7 +126,7 @@ fun WallpaperInfoCard(
                     LazyRow(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        item {
+                        item("like_button") {
                             ImageFolderButton(
                                 modifier = Modifier.padding(end = 8.dp),
                                 folderName = image.folderName,
@@ -134,7 +134,7 @@ fun WallpaperInfoCard(
                                 onFolderNameClick = onFolderNameClick
                             )
                         }
-                        items(chips) { (chip, onChipClick) ->
+                        items(chips, { it.first.text }) { (chip, onChipClick) ->
                             Chip(
                                 modifier = Modifier.padding(end = 8.dp),
                                 text = chip.text,

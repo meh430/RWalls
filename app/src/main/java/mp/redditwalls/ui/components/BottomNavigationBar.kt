@@ -2,7 +2,9 @@ package mp.redditwalls.ui.components
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CollectionsBookmark
 import androidx.compose.material.icons.filled.Explore
@@ -19,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AbstractComposeView
+import androidx.compose.ui.unit.dp
 import mp.redditwalls.R
 import mp.redditwalls.design.RwTheme
 import mp.redditwalls.design.components.IconText
@@ -33,6 +36,7 @@ fun BottomNavigationBar(
     NavigationBar(
         modifier = modifier.fillMaxWidth()
     ) {
+        Spacer(modifier = Modifier.width(4.dp))
         menuItems.forEachIndexed { index, pair ->
             NavigationBarItem(
                 icon = { Icon(pair.second.icon!!, contentDescription = null) },
@@ -41,6 +45,7 @@ fun BottomNavigationBar(
                 onClick = { onSelected(pair.first, index) }
             )
         }
+        Spacer(modifier = Modifier.width(4.dp))
     }
 }
 

@@ -44,7 +44,7 @@ fun LazyListScope.subredditListItems(
     onSaveChanged: (SubredditItemUiState, Boolean) -> Unit,
     onClick: (SubredditItemUiState) -> Unit
 ) {
-    items(subreddits) { subreddit ->
+    items(subreddits, { it.name }) { subreddit ->
         SubredditCard(
             modifier = Modifier
                 .fillMaxWidth()
