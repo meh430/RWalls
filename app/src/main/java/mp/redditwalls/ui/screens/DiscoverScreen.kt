@@ -3,6 +3,7 @@ package mp.redditwalls.ui.screens
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -52,7 +57,10 @@ import mp.redditwalls.ui.components.recentActivityListItems
 import mp.redditwalls.utils.toFriendlyCount
 import mp.redditwalls.viewmodels.DiscoverScreenViewModel
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class,
+    ExperimentalMaterialApi::class
+)
 @Composable
 fun DiscoverScreen(
     vm: DiscoverScreenViewModel = viewModel(),
@@ -63,6 +71,14 @@ fun DiscoverScreen(
 
     val uiState = vm.uiState
     val uiResult = uiState.uiResult.value
+
+    val refreshState = rememberPullRefreshState(
+        refreshing = uiState.refreshing.value,
+        onRefresh = {
+            uiState.refreshing.value = true
+            vm.refresh()
+        }
+    )
 
     Scaffold(
         content = { innerPadding ->
@@ -89,22 +105,29 @@ fun DiscoverScreen(
                             image = uiState.longPressedImage.value,
                             onDismiss = { uiState.longPressedImage.value = null }
                         )
-                        DiscoverScreenContent(
-                            navController = navController,
-                            recommendations = uiState.recommendedSubreddits,
-                            recentActivity = uiState.recentActivityItems,
-                            usePresetFolderWhenLiking = uiState.usePresetFolderWhenLiking.value,
-                            folderNames = uiState.folderNames,
-                            onSearchClick = {
-                                navController.navigate(
-                                    DiscoverScreenFragmentDirections.actionNavigationDiscoverScreenToNavigationSearchSubredditsScreen()
-                                )
-                            },
-                            onSaveClick = vm.savedSubredditViewModel::onSaveClick,
-                            onLikeClick = vm.favoriteImageViewModel::onLikeClick,
-                            onRecentActivityLongClick = vm.recentActivityViewModel::askForDeleteConfirmation,
-                            onImageLongClick = { uiState.longPressedImage.value = it }
-                        )
+                        Box(Modifier.pullRefresh(refreshState)) {
+                            DiscoverScreenContent(
+                                navController = navController,
+                                recommendations = uiState.recommendedSubreddits,
+                                recentActivity = uiState.recentActivityItems,
+                                usePresetFolderWhenLiking = uiState.usePresetFolderWhenLiking.value,
+                                folderNames = uiState.folderNames,
+                                onSearchClick = {
+                                    navController.navigate(
+                                        DiscoverScreenFragmentDirections.actionNavigationDiscoverScreenToNavigationSearchSubredditsScreen()
+                                    )
+                                },
+                                onSaveClick = vm.savedSubredditViewModel::onSaveClick,
+                                onLikeClick = vm.favoriteImageViewModel::onLikeClick,
+                                onRecentActivityLongClick = vm.recentActivityViewModel::askForDeleteConfirmation,
+                                onImageLongClick = { uiState.longPressedImage.value = it }
+                            )
+                            PullRefreshIndicator(
+                                uiState.refreshing.value,
+                                refreshState,
+                                Modifier.align(Alignment.TopCenter)
+                            )
+                        }
                     }
                 }
             }

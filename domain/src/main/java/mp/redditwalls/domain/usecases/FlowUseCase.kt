@@ -2,6 +2,7 @@ package mp.redditwalls.domain.usecases
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -21,13 +22,16 @@ abstract class FlowUseCase<D : Any, P : Any>(private val initialData: D) {
     private val _paramsFlow: MutableSharedFlow<P> = MutableSharedFlow()
     protected val paramsFlow = _paramsFlow.asSharedFlow()
 
+    private var job: Job? = null
+
     init {
         data = initialData
     }
 
     // Make sure to subscribe before calling this!
     fun init(coroutineScope: CoroutineScope) {
-        coroutineScope.launch {
+        job?.cancel()
+        job = coroutineScope.launch {
             initialized = true
             execute().retryWhen { e, _ ->
                 updateData(DomainResult.Error(message = e.localizedMessage.orEmpty()))

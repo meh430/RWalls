@@ -35,6 +35,13 @@ class DiscoverScreenViewModel @Inject constructor(
         getDiscoverFeed()
     }
 
+    fun refresh() {
+        getDiscoverUseCase.init(viewModelScope)
+        viewModelScope.launch {
+            getDiscoverUseCase(Unit)
+        }
+    }
+
     fun getDiscoverFeed() {
         viewModelScope.launch {
             getDiscoverUseCase(Unit)
@@ -44,6 +51,7 @@ class DiscoverScreenViewModel @Inject constructor(
     private fun subscribeToDiscoverFeed() {
         viewModelScope.launch {
             getDiscoverUseCase.sharedFlow.collect {
+                uiState.refreshing.value = false
                 when (it) {
                     is DomainResult.Error -> {
                         uiState.uiResult.value = UiResult.Error(it.message)
