@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -50,7 +51,9 @@ import mp.redditwalls.models.UiResult
 import mp.redditwalls.ui.components.SetWallpaperDialog
 import mp.redditwalls.ui.components.WallpaperInfoCard
 import mp.redditwalls.utils.DownloadUtils
+import mp.redditwalls.utils.Utils
 import mp.redditwalls.utils.launchBrowser
+import mp.redditwalls.utils.writePermissionGranted
 import mp.redditwalls.viewmodels.WallpaperScreenViewModel
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -59,7 +62,8 @@ fun WallpaperScreen(
     vm: WallpaperScreenViewModel = viewModel(),
     wallpaperHelper: WallpaperHelper,
     downloadUtils: DownloadUtils,
-    arguments: WallpaperActivityArguments
+    arguments: WallpaperActivityArguments,
+    onWritePermissionRequest: () -> Unit
 ) {
     val context = LocalContext.current
     val statusBarHeight =
@@ -91,7 +95,6 @@ fun WallpaperScreen(
     Scaffold { innerPadding ->
         Box(
             modifier = Modifier
-                .padding(innerPadding)
                 .consumedWindowInsets(innerPadding)
                 .pointerInput(Unit) {
                     detectDragGestures { change, dragAmount ->
@@ -116,6 +119,7 @@ fun WallpaperScreen(
                 }
                 is UiResult.Loading -> ThreeDotsLoader()
                 is UiResult.Success -> {
+                    val view = LocalView.current
                     val currentImage = remember(uiState.images, pagerState.currentPage) {
                         uiState.images[pagerState.currentPage]
                     }
@@ -125,7 +129,10 @@ fun WallpaperScreen(
                         image = currentImage.takeIf {
                             vm.showSetWallpaperDialog
                         },
-                        onDismiss = vm::dismissSetWallpaperDialog
+                        onDismiss = {
+                            vm.dismissSetWallpaperDialog()
+                            Utils.setFullScreen((context as Activity).window, view)
+                        }
                     )
                     ImageFolderRadioDialog(
                         show = vm.showFolderSelectDialog,
@@ -138,13 +145,19 @@ fun WallpaperScreen(
                                 folderName = name
                             )
                         },
-                        onDismiss = vm::dismissFolderSelectDialog
+                        onDismiss = {
+                            vm.dismissFolderSelectDialog()
+                            Utils.setFullScreen((context as Activity).window, view)
+                        }
                     )
                     ImageAlbum(
                         modifier = Modifier.fillMaxSize(),
                         state = pagerState,
                         imageUrls = imageUrls,
-                        onClick = vm::toggleUiVisibility,
+                        onClick = {
+                            vm.toggleUiVisibility()
+                            Utils.setFullScreen((context as Activity).window, view)
+                        },
                         onLongClick = vm::showSetWallpaperDialog,
                         onDoubleClick = {
                             if (!currentImage.isLiked.value) {
@@ -154,7 +167,9 @@ fun WallpaperScreen(
                         }
                     )
                     LikeAnimation(
-                        modifier = Modifier.fillMaxSize().align(Alignment.Center),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .align(Alignment.Center),
                         show = playAnimation,
                         onAnimationComplete = { playAnimation = false }
                     )
@@ -225,7 +240,11 @@ fun WallpaperScreen(
                                 },
                                 onSetWallpaperClick = vm::showSetWallpaperDialog,
                                 onDownloadClick = {
-                                    downloadUtils.downloadImage(currentImage.imageUrl.url)
+                                    if (context.writePermissionGranted()) {
+                                        downloadUtils.downloadImage(currentImage.imageUrl.url)
+                                    } else {
+                                        onWritePermissionRequest()
+                                    }
                                 },
                             )
                         }

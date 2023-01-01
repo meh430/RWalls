@@ -63,6 +63,7 @@ import mp.redditwalls.models.UiResult
 import mp.redditwalls.ui.components.ImagesList
 import mp.redditwalls.ui.components.onImageCardClick
 import mp.redditwalls.utils.DownloadUtils
+import mp.redditwalls.utils.writePermissionGranted
 import mp.redditwalls.viewmodels.FavoriteImagesScreenViewModel
 
 const val SELECT_ALL = 0
@@ -76,7 +77,8 @@ fun FavoriteImagesScreen(
     modifier: Modifier = Modifier,
     vm: FavoriteImagesScreenViewModel = viewModel(),
     wallpaperHelper: WallpaperHelper,
-    downloadUtils: DownloadUtils
+    downloadUtils: DownloadUtils,
+    onWritePermissionRequest: () -> Unit
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -151,7 +153,13 @@ fun FavoriteImagesScreen(
                                     SELECT_ALL -> vm.selectAll()
                                     MOVE_TO -> uiState.showMoveDialog.value = true
                                     DELETE -> uiState.showDeleteDialog.value = true
-                                    DOWNLOAD -> vm.downloadSelection(downloadUtils)
+                                    DOWNLOAD ->  {
+                                        if (context.writePermissionGranted()) {
+                                            vm.downloadSelection(downloadUtils)
+                                        } else {
+                                            onWritePermissionRequest()
+                                        }
+                                    }
                                     else -> {}
                                 }
                             }

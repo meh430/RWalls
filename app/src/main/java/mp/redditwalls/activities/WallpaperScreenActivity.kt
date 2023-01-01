@@ -1,5 +1,6 @@
 package mp.redditwalls.activities
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.os.Parcelable
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlinx.parcelize.Parcelize
@@ -16,6 +18,7 @@ import mp.redditwalls.domain.models.ImageId
 import mp.redditwalls.ui.screens.WallpaperScreen
 import mp.redditwalls.utils.DownloadUtils
 import mp.redditwalls.utils.Utils
+import mp.redditwalls.utils.onWriteStoragePermissionGranted
 import mp.redditwalls.utils.parcelable
 
 @AndroidEntryPoint
@@ -25,6 +28,14 @@ class WallpaperScreenActivity : ComponentActivity() {
 
     @Inject
     lateinit var downloadUtils: DownloadUtils
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            onWriteStoragePermissionGranted(it)
+            findViewById<View>(android.R.id.content)?.let { v ->
+                Utils.setFullScreen(window, v)
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +53,10 @@ class WallpaperScreenActivity : ComponentActivity() {
                 WallpaperScreen(
                     wallpaperHelper = wallpaperHelper,
                     downloadUtils = downloadUtils,
-                    arguments = arguments
+                    arguments = arguments,
+                    onWritePermissionRequest = {
+                        requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    }
                 )
             }
         }

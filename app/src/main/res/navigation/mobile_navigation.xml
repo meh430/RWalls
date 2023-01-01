@@ -96,18 +96,6 @@
             android:name="subreddit"
             app:argType="string"
             app:nullable="true" />
-        <deepLink
-            android:id="@+id/postDeepLink1"
-            app:uri="www.reddit.com/r/{subreddit}/comments/{postId}" />
-        <deepLink
-            android:id="@+id/postDeepLink2"
-            app:uri="amp.reddit.com/r/{subreddit}/comments/{postId}" />
-        <deepLink
-            android:id="@+id/postDeepLink3"
-            app:uri="old.reddit.com/r/{subreddit}/comments/{postId}" />
-        <deepLink
-            android:id="@+id/postDeepLink4"
-            app:uri="www.google.com/amp/s/amp.reddit.com/r/{subreddit}/comments/{postId}" />
     </activity>
 
     <fragment

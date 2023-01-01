@@ -1,8 +1,10 @@
 package mp.redditwalls.utils
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Insets
 import android.graphics.Point
@@ -12,6 +14,7 @@ import android.os.Parcelable
 import android.util.TypedValue
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.LazyGridState
@@ -23,6 +26,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -184,3 +188,18 @@ fun LazyGridState.OnBottomReached(
         }
     }
 }
+
+fun Context.onWriteStoragePermissionGranted(isGranted: Boolean) {
+    val text = if (isGranted) {
+        "Permission granted, please try to download once more"
+    } else {
+        "Write storage permission required to download"
+    }
+    Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+}
+
+fun Context.writePermissionGranted() =
+    ContextCompat.checkSelfPermission(
+        this,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE
+    ) == PackageManager.PERMISSION_GRANTED
