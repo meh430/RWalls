@@ -9,6 +9,7 @@ import android.content.res.Resources
 import android.graphics.Insets
 import android.graphics.Point
 import android.net.Uri
+import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Parcelable
 import android.util.TypedValue
@@ -198,7 +199,7 @@ fun Context.onWriteStoragePermissionGranted(isGranted: Boolean) {
     Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
 }
 
-fun Context.writePermissionGranted() =
+fun Context.writePermissionGranted() = SDK_INT >= Build.VERSION_CODES.Q ||
     ContextCompat.checkSelfPermission(
         this,
         Manifest.permission.WRITE_EXTERNAL_STORAGE

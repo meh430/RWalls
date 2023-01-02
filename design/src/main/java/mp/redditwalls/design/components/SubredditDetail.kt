@@ -48,6 +48,7 @@ fun SubredditDetail(
     title: String,
     subTitle: String,
     isSaved: Boolean,
+    onClick: () -> Unit,
     onSaveChanged: (Boolean) -> Unit
 ) {
     OutlinedCard(
@@ -63,7 +64,8 @@ fun SubredditDetail(
                 title = title,
                 subTitle = subTitle,
                 isSaved = isSaved,
-                onSaveChanged = onSaveChanged
+                onSaveChanged = onSaveChanged,
+                onClick = onClick
             )
             Text(
                 modifier = Modifier.padding(4.dp),
@@ -84,6 +86,7 @@ fun SubredditHeaderImage(
     title: String,
     subTitle: String = "",
     isSaved: Boolean,
+    onClick: () -> Unit,
     onSaveChanged: (Boolean) -> Unit
 ) {
     val style = MaterialTheme.typography.bodyMedium.copy(
@@ -113,7 +116,8 @@ fun SubredditHeaderImage(
         ) {
             Image(
                 modifier = Modifier.fillMaxSize(),
-                imageUrl = headerImageUrl
+                imageUrl = headerImageUrl,
+                onTap = onClick
             )
             Box(
                 modifier = Modifier
@@ -204,7 +208,8 @@ fun SubredditDetailPreview() {
                         title = "252k members",
                         subTitle = "437 online",
                         isSaved = isSaved,
-                        onSaveChanged = { isSaved = it }
+                        onSaveChanged = { isSaved = it },
+                        onClick = {}
                     )
                 }
                 items(6) {

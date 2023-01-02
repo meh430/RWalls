@@ -38,6 +38,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -52,6 +53,7 @@ import mp.redditwalls.design.components.LikeButton
 import mp.redditwalls.design.components.SubredditHeaderImage
 import mp.redditwalls.models.ImageItemUiState
 import mp.redditwalls.models.SubredditItemUiState
+import mp.redditwalls.utils.launchBrowser
 import mp.redditwalls.utils.toFriendlyCount
 
 @Composable
@@ -69,6 +71,7 @@ fun WallpaperInfoCard(
     onSetWallpaperClick: () -> Unit,
     onDownloadClick: () -> Unit
 ) {
+    val context = LocalContext.current
     val df = remember { SimpleDateFormat("MMM. dd, yyyy", Locale.getDefault()) }
     val date = remember(image.createdAt) { df.format(image.createdAt) }
     val chips = remember(subreddit, image, date) {
@@ -153,7 +156,10 @@ fun WallpaperInfoCard(
                             subreddit.numSubscribers.toFriendlyCount()
                         ),
                         isSaved = subreddit.isSaved.value,
-                        onSaveChanged = onSaveClick
+                        onSaveChanged = onSaveClick,
+                        onClick = {
+                            subreddit.subredditUrl.launchBrowser(context)
+                        }
                     )
                     Spacer(Modifier.height(6.dp))
                     Row {

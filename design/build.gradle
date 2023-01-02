@@ -5,7 +5,6 @@ plugins {
 }
 
 android {
-    namespace 'mp.redditwalls.design'
     compileSdk 33
 
     defaultConfig {

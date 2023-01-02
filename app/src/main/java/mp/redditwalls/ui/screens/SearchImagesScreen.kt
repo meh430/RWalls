@@ -35,6 +35,7 @@ import mp.redditwalls.models.UiResult
 import mp.redditwalls.preferences.enums.SortOrder
 import mp.redditwalls.ui.components.ImagesList
 import mp.redditwalls.ui.components.SetWallpaperDialog
+import mp.redditwalls.utils.launchBrowser
 import mp.redditwalls.utils.rememberSortMenuOptions
 import mp.redditwalls.utils.toFriendlyCount
 import mp.redditwalls.viewmodels.SearchImagesScreenViewModel
@@ -130,6 +131,9 @@ fun SearchImagesScreen(
                                 isSaved = it.isSaved.value,
                                 onSaveChanged = { isSaved ->
                                     vm.savedSubredditViewModel.onSaveClick(it, isSaved)
+                                },
+                                onClick = {
+                                    it.subredditUrl.launchBrowser(context)
                                 }
                             )
                         }
