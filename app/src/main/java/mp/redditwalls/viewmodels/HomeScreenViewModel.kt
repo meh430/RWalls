@@ -92,10 +92,11 @@ class HomeScreenViewModel @Inject constructor(
             }
         }
         viewModelScope.launch {
-            getHomeFeedUseCase.shouldReFetchHomeFeed { defaultSortOrder, swipeFeedEnabled ->
+            getHomeFeedUseCase.shouldReFetchHomeFeed { defaultSortOrder, _ ->
                 uiState.apply {
                     sortOrder.value = defaultSortOrder
-                    verticalSwipeFeedEnabled.value = swipeFeedEnabled
+                    // TODO: enable swiping
+                    verticalSwipeFeedEnabled.value = false
                 }
                 fetchHomeFeed(reload = true)
             }

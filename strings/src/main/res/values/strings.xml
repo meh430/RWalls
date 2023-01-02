@@ -80,7 +80,7 @@
     <string name="image_preview_resolution">Image preview resolution</string>
     <string name="theme">Theme</string>
     <string name="default_home_screen_sort">Default home screen sort</string>
-    <string name="view_vertical_image_feed">View vertical image feed</string>
+    <string name="view_horizontal_image_feed">View horizontal image feed</string>
     <string name="view_vertical_image_feed_subtitle">Show a swipe-able feed of images in the home screen</string>
     <string name="wallpaper_refresh">Wallpaper refresh</string>
     <string name="refresh_favorite_images">Refresh favorite images as wallpapers</string>

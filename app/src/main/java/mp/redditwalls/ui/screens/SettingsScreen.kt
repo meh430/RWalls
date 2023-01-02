@@ -169,15 +169,6 @@ fun SettingsScreen(
                 }
             )
             Spacer(modifier = Modifier.height(spacerHeight))
-            SubtitleSwitch(
-                modifier = Modifier.padding(horizontal = horizontalPadding),
-                title = stringResource(R.string.view_vertical_image_feed),
-                subtitle = stringResource(R.string.view_vertical_image_feed_subtitle),
-                checked = uiState.verticalSwipeFeedEnabled.value,
-                onCheckChanged = { vm.uiState.verticalSwipeFeedEnabled.value = it }
-            )
-            Spacer(modifier = Modifier.height(spacerHeight))
-            Spacer(modifier = Modifier.height(spacerHeight))
 
             // refresh
             SettingsSectionTitle(stringResource(R.string.wallpaper_refresh))
