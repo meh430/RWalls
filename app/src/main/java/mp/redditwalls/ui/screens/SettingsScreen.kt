@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -34,6 +35,7 @@ import mp.redditwalls.design.components.RadioDialog
 import mp.redditwalls.design.components.SubtitleSwitch
 import mp.redditwalls.fragments.SettingsScreenFragmentDirections
 import mp.redditwalls.models.SettingsRadioDialogModel
+import mp.redditwalls.utils.requestToPinWidget
 import mp.redditwalls.viewmodels.SettingsScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -44,6 +46,8 @@ fun SettingsScreen(
 ) {
     val uiState = vm.uiState
     val currentDialog = vm.uiState.currentRadioDialog.value
+
+    val context = LocalContext.current
 
     val scrollState = rememberScrollState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -172,6 +176,13 @@ fun SettingsScreen(
 
             // refresh
             SettingsSectionTitle(stringResource(R.string.wallpaper_refresh))
+            Spacer(modifier = Modifier.height(spacerHeight))
+            ClickableTextItem(
+                modifier = Modifier.padding(horizontal = horizontalPadding),
+                title = "Add wallpaper refresh widget",
+                subtitle = "This widget allows you to manually refresh the wallpaper with an image from your favorites",
+                onClick = { context.requestToPinWidget() }
+            )
             Spacer(modifier = Modifier.height(spacerHeight))
             SubtitleSwitch(
                 modifier = Modifier.padding(horizontal = horizontalPadding),

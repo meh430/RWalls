@@ -1,6 +1,9 @@
 package mp.redditwalls.utils
 
 import android.Manifest
+import android.app.PendingIntent
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -36,6 +39,8 @@ import kotlin.math.floor
 import kotlin.math.log10
 import kotlin.math.pow
 import kotlinx.coroutines.flow.filter
+import mp.redditwalls.RefreshWallpaper
+import mp.redditwalls.activities.MainActivity
 import mp.redditwalls.design.components.IconText
 import mp.redditwalls.preferences.enums.SortOrder
 import mp.redditwalls.repositories.SettingsItem
@@ -204,3 +209,20 @@ fun Context.writePermissionGranted() = SDK_INT >= Build.VERSION_CODES.Q ||
         this,
         Manifest.permission.WRITE_EXTERNAL_STORAGE
     ) == PackageManager.PERMISSION_GRANTED
+
+fun Context.requestToPinWidget() {
+    if (SDK_INT >= Build.VERSION_CODES.O) {
+        val appWidgetManager: AppWidgetManager? = getSystemService(AppWidgetManager::class.java)
+        val myProvider = ComponentName(this, RefreshWallpaper::class.java)
+        if (appWidgetManager != null && appWidgetManager.isRequestPinAppWidgetSupported) {
+            val pinnedWidgetCallbackIntent = Intent(this, MainActivity::class.java)
+            val successCallback = PendingIntent.getBroadcast(
+                this,
+                0,
+                pinnedWidgetCallbackIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+            appWidgetManager.requestPinAppWidget(myProvider, null, successCallback)
+        }
+    }
+}
