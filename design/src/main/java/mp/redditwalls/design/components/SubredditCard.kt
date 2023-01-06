@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -67,10 +68,12 @@ fun SubredditCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(
-                    modifier = Modifier.padding(
-                        top = outerPadding,
-                        start = outerPadding
-                    ),
+                    modifier = Modifier
+                        .padding(
+                            top = outerPadding,
+                            start = outerPadding
+                        )
+                        .weight(1f),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     SubredditIcon(
@@ -81,7 +84,9 @@ fun SubredditCard(
                         Text(
                             text = subredditName,
                             color = MaterialTheme.colorScheme.onSurface,
-                            style = MaterialTheme.typography.titleLarge
+                            style = MaterialTheme.typography.titleLarge,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1,
                         )
                         Text(
                             text = subscriberCount,
@@ -91,7 +96,8 @@ fun SubredditCard(
                     }
                 }
                 SaveButton(
-                    modifier = Modifier.padding(horizontal = 4.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 4.dp),
                     isSaved = isSaved,
                     onClick = onSaveChanged
                 )
