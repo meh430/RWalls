@@ -104,10 +104,12 @@ fun WallpaperScreen(
                             y > 0 -> {
                                 // swipe down
                                 expanded = false
+                                vm.showUi()
                             }
                             y < 0 -> {
                                 // swipe up
                                 expanded = true
+                                vm.showUi()
                             }
                         }
                     }

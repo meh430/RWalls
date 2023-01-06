@@ -60,11 +60,19 @@ class WallpaperScreenViewModel @Inject constructor(
     }
 
     fun toggleUiVisibility() {
-        uiState = if (uiState.shouldHideUi) {
-            uiState.showUi()
+        if (uiState.shouldHideUi) {
+            showUi()
         } else {
-            uiState.hideUi()
+            hideUi()
         }
+    }
+
+    fun showUi() {
+        uiState = uiState.showUi()
+    }
+
+    fun hideUi() {
+        uiState = uiState.hideUi()
     }
 
     private fun subscribeToImage() {
