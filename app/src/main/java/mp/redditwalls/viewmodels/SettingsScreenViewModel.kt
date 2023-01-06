@@ -96,4 +96,10 @@ class SettingsScreenViewModel @Inject constructor(
             }
         }
     }
+
+    companion object {
+        const val ISSUES_URl = "https://github.com/meh430/RWalls/issues"
+        const val EMAIL = "mehulpillai30@gmail.com"
+        const val PRIVACY_POLICY_URL = "https://mehulpillai.com/RWalls-privacy-policy"
+    }
 }

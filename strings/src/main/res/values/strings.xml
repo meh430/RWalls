@@ -87,4 +87,6 @@
     <string name="refresh_favorite_images_subtitle">Periodically refresh the system wallpaper with a random favorite image</string>
     <string name="refresh_interval">Refresh interval</string>
     <string name="allow_refresh_when_on">Allow refresh when on…</string>
+
+    <string name="about">About</string>
 </resources>

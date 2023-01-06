@@ -56,7 +56,7 @@ fun LazyListScope.recentActivityListItems(
             onLongClick = { onLongClick(recentActivityItem) }
         )
     }
-    item("footer_spacer") {
+    item {
         Spacer(modifier = Modifier.height(8.dp))
     }
 }

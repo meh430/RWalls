@@ -75,6 +75,11 @@ class HomeScreenViewModel @Inject constructor(
                         }
                         is DomainResult.Success -> {
                             uiResult.value = UiResult.Success()
+
+                            if (images.firstOrNull()?.imageId?.dbImageId == it.data?.images?.firstOrNull()?.imageId?.dbImageId) {
+                                images.clear()
+                            }
+
                             images.addAll(
                                 it.data?.images?.map { domainImage ->
                                     domainImage.toImageItemUiState()

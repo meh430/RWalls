@@ -93,6 +93,9 @@ class SearchImagesScreenViewModel @Inject constructor(
                         uiState.uiResult.value = UiResult.Error(result.message)
                     is DomainResult.Success -> uiState.apply {
                         uiState.uiResult.value = UiResult.Success()
+                        if (images.firstOrNull()?.imageId?.dbImageId == result.data?.images?.firstOrNull()?.imageId?.dbImageId) {
+                            images.clear()
+                        }
                         images.addAll(
                             result.data?.images?.map {
                                 it.toImageItemUiState()

@@ -3,6 +3,7 @@ package mp.redditwalls.utils
 import android.Manifest
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
+import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -205,10 +206,10 @@ fun Context.onWriteStoragePermissionGranted(isGranted: Boolean) {
 }
 
 fun Context.writePermissionGranted() = SDK_INT >= Build.VERSION_CODES.Q ||
-    ContextCompat.checkSelfPermission(
-        this,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
-    ) == PackageManager.PERMISSION_GRANTED
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
 
 fun Context.requestToPinWidget() {
     if (SDK_INT >= Build.VERSION_CODES.O) {
@@ -224,5 +225,25 @@ fun Context.requestToPinWidget() {
             )
             appWidgetManager.requestPinAppWidget(myProvider, null, successCallback)
         }
+    }
+}
+
+fun Context.sendEmail(
+    recipient: String,
+    subject: String,
+    body: String = ""
+) {
+    val intent = Intent(Intent.ACTION_SENDTO).apply {
+        setDataAndType(
+            Uri.parse("mailto:$recipient"),
+            "message/rfc822"
+        )
+        putExtra(Intent.EXTRA_SUBJECT, subject)
+        putExtra(Intent.EXTRA_TEXT, body)
+    }
+    try {
+        startActivity(intent)
+    } catch (ex: ActivityNotFoundException) {
+        Toast.makeText(this, "There are no email clients installed.", Toast.LENGTH_SHORT).show()
     }
 }

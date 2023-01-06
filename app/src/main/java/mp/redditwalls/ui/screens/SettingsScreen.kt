@@ -1,5 +1,6 @@
 package mp.redditwalls.ui.screens
 
+import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -28,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import mp.redditwalls.R
 import mp.redditwalls.design.components.ClickableTextItem
 import mp.redditwalls.design.components.ImageFolderRadioDialog
@@ -35,8 +37,12 @@ import mp.redditwalls.design.components.RadioDialog
 import mp.redditwalls.design.components.SubtitleSwitch
 import mp.redditwalls.fragments.SettingsScreenFragmentDirections
 import mp.redditwalls.models.SettingsRadioDialogModel
+import mp.redditwalls.utils.launchBrowser
 import mp.redditwalls.utils.requestToPinWidget
+import mp.redditwalls.utils.sendEmail
 import mp.redditwalls.viewmodels.SettingsScreenViewModel
+import mp.redditwalls.viewmodels.SettingsScreenViewModel.Companion.ISSUES_URl
+import mp.redditwalls.viewmodels.SettingsScreenViewModel.Companion.PRIVACY_POLICY_URL
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -215,6 +221,44 @@ fun SettingsScreen(
                     )
                 }
             }
+            Spacer(modifier = Modifier.height(spacerHeight))
+
+            // about
+            SettingsSectionTitle(stringResource(R.string.about))
+            Spacer(modifier = Modifier.height(spacerHeight))
+            ClickableTextItem(
+                modifier = Modifier.padding(horizontal = horizontalPadding),
+                title = "Report a bug or give feedback",
+                subtitle = "Create an issue on the project GitHub",
+                onClick = { ISSUES_URl.launchBrowser(context) }
+            )
+            Spacer(modifier = Modifier.height(spacerHeight))
+            ClickableTextItem(
+                modifier = Modifier.padding(horizontal = horizontalPadding),
+                title = "Email the developer",
+                onClick = {
+                    context.sendEmail(
+                        recipient = SettingsScreenViewModel.EMAIL,
+                        subject = context.getString(R.string.app_name)
+                    )
+                }
+            )
+            Spacer(modifier = Modifier.height(spacerHeight))
+            ClickableTextItem(
+                modifier = Modifier.padding(horizontal = horizontalPadding),
+                title = "Open Source Licenses",
+                onClick = {
+                    context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
+                }
+            )
+            Spacer(modifier = Modifier.height(spacerHeight))
+            ClickableTextItem(
+                modifier = Modifier.padding(horizontal = horizontalPadding),
+                title = "Privacy Policy",
+                onClick = {
+                    PRIVACY_POLICY_URL.launchBrowser(context)
+                }
+            )
             Spacer(modifier = Modifier.height(spacerHeight))
         }
     }
