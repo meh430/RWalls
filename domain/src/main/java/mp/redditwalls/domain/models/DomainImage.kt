@@ -23,6 +23,7 @@ data class DomainImage(
     val isLiked: Boolean = false,
     val folderName: String,
     val isAlbum: Boolean = false,
+    val isNsfw: Boolean = false,
     val createdAt: Date = Date()
 )
 
@@ -71,7 +72,8 @@ fun NetworkImage.toDomainImage(
     isLiked = dbImage != null,
     folderName = dbImage?.imageFolderName.orEmpty(),
     isAlbum = galleryItems.size > 1 || imgurAlbumId.isNotEmpty(),
-    createdAt = Date(createdUtc * 1000)
+    createdAt = Date(createdUtc * 1000),
+    isNsfw = isOver18
 )
 
 

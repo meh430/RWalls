@@ -61,7 +61,8 @@ class GetDiscoverUseCase @Inject constructor(
                         TimeFilter.ALL,
                         TimeFilter.MONTH
                     ).random(),
-                    after = ""
+                    after = "",
+                    includeOver18 = preferences.allowNsfw
                 ).images.map { networkImage ->
                     networkImage.toDomainImage(
                         previewResolution = preferences.previewResolution,

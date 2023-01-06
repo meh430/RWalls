@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.Comment
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled._18UpRating
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
@@ -75,12 +76,21 @@ fun WallpaperInfoCard(
     val df = remember { SimpleDateFormat("MMM. dd, yyyy", Locale.getDefault()) }
     val date = remember(image.createdAt) { df.format(image.createdAt) }
     val chips = remember(subreddit, image, date) {
-        listOf(
+        listOfNotNull(
             IconText(text = image.numUpvotes.toFriendlyCount(), icon = Icons.Default.ArrowUpward),
             IconText(text = image.numComments.toFriendlyCount(), icon = Icons.Default.Comment),
             IconText(text = date, icon = Icons.Default.CalendarMonth),
+            IconText(text = "nsfw", icon = Icons.Default._18UpRating).takeIf { image.isNsfw },
             IconText(text = "u/${image.author}", icon = Icons.Default.Person)
-        ).zip(listOf(navigateToPost, navigateToPost, {}, navigateToUser))
+        ).zip(
+            listOf(
+                navigateToPost,
+                navigateToPost,
+                navigateToPost,
+                navigateToPost,
+                navigateToUser
+            )
+        )
     }
 
     ElevatedCard(

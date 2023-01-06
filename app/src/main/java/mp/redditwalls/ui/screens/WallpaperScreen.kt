@@ -1,6 +1,7 @@
 package mp.redditwalls.ui.screens
 
 import android.app.Activity
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -124,6 +125,14 @@ fun WallpaperScreen(
                     val view = LocalView.current
                     val currentImage = remember(uiState.images, pagerState.currentPage) {
                         uiState.images[pagerState.currentPage]
+                    }
+
+                    BackHandler {
+                        if (expanded) {
+                            expanded = false
+                        } else {
+                            (context as? Activity)?.finish()
+                        }
                     }
                     SetWallpaperDialog(
                         wallpaperHelper = wallpaperHelper,

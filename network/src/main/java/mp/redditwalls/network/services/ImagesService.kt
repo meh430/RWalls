@@ -10,20 +10,23 @@ interface ImagesService {
     @GET("/r/{subreddit}/hot")
     suspend fun getHotImages(
         @Path("subreddit") subreddit: String,
-        @Query("after") after: String? = null
+        @Query("after") after: String? = null,
+        @Query("include_over_18") includeOver18: Boolean
     ): NetworkImages
 
     @GET("/r/{subreddit}/new")
     suspend fun getNewImages(
         @Path("subreddit") subreddit: String,
-        @Query("after") after: String? = null
+        @Query("after") after: String? = null,
+        @Query("include_over_18") includeOver18: Boolean
     ): NetworkImages
 
     @GET("/r/{subreddit}/top")
     suspend fun getTopImages(
         @Path("subreddit") subreddit: String,
         @Query("t") time: String,
-        @Query("after") after: String? = null
+        @Query("after") after: String? = null,
+        @Query("include_over_18") includeOver18: Boolean
     ): NetworkImages
 
     @GET("/search")

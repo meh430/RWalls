@@ -25,6 +25,7 @@ data class ImageItemUiState(
     val selectionState: MutableState<SelectionState> = mutableStateOf(SelectionState.NOT_SELECTABLE),
     val isLiked: MutableState<Boolean> = mutableStateOf(false),
     val isAlbum: Boolean = false,
+    val isNsfw: Boolean = false,
     val createdAt: Date = Date()
 ) {
     val authorUrl: String
@@ -43,7 +44,8 @@ fun DomainImage.toImageItemUiState() = ImageItemUiState(
     isLiked = mutableStateOf(isLiked),
     folderName = folderName,
     isAlbum = isAlbum,
-    createdAt = createdAt
+    createdAt = createdAt,
+    isNsfw = isNsfw
 )
 
 fun ImageItemUiState.toDomainImage() = DomainImage(
@@ -57,7 +59,8 @@ fun ImageItemUiState.toDomainImage() = DomainImage(
     imageUrls = listOf(imageUrl),
     folderName = folderName,
     isLiked = isLiked.value,
-    isAlbum = isAlbum
+    isAlbum = isAlbum,
+    isNsfw = isNsfw
 )
 
 fun ImageItemUiState.toImageCardModel(

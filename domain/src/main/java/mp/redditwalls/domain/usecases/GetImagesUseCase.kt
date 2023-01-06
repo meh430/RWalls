@@ -41,16 +41,19 @@ class GetImagesUseCase @Inject constructor(
                 when (params.sortOrder) {
                     SortOrder.HOT -> networkImagesRepository.getHotImages(
                         subreddit = params.subreddit,
-                        after = after
+                        after = after,
+                        includeOver18 = preferences.allowNsfw
                     )
                     SortOrder.NEW -> networkImagesRepository.getNewImages(
                         subreddit = params.subreddit,
-                        after = after
+                        after = after,
+                        includeOver18 = preferences.allowNsfw
                     )
                     else -> networkImagesRepository.getTopImages(
                         subreddit = params.subreddit,
                         timeFilter = params.sortOrder.toTimeFilter(),
-                        after = after
+                        after = after,
+                        includeOver18 = preferences.allowNsfw
                     )
                 }
             } else if (params.subreddit == null && params.query != null) {

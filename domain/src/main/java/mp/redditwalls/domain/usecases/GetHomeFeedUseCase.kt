@@ -39,10 +39,21 @@ class GetHomeFeedUseCase @Inject constructor(
             localImagesRepository.getDbImages().toNetworkIdToDbImageMap()
         val after = data.nextPageId?.takeIf { !params.reload }
         val networkImages = when (val sortOrder = params.sortOrder) {
-            SortOrder.HOT -> networkImagesRepository.getHotImages(subreddit, after)
-            SortOrder.NEW -> networkImagesRepository.getNewImages(subreddit, after)
+            SortOrder.HOT -> networkImagesRepository.getHotImages(
+                subreddit,
+                after,
+                extras.allowNsfw
+            )
+            SortOrder.NEW -> networkImagesRepository.getNewImages(
+                subreddit,
+                after,
+                extras.allowNsfw
+            )
             else -> networkImagesRepository.getTopImages(
-                subreddit, sortOrder.toTimeFilter(), after
+                subreddit,
+                sortOrder.toTimeFilter(),
+                after,
+                extras.allowNsfw
             )
         }
 

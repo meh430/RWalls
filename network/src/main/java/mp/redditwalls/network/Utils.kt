@@ -23,6 +23,12 @@ internal object Utils {
         default
     }
 
+    fun JsonObject.getBoolean(key: String, default: Boolean = false) = if (validField(key)) {
+        get(key).asBoolean
+    } else {
+        default
+    }
+
     private fun JsonObject.validField(key: String) = has(key) && !get(key).isJsonNull
 
 }

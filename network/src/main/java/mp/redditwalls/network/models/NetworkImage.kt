@@ -3,6 +3,7 @@ package mp.redditwalls.network.models
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import mp.redditwalls.network.Constants
+import mp.redditwalls.network.Utils.getBoolean
 import mp.redditwalls.network.Utils.getInt
 import mp.redditwalls.network.Utils.getLong
 import mp.redditwalls.network.Utils.getString
@@ -79,6 +80,7 @@ data class NetworkImage(
                     numComments = json.getInt("num_comments"),
                     imgurAlbumId = imgurAlbumId,
                     postUrl = Constants.BASE_REDDIT_MOBILE_URL + json.getString("permalink"),
+                    isOver18 = json.getBoolean("over_18"),
                     galleryItems = it
                 )
             }

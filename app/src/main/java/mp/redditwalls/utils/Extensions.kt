@@ -172,7 +172,7 @@ fun LazyListState.isScrollingUp(): Boolean {
 
 @Composable
 fun LazyGridState.OnBottomReached(
-    buffer: Int = 6,
+    buffer: Int = 0,
     onLoadMore: () -> Unit
 ) {
     val shouldLoadMore = remember {
