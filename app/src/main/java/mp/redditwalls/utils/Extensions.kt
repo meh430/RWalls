@@ -3,7 +3,6 @@ package mp.redditwalls.utils
 import android.Manifest
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
-import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -234,16 +233,14 @@ fun Context.sendEmail(
     body: String = ""
 ) {
     val intent = Intent(Intent.ACTION_SENDTO).apply {
-        setDataAndType(
-            Uri.parse("mailto:$recipient"),
-            "message/rfc822"
-        )
+        data = Uri.parse("mailto:")
+        putExtra(Intent.EXTRA_EMAIL, arrayOf(recipient))
         putExtra(Intent.EXTRA_SUBJECT, subject)
         putExtra(Intent.EXTRA_TEXT, body)
     }
-    try {
+    if (intent.resolveActivity(packageManager) != null) {
         startActivity(intent)
-    } catch (ex: ActivityNotFoundException) {
+    } else {
         Toast.makeText(this, "There are no email clients installed.", Toast.LENGTH_SHORT).show()
     }
 }
