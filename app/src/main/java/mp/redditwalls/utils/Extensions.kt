@@ -35,6 +35,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import java.text.DecimalFormat
+import java.util.UUID
 import kotlin.math.floor
 import kotlin.math.log10
 import kotlin.math.pow
@@ -242,5 +243,17 @@ fun Context.sendEmail(
         startActivity(intent)
     } else {
         Toast.makeText(this, "There are no email clients installed.", Toast.LENGTH_SHORT).show()
+    }
+}
+
+fun String.generateFileName() = UUID.randomUUID().toString().let { uuid ->
+    if (contains(".png")) {
+        "$uuid.png"
+    } else if (contains(".jpg")) {
+        "$uuid.jpg"
+    } else if (contains(".jpeg")) {
+        "$uuid.jpeg"
+    } else {
+        uuid
     }
 }

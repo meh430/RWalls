@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Environment
 import androidx.core.content.ContextCompat.getSystemService
 import dagger.hilt.android.qualifiers.ApplicationContext
-import java.util.UUID
 import javax.inject.Inject
 
 class DownloadUtils @Inject constructor(
@@ -17,7 +16,10 @@ class DownloadUtils @Inject constructor(
             .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             .setAllowedOverMetered(true)
-            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, UUID.randomUUID().toString())
+            .setDestinationInExternalPublicDir(
+                Environment.DIRECTORY_DOWNLOADS,
+                imageUrl.generateFileName()
+            )
         val downloadManager = getSystemService(context, DownloadManager::class.java)!!
         downloadManager.enqueue(request)
     }
