@@ -19,5 +19,5 @@ An app that uses the model-view-viewmodel pattern with the help of Android Jetpa
 - Set periodic refresh of wallpapers from favorites list
 
 ### Screenshots
-<img src="screens/Screenshot_20230106_144605_RWalls.png" height="480"><img src="screens/Screenshot_20230106_144724_RWalls" height="480"><img src="screens/Screenshot_20230106_144752_RWalls.png" height="480"><img src="screens/Screenshot_20230106_144830_RWalls.png" height="480"><img src="screens/Screenshot_20230106_144844_RWalls.png" height="480"><img src="screens/Screenshot_20230106_144927_RWalls.png" height="480"><img src="screens/Screenshot_20230108_005735_RWalls.png" height="480">
+<img src="screens/Screenshot_20230106_144605_RWalls.png" height="480"><img src="screens/Screenshot_20230106_144724_RWalls.png" height="480"><img src="screens/Screenshot_20230106_144752_RWalls.png" height="480"><img src="screens/Screenshot_20230106_144830_RWalls.png" height="480"><img src="screens/Screenshot_20230106_144844_RWalls.png" height="480"><img src="screens/Screenshot_20230106_144927_RWalls.png" height="480"><img src="screens/Screenshot_20230108_005735_RWalls.png" height="480">
 
