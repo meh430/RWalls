@@ -1,4 +1,4 @@
-# RedditWalls-rewrite
+# RWalls
 A rewrite of [RedditWalls](https://github.com/meh430/RedditWall)
 
 An app that uses the model-view-viewmodel pattern with the help of Android Jetpack libraries and pulls images from a specified subreddit to set as device wallpaper
