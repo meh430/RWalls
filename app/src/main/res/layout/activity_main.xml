@@ -4,32 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/appbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:elevation="0dp">
-
-            <include
-                android:id="@+id/toolbar"
-                layout="@layout/toolbar" />
-
-        </com.google.android.material.appbar.AppBarLayout>
-
-
         <FrameLayout
-            android:layout_below="@id/appbar"
-            android:layout_above="@+id/bottomNavView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@+id/bottom_nav_bar"
             android:layout_centerHorizontal="true">
 
             <fragment
@@ -39,21 +21,13 @@
                 android:layout_height="match_parent"
                 app:defaultNavHost="true"
                 app:navGraph="@navigation/mobile_navigation" />
-
         </FrameLayout>
 
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNavView"
-            style="@style/Widget.Material3.BottomNavigationView"
+        <mp.redditwalls.ui.components.BottomNavigationBarView
+            android:id="@+id/bottom_nav_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:paddingStart="6dp"
-            android:paddingEnd="6dp"
-            android:elevation="8dp"
-            app:itemIconSize="24dp"
-            app:menu="@menu/bottom_nav_menu" />
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

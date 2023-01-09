@@ -1,0 +1,51 @@
+package mp.redditwalls.local.repositories
+
+import javax.inject.Inject
+
+class RecommendedSubredditsRepository @Inject constructor() {
+    fun getRecommendedSubreddits() = listOf(
+        "mobilewallpaper",
+        "earthporn",
+        "spaceporn",
+        "animewallpaper",
+        "animeart",
+        "verticalwallpapers",
+        "streetmoe",
+        "animephonewallpapers",
+        "animewallpaperssfw",
+        "amoledbackgrounds",
+        "iphonewallpapers",
+        "moescape",
+        "mobilewallpapers",
+        "astrophotography",
+        "wallpaperdump",
+        "phonewallpapers",
+        "futureporn",
+        "skyporn",
+        "imaginarylandscapes",
+        "exposureporn",
+        "art",
+        "imaginarytechnology",
+        "S10wallpapers",
+        "iwallpaper",
+        "weatherporn",
+        "botanicalporn",
+        "foodporn",
+        "cityporn",
+        "lakeporn",
+        "villageporn",
+        "beachporn",
+        "waterporn",
+        "abandonedporn",
+        "seaporn",
+        "fireporn",
+        "desertporn",
+        "winterporn",
+        "autumnporn",
+        "architectureporn",
+        "houseporn",
+        "animalporn",
+        "pixelart",
+        "fractalporn"
+    )
+}

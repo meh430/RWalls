@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="retry">Retry</string>
+    <string name="empty_state_title">Nothing to see here…</string>
+    <string name="error_state_title">Something went wrong…</string>
+
+
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="set_wallpaper">Set wallpaper</string>
+    <string name="home_screen">Home screen</string>
+    <string name="lock_screen">Lock screen</string>
+    <string name="both_screens">Both screens</string>
+
+    <string name="lock">Lock</string>
+    <string name="both">Both</string>
+
+
+    <string name="search">Search…</string>
+
+    <string name="sort_hot">Hot</string>
+    <string name="sort_new">New</string>
+    <string name="sort_top_hour">Top Hour</string>
+    <string name="sort_top_day">Top Day</string>
+    <string name="sort_top_week">Top Week</string>
+    <string name="sort_top_month">Top Month</string>
+    <string name="sort_top_year">Top Year</string>
+    <string name="sort_top_all">Top All</string>
+
+    <string name="low_quality">Low Quality</string>
+    <string name="medium_quality">Medium Quality</string>
+    <string name="high_quality">High Quality</string>
+
+    <string name="wifi_only">Wi-Fi Only</string>
+    <string name="data_only">Data Only</string>
+    <string name="wifi_and_data">Wi-Fi and Data</string>
+
+    <string name="dark_theme">Dark Theme</string>
+    <string name="light_theme">Light Theme</string>
+    <string name="system_theme">System Theme</string>
+
+    <string name="fifteen_minutes">Every Fifteen Minutes</string>
+    <string name="thirty_minutes">Every Thirty Minutes</string>
+    <string name="one_hour">Every Hour</string>
+    <string name="six_hours">Every Six Hours</string>
+    <string name="twelve_hours">Every Twelve Hours</string>
+    <string name="twenty_four_hours">Every Twenty-four Hours</string>
+
+    <string name="home">Home</string>
+    <string name="favorites">Favorites</string>
+    <string name="discover">Discover</string>
+    <string name="saved">Saved</string>
+    <string name="settings">Settings</string>
+
+    <string name="saved_subreddits">Saved Subreddits</string>
+
+
+    <string name="selected_count">Selected %1$d</string>
+
+    <string name="delete">Delete</string>
+    <string name="select_all">Select all</string>
+    <string name="move_to">Move to</string>
+    <string name="download">Download</string>
+
+    <string name="choose_location">Choose Location</string>
+
+    <string name="confirm">Confirm</string>
+    <string name="delete_confirmation">Are you sure you want to delete?</string>
+
+    <string name="recommendations">Recommendations</string>
+    <string name="recent_activity">Recent Activity</string>
+
+    <string name="view_more">View More</string>
+
+    <string name="subscriber_count">%1$s subscribers</string>
+    <string name="online_count">%1$s online</string>
+
+    <string name="general">General</string>
+    <string name="allow_nsfw_images">Allow NSFW images</string>
+    <string name="image_preview_resolution">Image preview resolution</string>
+    <string name="theme">Theme</string>
+    <string name="default_home_screen_sort">Default home screen sort</string>
+    <string name="view_horizontal_image_feed">View horizontal image feed</string>
+    <string name="view_vertical_image_feed_subtitle">Show a swipe-able feed of images in the home screen</string>
+    <string name="wallpaper_refresh">Wallpaper refresh</string>
+    <string name="refresh_favorite_images">Refresh favorite images as wallpapers</string>
+    <string name="refresh_favorite_images_subtitle">Periodically refresh the system wallpaper with a random favorite image</string>
+    <string name="refresh_interval">Refresh interval</string>
+    <string name="allow_refresh_when_on">Allow refresh when on…</string>
+
+    <string name="about">About</string>
+</resources>

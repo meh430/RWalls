@@ -8,3 +8,10 @@ dependencyResolutionManagement {
 }
 rootProject.name = "RedditWalls"
 include ':app'
+include ':network'
+include ':domain'
+include ':preferences'
+include ':local'
+include ':strings'
+include ':utilities'
+include ':design'

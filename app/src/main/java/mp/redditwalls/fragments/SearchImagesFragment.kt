@@ -1,0 +1,90 @@
+package mp.redditwalls.fragments
+
+import android.content.Context
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import androidx.navigation.fragment.navArgs
+import dagger.hilt.android.AndroidEntryPoint
+import mp.redditwalls.databinding.FragmentSearchImagesBinding
+import mp.redditwalls.models.Image
+
+@AndroidEntryPoint
+class SearchImagesFragment : BaseApiImagesFragment() {
+
+    private val navArgs: SearchImagesFragmentArgs by navArgs()
+
+    private var _binding: FragmentSearchImagesBinding? = null
+    private val binding get() = _binding!!
+
+    override val subreddit: String
+        get() = navArgs.subreddit
+
+    override fun scrollToTop() {
+        binding.imageScroll.scrollToPosition(0)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSearchImagesBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initRecyclerView(binding.imageScroll)
+        observeImages()
+        binding.swipeRefresh.setOnRefreshListener {
+            imagesAdapter.refresh()
+            binding.swipeRefresh.isRefreshing = false
+        }
+        addLoadStateListener(
+            binding.imageScroll,
+            binding.loading,
+            binding.error,
+            binding.empty
+        )
+
+        binding.searchBar.setOnEditorActionListener { _, i, _ ->
+            if (i == EditorInfo.IME_ACTION_SEARCH) {
+                // hide kb
+                binding.searchBar.clearFocus()
+                (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+                    .hideSoftInputFromWindow(binding.searchBar.windowToken, 0)
+                val query = binding.searchBar.text.toString()
+
+                if (query.isEmpty()) {
+                    // Search with new query
+                    setQuery("")
+                } else {
+                    setQuery(query)
+                }
+                true
+            } else {
+                false
+            }
+        }
+    }
+
+    override fun onClick(view: View?, image: Image) {
+        val toWall =
+            SearchImagesFragmentDirections.actionSearchImagesFragmentToNavigationWallpaper(
+                image,
+                null,
+                null
+            )
+        navigateToWall(view, toWall)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+}
