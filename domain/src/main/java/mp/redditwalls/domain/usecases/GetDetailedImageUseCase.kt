@@ -14,6 +14,7 @@ import mp.redditwalls.network.repositories.ImgurRepository
 import mp.redditwalls.network.repositories.NetworkImagesRepository
 import mp.redditwalls.network.repositories.NetworkSubredditsRepository
 import mp.redditwalls.preferences.PreferencesRepository
+import mp.redditwalls.preferences.enums.ImageQuality
 
 class GetDetailedImageUseCase @Inject constructor(
     private val networkImagesRepository: NetworkImagesRepository,
@@ -59,7 +60,7 @@ class GetDetailedImageUseCase @Inject constructor(
             isSaved = networkImage.subredditName in dbSubredditNames
         )
 
-        val images = networkImage.toDomainImages(preferences.previewResolution) { imageId ->
+        val images = networkImage.toDomainImages(ImageQuality.HIGH) { imageId ->
             dbImageIds[imageId.networkId]?.find { it.id == imageId.dbImageId }
         }
 
