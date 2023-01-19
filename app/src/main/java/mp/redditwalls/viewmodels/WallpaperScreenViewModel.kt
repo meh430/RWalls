@@ -71,7 +71,7 @@ class WallpaperScreenViewModel @Inject constructor(
         uiState = uiState.showUi()
     }
 
-    fun hideUi() {
+    private fun hideUi() {
         uiState = uiState.hideUi()
     }
 
